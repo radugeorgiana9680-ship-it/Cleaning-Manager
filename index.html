@@ -1,1543 +1,1790 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="manifest" href="manifest.json">
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#6d35d9">
-<title>Cleaning Manager</title>
+<meta name="theme-color" content="#b8a4e8">
+<title>Cleaning Manager 2.0</title>
 
 <style>
-:root{
---p:#a979c5;
---pl:#f4e8f8;
---bg:#fcf9fc;
---card:#ffffff;
---t:#4d4050;
---m:#857889;
---line:#eadfea;
---g:#72a88a;
---o:#d39a57;
---r:#c97886;
-}
-
 *{box-sizing:border-box}
-
-html,body{
-margin:0;
-padding:0;
-width:100%;
-min-height:100%;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-color:var(--t);
-background:#eee8f1;
-font-size:15px;
-line-height:1.4;
+:root{
+  --bg:#fbf9ff;
+  --card:#fff;
+  --text:#303044;
+  --muted:#77778b;
+  --purple:#b8a4e8;
+  --pink:#f3b6cf;
+  --blue:#a9dff0;
+  --green:#b9e4c6;
+  --yellow:#f6df9b;
+  --peach:#f5c6a5;
+  --lav:#ddd1f6;
+  --red:#efb2b2;
 }
-
 body{
-overscroll-behavior-x:none;
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-
-button,input,select,textarea{
-font:inherit;
-}
-
-button{
--webkit-tap-highlight-color:transparent;
-}
-
 .app{
-width:100%;
-max-width:430px;
-min-height:100vh;
-margin:auto;
-background:linear-gradient(180deg,#fdfafd 0%,#faf7fb 100%);
-padding-bottom:92px;
-overflow:hidden;
+  max-width:540px;
+  margin:auto;
+  min-height:100vh;
+  padding:18px 16px 105px;
 }
-
-.hidden{
-display:none!important;
-}
-
-/* HEADER */
-
 header{
-padding:22px 20px 12px;
-background:linear-gradient(135deg,#fbf3fc 0%,#f5eef8 100%);
-border-bottom:1px solid #eadfea;
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+.logo{
+  width:50px;
+  height:50px;
+  border-radius:17px;
+  background:linear-gradient(135deg,#b8a4e8,#a9dff0);
+  display:grid;
+  place-items:center;
+  font-size:25px;
+  box-shadow:0 5px 15px #00000012;
+}
+h1{font-size:24px;margin:0 0 3px}
+h2{font-size:19px;margin:20px 3px 11px}
+.sub{font-size:13px;color:var(--muted)}
+.icon{
+  border:0;
+  background:#fff;
+  border-radius:15px;
+  width:46px;
+  height:46px;
+  font-size:23px;
+  box-shadow:0 4px 14px #0000000c;
+}
+.screen{display:none}
+.screen.active{display:block}
+
+.date{
+  background:linear-gradient(135deg,#f4eafd,#eaf8ff);
+  border-radius:22px;
+  padding:18px;
+  margin-bottom:15px;
+}
+.date b{font-size:18px}
+.date span{display:block;color:var(--muted);margin-top:4px}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-bottom:18px;
+}
+.stat{
+  padding:13px 7px;
+  border-radius:18px;
+  text-align:center;
+  background:white;
+  box-shadow:0 4px 15px #00000008;
+}
+.stat:nth-child(1){background:#e8dcfa}
+.stat:nth-child(2){background:#dff4fb}
+.stat:nth-child(3){background:#e1f6e7}
+.stat:nth-child(4){background:#fff2cf}
+.stat b{display:block;font-size:18px}
+.stat small{color:#686878;font-size:11px}
+
+.card{
+  background:var(--card);
+  border-radius:22px;
+  padding:16px;
+  box-shadow:0 5px 20px #00000009;
+  margin-bottom:12px;
+}
+.job{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  border-radius:18px;
+  padding:12px;
+  margin:8px 0;
+}
+.job.pink{background:#fff0f6}
+.job.blue{background:#ebf9fd}
+.job.green{background:#edf9f0}
+.job.yellow{background:#fff8df}
+.job.gray{background:#f1f0f5}
+.jobicon{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:#fff;
+  font-size:20px;
+  flex-shrink:0;
+}
+.jobmain{flex:1;min-width:0}
+.jobmain b{display:block}
+.jobmain small{color:var(--muted)}
+.price{font-weight:700;white-space:nowrap}
+
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:9px;
+  font-size:10px;
+  font-weight:700;
+  margin-top:5px;
+}
+.agency{background:#dff4fb;color:#39798d}
+.private{background:#f8dfeb;color:#98506f}
+.weekly{background:#e4f4e7;color:#477b53}
+.fortnightly{background:#fff0ca;color:#816b2f}
+.tentative{background:#fff0bf;color:#856c27}
+.confirmed{background:#dff3e4;color:#477450}
+.holiday{background:#eadff9;color:#725c9b}
+.oneoff{background:#f1e5dc;color:#825f48}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.btn{
+  border:0;
+  border-radius:16px;
+  padding:14px;
+  font-weight:700;
+  font:inherit;
+}
+.primary{background:#b8a4e8;color:white}
+.bluebtn{background:#b9e6f2}
+.greenbtn{background:#c6e9ce}
+.pinkbtn{background:#f5c2d6}
+.yellowbtn{background:#f8e7a9}
+.graybtn{background:#eeeaf3}
+.redbtn{background:#f3c0c0}
+
+input,select,textarea{
+  width:100%;
+  padding:13px;
+  border:1px solid #ddd9e8;
+  border-radius:14px;
+  margin:5px 0 12px;
+  font:inherit;
+  background:white;
+  color:var(--text);
+}
+textarea{min-height:80px;resize:vertical}
+label{
+  font-size:13px;
+  font-weight:600;
+}
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.notice{
+  padding:12px 14px;
+  background:#fff5cf;
+  border-radius:14px;
+  color:#665528;
+  font-size:13px;
+  margin-bottom:12px;
+}
+.available{
+  background:#e5f6e9;
+  border-radius:18px;
+  padding:14px;
+  margin:8px 0;
+}
+.available b{color:#477450}
+.tentativeBox{
+  background:#fff5d6;
+  border-radius:18px;
+  padding:14px;
+  margin:8px 0;
+}
+.holidayBox{
+  background:#f0e7fb;
+  border-radius:18px;
+  padding:14px;
+  margin:8px 0;
+}
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:20px;
+}
+.calendarHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+.calendar{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+}
+.dayName{
+  text-align:center;
+  font-size:10px;
+  color:var(--muted);
+  padding:4px;
+}
+.day{
+  min-height:46px;
+  padding:7px 3px;
+  text-align:center;
+  border-radius:12px;
+  background:#f5f1fb;
+  font-size:12px;
+}
+.day.has{background:#dff4fb;font-weight:700}
+.day.hol{background:#eadff9}
+.day.today{outline:2px solid #b8a4e8}
+
+nav{
+  position:fixed;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(508px,calc(100% - 24px));
+  background:#ffffffed;
+  backdrop-filter:blur(15px);
+  border-radius:24px;
+  padding:8px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:3px;
+  box-shadow:0 8px 30px #0002;
+  z-index:10;
+}
+nav button{
+  border:0;
+  background:transparent;
+  padding:7px 2px;
+  border-radius:16px;
+  color:#77778b;
+  font-size:10px;
+}
+nav button.active{
+  background:#eee7fb;
+  color:#6f59a8;
+  font-weight:700;
+}
+nav span{
+  display:block;
+  font-size:19px;
+  margin-bottom:2px;
 }
 
-.brand{
-display:flex;
-align-items:center;
-gap:14px;
-min-width:0;
+.modal{
+  position:fixed;
+  inset:0;
+  background:#0006;
+  display:none;
+  align-items:flex-end;
+  z-index:20;
 }
-
-.brandIcon{
-width:58px;
-height:58px;
-border-radius:22px;
-background:linear-gradient(145deg,#b9a3ed,#aee0ef);
-display:grid;
-place-items:center;
-font-size:30px;
-box-shadow:0 10px 24px rgba(128,108,185,.12);
-flex:none;
+.modal.open{display:flex}
+.modalbox{
+  background:#fff;
+  width:100%;
+  max-width:540px;
+  margin:auto;
+  border-radius:28px 28px 0 0;
+  padding:22px;
+  max-height:92vh;
+  overflow:auto;
 }
-
-.brandText h1{
-font-size:27px;
-line-height:1.05;
-font-weight:800;
-color:#303149;
-margin:0;
-letter-spacing:-.7px;
+.close{
+  float:right;
+  border:0;
+  background:#f1eff5;
+  border-radius:50%;
+  width:36px;
+  height:36px;
+  font-size:20px;
 }
-
-.brandText p{
-margin:6px 0 0;
-color:#77778d;
-font-size:14px;
+.timer{
+  font-size:40px;
+  text-align:center;
+  font-weight:800;
+  margin:18px;
 }
-
-.headerPlus{
-width:54px;
-height:54px;
-border:0;
-border-radius:20px;
-background:#fff;
-color:#1687ed;
-font-size:30px;
-line-height:1;
-box-shadow:0 8px 22px rgba(90,75,130,.07);
-flex:none;
+.slot{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#e5f6e9;
+  border-radius:16px;
+  padding:12px;
+  margin:7px 0;
 }
-
-/* SWIPE */
-
-.pageDots{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:7px;
-padding:7px 0 2px;
+.slot b{color:#477450}
+.weekSwitch{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:12px;
 }
-
-.pageDot{
-width:7px;
-height:7px;
-border-radius:50%;
-background:#ded7e5;
-transition:.2s;
+.weekSwitch button{
+  border:0;
+  padding:12px;
+  border-radius:15px;
+  background:#eeeaf5;
+  font-weight:700;
 }
-
-.pageDot.active{
-width:21px;
-border-radius:8px;
-background:#a979c5;
+.weekSwitch button.active{
+  background:#b8a4e8;
+  color:white;
 }
-
-.swipeHint{
-font-size:11px;
-color:#968
-  function renderHome(){
-
-let d=today();
-
-let js=data.jobs
-.filter(j=>j.date===d)
-.sort((a,b)=>minutes(a.start)-minutes(b.start));
-
-document.getElementById('todayText').textContent=
-new Date(d+'T12:00:00').toLocaleDateString(undefined,{
-weekday:'long',
-day:'numeric',
-month:'long',
-year:'numeric'
-});
-
-document.getElementById('sJobs').textContent=js.length;
-
-let mins=js.reduce((a,j)=>a+dur(j),0);
-
-document.getElementById('sHours').textContent=fmtHours(mins);
-
-document.getElementById('sEarn').textContent=
-'£'+js.reduce((a,j)=>a+Number(j.price||0),0);
-
-document.getElementById('sAvail').textContent=
-calcAvail(js)+'h';
-
-document.getElementById('todayJobs').innerHTML=
-js.length
-?js.map(j=>jobHTML(j)).join('')
-:'<div class="card" style="padding:18px;text-align:center;color:#857889">No cleanings today 🫧</div>';
-
-let slot=findNextSlot(js);
-
-document.getElementById('nextSlot').textContent=slot.label;
-document.getElementById('nextSlotDetail').textContent=slot.detail;
+hr{
+  border:0;
+  border-top:1px solid #eee;
+  margin:16px 0;
 }
+.small{font-size:12px;color:var(--muted)}
+</style>
+</head>
 
+<body>
 
-function calcAvail(js){
+<div class="app">
 
-let total=0;
-let last=9*60;
+<header>
+  <div style="display:flex;gap:12px;align-items:center">
+    <div class="logo">🧹</div>
+    <div>
+      <h1>Cleaning Manager</h1>
+      <div class="sub">Your cleaning business ✨</div>
+    </div>
+  </div>
+  <button class="icon" onclick="openJob()">＋</button>
+</header>
 
-js.forEach(j=>{
-total+=Math.max(0,minutes(j.start)-last);
-last=Math.max(last,minutes(j.end));
-});
+<!-- HOME -->
+<section id="home" class="screen active">
 
-total+=Math.max(0,18*60-last);
+  <div class="date">
+    <b id="today"></b>
+    <span>Let's make today productive 🌸</span>
+  </div>
 
-return (total/60).toFixed(1);
-}
+  <div class="stats">
+    <div class="stat"><b id="jobsCount">0</b><small>Jobs</small></div>
+    <div class="stat"><b id="hoursCount">0h</b><small>Hours</small></div>
+    <div class="stat"><b id="earnedCount">£0</b><small>Earned</small></div>
+    <div class="stat"><b id="availableCount">0h</b><small>Available</small></div>
+  </div>
 
+  <h2>Today's schedule</h2>
+  <div class="card" id="todayJobs"></div>
 
-function jobHTML(j){
+  <h2>Quick actions</h2>
+  <div class="actions">
+    <button class="btn primary" onclick="openJob()">➕ Add cleaning</button>
+    <button class="btn bluebtn" onclick="startTimer()">⏱ Start cleaning</button>
+    <button class="btn greenbtn" onclick="showScreen('clients')">👤 Clients</button>
+    <button class="btn pinkbtn" onclick="showScreen('schedule')">📅 Schedule</button>
+    <button class="btn yellowbtn" onclick="findSlots()">🔍 Find free time</button>
+    <button class="btn graybtn" onclick="showScreen('holidays')">🏖️ Holidays</button>
+  </div>
 
-let c=client(j.clientId);
+</section>
 
-let cls=
-j.status==='completed'
-?'done'
-:j.status==='inprogress'
-?'prog'
-:'';
+<!-- SCHEDULE -->
+<section id="schedule" class="screen">
 
-return `
-<div class="job" onclick="jobAction(${j.id})">
+  <h2>📅 Schedule</h2>
 
-<div class="bar"></div>
+  <div class="weekSwitch">
+    <button id="weekABtn" onclick="setWeek('A')">Week A</button>
+    <button id="weekBBtn" onclick="setWeek('B')">Week B</button>
+  </div>
 
-<div class="jobbody">
+  <div class="card">
+    <label>View week</label>
+    <input id="weekDate" type="date" onchange="renderSchedule()">
+  </div>
 
-<div class="jobtop">
+  <div id="scheduleList"></div>
 
-<b>${c.name}</b>
+  <h2>🟢 Available time</h2>
+  <div id="availableSlots"></div>
 
-<b>£${Number(j.price||0).toFixed(2)}</b>
+</section>
+
+<!-- CLIENTS -->
+<section id="clients" class="screen">
+
+  <h2>👤 Clients</h2>
+
+  <div class="card">
+    <input id="clientSearch" placeholder="🔎 Search clients..." oninput="renderClients()">
+  </div>
+
+  <div id="clientsList"></div>
+
+  <button class="btn primary" style="width:100%" onclick="openClient()">
+    ＋ Add new client
+  </button>
+
+</section>
+
+<!-- HOLIDAYS -->
+<section id="holidays" class="screen">
+
+  <h2>🏖️ Client holidays</h2>
+
+  <div class="card">
+    <div class="notice">
+      💡 Add a holiday and the client's cleaning time will automatically become available during those dates.
+    </div>
+    <button class="btn primary" style="width:100%" onclick="openHoliday()">
+      🏖️ Add client holiday
+    </button>
+  </div>
+
+  <div id="holidayList"></div>
+
+</section>
+
+<!-- FIND AVAILABLE -->
+<section id="available" class="screen">
+
+  <h2>🔍 Find available time</h2>
+
+  <div class="card">
+
+    <label>How many hours do you need?</label>
+    <input id="searchHours" type="number" min="0.5" step="0.5" value="3">
+
+    <label>From date</label>
+    <input id="searchFrom" type="date">
+
+    <label>Weeks to search</label>
+    <select id="searchWeeks">
+      <option value="1">1 week</option>
+      <option value="2">2 weeks</option>
+      <option value="4" selected>4 weeks</option>
+      <option value="8">8 weeks</option>
+    </select>
+
+    <button class="btn primary" style="width:100%" onclick="findSlots()">
+      🔍 Find available slots
+    </button>
+
+  </div>
+
+  <div id="slotResults"></div>
+
+</section>
+
+<!-- EARNINGS -->
+<section id="earnings" class="screen">
+
+  <h2>💷 Earnings</h2>
+
+  <div class="card">
+    <div class="small">Total completed</div>
+    <div id="bigEarned" style="font-size:38px;font-weight:800;margin:5px 0">£0</div>
+    <div class="small">Based on completed cleaning jobs</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <b id="agencyEarned">£0</b>
+      <small>Agency</small>
+    </div>
+    <div class="stat">
+      <b id="privateEarned">£0</b>
+      <small>Private</small>
+    </div>
+    <div class="stat">
+      <b id="totalHours">0h</b>
+      <small>Hours</small>
+    </div>
+    <div class="stat">
+      <b id="averageRate">£0</b>
+      <small>Avg/hour</small>
+    </div>
+  </div>
+
+  <h2>Recent jobs</h2>
+  <div id="earningsList"></div>
+
+</section>
 
 </div>
 
-<p>
-🕐 ${j.start} – ${j.end}
-· ${fmtHours(dur(j))}
-</p>
+<!-- NAVIGATION -->
+<nav>
+  <button class="active" onclick="showScreen('home',this)">
+    <span>🏠</span>Home
+  </button>
+  <button onclick="showScreen('schedule',this)">
+    <span>📅</span>Schedule
+  </button>
+  <button onclick="showScreen('clients',this)">
+    <span>👤</span>Clients
+  </button>
+  <button onclick="showScreen('available',this)">
+    <span>🟢</span>Free time
+  </button>
+  <button onclick="showScreen('earnings',this)">
+    <span>💷</span>Earnings
+  </button>
+</nav>
 
-${c.address
-?`<p>📍 ${c.address}</p>`
-:''}
+<!-- JOB MODAL -->
+<div class="modal" id="jobModal">
+<div class="modalbox">
 
-<span class="pill ${cls}">
-${
-j.status==='inprogress'
-?'In Progress'
-:j.status
-?j.status[0].toUpperCase()+j.status.slice(1)
-:'Scheduled'
-}
-</span>
+<button class="close" onclick="closeJob()">×</button>
 
-</div>
+<h2 style="margin-top:0">Add cleaning job 🧹</h2>
 
-</div>
-`;
-}
+<label>Client</label>
+<select id="jobClient"></select>
 
-
-function jobAction(id){
-
-let j=data.jobs.find(x=>x.id===id);
-
-if(!j)return;
-
-if(j.status==='scheduled'){
-
-if(confirm('Start this cleaning now? 🧹')){
-startTimer(id);
-}
-
-}else if(j.status==='inprogress'){
-
-showTimer(id);
-
-}else{
-
-openJobEdit(id);
-
-}
-}
-
-
-function startTimer(id){
-
-let j=data.jobs.find(x=>x.id===id);
-
-if(!j)return;
-
-j.status='inprogress';
-
-timerJobId=id;
-timerStart=Date.now();
-
-save();
-
-showTimer(id);
-
-clearInterval(timerId);
-
-timerId=setInterval(updateClock,1000);
-
-updateClock();
-}
-
-
-function showTimer(id){
-
-let j=data.jobs.find(x=>x.id===id);
-
-if(!j)return;
-
-let c=client(j.clientId);
-
-document.getElementById('timerName').textContent=c.name;
-
-document.getElementById('timerDetails').innerHTML=`
+<label>Date</label>
+<input id="jobDate" type="date">
 
 <div class="row">
-<span>Date</span>
-<b>${j.date}</b>
+  <div>
+    <label>Start time</label>
+    <input id="jobStart" type="time" onchange="calculateJob()">
+  </div>
+  <div>
+    <label>End time</label>
+    <input id="jobEnd" type="time" onchange="calculateJob()">
+  </div>
+</div>
+
+<div class="card" style="background:#f3edff">
+  <div class="small">Calculated duration</div>
+  <b id="calculatedDuration">0h 0m</b>
 </div>
 
 <div class="row">
-<span>Scheduled</span>
-<b>${j.start} – ${j.end}</b>
+  <div>
+    <label>Hourly rate (£)</label>
+    <input id="jobRate" type="number" step="0.5" onchange="calculateJob()">
+  </div>
+  <div>
+    <label>Total (£)</label>
+    <input id="jobPrice" type="number" step="0.01">
+  </div>
 </div>
+
+<label>Status</label>
+<select id="jobStatus">
+  <option value="scheduled">Confirmed</option>
+  <option value="tentative">Tentative</option>
+  <option value="completed">Completed</option>
+</select>
+
+<label>Notes</label>
+<textarea id="jobNotes" placeholder="Anything important..."></textarea>
+
+<button class="btn primary" style="width:100%" onclick="saveJob()">
+  Save cleaning
+</button>
+
+</div>
+</div>
+
+<!-- CLIENT MODAL -->
+<div class="modal" id="clientModal">
+<div class="modalbox">
+
+<button class="close" onclick="closeClient()">×</button>
+
+<h2 style="margin-top:0">New client 👤</h2>
+
+<label>Name</label>
+<input id="cName" placeholder="Client name">
+
+<label>Phone</label>
+<input id="cPhone" placeholder="Phone number">
+
+<label>Address</label>
+<input id="cAddress" placeholder="Address">
+
+<label>Client type</label>
+<select id="cType">
+  <option value="agency">🏢 Agency</option>
+  <option value="private">🏠 Private</option>
+</select>
+
+<label>Hourly rate (£)</label>
+<input id="cRate" type="number" step="0.5" value="16">
+
+<label>Frequency</label>
+<select id="cFreq" onchange="toggleFortnightly()">
+  <option value="weekly">Weekly</option>
+  <option value="fortnightly">Fortnightly</option>
+  <option value="oneoff">One-off</option>
+</select>
+
+<div id="weekChoice" style="display:none">
+  <label>Fortnightly week</label>
+  <select id="cWeek">
+    <option value="A">Week A</option>
+    <option value="B">Week B</option>
+  </select>
+</div>
+
+<label>Usual start time</label>
+<input id="cStart" type="time">
+
+<label>Usual hours</label>
+<input id="cHours" type="number" min="0.5" step="0.5" value="3">
+
+<label>Flexibility</label>
+<select id="cFlex">
+  <option value="fixed">Fixed</option>
+  <option value="flexible">Flexible</option>
+  <option value="variable">Usually varies</option>
+</select>
+
+<label>Notes</label>
+<textarea id="cNotes" placeholder="Cleaning notes, preferences, keys, etc."></textarea>
+
+<button class="btn primary" style="width:100%" onclick="saveClient()">
+  Save client
+</button>
+
+</div>
+</div>
+
+<!-- HOLIDAY MODAL -->
+<div class="modal" id="holidayModal">
+<div class="modalbox">
+
+<button class="close" onclick="closeHoliday()">×</button>
+
+<h2 style="margin-top:0">🏖️ Add holiday</h2>
+
+<label>Client</label>
+<select id="holidayClient"></select>
 
 <div class="row">
-<span>Price</span>
-<b>£${Number(j.price||0).toFixed(2)}</b>
+  <div>
+    <label>From</label>
+    <input id="holidayStart" type="date">
+  </div>
+  <div>
+    <label>Until</label>
+    <input id="holidayEnd" type="date">
+  </div>
 </div>
 
-`;
+<label>Notes</label>
+<textarea id="holidayNotes" placeholder="Holiday / unavailable..."></textarea>
 
-show('timer');
+<button class="btn primary" style="width:100%" onclick="saveHoliday()">
+  Save holiday
+</button>
 
-if(!timerStart){
+</div>
+</div>
 
-timerJobId=id;
+<!-- TIMER MODAL -->
+<div class="modal" id="timerModal">
+<div class="modalbox">
 
-timerStart=Date.now();
+<button class="close" onclick="closeTimer()">×</button>
 
-clearInterval(timerId);
+<h2 style="text-align:center">Cleaning timer ⏱</h2>
 
-timerId=setInterval(updateClock,1000);
+<div class="timer" id="timerDisplay">00:00:00</div>
 
+<div id="timerClientArea">
+  <label>Client</label>
+  <select id="timerClient"></select>
+</div>
+
+<div class="actions">
+  <button class="btn greenbtn" onclick="toggleTimer()" id="timerBtn">Start</button>
+  <button class="btn pinkbtn" onclick="stopTimer()">Stop</button>
+</div>
+
+</div>
+</div>
+
+<script>
+
+const KEY="cleaningManager2";
+
+let currentWeek="A";
+let timerStart=null;
+let timerInterval=null;
+
+const defaultData={
+  clients:[
+    {
+      id:1,
+      name:"Tosca",
+      phone:"",
+      address:"",
+      type:"agency",
+      rate:16,
+      freq:"weekly",
+      week:"A",
+      start:"09:00",
+      hours:3,
+      flex:"fixed",
+      notes:""
+    },
+    {
+      id:2,
+      name:"Lottie",
+      phone:"",
+      address:"",
+      type:"agency",
+      rate:16,
+      freq:"weekly",
+      week:"A",
+      start:"15:00",
+      hours:2,
+      flex:"fixed",
+      notes:""
+    },
+    {
+      id:3,
+      name:"Christine",
+      phone:"",
+      address:"",
+      type:"private",
+      rate:18,
+      freq:"fortnightly",
+      week:"A",
+      start:"09:30",
+      hours:3,
+      flex:"fixed",
+      notes:""
+    },
+    {
+      id:4,
+      name:"Matt",
+      phone:"",
+      address:"",
+      type:"agency",
+      rate:16,
+      freq:"weekly",
+      week:"A",
+      start:"09:00",
+      hours:5,
+      flex:"variable",
+      notes:"Usually 5h, sometimes 5.5–6h."
+    },
+    {
+      id:5,
+      name:"Sonia",
+      phone:"",
+      address:"",
+      type:"agency",
+      rate:16,
+      freq:"weekly",
+      week:"A",
+      start:"14:30",
+      hours:5,
+      flex:"variable",
+      notes:"Tentative — need to confirm day/time."
+    },
+    {
+      id:6,
+      name:"Laura",
+      phone:"",
+      address:"",
+      type:"private",
+      rate:18,
+      freq:"weekly",
+      week:"A",
+      start:"09:00",
+      hours:4,
+      flex:"variable",
+      notes:"Usually around 4 hours."
+    },
+    {
+      id:7,
+      name:"Gill",
+      phone:"",
+      address:"",
+      type:"agency",
+      rate:16,
+      freq:"fortnightly",
+      week:"A",
+      start:"15:00",
+      hours:2,
+      flex:"variable",
+      notes:"Sometimes earlier or later."
+    },
+    {
+      id:8,
+      name:"Joanna",
+      phone:"",
+      address:"",
+      type:"private",
+      rate:18,
+      freq:"fortnightly",
+      week:"A",
+      start:"09:30",
+      hours:4,
+      flex:"variable",
+      notes:"Sometimes 5 hours depending on condition."
+    },
+    {
+      id:9,
+      name:"Sindu",
+      phone:"",
+      address:"",
+      type:"agency",
+      rate:16,
+      freq:"fortnightly",
+      week:"B",
+      start:"09:30",
+      hours:3,
+      flex:"fixed",
+      notes:"Alternates with Joanna."
+    }
+  ],
+  jobs:[],
+  holidays:[],
+  available:4
+};
+
+let data=JSON.parse(localStorage.getItem(KEY)||"null") || defaultData;
+
+function save(){
+  localStorage.setItem(KEY,JSON.stringify(data));
+  renderAll();
 }
 
-updateClock();
+function pad(n){
+  return String(n).padStart(2,"0");
 }
 
-
-function updateClock(){
-
-if(!timerStart)return;
-
-let s=Math.floor((Date.now()-timerStart)/1000);
-
-document.getElementById('clock').textContent=
-`${pad(Math.floor(s/3600))}:${pad(Math.floor(s/60)%60)}:${pad(s%60)}`;
+function todayStr(){
+  return new Date().toISOString().slice(0,10);
 }
 
-
-function finishTimer(){
-
-let j=data.jobs.find(x=>x.id===timerJobId);
-
-if(!j)return;
-
-let elapsed=Math.max(0,Date.now()-timerStart);
-
-let totalHours=elapsed/3600000;
-
-let startMinutes=minutes(j.start);
-
-let endMinutes=Math.round(startMinutes+totalHours*60);
-
-j.end=
-`${pad(Math.floor(endMinutes/60)%24)}:${pad(endMinutes%60)}`;
-
-j.status='completed';
-
-clearInterval(timerId);
-
-timerId=null;
-timerStart=null;
-timerJobId=null;
-
-save();
-
-toast('Job completed and saved ✓');
-
-show('home');
+function mins(time){
+  if(!time)return 0;
+  const p=time.split(":").map(Number);
+  return p[0]*60+p[1];
 }
 
+function timeFromMins(m){
+  return pad(Math.floor(m/60)%24)+":"+pad(m%60);
+}
+
+function duration(start,end){
+  return Math.max(0,mins(end)-mins(start));
+}
+
+function formatDuration(m){
+  return Math.floor(m/60)+"h "+(m%60)+"m";
+}
+
+function getClient(id){
+  return data.clients.find(c=>Number(c.id)===Number(id)) || {name:"Unknown",rate:0,type:"agency"};
+}
+
+function clientOnHoliday(clientId,date){
+  return data.holidays.some(h =>
+    Number(h.clientId)===Number(clientId) &&
+    date>=h.start &&
+    date<=h.end
+  );
+}
+
+function weekLetter(date){
+  const d=new Date(date+"T12:00:00");
+  const start=new Date("2026-08-24T12:00:00");
+  const diff=Math.floor((d-start)/86400000);
+  return Math.floor(diff/7)%2===0 ? "A":"B";
+}
+
+function clientRunsOnDate(c,date){
+  if(c.freq==="oneoff")return false;
+  if(c.freq==="weekly")return true;
+  return weekLetter(date)===c.week;
+}
+
+function renderAll(){
+  renderHome();
+  renderClients();
+  renderHolidays();
+  renderSchedule();
+  renderEarnings();
+}
+
+function renderHome(){
+
+  const d=new Date();
+
+  document.getElementById("today").textContent =
+    d.toLocaleDateString("en-GB",{
+      weekday:"long",
+      day:"numeric",
+      month:"long"
+    });
+
+  const jobs=data.jobs.filter(j=>j.date===todayStr());
+
+  const total=jobs.reduce((a,j)=>a+duration(j.start,j.end),0);
+
+  const earned=jobs
+    .filter(j=>j.status==="completed")
+    .reduce((a,j)=>a+Number(j.price||0),0);
+
+  jobsCount.textContent=jobs.length;
+  hoursCount.textContent=formatDuration(total);
+  earnedCount.textContent="£"+earned.toFixed(0);
+  availableCount.textContent=getAvailableToday()+"h";
+
+  const el=document.getElementById("todayJobs");
+
+  if(!jobs.length){
+    el.innerHTML='<div class="empty">No cleaning jobs today 🌸<br>Add one with the + button.</div>';
+    return;
+  }
+
+  el.innerHTML=jobs.map((j,i)=>jobHTML(j,i)).join("");
+}
+
+function jobHTML(j,i){
+
+  const c=getClient(j.clientId);
+
+  const type=c.type==="private"
+    ? '<span class="badge private">🏠 PRIVATE</span>'
+    : '<span class="badge agency">🏢 AGENCY</span>';
+
+  let status="";
+
+  if(j.status==="tentative")
+    status='<span class="badge tentative">🟡 TENTATIVE</span>';
+  else if(j.status==="completed")
+    status='<span class="badge confirmed">✓ COMPLETED</span>';
+  else
+    status='<span class="badge confirmed">✓ CONFIRMED</span>';
+
+  return `
+  <div class="job ${["pink","blue","green","yellow"][i%4]}">
+    <div class="jobicon">🧹</div>
+    <div class="jobmain">
+      <b>${escapeHTML(c.name)}</b>
+      <small>${j.start} – ${j.end} · ${formatDuration(duration(j.start,j.end))}</small>
+      <div>${type} ${status}</div>
+    </div>
+    <div class="price">£${Number(j.price||0).toFixed(0)}</div>
+  </div>`;
+}
 
 function renderClients(){
 
-let q=(document.getElementById('search')?.value||'').toLowerCase();
+  const q=(document.getElementById("clientSearch")?.value||"").toLowerCase();
 
-let arr=data.clients.filter(c=>
-(c.name+c.address+c.phone)
-.toLowerCase()
-.includes(q)
-);
+  const arr=data.clients.filter(c =>
+    c.name.toLowerCase().includes(q)
+  );
 
-document.getElementById('clientList').innerHTML=
-arr.length
-?arr.map(c=>`
+  const el=document.getElementById("clientsList");
 
-<div class="job">
+  if(!arr.length){
+    el.innerHTML='<div class="empty">No clients found.</div>';
+    return;
+  }
 
-<div class="bar"></div>
+  el.innerHTML=arr.map((c,i)=>{
 
-<div class="jobbody">
+    const type=c.type==="private"
+      ? '<span class="badge private">🏠 PRIVATE</span>'
+      : '<span class="badge agency">🏢 AGENCY</span>';
 
-<div class="jobtop">
+    let freq="";
 
-<b>${c.name}</b>
+    if(c.freq==="weekly")
+      freq='<span class="badge weekly">WEEKLY</span>';
 
-<button
-class="editbtn"
-onclick="event.stopPropagation();openClient(${c.id})">
-Edit
-</button>
+    if(c.freq==="fortnightly")
+      freq=`<span class="badge fortnightly">FORTNIGHTLY · WEEK ${c.week}</span>`;
 
-</div>
+    if(c.freq==="oneoff")
+      freq='<span class="badge oneoff">ONE-OFF</span>';
 
-${c.phone
-?`<p>📞 ${c.phone}</p>`
-:''}
+    const holiday=data.holidays.find(h =>
+      Number(h.clientId)===Number(c.id) &&
+      todayStr()>=h.start &&
+      todayStr()<=h.end
+    );
 
-${c.address
-?`<p>📍 ${c.address}</p>`
-:''}
+    return `
+    <div class="card" style="background:${["#f3edff","#eaf8fd","#edf9f0","#fff6dc"][i%4]}">
 
-<p>
-⏱ ${c.hours||0}h
-· £${Number(c.price||0).toFixed(2)}
-${c.type?' · '+c.type:''}
-</p>
+      <div style="display:flex;gap:12px;align-items:center">
 
-</div>
+        <div class="jobicon">👤</div>
 
-</div>
+        <div style="flex:1">
 
-`).join('')
-:'<div class="card" style="text-align:center">No clients found 🫧</div>';
+          <b>${escapeHTML(c.name)}</b>
+
+          <div class="sub">${escapeHTML(c.address||"No address added")}</div>
+
+          <div class="sub">${escapeHTML(c.phone||"No phone added")}</div>
+
+          <div style="margin-top:5px">
+            ${type} ${freq}
+          </div>
+
+          <div class="sub" style="margin-top:5px">
+            £${Number(c.rate||0).toFixed(0)}/hour ·
+            ${c.start||"No time"} ·
+            ${c.hours||0}h
+          </div>
+
+          ${holiday ? `<div><span class="badge holiday">🏖️ ON HOLIDAY</span></div>`:""}
+
+        </div>
+
+      </div>
+
+    </div>`;
+  }).join("");
 }
 
+function renderHolidays(){
 
-function openClient(id){
+  const el=document.getElementById("holidayList");
 
-editingClient=id||null;
+  if(!data.holidays.length){
+    el.innerHTML='<div class="empty">No holidays added yet 🏖️</div>';
+    return;
+  }
 
-let c=id
-?client(id)
-:{
-name:'',
-phone:'',
-address:'',
-freq:'Weekly',
-hours:3,
-price:18,
-type:'Private'
-};
+  el.innerHTML=data.holidays.map(h=>{
 
-document.getElementById('modalTitle').textContent=
-id?'Edit Client ✨':'New Client 🧹';
+    const c=getClient(h.clientId);
 
-document.getElementById('cName').value=c.name||'';
-document.getElementById('cPhone').value=c.phone||'';
-document.getElementById('cAddress').value=c.address||'';
-document.getElementById('cFreq').value=c.freq||'Weekly';
-document.getElementById('cHours').value=c.hours||3;
-document.getElementById('cPrice').value=c.price||18;
-
-document.getElementById('deleteClientBtn')
-.classList.toggle('hidden',!id);
-
-document.getElementById('modal').classList.remove('hidden');
+    return `
+    <div class="holidayBox">
+      <b>🏖️ ${escapeHTML(c.name)}</b>
+      <div class="sub">${h.start} → ${h.end}</div>
+      ${h.notes?`<div class="small" style="margin-top:6px">${escapeHTML(h.notes)}</div>`:""}
+    </div>`;
+  }).join("");
 }
 
+function renderSchedule(){
 
-function closeModal(){
+  const date=document.getElementById("weekDate");
 
-document.getElementById('modal')
-.classList.add('hidden');
+  if(!date.value)
+    date.value=todayStr();
 
-editingClient=null;
+  document.getElementById("weekABtn").classList.toggle("active",currentWeek==="A");
+  document.getElementById("weekBBtn").classList.toggle("active",currentWeek==="B");
+
+  const base=new Date(date.value+"T12:00:00");
+
+  const monday=new Date(base);
+
+  const day=(monday.getDay()+6)%7;
+
+  monday.setDate(monday.getDate()-day);
+
+  let html="";
+
+  for(let i=0;i<7;i++){
+
+    const d=new Date(monday);
+
+    d.setDate(monday.getDate()+i);
+
+    const ds=d.toISOString().slice(0,10);
+
+    const weekday=d.toLocaleDateString("en-GB",{weekday:"long"});
+
+    const jobs=data.jobs.filter(j=>j.date===ds);
+
+    const regular=data.clients.filter(c=>clientRunsOnDate(c,ds));
+
+    const activeHoliday=regular.filter(c=>clientOnHoliday(c.id,ds));
+
+    const scheduledNames=new Set(jobs.map(j=>Number(j.clientId)));
+
+    const missing=regular.filter(c=>
+      !scheduledNames.has(Number(c.id)) &&
+      !clientOnHoliday(c.id,ds)
+    );
+
+    html+=`
+    <div class="card">
+
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <b>${weekday}</b>
+          <div class="small">${ds}</div>
+        </div>
+        <span class="badge ${weekLetter(ds)==="A"?"weekly":"fortnightly"}">
+          Week ${weekLetter(ds)}
+        </span>
+      </div>
+
+      ${jobs.length
+        ? jobs.map((j,n)=>jobHTML(j,n)).join("")
+        : '<div class="empty">No saved bookings</div>'
+      }
+
+      ${activeHoliday.map(c=>`
+        <div class="holidayBox">
+          🏖️ <b>${escapeHTML(c.name)}</b> is on holiday
+          <div class="small">${c.start||""} · time released</div>
+        </div>
+      `).join("")}
+
+      ${missing.map(c=>`
+        <div class="available">
+          🟢 <b>${escapeHTML(c.name)}</b> expected
+          <div class="small">
+            ${c.start||"Flexible"} · ${c.hours||0}h ·
+            ${c.type==="private"?"Private":"Agency"}
+          </div>
+        </div>
+      `).join("")}
+
+    </div>`;
+  }
+
+  document.getElementById("scheduleList").innerHTML=html;
+
+  renderAvailableWeek(monday);
 }
 
+function renderAvailableWeek(monday){
 
-function saveClient(){
+  const el=document.getElementById("availableSlots");
 
-let c={
-id:editingClient||Date.now(),
-name:document.getElementById('cName').value.trim(),
-phone:document.getElementById('cPhone').value.trim(),
-address:document.getElementById('cAddress').value.trim(),
-freq:document.getElementById('cFreq').value,
-hours:Number(document.getElementById('cHours').value||0),
-price:Number(document.getElementById('cPrice').value||0)
-};
+  let html="";
 
-if(!c.name){
+  for(let i=0;i<5;i++){
 
-toast('Please enter a client name');
+    const d=new Date(monday);
 
-return;
+    d.setDate(monday.getDate()+i);
+
+    const ds=d.toISOString().slice(0,10);
+
+    const slots=calculateAvailableSlots(ds);
+
+    if(slots.length){
+
+      html+=`
+      <div class="card">
+        <b>${d.toLocaleDateString("en-GB",{weekday:"long"})}</b>
+        <div class="small">${ds}</div>
+
+        ${slots.map(s=>`
+          <div class="slot">
+            <div>
+              <b>${s.start} – ${s.end}</b>
+              <div class="small">${formatDuration(s.minutes)} available</div>
+            </div>
+            <button class="btn greenbtn" style="padding:8px 11px"
+              onclick="useSlot('${ds}','${s.start}','${s.end}')">
+              Use
+            </button>
+          </div>
+        `).join("")}
+
+      </div>`;
+    }
+  }
+
+  if(!html)
+    html='<div class="empty">No free slots calculated for this week.</div>';
+
+  el.innerHTML=html;
 }
 
-if(editingClient){
+function calculateAvailableSlots(date){
 
-let i=data.clients.findIndex(
-x=>x.id===editingClient
-);
+  const startDay=9*60;
+  const endDay=20*60;
 
-if(i>=0)data.clients[i]=c;
+  const bookings=data.jobs
+    .filter(j=>j.date===date)
+    .map(j=>({
+      start:mins(j.start),
+      end:mins(j.end)
+    }));
 
-}else{
+  data.clients
+    .filter(c=>clientRunsOnDate(c,date))
+    .filter(c=>!clientOnHoliday(c.id,date))
+    .forEach(c=>{
 
-data.clients.push(c);
+      const s=mins(c.start||"09:00");
+      const e=s+Number(c.hours||0)*60;
 
+      bookings.push({start:s,end:e});
+    });
+
+  bookings.sort((a,b)=>a.start-b.start);
+
+  const slots=[];
+
+  let cursor=startDay;
+
+  bookings.forEach(b=>{
+
+    if(b.start>cursor){
+
+      const free=b.start-cursor;
+
+      if(free>=30){
+        slots.push({
+          start:timeFromMins(cursor),
+          end:timeFromMins(b.start),
+          minutes:free
+        });
+      }
+    }
+
+    cursor=Math.max(cursor,b.end);
+  });
+
+  if(endDay>cursor){
+
+    const free=endDay-cursor;
+
+    if(free>=30){
+      slots.push({
+        start:timeFromMins(cursor),
+        end:timeFromMins(endDay),
+        minutes:free
+      });
+    }
+  }
+
+  return slots;
 }
 
-save();
+function getAvailableToday(){
 
-closeModal();
+  const slots=calculateAvailableSlots(todayStr());
 
-renderAll();
-
-toast('Client saved ✓');
+  return slots.reduce((a,s)=>a+s.minutes,0)/60;
 }
 
+function setWeek(w){
 
-function deleteClient(){
+  currentWeek=w;
 
-if(!editingClient)return;
-
-let c=client(editingClient);
-
-if(!confirm(
-`Delete ${c.name} from your clients? Historical jobs will be kept.`
-))return;
-
-data.clients=data.clients.filter(
-x=>x.id!==editingClient
-);
-
-data.weeklySchedule=
-data.weeklySchedule.filter(
-x=>x.name.toLowerCase()!==c.name.toLowerCase()
-);
-
-save();
-
-closeModal();
-
-renderAll();
-
-toast('Client deleted');
+  renderSchedule();
 }
 
+function useSlot(date,start,end){
 
-function populateClients(){
+  openJob();
 
-document.getElementById('jobClient').innerHTML=
-data.clients.map(c=>
-`<option value="${c.id}">${c.name}</option>`
-).join('');
+  jobDate.value=date;
+  jobStart.value=start;
+  jobEnd.value=end;
 
-document.getElementById('eJobClient').innerHTML=
-data.clients.map(c=>
-`<option value="${c.id}">${c.name}</option>`
-).join('');
+  calculateJob();
 }
 
+function findSlots(){
 
-function openAdd(){
+  showScreen("available");
 
-document.getElementById('jobDate').value=today();
+  const from=document.getElementById("searchFrom");
 
-document.getElementById('addTitle').textContent=
-'Add Cleaning ✨';
+  if(!from.value)
+    from.value=todayStr();
 
-document.getElementById('jobStart').value='09:00';
-document.getElementById('jobEnd').value='12:00';
-document.getElementById('jobPrice').value='0';
-document.getElementById('jobNotes').value='';
+  const hours=Number(document.getElementById("searchHours").value||3);
+  const weeks=Number(document.getElementById("searchWeeks").value||4);
 
-document.getElementById('actualHoursRow')
-.classList.add('hidden');
+  const start=new Date(from.value+"T12:00:00");
 
-show('add');
+  const results=[];
+
+  for(let i=0;i<weeks*7;i++){
+
+    const d=new Date(start);
+    d.setDate(start.getDate()+i);
+
+    if(d.getDay()===0 || d.getDay()===6)continue;
+
+    const ds=d.toISOString().slice(0,10);
+
+    calculateAvailableSlots(ds).forEach(s=>{
+
+      if(s.minutes>=hours*60){
+
+        results.push({
+          date:ds,
+          start:s.start,
+          end:timeFromMins(mins(s.start)+hours*60),
+          minutes:hours*60
+        });
+      }
+
+    });
+  }
+
+  const el=document.getElementById("slotResults");
+
+  if(!results.length){
+
+    el.innerHTML=`
+    <div class="empty">
+      No ${hours}h slots found in the selected period.
+      <br><br>
+      Try fewer hours or a longer search period.
+    </div>`;
+
+    return;
+  }
+
+  el.innerHTML=`
+  <h2>🟢 Available slots</h2>
+  ${results.slice(0,30).map(s=>`
+
+    <div class="card" style="background:#e7f6ea">
+
+      <b>${new Date(s.date+"T12:00:00").toLocaleDateString("en-GB",{
+        weekday:"long",
+        day:"numeric",
+        month:"short"
+      })}</b>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+
+        <div>
+          <b style="font-size:20px">${s.start} – ${s.end}</b>
+          <div class="small">${hours}h available</div>
+        </div>
+
+        <button class="btn greenbtn"
+          onclick="useSlot('${s.date}','${s.start}','${s.end}')">
+          Book
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("")}`;
 }
-
-
-document.getElementById('jobClient')
-.addEventListener('change',function(){
-
-let c=client(Number(this.value));
-
-if(!c)return;
-
-document.getElementById('jobPrice').value=
-Number(c.price||0);
-
-});
-  function saveJob(){
-
-let clientId=Number(
-document.getElementById('jobClient').value
-);
-
-let c=client(clientId);
-
-let start=document.getElementById('jobStart').value;
-let end=document.getElementById('jobEnd').value;
-
-let actual=document.getElementById('actualHours').value;
-
-if(
-!clientId ||
-!document.getElementById('jobDate').value ||
-!start ||
-!end
-){
-
-toast('Please complete the required fields');
-
-return;
-}
-
-if(c && ['Matt','Sonia','Laura'].includes(c.name) && actual){
-
-let mins=minutes(start)+Number(actual)*60;
-
-end=
-`${pad(Math.floor(mins/60)%24)}:${pad(Math.round(mins%60))}`;
-
-document.getElementById('jobEnd').value=end;
-}
-
-let hours=
-Math.max(0,minutes(end)-minutes(start))/60;
-
-let rate=
-Number(c.price||document.getElementById('jobPrice').value||0);
-
-let price=
-Number((hours*rate).toFixed(2));
-
-let j={
-id:Date.now(),
-clientId,
-date:document.getElementById('jobDate').value,
-start,
-end,
-price,
-rate,
-status:'scheduled',
-notes:document.getElementById('jobNotes').value||''
-};
-
-data.jobs.push(j);
-
-save();
-
-toast('Cleaning saved ✓');
-
-show('home');
-}
-
-
-function openJobEdit(id){
-
-let j=data.jobs.find(x=>x.id===id);
-
-if(!j)return;
-
-editingJobId=id;
-
-let c=client(j.clientId);
-
-document.getElementById('eJobClient').value=j.clientId;
-document.getElementById('eJobDate').value=j.date;
-document.getElementById('eJobStart').value=j.start;
-document.getElementById('eJobEnd').value=j.end;
-
-let hours=
-j.hours!==undefined
-?Number(j.hours)
-:dur(j)/60;
-
-let rate=
-j.rate!==undefined
-?Number(j.rate)
-:(hours?Number(j.price)/hours:0);
-
-document.getElementById('eJobHours').value=
-hours.toFixed(2);
-
-document.getElementById('eJobRate').value=
-rate.toFixed(2);
-
-document.getElementById('eJobPrice').value=
-Number(j.price||0).toFixed(2);
-
-document.getElementById('eJobStatus').value=
-j.status||'completed';
-
-document.getElementById('eJobNotes').value=
-j.notes||'';
-
-document.getElementById('jobModal')
-.classList.remove('hidden');
-}
-
-
-function closeJobModal(){
-
-document.getElementById('jobModal')
-.classList.add('hidden');
-
-editingJobId=null;
-}
-
-
-function recalcEditedJob(){
-
-let hours=
-Number(document.getElementById('eJobHours').value||0);
-
-let rate=
-Number(document.getElementById('eJobRate').value||0);
-
-document.getElementById('eJobPrice').value=
-(hours*rate).toFixed(2);
-
-let start=
-document.getElementById('eJobStart').value;
-
-if(start && hours>=0){
-
-let mins=minutes(start)+Math.round(hours*60);
-
-document.getElementById('eJobEnd').value=
-`${pad(Math.floor(mins/60)%24)}:${pad(mins%60)}`;
-
-}
-
-}
-
-
-document.getElementById('eJobHours')
-.addEventListener('input',recalcEditedJob);
-
-document.getElementById('eJobRate')
-.addEventListener('input',recalcEditedJob);
-
-document.getElementById('eJobStart')
-.addEventListener('change',recalcEditedJob);
-
-
-function saveEditedJob(){
-
-if(!editingJobId)return;
-
-let j=data.jobs.find(x=>x.id===editingJobId);
-
-if(!j)return;
-
-let hours=
-Number(document.getElementById('eJobHours').value||0);
-
-let rate=
-Number(document.getElementById('eJobRate').value||0);
-
-let status=
-document.getElementById('eJobStatus').value;
-
-j.clientId=
-Number(document.getElementById('eJobClient').value);
-
-j.date=
-document.getElementById('eJobDate').value;
-
-j.start=
-document.getElementById('eJobStart').value;
-
-j.end=
-document.getElementById('eJobEnd').value;
-
-j.hours=hours;
-
-j.rate=rate;
-
-j.price=
-Number((hours*rate).toFixed(2));
-
-j.status=status;
-
-j.notes=
-document.getElementById('eJobNotes').value||'';
-
-save();
-
-closeJobModal();
-
-renderAll();
-
-toast('Job updated ✓');
-}
-
-
-function renderCalendar(){
-
-renderWeeklySchedule();
-
-let js=[...data.jobs]
-.sort((a,b)=>
-(b.date+b.start).localeCompare(a.date+a.start)
-);
-
-document.getElementById('calendarList').innerHTML=
-js.length
-?js.map(j=>`
-
-<div>
-
-<h2 style="font-size:16px;margin-top:18px">
-${new Date(j.date+'T12:00:00')
-.toLocaleDateString(undefined,{
-weekday:'long',
-day:'numeric',
-month:'short'
-})}
-</h2>
-
-<div style="position:relative">
-
-${jobHTML(j)}
-
-<button
-class="editbtn"
-style="position:absolute;right:12px;top:12px"
-onclick="event.stopPropagation();openJobEdit(${j.id})">
-✏️ Edit
-</button>
-
-</div>
-
-</div>
-
-`).join('')
-:'<p class="small">No bookings yet.</p>';
-
-document.getElementById('slots').innerHTML=
-nextSlots().map(s=>`
-
-<div class="job">
-
-<div class="bar"></div>
-
-<div>
-<b>${s.date}</b>
-<p>${s.time} · ${s.hours} available</p>
-</div>
-
-</div>
-
-`).join('');
-
-renderMonthlyEstimate();
-}
-
-
-function renderWeeklySchedule(){
-
-let container=
-document.getElementById('weeklySchedule');
-
-if(!container)return;
-
-let names=[
-'Monday',
-'Tuesday',
-'Wednesday',
-'Thursday',
-'Friday'
-];
-
-let html='';
-
-names.forEach((name,index)=>{
-
-let items=data.weeklySchedule
-.filter(x=>x.day===index+1);
-
-if(!items.length)return;
-
-html+=`
-
-<h2 style="font-size:17px;margin-bottom:8px">
-${name}
-</h2>
-`;
-
-items.forEach(x=>{
-
-let actual=x;
-
-if(index===4){
-
-let weekAnchor=
-new Date(2026,0,5);
-
-let now=new Date();
-
-let diff=Math.floor(
-(now-weekAnchor)/(7*24*60*60*1000)
-);
-
-let even=Math.abs(diff)%2===0;
-
-if(x.alternate==='A'&&!even)return;
-if(x.alternate==='B'&&even)return;
-}
-
-let hours=
-x.variable
-?`${x.defaultHours||4}h default`
-:`${(minutes(x.end)-minutes(x.start))/60}h`;
-
-html+=`
-
-<div class="job">
-
-<div class="bar"></div>
-
-<div class="jobbody">
-
-<div class="jobtop">
-<b>${x.name}</b>
-<b>£${x.rate}/h</b>
-</div>
-
-<p>
-🕐 ${x.start} – ${x.end}
-· ${hours}
-</p>
-
-<p>
-${x.type==='Private'?'🏡 Private':'🏢 Agency'}
-</p>
-
-${x.variable
-?`<span class="pill">Flexible hours</span>`
-:''}
-
-</div>
-
-</div>
-`;
-
-});
-
-});
-
-container.innerHTML=html;
-}
-
-
-function renderMonthlyEstimate(){
-
-let el=
-document.getElementById('monthlyEstimate');
-
-if(!el)return;
-
-let now=new Date();
-
-let prev=
-new Date(now.getFullYear(),now.getMonth()-1,1);
-
-let year=prev.getFullYear();
-let month=prev.getMonth();
-
-let daysInMonth=
-new Date(year,month+1,0).getDate();
-
-let totalHours=0;
-let totalEarn=0;
-
-for(let d=1;d<=daysInMonth;d++){
-
-let date=
-new Date(year,month,d);
-
-let day=date.getDay();
-
-if(day===0||day===6)continue;
-
-let weekday=
-day===0?7:day;
-
-data.weeklySchedule
-.filter(x=>x.day===weekday)
-.forEach(x=>{
-
-let hours=
-x.variable
-?Number(x.defaultHours||4)
-:(minutes(x.end)-minutes(x.start))/60;
-
-totalHours+=hours;
-totalEarn+=hours*Number(x.rate||0);
-
-});
-
-}
-
-el.innerHTML=`
-
-<b>
-📊 Estimated ${prev.toLocaleDateString(undefined,{
-month:'long',
-year:'numeric'
-})}
-</b>
-
-<p style="margin:8px 0 0">
-Approximately <strong>${totalHours.toFixed(1)} hours</strong>
-</p>
-
-<p style="margin:4px 0 0">
-Estimated earnings:
-<strong>£${totalEarn.toFixed(2)}</strong>
-</p>
-
-<p class="small" style="margin-top:9px">
-Based on your saved weekly schedule and default hours.
-</p>
-`;
-}
-
-
-function nextSlots(){
-
-let out=[];
-
-let d=new Date();
-
-for(
-let n=1;
-n<=14&&out.length<3;
-n++
-){
-
-let x=new Date();
-
-x.setDate(d.getDate()+n);
-
-let ds=dateStr(x);
-
-let js=data.jobs
-.filter(j=>j.date===ds)
-.sort((a,b)=>
-minutes(a.start)-minutes(b.start)
-);
-
-let start=9*60;
-
-for(let j of js){
-
-let gap=minutes(j.start)-start;
-
-if(gap>=120){
-
-out.push({
-date:x.toLocaleDateString(undefined,{
-weekday:'short',
-day:'numeric',
-month:'short'
-}),
-
-time:
-`${pad(Math.floor(start/60))}:${pad(start%60)} – ${j.start}`,
-
-hours:(gap/60).toFixed(1)+'h'
-});
-
-break;
-}
-
-start=Math.max(start,minutes(j.end));
-}
-
-if(
-out.length<3 &&
-18*60-start>=120
-){
-
-out.push({
-
-date:x.toLocaleDateString(undefined,{
-weekday:'short',
-day:'numeric',
-month:'short'
-}),
-
-time:
-`${pad(Math.floor(start/60))}:${pad(start%60)} – 18:00`,
-
-hours:
-((18*60-start)/60).toFixed(1)+'h'
-
-});
-
-}
-
-}
-
-return out;
-}
-
-
-function findNextSlot(js){
-
-let last=9*60;
-
-for(let j of js){
-
-if(minutes(j.start)-last>=120){
-
-return {
-label:'Today ✨',
-detail:
-`${pad(Math.floor(last/60))}:${pad(last%60)} – ${j.start}`
-};
-
-}
-
-last=Math.max(last,minutes(j.end));
-
-}
-
-if(18*60-last>=120){
-
-return {
-label:'Today ✨',
-detail:
-`${pad(Math.floor(last/60))}:${pad(last%60)} – 18:00`
-};
-
-}
-
-return {
-label:'Tomorrow',
-detail:'Swipe to Schedule to see available slots 📅'
-};
-
-}
-
 
 function renderEarnings(){
 
-let now=new Date();
+  const completed=data.jobs.filter(j=>j.status==="completed");
 
-let ym=
-now.getFullYear()+
-'-'+
-pad(now.getMonth()+1);
+  const total=completed.reduce((a,j)=>a+Number(j.price||0),0);
 
-let js=data.jobs
-.filter(j=>j.date.startsWith(ym));
+  const agency=completed
+    .filter(j=>getClient(j.clientId).type==="agency")
+    .reduce((a,j)=>a+Number(j.price||0),0);
 
-let earn=
-js.reduce((a,j)=>a+Number(j.price||0),0);
+  const privateMoney=completed
+    .filter(j=>getClient(j.clientId).type==="private")
+    .reduce((a,j)=>a+Number(j.price||0),0);
 
-let mins=
-js.reduce((a,j)=>a+dur(j),0);
+  const hours=completed.reduce((a,j)=>a+duration(j.start,j.end),0)/60;
 
-document.getElementById('monthEarn').textContent=
-'£'+earn.toFixed(2);
+  bigEarned.textContent="£"+total.toFixed(0);
+  agencyEarned.textContent="£"+agency.toFixed(0);
+  privateEarned.textContent="£"+privateMoney.toFixed(0);
+  totalHours.textContent=hours.toFixed(1)+"h";
+  averageRate.textContent="£"+(hours?total/hours:0).toFixed(2);
 
-document.getElementById('monthMeta').textContent=
-`${js.length} jobs · ${fmtHours(mins)} · £${
-mins
-?((earn/(mins/60)).toFixed(2))
-:'0.00'
-}/hour`;
+  const el=document.getElementById("earningsList");
 
-let weeks=[0,0,0,0,0];
+  if(!completed.length){
 
-js.forEach(j=>{
+    el.innerHTML='<div class="empty">No completed jobs yet.</div>';
+    return;
+  }
 
-let day=
-Number(j.date.slice(-2));
+  el.innerHTML=completed
+    .slice()
+    .reverse()
+    .map(j=>{
 
-weeks[
-Math.min(4,Math.floor((day-1)/7))
-]+=Number(j.price||0);
+      const c=getClient(j.clientId);
 
+      return `
+      <div class="card">
+
+        <div style="display:flex;justify-content:space-between">
+
+          <div>
+            <b>${escapeHTML(c.name)}</b>
+            <div class="small">${j.date}</div>
+            <div class="small">${j.start}–${j.end} · ${formatDuration(duration(j.start,j.end))}</div>
+            <div>
+              <span class="badge ${c.type==="private"?"private":"agency"}">
+                ${c.type==="private"?"🏠 PRIVATE":"🏢 AGENCY"}
+              </span>
+            </div>
+          </div>
+
+          <strong>£${Number(j.price||0).toFixed(2)}</strong>
+
+        </div>
+
+      </div>`;
+    }).join("");
+}
+
+function showScreen(id,btn){
+
+  document.querySelectorAll(".screen")
+    .forEach(x=>x.classList.remove("active"));
+
+  document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll("nav button")
+    .forEach(x=>x.classList.remove("active"));
+
+  if(btn)
+    btn.classList.add("active");
+
+  renderAll();
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function openJob(){
+
+  jobModal.classList.add("open");
+
+  jobDate.value=todayStr();
+
+  jobClient.innerHTML=data.clients
+    .map(c=>`
+      <option value="${c.id}">
+        ${escapeHTML(c.name)} · £${c.rate}/h · ${c.type==="private"?"Private":"Agency"}
+      </option>`)
+    .join("");
+
+  if(data.clients.length){
+
+    const c=data.clients[0];
+
+    jobRate.value=c.rate||16;
+
+    if(c.start)jobStart.value=c.start;
+
+    if(c.hours)
+      jobEnd.value=timeFromMins(mins(c.start||"09:00")+Number(c.hours)*60);
+  }
+
+  calculateJob();
+}
+
+function closeJob(){
+  jobModal.classList.remove("open");
+}
+
+jobClient.addEventListener("change",()=>{
+
+  const c=getClient(jobClient.value);
+
+  jobRate.value=c.rate||16;
+
+  if(c.start)
+    jobStart.value=c.start;
+
+  if(c.hours)
+    jobEnd.value=timeFromMins(
+      mins(c.start||"09:00")+Number(c.hours)*60
+    );
+
+  calculateJob();
 });
 
-let max=Math.max(...weeks,1);
+function calculateJob(){
 
-document.getElementById('chart').innerHTML=
-weeks.map((v,i)=>`
+  const s=jobStart.value;
+  const e=jobEnd.value;
 
-<div style="flex:1;text-align:center">
+  const m=duration(s,e);
 
-<div
-class="barcol"
-style="height:${20+110*v/max}px">
-</div>
+  calculatedDuration.textContent=formatDuration(m);
 
-<div class="barlabel">
-W${i+1}<br>
-£${v.toFixed(0)}
-</div>
+  const rate=Number(jobRate.value||0);
 
-</div>
-
-`).join('');
-
-document.getElementById('recent').innerHTML=
-[...data.jobs]
-.sort((a,b)=>
-(b.date+b.start).localeCompare(a.date+a.start)
-)
-.slice(0,12)
-.map(j=>`
-
-<div style="position:relative">
-
-${jobHTML(j)}
-
-<button
-class="editbtn"
-style="position:absolute;right:12px;top:12px"
-onclick="event.stopPropagation();openJobEdit(${j.id})">
-✏️ Edit
-</button>
-
-</div>
-
-`).join('');
+  jobPrice.value=(m/60*rate).toFixed(2);
 }
 
+function saveJob(){
 
-function requestReminderPermission(){
+  if(!jobClient.value)return;
 
-if(!('Notification' in window)){
+  if(!jobDate.value){
+    alert("Please choose a date.");
+    return;
+  }
 
-toast('Notifications are not supported here');
+  if(!jobStart.value || !jobEnd.value){
+    alert("Please enter start and end time.");
+    return;
+  }
 
-return;
+  const c=getClient(jobClient.value);
+
+  const m=duration(jobStart.value,jobEnd.value);
+
+  const price=Number(jobPrice.value||(
+    m/60*Number(jobRate.value||c.rate||0)
+  ));
+
+  data.jobs.push({
+    id:Date.now(),
+    clientId:Number(jobClient.value),
+    date:jobDate.value,
+    start:jobStart.value,
+    end:jobEnd.value,
+    rate:Number(jobRate.value||c.rate||0),
+    price:price,
+    status:jobStatus.value,
+    notes:jobNotes.value
+  });
+
+  save();
+  closeJob();
 }
 
-Notification.requestPermission()
-.then(permission=>{
+function openClient(){
 
-if(permission==='granted'){
+  clientModal.classList.add("open");
 
-toast('Reminders enabled 🔔');
+  cRate.value=16;
+  cFreq.value="weekly";
+  cStart.value="";
+  cHours.value=3;
+  cName.value="";
+  cPhone.value="";
+  cAddress.value="";
+  cNotes.value="";
 
-scheduleReminder();
-
-}else{
-
-toast('Notification permission not granted');
-
+  toggleFortnightly();
 }
 
-});
-
+function closeClient(){
+  clientModal.classList.remove("open");
 }
 
+function toggleFortnightly(){
 
-function scheduleReminder(){
-
-if(!('Notification' in window))return;
-
-if(Notification.permission!=='granted')return;
-
-let now=new Date();
-
-let tomorrow=
-new Date(
-now.getFullYear(),
-now.getMonth(),
-now.getDate()+1
-);
-
-let day=
-tomorrow.getDay();
-
-let weekday=
-day===0?7:day;
-
-let items=data.weeklySchedule
-.filter(x=>x.day===weekday);
-
-if(!items.length)return;
-
-let text=items.map(x=>
-`${x.name} · ${x.start}–${x.end}`
-).join('\n');
-
-let target=
-new Date(
-tomorrow.getFullYear(),
-tomorrow.getMonth(),
-tomorrow.getDate()-1,
-20,0,0
-);
-
-let delay=target-now;
-
-if(delay>0){
-
-setTimeout(()=>{
-
-new Notification(
-'Tomorrow’s cleaning 🧹',
-{
-body:text
-}
-);
-
-},delay);
-
+  weekChoice.style.display=
+    cFreq.value==="fortnightly" ? "block":"none";
 }
 
+function saveClient(){
+
+  const name=cName.value.trim();
+
+  if(!name){
+    alert("Please enter the client name.");
+    return;
+  }
+
+  data.clients.push({
+    id:Date.now(),
+    name:name,
+    phone:cPhone.value,
+    address:cAddress.value,
+    type:cType.value,
+    rate:Number(cRate.value||16),
+    freq:cFreq.value,
+    week:cWeek.value,
+    start:cStart.value,
+    hours:Number(cHours.value||0),
+    flex:cFlex.value,
+    notes:cNotes.value
+  });
+
+  save();
+  closeClient();
 }
 
+function openHoliday(){
 
-function renderTomorrowReminder(){
+  holidayModal.classList.add("open");
 
-let el=
-document.getElementById('tomorrowReminder');
+  holidayClient.innerHTML=data.clients
+    .map(c=>`<option value="${c.id}">${escapeHTML(c.name)}</option>`)
+    .join("");
 
-if(!el)return;
-
-let tomorrow=
-new Date();
-
-tomorrow.setDate(tomorrow.getDate()+1);
-
-let day=tomorrow.getDay();
-
-let weekday=
-day===0?7:day;
-
-let items=data.weeklySchedule
-.filter(x=>x.day===weekday);
-
-if(!items.length){
-
-el.innerHTML=
-'🌸 No scheduled cleaning for tomorrow.';
-
-return;
+  holidayStart.value=todayStr();
+  holidayEnd.value=todayStr();
+  holidayNotes.value="";
 }
 
-el.innerHTML=`
-
-<b>🔔 Tomorrow at 20:00</b>
-
-<p class="small" style="margin:6px 0 0">
-${items.map(x=>
-`${x.name} · ${x.start}–${x.end}`
-).join(' · ')}
-</p>
-
-`;
+function closeHoliday(){
+  holidayModal.classList.remove("open");
 }
 
+function saveHoliday(){
 
-function toast(t){
+  if(!holidayClient.value)return;
 
-let el=
-document.getElementById('toast');
+  if(holidayEnd.value<holidayStart.value){
+    alert("End date cannot be before start date.");
+    return;
+  }
 
-el.textContent=t;
+  data.holidays.push({
+    id:Date.now(),
+    clientId:Number(holidayClient.value),
+    start:holidayStart.value,
+    end:holidayEnd.value,
+    notes:holidayNotes.value
+  });
 
-el.classList.remove('hidden');
-
-setTimeout(()=>{
-el.classList.add('hidden');
-},1800);
-
+  save();
+  closeHoliday();
 }
 
+function startTimer(){
 
-const toastEl=
-document.getElementById('toast');
+  timerModal.classList.add("open");
 
-
-/* SWIPE NAVIGATION */
-
-let touchStartX=0;
-let touchStartY=0;
-
-const track=
-document.getElementById('pageTrack');
-
-track.addEventListener(
-'touchstart',
-e=>{
-
-touchStartX=e.touches[0].clientX;
-touchStartY=e.touches[0].clientY;
-
-},
-{passive:true}
-);
-
-
-track.addEventListener(
-'touchend',
-e=>{
-
-let endX=e.changedTouches[0].clientX;
-let endY=e.changedTouches[0].clientY;
-
-let dx=endX-touchStartX;
-let dy=endY-touchStartY;
-
-if(Math.abs(dx)<55)return;
-
-if(Math.abs(dx)<=Math.abs(dy))return;
-
-if(dx<0){
-
-goPage(currentPage+1);
-
-}else{
-
-goPage(currentPage-1);
-
+  timerClient.innerHTML=data.clients
+    .map(c=>`
+      <option value="${c.id}">
+        ${escapeHTML(c.name)}
+      </option>`)
+    .join("");
 }
 
-},
-{passive:true}
-);
-
-
-window.addEventListener(
-'pageshow',
-()=>{
-
-if(timerStart){
-updateClock();
+function closeTimer(){
+  timerModal.classList.remove("open");
 }
 
-}
-);
+function toggleTimer(){
 
+  if(timerStart){
 
-window.addEventListener(
-'beforeunload',
-()=>{
+    clearInterval(timerInterval);
+    timerStart=null;
+    timerBtn.textContent="Start";
+    return;
+  }
 
-if(timerStart){
+  timerStart=Date.now();
 
-localStorage.setItem(
-'cleaningTimer',
-JSON.stringify({
-jobId:timerJobId,
-startedAt:timerStart
-})
-);
+  timerInterval=setInterval(updateTimer,1000);
 
+  timerBtn.textContent="Pause";
 }
 
-}
-);
+function updateTimer(){
 
+  if(!timerStart)return;
 
-function restoreTimer(){
+  const seconds=Math.floor(
+    (Date.now()-timerStart)/1000
+  );
 
-let saved=
-localStorage.getItem('cleaningTimer');
-
-if(!saved)return;
-
-try{
-
-let t=JSON.parse(saved);
-
-if(
-t &&
-t.jobId &&
-t.startedAt
-){
-
-let j=data.jobs.find(
-x=>x.id==t.jobId
-);
-
-if(
-j &&
-j.status==='inprogress'
-){
-
-timerJobId=t.jobId;
-timerStart=t.startedAt;
-
-clearInterval(timerId);
-
-timerId=
-setInterval(updateClock,1000);
-
+  timerDisplay.textContent=
+    pad(Math.floor(seconds/3600))+":"+
+    pad(Math.floor(seconds%3600/60))+":"+
+    pad(seconds%60);
 }
 
+function stopTimer(){
+
+  if(!timerStart){
+    closeTimer();
+    return;
+  }
+
+  const end=new Date();
+
+  const elapsed=Math.floor(
+    (Date.now()-timerStart)/1000
+  );
+
+  clearInterval(timerInterval);
+
+  const startDate=new Date(
+    end.getTime()-elapsed*1000
+  );
+
+  const clientId=Number(timerClient.value);
+
+  const c=getClient(clientId);
+
+  const startTime=
+    pad(startDate.getHours())+":"+
+    pad(startDate.getMinutes());
+
+  const endTime=
+    pad(end.getHours())+":"+
+    pad(end.getMinutes());
+
+  const minutesWorked=Math.max(
+    1,
+    Math.round(elapsed/60)
+  );
+
+  const price=
+    minutesWorked/60*Number(c.rate||0);
+
+  data.jobs.push({
+    id:Date.now(),
+    clientId:clientId,
+    date:todayStr(),
+    start:startTime,
+    end:endTime,
+    rate:Number(c.rate||0),
+    price:price,
+    status:"completed",
+    notes:"Added using cleaning timer."
+  });
+
+  timerStart=null;
+  timerDisplay.textContent="00:00:00";
+  timerBtn.textContent="Start";
+
+  save();
+  closeTimer();
 }
 
-}catch(e){}
+function escapeHTML(str){
 
+  return String(str||"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
+/* Initialisation */
 
-renderTomorrowReminder();
+document.getElementById("weekDate").value=todayStr();
+
+document.getElementById("searchFrom").value=todayStr();
+
 renderAll();
-restoreTimer();
 
-if('serviceWorker' in navigator){
-
-window.addEventListener(
-'load',
-()=>
-navigator.serviceWorker
-.register('./sw.js')
-.catch(()=>{})
-);
-
-}
 </script>
 
 </body>
