@@ -1,0 +1,2377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f7d5e3">
+<title>Pure Shine Cleaning Manager</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #fff9fb;
+    color: #4d3942;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button {
+    font: inherit;
+    border: 0;
+    cursor: pointer;
+}
+
+/* ---------- START SCREEN ---------- */
+
+.start-screen {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 45px 22px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        radial-gradient(circle at top, #ffffff 0%, #fff7fa 45%, #f8dce8 100%);
+}
+
+.start-content {
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+}
+
+.logo-circle {
+    width: 165px;
+    height: 165px;
+    margin: 0 auto 25px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #fff, #f7c9dc);
+    border: 4px solid #c9a45c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 12px 35px rgba(170, 90, 125, 0.18);
+}
+
+.logo-symbol {
+    font-size: 58px;
+}
+
+.title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 39px;
+    line-height: 1.05;
+    color: #a84f79;
+    margin: 0;
+}
+
+.subtitle {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: 30px;
+    color: #cf719b;
+    margin-top: 5px;
+}
+
+.description {
+    margin: 18px auto 25px;
+    max-width: 350px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #765d67;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 25px;
+}
+
+.feature {
+    min-height: 95px;
+    padding: 10px 4px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid #efd8e2;
+    box-shadow: 0 7px 20px rgba(120,70,90,0.08);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-icon {
+    font-size: 25px;
+    color: #c45b88;
+    margin-bottom: 6px;
+}
+
+.feature-text {
+    font-size: 10px;
+    line-height: 1.25;
+    font-weight: 600;
+}
+
+.start-button {
+    width: 100%;
+    padding: 17px;
+    border-radius: 18px;
+    color: white;
+    font-weight: 700;
+    font-size: 17px;
+
+    background: linear-gradient(
+        90deg,
+        #e58ab1,
+        #d96e9c
+    );
+
+    box-shadow:
+        0 10px 25px rgba(210,105,150,0.25);
+
+    transition: transform .15s ease;
+}
+
+.start-button:active {
+    transform: scale(.98);
+}
+
+.start-note {
+    margin-top: 14px;
+    color: #a0838e;
+    font-size: 12px;
+}
+
+/* ---------- APP ---------- */
+
+.app {
+    display: none;
+    min-height: 100vh;
+}
+
+.app.visible {
+    display: block;
+}
+
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    text-align: center;
+    padding: 17px 15px 12px;
+
+    background: rgba(255,249,251,.96);
+    backdrop-filter: blur(12px);
+
+    border-bottom: 1px solid #efdce4;
+}
+
+.app-logo {
+    font-family: Georgia, serif;
+    font-size: 25px;
+    color: #a84f79;
+}
+
+.app-label {
+    margin-top: 3px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #9d818c;
+}
+
+.navigation {
+    position: sticky;
+    top: 70px;
+    z-index: 19;
+
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+
+    padding: 10px;
+
+    background: white;
+    border-bottom: 1px solid #efdce4;
+}
+
+.navigation button {
+    white-space: nowrap;
+    padding: 9px 14px;
+    border-radius: 20px;
+    background: #fff0f5;
+    color: #995673;
+}
+
+.navigation button.active {
+    background: #d878a2;
+    color: white;
+}
+
+main {
+    max-width: 760px;
+    margin: auto;
+    padding: 16px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 18px;
+    margin-bottom: 15px;
+
+    border: 1px solid #efdce4;
+
+    box-shadow:
+        0 8px 25px rgba(100,55,75,.08);
+}
+
+h2,
+h3 {
+    margin-top: 0;
+    font-family: Georgia, serif;
+    color: #794c60;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.stat {
+    padding: 15px;
+    border-radius: 17px;
+    background: linear-gradient(145deg,#fff0f5,#fffaf8);
+    border: 1px solid #efdce4;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #917681;
+}
+
+.stat-value {
+    display: block;
+    margin-top: 4px;
+    font-size: 23px;
+    font-weight: 700;
+    color: #a84f79;
+}
+
+.job {
+    padding: 14px;
+    margin-bottom: 10px;
+    border-radius: 16px;
+    background: #fffafd;
+    border: 1px solid #efdce4;
+}
+
+.job-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.client-name {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.small {
+    font-size: 12px;
+    color: #917681;
+}
+
+.badge {
+    height: fit-content;
+    padding: 4px 9px;
+    border-radius: 10px;
+    font-size: 10px;
+}
+
+.agency {
+    background: #eee8ff;
+    color: #6f5ba0;
+}
+
+.private {
+    background: #ffe5ef;
+    color: #a64f75;
+}
+
+.row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.row > * {
+    flex: 1;
+}
+
+.btn {
+    padding: 11px 13px;
+    border-radius: 13px;
+}
+
+.btn-primary {
+    background: #d878a2;
+    color: white;
+}
+
+.btn-soft {
+    background: #fff0f5;
+    color: #995673;
+}
+
+.btn-gold {
+    background: #c9a45c;
+    color: white;
+}
+
+.btn-danger {
+    background: #f6dede;
+    color: #a64f4f;
+}
+
+.week-day {
+    margin: 20px 0 9px;
+    font-family: Georgia, serif;
+    font-size: 20px;
+    color: #a84f79;
+}
+
+.empty {
+    padding: 25px 10px;
+    text-align: center;
+    color: #a18a94;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+}
+
+label {
+    display: block;
+    font-size: 11px;
+    color: #8c737e;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0 12px;
+
+    border: 1px solid #e3d4db;
+    border-radius: 12px;
+
+    background: white;
+    color: #4d3942;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+
+    padding: 18px;
+
+    background: rgba(50,25,38,.35);
+
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    padding: 20px;
+    border-radius: 23px;
+
+    background: white;
+}
+
+.close {
+    float: right;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #f8e4ec;
+}
+
+.timer {
+    text-align: center;
+    margin: 18px 0;
+
+    font-size: 36px;
+    font-weight: 700;
+
+    color: #a84f79;
+}
+
+footer {
+    padding: 25px;
+    text-align: center;
+    font-size: 11px;
+    color: #a58d96;
+}
+
+@media(max-width:380px) {
+
+    .title {
+        font-size: 34px;
+    }
+
+    .subtitle {
+        font-size: 27px;
+    }
+
+    .features {
+        gap: 5px;
+    }
+
+    .feature {
+        min-height: 88px;
+    }
+
+    .feature-text {
+        font-size: 9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     START SCREEN
+========================= -->
+
+<section id="startScreen" class="start-screen">
+
+    <div class="start-content">
+
+        <div class="logo-circle">
+            <div class="logo-symbol">✨</div>
+        </div>
+
+        <h1 class="title">
+            Pure Shine
+        </h1>
+
+        <div class="subtitle">
+            Cleaning Manager
+        </div>
+
+        <p class="description">
+            Everything you need to organise your cleaning business
+            in one beautiful place.
+        </p>
+
+        <div class="features">
+
+            <div class="feature">
+                <div class="feature-icon">▦</div>
+                <div class="feature-text">
+                    Manage<br>Jobs
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">♧</div>
+                <div class="feature-text">
+                    Track<br>Clients
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">▥</div>
+                <div class="feature-text">
+                    Track<br>Earnings
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">◷</div>
+                <div class="feature-text">
+                    Save<br>Your Time
+                </div>
+            </div>
+
+        </div>
+
+        <button
+            class="start-button"
+            onclick="openApp()"
+        >
+            Get Started&nbsp; ›
+        </button>
+
+        <div class="start-note">
+            Your schedule, clients and earnings — together.
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     APPLICATION
+========================= -->
+
+<section id="app" class="app">
+
+<header class="app-header">
+
+    <div class="app-logo">
+        ✨ Pure Shine
+    </div>
+
+    <div class="app-label">
+        CLEANING MANAGER
+    </div>
+
+</header>
+
+
+<nav class="navigation">
+
+    <button
+        class="active"
+        onclick="showPage('home',this)"
+    >
+        🏠 Home
+    </button>
+
+    <button
+        onclick="showPage('week',this)"
+    >
+        📅 Week
+    </button>
+
+    <button
+        onclick="showPage('clients',this)"
+    >
+        👥 Clients
+    </button>
+
+    <button
+        onclick="showPage('jobs',this)"
+    >
+        🧾 Jobs
+    </button>
+
+    <button
+        onclick="showPage('earnings',this)"
+    >
+        💷 Earnings
+    </button>
+
+</nav>
+
+
+<main>
+
+<!-- HOME -->
+
+<section
+    id="home"
+    class="page active"
+>
+
+<div class="card">
+
+    <h2>
+        Welcome back ✨
+    </h2>
+
+    <div
+        class="small"
+        id="todayDate"
+    ></div>
+
+    <div
+        class="dashboard"
+        style="margin-top:15px"
+    >
+
+        <div class="stat">
+            <span class="stat-label">
+                Today's hours
+            </span>
+
+            <strong
+                class="stat-value"
+                id="todayHours"
+            >
+                0h
+            </strong>
+        </div>
+
+        <div class="stat">
+            <span class="stat-label">
+                Today's earnings
+            </span>
+
+            <strong
+                class="stat-value"
+                id="todayEarnings"
+            >
+                £0.00
+            </strong>
+        </div>
+
+        <div class="stat">
+            <span class="stat-label">
+                This week
+            </span>
+
+            <strong
+                class="stat-value"
+                id="weekEarnings"
+            >
+                £0.00
+            </strong>
+        </div>
+
+        <div class="stat">
+            <span class="stat-label">
+                Clients
+            </span>
+
+            <strong
+                class="stat-value"
+                id="numberClients"
+            >
+                0
+            </strong>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h3>
+        Today's Cleaning
+    </h3>
+
+    <div id="todayJobs"></div>
+
+</div>
+
+</section>
+
+
+<!-- WEEK -->
+
+<section
+    id="week"
+    class="page"
+>
+
+<div class="card">
+
+    <h2>
+        Weekly Schedule
+    </h2>
+
+    <div id="weeklySchedule"></div>
+
+</div>
+
+</section>
+
+
+<!-- CLIENTS -->
+
+<section
+    id="clients"
+    class="page"
+>
+
+<div class="card">
+
+    <div
+        class="row"
+        style="align-items:center"
+    >
+
+        <h2 style="flex:1">
+            Clients
+        </h2>
+
+        <button
+            class="btn btn-primary"
+            onclick="openClientModal()"
+        >
+            ＋ Add
+        </button>
+
+    </div>
+
+    <div id="clientsList"></div>
+
+</div>
+
+</section>
+
+
+<!-- JOBS -->
+
+<section
+    id="jobs"
+    class="page"
+>
+
+<div class="card">
+
+    <div
+        class="row"
+        style="align-items:center"
+    >
+
+        <h2 style="flex:1">
+            Cleaning Jobs
+        </h2>
+
+        <button
+            class="btn btn-primary"
+            onclick="openJobModal()"
+        >
+            ＋ Add Job
+        </button>
+
+    </div>
+
+    <div id="jobsList"></div>
+
+</div>
+
+</section>
+
+
+<!-- EARNINGS -->
+
+<section
+    id="earnings"
+    class="page"
+>
+
+<div class="card">
+
+    <h2>
+        Earnings 💷
+    </h2>
+
+    <div class="dashboard">
+
+        <div class="stat">
+            <span class="stat-label">
+                Total hours
+            </span>
+
+            <strong
+                class="stat-value"
+                id="totalHours"
+            >
+                0h
+            </strong>
+        </div>
+
+        <div class="stat">
+            <span class="stat-label">
+                Total earnings
+            </span>
+
+            <strong
+                class="stat-value"
+                id="totalEarnings"
+            >
+                £0.00
+            </strong>
+        </div>
+
+        <div class="stat">
+            <span class="stat-label">
+                Paid
+            </span>
+
+            <strong
+                class="stat-value"
+                id="paidMoney"
+            >
+                £0.00
+            </strong>
+        </div>
+
+        <div class="stat">
+            <span class="stat-label">
+                Owed
+            </span>
+
+            <strong
+                class="stat-value"
+                id="owedMoney"
+            >
+                £0.00
+            </strong>
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer>
+    ✨ Pure Shine Cleaning Manager
+</footer>
+
+</section>
+
+
+<!-- =========================
+     CLIENT MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="clientModal"
+>
+
+<div class="modal-box">
+
+<button
+    class="close"
+    onclick="closeModal('clientModal')"
+>
+    ×
+</button>
+
+<h2>
+    Add Client
+</h2>
+
+<label>
+    Client name
+</label>
+
+<input
+    id="clientName"
+    placeholder="e.g. Sarah"
+/>
+
+<label>
+    Client type
+</label>
+
+<select id="clientType">
+
+<option value="Private">
+    Private
+</option>
+
+<option value="Agency">
+    Agency
+</option>
+
+</select>
+
+<label>
+    Hourly rate (£)
+</label>
+
+<input
+    id="clientRate"
+    type="number"
+    value="18"
+    step="0.50"
+/>
+
+<label>
+    Default hours
+</label>
+
+<input
+    id="clientHours"
+    type="number"
+    value="2"
+    step="0.25"
+/>
+
+<label>
+    Notes
+</label>
+
+<input
+    id="clientNotes"
+    placeholder="Optional"
+/>
+
+<button
+    class="btn btn-primary"
+    style="width:100%"
+    onclick="saveClient()"
+>
+    Save Client ✨
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     JOB MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="jobModal"
+>
+
+<div class="modal-box">
+
+<button
+    class="close"
+    onclick="closeModal('jobModal')"
+>
+    ×
+</button>
+
+<h2>
+    Add Cleaning Job
+</h2>
+
+<label>
+    Client
+</label>
+
+<select id="jobClient"></select>
+
+<label>
+    Date
+</label>
+
+<input
+    id="jobDate"
+    type="date"
+/>
+
+<div class="form-grid">
+
+<div>
+
+<label>
+    Start
+</label>
+
+<input
+    id="jobStart"
+    type="time"
+/>
+
+</div>
+
+<div>
+
+<label>
+    End
+</label>
+
+<input
+    id="jobEnd"
+    type="time"
+/>
+
+</div>
+
+</div>
+
+<label>
+    Hours
+</label>
+
+<input
+    id="jobHours"
+    type="number"
+    step="0.25"
+/>
+
+<label>
+    Payment
+</label>
+
+<select id="jobPaid">
+
+<option value="no">
+    Not paid — Owed
+</option>
+
+<option value="yes">
+    Paid
+</option>
+
+</select>
+
+<button
+    class="btn btn-primary"
+    style="width:100%"
+    onclick="saveJob()"
+>
+    Save Job ✨
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     TIMER MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="timerModal"
+>
+
+<div
+    class="modal-box"
+    style="text-align:center"
+>
+
+<button
+    class="close"
+    onclick="closeModal('timerModal')"
+>
+    ×
+</button>
+
+<h2 id="timerClientName">
+    Cleaning Timer
+</h2>
+
+<div
+    class="timer"
+    id="timerDisplay"
+>
+    00:00:00
+</div>
+
+<div class="row">
+
+<button
+    class="btn btn-primary"
+    onclick="startTimer()"
+>
+    ▶ Start
+</button>
+
+<button
+    class="btn btn-gold"
+    onclick="stopTimer()"
+>
+    ■ Stop
+</button>
+
+</div>
+
+<p
+    class="small"
+    id="timerMessage"
+>
+    Press Start when you begin cleaning.
+</p>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   DATA
+========================= */
+
+let clients =
+JSON.parse(
+    localStorage.getItem("pureShineClients")
+) || [
+
+    {
+        id: 1,
+        name: "Lottie",
+        type: "Agency",
+        rate: 16,
+        hours: 2
+    },
+
+    {
+        id: 2,
+        name: "Christine",
+        type: "Private",
+        rate: 18,
+        hours: 3
+    },
+
+    {
+        id: 3,
+        name: "Matt",
+        type: "Agency",
+        rate: 16,
+        hours: 4
+    },
+
+    {
+        id: 4,
+        name: "Sonia",
+        type: "Agency",
+        rate: 16,
+        hours: 5
+    },
+
+    {
+        id: 5,
+        name: "Gill",
+        type: "Agency",
+        rate: 16,
+        hours: 3
+    },
+
+    {
+        id: 6,
+        name: "Laura",
+        type: "Private",
+        rate: 18,
+        hours: 4
+    },
+
+    {
+        id: 7,
+        name: "Hannah",
+        type: "Agency",
+        rate: 16,
+        hours: 3
+    }
+
+];
+
+
+let jobs =
+JSON.parse(
+    localStorage.getItem("pureShineJobs")
+) || [];
+
+
+let timer = {
+    clientId: null,
+    start: null,
+    elapsed: 0,
+    running: false
+};
+
+
+let timerInterval;
+
+
+/* =========================
+   BASIC FUNCTIONS
+========================= */
+
+function saveData() {
+
+    localStorage.setItem(
+        "pureShineClients",
+        JSON.stringify(clients)
+    );
+
+    localStorage.setItem(
+        "pureShineJobs",
+        JSON.stringify(jobs)
+    );
+
+}
+
+
+function money(value) {
+
+    return "£" +
+        Number(value || 0)
+        .toFixed(2);
+
+}
+
+
+function getClient(id) {
+
+    return clients.find(
+        client =>
+        Number(client.id) === Number(id)
+    );
+
+}
+
+
+function today() {
+
+    return new Date()
+        .toISOString()
+        .split("T")[0];
+
+}
+
+
+function calculateHours(start,end) {
+
+    if (!start || !end)
+        return 0;
+
+    const a =
+        start.split(":").map(Number);
+
+    const b =
+        end.split(":").map(Number);
+
+    let startMinutes =
+        a[0] * 60 + a[1];
+
+    let endMinutes =
+        b[0] * 60 + b[1];
+
+    if (endMinutes < startMinutes)
+        endMinutes += 1440;
+
+    return (
+        endMinutes -
+        startMinutes
+    ) / 60;
+
+}
+
+
+/* =========================
+   START APP
+========================= */
+
+function openApp() {
+
+    document
+        .getElementById("startScreen")
+        .style.display = "none";
+
+    document
+        .getElementById("app")
+        .classList.add("visible");
+
+    localStorage.setItem(
+        "pureShineStarted",
+        "yes"
+    );
+
+    renderAll();
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showPage(page,button) {
+
+    document
+        .querySelectorAll(".page")
+        .forEach(
+            p =>
+            p.classList.remove("active")
+        );
+
+    document
+        .getElementById(page)
+        .classList.add("active");
+
+    document
+        .querySelectorAll(".navigation button")
+        .forEach(
+            b =>
+            b.classList.remove("active")
+        );
+
+    button.classList.add("active");
+
+    renderAll();
+
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+function renderHome() {
+
+    const date = new Date();
+
+    document
+        .getElementById("todayDate")
+        .textContent =
+        date.toLocaleDateString(
+            "en-GB",
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long"
+            }
+        );
+
+
+    const todayJobs =
+        jobs.filter(
+            job =>
+            job.date === today()
+        );
+
+
+    const hours =
+        todayJobs.reduce(
+            (sum,job) =>
+            sum + Number(job.hours),
+            0
+        );
+
+
+    const earnings =
+        todayJobs.reduce(
+            (sum,job) =>
+            sum + Number(job.amount),
+            0
+        );
+
+
+    document
+        .getElementById("todayHours")
+        .textContent =
+        hours.toFixed(2) + "h";
+
+
+    document
+        .getElementById("todayEarnings")
+        .textContent =
+        money(earnings);
+
+
+    document
+        .getElementById("numberClients")
+        .textContent =
+        clients.length;
+
+
+    let weekStart =
+        new Date();
+
+    weekStart.setDate(
+        weekStart.getDate() -
+        ((weekStart.getDay() + 6) % 7)
+    );
+
+
+    const weekEarnings =
+        jobs
+        .filter(
+            job =>
+            new Date(job.date) >= weekStart
+        )
+        .reduce(
+            (sum,job) =>
+            sum + Number(job.amount),
+            0
+        );
+
+
+    document
+        .getElementById("weekEarnings")
+        .textContent =
+        money(weekEarnings);
+
+
+    const container =
+        document.getElementById("todayJobs");
+
+
+    if (!todayJobs.length) {
+
+        container.innerHTML =
+        `
+        <div class="empty">
+            No cleaning jobs recorded for today ✨
+        </div>
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        todayJobs
+        .map(jobHTML)
+        .join("");
+
+}
+
+
+/* =========================
+   JOB DISPLAY
+========================= */
+
+function jobHTML(job) {
+
+    const client =
+        getClient(job.clientId);
+
+
+    return `
+    
+    <div class="job">
+
+        <div class="job-header">
+
+            <div>
+
+                <div class="client-name">
+                    ${client ? client.name : "Deleted client"}
+                </div>
+
+                <div class="small">
+                    ${job.date}
+                    ·
+                    ${job.start || ""}
+                    ${job.end ? " – " + job.end : ""}
+                </div>
+
+            </div>
+
+            <span
+                class="badge ${
+                    client &&
+                    client.type === "Agency"
+                    ? "agency"
+                    : "private"
+                }"
+            >
+                ${client ? client.type : ""}
+            </span>
+
+        </div>
+
+        <div style="margin-top:8px">
+
+            <strong>
+                ${Number(job.hours).toFixed(2)}h
+            </strong>
+
+            ·
+
+            ${money(job.amount)}
+
+            ·
+
+            ${
+                job.paid === "yes"
+                ? "✓ Paid"
+                : "💷 Owed"
+            }
+
+        </div>
+
+    </div>
+
+    `;
+
+}
+
+
+/* =========================
+   WEEKLY SCHEDULE
+========================= */
+
+const weeklySchedule = [
+
+    ["Monday","Lottie","13:00","15:00"],
+
+    ["Tuesday","Christine","09:30","12:30"],
+
+    ["Tuesday","Matt","13:00","17:00"],
+
+    ["Wednesday","Sonia","09:00","14:00"],
+
+    ["Wednesday","Gill","15:00","18:00"],
+
+    ["Thursday","Laura","09:00","13:00"],
+
+    ["Thursday","Hannah","13:00","16:00"]
+
+];
+
+
+function renderWeek() {
+
+    let html = "";
+
+
+    weeklySchedule.forEach(
+        item => {
+
+            const [
+                day,
+                name,
+                start,
+                end
+            ] = item;
+
+
+            const client =
+                clients.find(
+                    c =>
+                    c.name === name
+                );
+
+
+            html += `
+
+            <div class="week-day">
+                ${day}
+            </div>
+
+            <div class="job">
+
+                <div class="job-header">
+
+                    <div>
+
+                        <div class="client-name">
+                            ${name}
+                        </div>
+
+                        <div class="small">
+                            ${start} – ${end}
+                        </div>
+
+                    </div>
+
+                    <span
+                        class="badge ${
+                            client &&
+                            client.type === "Agency"
+                            ? "agency"
+                            : "private"
+                        }"
+                    >
+                        ${client ? client.type : ""}
+                    </span>
+
+                </div>
+
+                ${
+                    client
+                    ? `
+                    <div
+                        class="small"
+                        style="margin-top:7px"
+                    >
+                        ${money(client.rate)}
+                        /hour ·
+                        ${client.hours}h default
+                    </div>
+                    `
+                    : ""
+                }
+
+                ${
+                    client
+                    ? `
+                    <div
+                        class="row"
+                        style="margin-top:9px"
+                    >
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="openTimer(${client.id})"
+                        >
+                            ⏱ Timer
+                        </button>
+
+                        <button
+                            class="btn btn-soft"
+                            onclick="
+                                quickJob(
+                                    ${client.id},
+                                    '${start}',
+                                    '${end}'
+                                )
+                            "
+                        >
+                            ＋ Job
+                        </button>
+
+                    </div>
+                    `
+                    : ""
+                }
+
+            </div>
+
+            `;
+
+        }
+    );
+
+
+    document
+        .getElementById("weeklySchedule")
+        .innerHTML = html;
+
+}
+
+
+/* =========================
+   CLIENTS
+========================= */
+
+function renderClients() {
+
+    const container =
+        document.getElementById("clientsList");
+
+
+    if (!clients.length) {
+
+        container.innerHTML =
+        `
+        <div class="empty">
+            No clients yet.
+        </div>
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+    clients
+    .map(
+        client => `
+
+        <div class="job">
+
+            <div class="job-header">
+
+                <div>
+
+                    <div class="client-name">
+                        ${client.name}
+                    </div>
+
+                    <div class="small">
+                        ${client.type}
+                        ·
+                        ${money(client.rate)}/hour
+                        ·
+                        ${client.hours}h default
+                    </div>
+
+                </div>
+
+                <span
+                    class="badge ${
+                        client.type === "Agency"
+                        ? "agency"
+                        : "private"
+                    }"
+                >
+                    ${client.type}
+                </span>
+
+            </div>
+
+            <div
+                class="row"
+                style="margin-top:9px"
+            >
+
+                <button
+                    class="btn btn-primary"
+                    onclick="openTimer(${client.id})"
+                >
+                    ⏱ Timer
+                </button>
+
+                <button
+                    class="btn btn-danger"
+                    onclick="deleteClient(${client.id})"
+                >
+                    🗑 Delete
+                </button>
+
+            </div>
+
+        </div>
+
+        `
+    )
+    .join("");
+
+}
+
+
+/* =========================
+   JOBS
+========================= */
+
+function renderJobs() {
+
+    const container =
+        document.getElementById("jobsList");
+
+
+    const sorted =
+        [...jobs]
+        .sort(
+            (a,b) =>
+            b.date.localeCompare(a.date)
+        );
+
+
+    if (!sorted.length) {
+
+        container.innerHTML =
+        `
+        <div class="empty">
+            No jobs recorded yet.
+        </div>
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        sorted
+        .map(jobHTML)
+        .join("");
+
+}
+
+
+/* =========================
+   EARNINGS
+========================= */
+
+function renderEarnings() {
+
+    const hours =
+        jobs.reduce(
+            (sum,job) =>
+            sum + Number(job.hours),
+            0
+        );
+
+
+    const total =
+        jobs.reduce(
+            (sum,job) =>
+            sum + Number(job.amount),
+            0
+        );
+
+
+    const paid =
+        jobs
+        .filter(
+            job =>
+            job.paid === "yes"
+        )
+        .reduce(
+            (sum,job) =>
+            sum + Number(job.amount),
+            0
+        );
+
+
+    document
+        .getElementById("totalHours")
+        .textContent =
+        hours.toFixed(2) + "h";
+
+
+    document
+        .getElementById("totalEarnings")
+        .textContent =
+        money(total);
+
+
+    document
+        .getElementById("paidMoney")
+        .textContent =
+        money(paid);
+
+
+    document
+        .getElementById("owedMoney")
+        .textContent =
+        money(total - paid);
+
+}
+
+
+/* =========================
+   CLIENT MODAL
+========================= */
+
+function openClientModal() {
+
+    document
+        .getElementById("clientName")
+        .value = "";
+
+    document
+        .getElementById("clientRate")
+        .value = 18;
+
+    document
+        .getElementById("clientHours")
+        .value = 2;
+
+    document
+        .getElementById("clientNotes")
+        .value = "";
+
+    document
+        .getElementById("clientModal")
+        .classList.add("show");
+
+}
+
+
+function saveClient() {
+
+    const name =
+        document
+        .getElementById("clientName")
+        .value
+        .trim();
+
+
+    if (!name) {
+
+        alert(
+            "Please enter the client name."
+        );
+
+        return;
+
+    }
+
+
+    clients.push({
+
+        id: Date.now(),
+
+        name: name,
+
+        type:
+            document
+            .getElementById("clientType")
+            .value,
+
+        rate:
+            Number(
+                document
+                .getElementById("clientRate")
+                .value
+            ),
+
+        hours:
+            Number(
+                document
+                .getElementById("clientHours")
+                .value
+            )
+
+    });
+
+
+    saveData();
+
+    closeModal("clientModal");
+
+    renderAll();
+
+}
+
+
+/* =========================
+   JOB MODAL
+========================= */
+
+function fillClientSelect() {
+
+    document
+        .getElementById("jobClient")
+        .innerHTML =
+        clients
+        .map(
+            client => `
+                <option
+                    value="${client.id}"
+                >
+                    ${client.name}
+                    —
+                    ${money(client.rate)}/h
+                </option>
+            `
+        )
+        .join("");
+
+}
+
+
+function openJobModal(clientId = null) {
+
+    fillClientSelect();
+
+
+    document
+        .getElementById("jobDate")
+        .value = today();
+
+
+    document
+        .getElementById("jobStart")
+        .value = "";
+
+
+    document
+        .getElementById("jobEnd")
+        .value = "";
+
+
+    document
+        .getElementById("jobHours")
+        .value = "";
+
+
+    document
+        .getElementById("jobPaid")
+        .value = "no";
+
+
+    if (clientId) {
+
+        document
+            .getElementById("jobClient")
+            .value = clientId;
+
+    }
+
+
+    document
+        .getElementById("jobModal")
+        .classList.add("show");
+
+}
+
+
+function quickJob(
+    clientId,
+    start,
+    end
+) {
+
+    openJobModal(clientId);
+
+
+    document
+        .getElementById("jobStart")
+        .value = start;
+
+
+    document
+        .getElementById("jobEnd")
+        .value = end;
+
+
+    document
+        .getElementById("jobHours")
+        .value =
+        calculateHours(
+            start,
+            end
+        );
+
+}
+
+
+function saveJob() {
+
+    const client =
+        getClient(
+            document
+            .getElementById("jobClient")
+            .value
+        );
+
+
+    if (!client)
+        return;
+
+
+    const start =
+        document
+        .getElementById("jobStart")
+        .value;
+
+
+    const end =
+        document
+        .getElementById("jobEnd")
+        .value;
+
+
+    let hours =
+        Number(
+            document
+            .getElementById("jobHours")
+            .value
+        );
+
+
+    if (!hours && start && end) {
+
+        hours =
+            calculateHours(
+                start,
+                end
+            );
+
+    }
+
+
+    if (!hours)
+        hours = client.hours;
+
+
+    jobs.push({
+
+        id: Date.now(),
+
+        clientId: client.id,
+
+        date:
+            document
+            .getElementById("jobDate")
+            .value,
+
+        start: start,
+
+        end: end,
+
+        hours: hours,
+
+        amount:
+            hours * client.rate,
+
+        paid:
+            document
+            .getElementById("jobPaid")
+            .value
+
+    });
+
+
+    saveData();
+
+    closeModal("jobModal");
+
+    renderAll();
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+function deleteClient(id) {
+
+    const client =
+        getClient(id);
+
+
+    if (!client)
+        return;
+
+
+    if (
+        confirm(
+            "Delete " +
+            client.name +
+            "?"
+        )
+    ) {
+
+        clients =
+            clients.filter(
+                c =>
+                Number(c.id) !== Number(id)
+            );
+
+
+        saveData();
+
+        renderAll();
+
+    }
+
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+function openTimer(id) {
+
+    timer.clientId = id;
+
+
+    const client =
+        getClient(id);
+
+
+    document
+        .getElementById("timerClientName")
+        .textContent =
+        client.name +
+        " — Cleaning Timer";
+
+
+    document
+        .getElementById("timerModal")
+        .classList.add("show");
+
+
+    updateTimer();
+
+}
+
+
+function startTimer() {
+
+    if (!timer.clientId)
+        return;
+
+
+    timer.start =
+        Date.now() -
+        timer.elapsed * 1000;
+
+
+    timer.running = true;
+
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    timerInterval =
+        setInterval(
+            updateTimer,
+            1000
+        );
+
+
+    document
+        .getElementById("timerMessage")
+        .textContent =
+        "Timer is running…";
+
+}
+
+
+function stopTimer() {
+
+    if (!timer.running)
+        return;
+
+
+    timer.elapsed =
+        Math.floor(
+            (Date.now() -
+            timer.start) /
+            1000
+        );
+
+
+    timer.running = false;
+
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    updateTimer();
+
+
+    document
+        .getElementById("timerMessage")
+        .textContent =
+        "Timer stopped.";
+
+}
+
+
+function updateTimer() {
+
+    let seconds =
+        timer.elapsed;
+
+
+    if (timer.running) {
+
+        seconds =
+            Math.floor(
+                (Date.now() -
+                timer.start) /
+                1000
+            );
+
+    }
+
+
+    const hours =
+        Math.floor(
+            seconds / 3600
+        );
+
+
+    const minutes =
+        Math.floor(
+            (seconds % 3600) / 60
+        );
+
+
+    const secs =
+        seconds % 60;
+
+
+    document
+        .getElementById("timerDisplay")
+        .textContent =
+        String(hours).padStart(2,"0") +
+        ":" +
+        String(minutes).padStart(2,"0") +
+        ":" +
+        String(secs).padStart(2,"0");
+
+}
+
+
+/* =========================
+   MODALS
+========================= */
+
+function closeModal(id) {
+
+    document
+        .getElementById(id)
+        .classList.remove("show");
+
+}
+
+
+/* =========================
+   RENDER EVERYTHING
+========================= */
+
+function renderAll() {
+
+    renderHome();
+
+    renderWeek();
+
+    renderClients();
+
+    renderJobs();
+
+    renderEarnings();
+
+}
+
+
+/* =========================
+   STARTUP
+========================= */
+
+if (
+    localStorage.getItem(
+        "pureShineStarted"
+    ) === "yes"
+) {
+
+    document
+        .getElementById("startScreen")
+        .style.display = "none";
+
+    document
+        .getElementById("app")
+        .classList.add("visible");
+
+}
+
+
+renderAll();
+
+</script>
+
+</body>
+</html>
