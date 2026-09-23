@@ -1,543 +1,2065 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,
-      initial-scale=1.0,
-      viewport-fit=cover">
-
-<meta name="theme-color"
-      content="#f3a9c5">
-
-<link rel="manifest"
-      href="manifest.json">
-
-<link rel="apple-touch-icon"
-      href="icon.png">
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6b7cf">
+<link rel="manifest" href="manifest.json">
 <title>Pure Shine Cleaning Manager</title>
 
 <style>
-
-/* =====================================================
-   GLOBAL
-===================================================== */
-
-*{
-    box-sizing:border-box;
+:root{
+--pink:#f7bfd3;
+--pink2:#fce6ef;
+--gold:#ead39f;
+--lav:#eee7fb;
+--blue:#e6f4fb;
+--mint:#e5f5eb;
+--yellow:#fff5d7;
+--peach:#fbe9df;
+--ink:#343348;
+--muted:#858399;
+--white:#fff;
+--shadow:0 10px 35px rgba(80,70,100,.08)
 }
 
-html,
+*{box-sizing:border-box}
+
+html,body{
+margin:0;
+min-height:100%;
+background:#f8f6fb;
+color:var(--ink);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+}
+
 body{
-    margin:0;
-    padding:0;
-    min-height:100%;
+overflow:hidden;
+-webkit-overflow-scrolling:none
 }
 
-body{
-    background:#fff8fb;
-    color:#533d47;
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
+/* APP */
+#app{
+width:100%;
+height:100dvh;
+min-height:100dvh;
+overflow:hidden;
+position:fixed;
+inset:0
 }
 
-button,
-input,
-select{
-    font:inherit;
+/* START PAGE */
+#startPage{
+position:fixed;
+inset:0;
+width:100vw;
+height:100dvh;
+overflow:hidden;
+z-index:9999;
+background-image:
+linear-gradient(rgba(255,248,251,.10),rgba(255,248,251,.10)),
+url("pure-shine-bg.jpg");
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px
 }
 
-button{
-    border:0;
-    cursor:pointer;
+.startContent{
+width:100%;
+max-width:430px;
+height:100%;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:space-between;
+text-align:center;
+padding:
+25px 12px
+calc(15px + env(safe-area-inset-bottom))
 }
 
-
-/* =====================================================
-   WELCOME SCREEN
-===================================================== */
-
-.start-screen{
-
-    min-height:100vh;
-    min-height:100svh;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    padding:
-        calc(25px + env(safe-area-inset-top))
-        22px
-        calc(25px + env(safe-area-inset-bottom));
-
-    position:relative;
-    overflow:hidden;
-
-    background:
-        radial-gradient(
-            circle at 15% 15%,
-            #ffffff 0%,
-            transparent 32%
-        ),
-        radial-gradient(
-            circle at 90% 25%,
-            #f8d3e2 0%,
-            transparent 35%
-        ),
-        linear-gradient(
-            145deg,
-            #fffafc,
-            #fce8f1 55%,
-            #f5d4e1
-        );
+.brand{
+font-family:"Brush Script MT","Segoe Script",cursive;
+font-size:32px;
+font-weight:600;
+color:#b65d84;
+text-shadow:0 2px 5px rgba(255,255,255,.9);
+margin-top:4vh
 }
 
-
-/* decorative bubbles */
-
-.start-screen:before{
-
-    content:"";
-
-    position:absolute;
-
-    width:260px;
-    height:260px;
-
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,255,255,.8),
-            rgba(255,255,255,0)
-        );
-
-    top:-90px;
-    right:-70px;
+.startTitle{
+font-family:Georgia,serif;
+font-size:34px;
+line-height:1.05;
+font-weight:900;
+color:#3d2c3a;
+text-shadow:0 2px 5px rgba(255,255,255,.85);
+margin-top:10px
 }
 
-.start-screen:after{
-
-    content:"";
-
-    position:absolute;
-
-    width:220px;
-    height:220px;
-
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(201,164,92,.15),
-            transparent 70%
-        );
-
-    bottom:-80px;
-    left:-70px;
+.startSubtitle{
+font-size:16px;
+line-height:1.35;
+font-weight:600;
+color:#5f5a6c;
+margin-top:10px;
+text-shadow:0 1px 4px white
 }
-
-
-.start-content{
-
-    width:100%;
-    max-width:430px;
-
-    text-align:center;
-
-    position:relative;
-    z-index:2;
-}
-
-
-/* logo */
-
-.welcome-logo{
-
-    width:145px;
-    height:145px;
-
-    margin:0 auto 18px;
-
-    border-radius:50%;
-
-    background:
-        linear-gradient(
-            145deg,
-            #fff,
-            #f8c9dc
-        );
-
-    border:3px solid #c9a45c;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    box-shadow:
-        0 18px 45px
-        rgba(160,75,110,.18);
-
-    position:relative;
-}
-
-.welcome-logo:after{
-
-    content:"✦";
-
-    position:absolute;
-
-    top:8px;
-    right:18px;
-
-    color:#c9a45c;
-
-    font-size:22px;
-}
-
-.logo-inner{
-
-    font-family:
-        Georgia,
-        serif;
-
-    color:#ad537d;
-
-    font-size:24px;
-
-    line-height:1.05;
-}
-
-.logo-inner span{
-
-    display:block;
-
-    font-family:
-        "Brush Script MT",
-        cursive;
-
-    font-size:28px;
-
-    color:#d67da4;
-
-    margin-top:5px;
-}
-
-
-/* title */
-
-.welcome-title{
-
-    margin:0;
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size:43px;
-
-    line-height:1;
-
-    color:#a84f79;
-
-    letter-spacing:-1px;
-}
-
-.welcome-subtitle{
-
-    margin-top:8px;
-
-    font-family:
-        Georgia,
-        serif;
-
-    font-size:12px;
-
-    letter-spacing:4px;
-
-    color:#92707e;
-}
-
-
-/* slogan */
-
-.welcome-slogan{
-
-    margin:22px auto 20px;
-
-    font-family:
-        "Brush Script MT",
-        "Segoe Script",
-        cursive;
-
-    font-size:29px;
-
-    line-height:1.05;
-
-    color:#bd638d;
-}
-
-.welcome-slogan b{
-
-    color:#9e4d75;
-}
-
-
-/* feature buttons */
 
 .features{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(4,1fr);
-
-    gap:8px;
-
-    margin:18px 0 22px;
+width:100%;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:7px;
+margin-top:20px
 }
 
 .feature{
-
-    min-height:94px;
-
-    padding:9px 3px;
-
-    border-radius:19px;
-
-    background:
-        rgba(255,255,255,.82);
-
-    border:
-        1px solid
-        rgba(210,157,179,.35);
-
-    box-shadow:
-        0 9px 25px
-        rgba(130,65,90,.08);
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:7px;
+font-size:12px;
+font-weight:600;
+line-height:1.1;
+color:#504b59;
+text-shadow:0 1px 3px white
 }
 
-.feature-icon{
-
-    font-size:27px;
-
-    margin-bottom:6px;
+.featureIcon{
+width:58px;
+height:58px;
+border-radius:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+background:rgba(255,255,255,.82);
+box-shadow:0 7px 18px rgba(80,50,70,.12)
 }
 
-.feature-text{
+.f1 .featureIcon{background:#f8dce8}
+.f2 .featureIcon{background:#e0f2e8}
+.f3 .featureIcon{background:#e8def7}
+.f4 .featureIcon{background:#fff0c9}
 
-    font-size:10px;
+.startButton{
+width:88%;
+height:62px;
+border:0;
+border-radius:31px;
+background:linear-gradient(135deg,#efa2c1,#d979a4);
+color:white;
+font-size:23px;
+font-weight:800;
+box-shadow:0 10px 25px rgba(180,85,125,.25);
+cursor:pointer
+}
 
-    line-height:1.2;
+.startFooter{
+font-size:11px;
+color:#716b77;
+text-shadow:0 1px 3px white
+}
 
-    font-weight:700;
+/* MAIN APP */
+.mainApp{
+width:100%;
+height:100dvh;
+overflow:hidden;
+background:#f8f6fb;
+display:flex;
+flex-direction:column
+}
 
-    color:#765361;
+.topbar{
+padding:
+calc(15px + env(safe-area-inset-top))
+18px
+10px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+background:rgba(255,255,255,.88);
+backdrop-filter:blur(15px);
+flex:none
+}
+
+.logoArea{
+display:flex;
+align-items:center;
+gap:10px
+}
+
+.logoSquare{
+width:42px;
+height:42px;
+border-radius:13px;
+overflow:hidden;
+box-shadow:0 4px 12px rgba(100,60,80,.12)
+}
+
+.logoSquare img{
+width:100%;
+height:100%;
+object-fit:cover
+}
+
+.appName{
+font-size:18px;
+font-weight:800
+}
+
+.appSub{
+font-size:11px;
+color:var(--muted)
+}
+
+.addBtn{
+width:42px;
+height:42px;
+border:0;
+border-radius:14px;
+background:var(--pink);
+font-size:25px;
+color:white;
+box-shadow:0 5px 15px rgba(200,100,140,.18)
+}
+
+.page{
+flex:1;
+overflow:hidden;
+padding:16px 16px 90px
+}
+
+.pageScroll{
+height:100%;
+overflow-y:auto;
+padding-bottom:20px;
+-webkit-overflow-scrolling:touch
+}
+
+.pageTitle{
+font-size:27px;
+font-weight:850;
+margin:3px 0 4px
+}
+
+.pageSub{
+font-size:13px;
+color:var(--muted);
+margin-bottom:17px
+}
+
+/* CARDS */
+.card{
+background:white;
+border-radius:23px;
+padding:16px;
+box-shadow:var(--shadow);
+border:1px solid rgba(255,255,255,.8)
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:11px;
+margin-bottom:15px
+}
+
+.stat{
+border-radius:20px;
+padding:15px;
+min-height:105px
+}
+
+.statJobs{background:var(--pink2)}
+.statHours{background:var(--lav)}
+.statEarned{background:var(--mint)}
+.statAvailable{background:var(--yellow)}
+
+.statLabel{
+font-size:12px;
+color:#777286;
+margin-bottom:9px
+}
+
+.statValue{
+font-size:25px;
+font-weight:850
+}
+
+.statIcon{
+font-size:22px;
+margin-bottom:5px
+}
+
+/* TODAY */
+.sectionHeader{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin:18px 2px 10px
+}
+
+.sectionHeader h3{
+font-size:17px;
+margin:0
+}
+
+.sectionHeader button{
+border:0;
+background:none;
+color:#b8668c;
+font-weight:700
+}
+
+.jobCard{
+display:flex;
+align-items:center;
+gap:12px;
+padding:13px;
+background:white;
+border-radius:18px;
+margin-bottom:9px;
+box-shadow:var(--shadow)
+}
+
+.jobDot{
+width:10px;
+height:50px;
+border-radius:8px;
+background:#e7b4ca
+}
+
+.jobInfo{
+flex:1
+}
+
+.jobName{
+font-weight:800;
+font-size:15px
+}
+
+.jobTime{
+font-size:12px;
+color:var(--muted);
+margin-top:3px
+}
+
+.jobMoney{
+font-size:14px;
+font-weight:800
+}
+
+/* QUICK ACTIONS */
+.quickGrid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px
+}
+
+.quick{
+padding:15px;
+border:0;
+border-radius:19px;
+text-align:left;
+font-weight:750;
+font-size:13px;
+color:var(--ink)
+}
+
+.quick span{
+display:block;
+font-size:23px;
+margin-bottom:7px
+}
+
+.quickPink{background:var(--pink2)}
+.quickLav{background:var(--lav)}
+.quickMint{background:var(--mint)}
+.quickBlue{background:var(--blue)}
+
+/* SCHEDULE */
+.weekSwitch{
+display:flex;
+gap:8px;
+margin-bottom:14px
+}
+
+.weekBtn{
+flex:1;
+border:0;
+padding:11px;
+border-radius:14px;
+background:#eeeaf4;
+font-weight:750;
+color:#777286
+}
+
+.weekBtn.active{
+background:#dfb1c7;
+color:white
+}
+
+.dayBlock{
+margin-bottom:14px
+}
+
+.dayTitle{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:7px
+}
+
+.dayTitle strong{
+font-size:15px
+}
+
+.dayTitle span{
+font-size:11px;
+color:var(--muted)
+}
+
+/* CLIENTS */
+.search{
+width:100%;
+border:0;
+outline:none;
+background:white;
+padding:14px 16px;
+border-radius:17px;
+font-size:14px;
+box-shadow:var(--shadow);
+margin-bottom:12px
+}
+
+.filters{
+display:flex;
+gap:7px;
+overflow-x:auto;
+padding-bottom:3px;
+margin-bottom:12px
+}
+
+.filter{
+white-space:nowrap;
+border:0;
+border-radius:13px;
+padding:9px 13px;
+background:#eeeaf4;
+color:#716b7b;
+font-weight:700
+}
+
+.filter.active{
+background:#dfb1c7;
+color:white
+}
+
+.clientCard{
+display:flex;
+align-items:center;
+gap:12px;
+background:white;
+border-radius:19px;
+padding:14px;
+margin-bottom:9px;
+box-shadow:var(--shadow)
+}
+
+.clientAvatar{
+width:45px;
+height:45px;
+border-radius:15px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:var(--pink2);
+font-weight:800;
+color:#a45c7f
+}
+
+.clientInfo{
+flex:1
+}
+
+.clientName{
+font-weight:800;
+font-size:15px
+}
+
+.clientMeta{
+font-size:11px;
+color:var(--muted);
+margin-top:3px
+}
+
+.rate{
+font-weight:800;
+font-size:14px
+}
+
+/* JOBS */
+.jobFilters{
+display:flex;
+gap:7px;
+overflow-x:auto;
+margin-bottom:12px
+}
+
+.status{
+font-size:10px;
+font-weight:800;
+padding:5px 8px;
+border-radius:9px
+}
+
+.paid{
+background:#dff2e6;
+color:#4b8b62
+}
+
+.pending{
+background:#fff0cf;
+color:#9b7841
+}
+
+.debt{
+background:#f8d9dd;
+color:#a4515b
+}
+
+.jobActions{
+display:flex;
+gap:6px;
+margin-top:9px
+}
+
+.smallBtn{
+border:0;
+border-radius:10px;
+padding:7px 10px;
+font-size:11px;
+font-weight:750;
+background:#f1edf5
+}
+
+/* EARNINGS */
+.earnGrid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px
+}
+
+.earnCard{
+padding:17px;
+border-radius:20px;
+min-height:110px
+}
+
+.totalCard{background:var(--pink2)}
+.paidCard{background:var(--mint)}
+.pendingCard{background:var(--yellow)}
+.debtCard{background:var(--peach)}
+
+.earnLabel{
+font-size:12px;
+color:#777286;
+margin-bottom:9px
+}
+
+.earnValue{
+font-size:24px;
+font-weight:850
+}
+
+.chart{
+height:180px;
+display:flex;
+align-items:flex-end;
+gap:10px;
+padding:15px 5px 5px
+}
+
+.barWrap{
+flex:1;
+height:100%;
+display:flex;
+flex-direction:column;
+justify-content:flex-end;
+align-items:center;
+gap:6px
+}
+
+.bar{
+width:100%;
+max-width:32px;
+border-radius:9px 9px 4px 4px;
+background:#d9b5ca
+}
+
+.barLabel{
+font-size:10px;
+color:var(--muted)
+}
+
+/* BOTTOM NAV */
+.bottomNav{
+position:fixed;
+left:0;
+right:0;
+bottom:0;
+height:73px;
+padding:
+7px
+12px
+calc(7px + env(safe-area-inset-bottom));
+background:rgba(255,255,255,.94);
+backdrop-filter:blur(18px);
+border-top:1px solid rgba(230,220,230,.8);
+display:grid;
+grid-template-columns:repeat(5,1fr);
+z-index:500
+}
+
+.navBtn{
+border:0;
+background:transparent;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:3px;
+color:#8b8694;
+font-size:10px;
+font-weight:700
+}
+
+.navBtn span{
+font-size:21px;
+line-height:1
+}
+
+.navBtn.active{
+color:#b15f84
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+inset:0;
+z-index:1000;
+display:none;
+align-items:flex-end;
+background:rgba(40,30,40,.25)
+}
+
+.modal.show{
+display:flex
+}
+
+.modalCard{
+width:100%;
+max-height:90dvh;
+overflow-y:auto;
+background:#fff;
+border-radius:28px 28px 0 0;
+padding:22px 18px calc(22px + env(safe-area-inset-bottom))
+}
+
+.modalTitle{
+font-size:21px;
+font-weight:850;
+margin-bottom:15px
+}
+
+.field{
+margin-bottom:12px
+}
+
+.field label{
+display:block;
+font-size:12px;
+font-weight:700;
+color:#777286;
+margin-bottom:5px
+}
+
+.field input,
+.field select{
+width:100%;
+border:1px solid #eee8f0;
+border-radius:13px;
+padding:12px;
+font-size:14px;
+outline:none
+}
+
+.primary{
+width:100%;
+border:0;
+border-radius:15px;
+padding:13px;
+background:#dda0bd;
+color:white;
+font-weight:800;
+font-size:15px
+}
+
+.secondary{
+width:100%;
+border:0;
+border-radius:15px;
+padding:12px;
+background:#f0ecf3;
+color:#666170;
+font-weight:750;
+margin-top:7px
+}
+
+@media(min-width:700px){
+#app,.mainApp{
+max-width:430px;
+margin:auto;
+box-shadow:0 0 50px rgba(70,50,70,.12)
+}
+.bottomNav{
+max-width:430px;
+left:50%;
+transform:translateX(-50%)
+}
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<!-- START PAGE -->
+<section id="startPage">
+<div class="startContent">
+
+<div>
+<div class="brand">Pure Shine Cleaning</div>
+
+<div class="startTitle">
+Clean. Organise.<br>
+Shine. ✨
+</div>
+
+<div class="startSubtitle">
+Everything you need to manage your cleaning business.
+</div>
+</div>
+
+<div class="features">
+
+<div class="feature">
+<div class="featureIcon">📅</div>
+<span>Manage<br>Jobs</span>
+</div>
+
+<div class="feature">
+<div class="featureIcon">👥</div>
+<span>Keep Track<br>of Clients</span>
+</div>
+
+<div class="feature">
+<div class="featureIcon">📊</div>
+<span>Track<br>Earnings</span>
+</div>
+
+<div class="feature">
+<div class="featureIcon">⏰</div>
+<span>More Time<br>for You</span>
+</div>
+
+</div>
+
+<button class="startButton" onclick="openApp()">
+Get Started →
+</button>
+
+<div class="startFooter">
+Your data stays on this device · Pure Shine ✨
+</div>
+
+</div>
+</section>
+
+
+<!-- MAIN APPLICATION -->
+<section class="mainApp" id="mainApp" style="display:none">
+
+<header class="topbar">
+
+<div class="logoArea">
+
+<div class="logoSquare">
+<img src="pure-shine-bg.jpg">
+</div>
+
+<div>
+<div class="appName">Pure Shine</div>
+<div class="appSub">Cleaning Manager ✨</div>
+</div>
+
+</div>
+
+<button class="addBtn" onclick="openAddJob()">+</button>
+
+</header>
+
+
+<main class="page">
+
+<!-- HOME -->
+<section id="homePage" class="appPage">
+
+<div class="pageScroll">
+
+<div class="pageTitle">Good morning ✨</div>
+
+<div class="pageSub" id="todayDate"></div>
+
+
+<div class="stats">
+
+<div class="stat statJobs">
+<div class="statIcon">🧹</div>
+<div class="statLabel">Jobs</div>
+<div class="statValue" id="statJobs">0</div>
+</div>
+
+<div class="stat statHours">
+<div class="statIcon">⏰</div>
+<div class="statLabel">Hours</div>
+<div class="statValue" id="statHours">0h</div>
+</div>
+
+<div class="stat statEarned">
+<div class="statIcon">💷</div>
+<div class="statLabel">Earned</div>
+<div class="statValue" id="statEarned">£0</div>
+</div>
+
+<div class="stat statAvailable">
+<div class="statIcon">✨</div>
+<div class="statLabel">Available</div>
+<div class="statValue" id="statAvailable">£0</div>
+</div>
+
+</div>
+
+
+<div class="sectionHeader">
+<h3>Today's schedule</h3>
+<button onclick="showPage('schedule')">View all</button>
+</div>
+
+<div id="todayJobs"></div>
+
+
+<div class="sectionHeader">
+<h3>Quick actions</h3>
+</div>
+
+<div class="quickGrid">
+
+<button class="quick quickPink" onclick="openAddJob()">
+<span>➕</span>
+Add Job
+</button>
+
+<button class="quick quickLav" onclick="openAddClient()">
+<span>👤</span>
+Add Client
+</button>
+
+<button class="quick quickMint" onclick="showPage('schedule')">
+<span>📅</span>
+View Schedule
+</button>
+
+<button class="quick quickBlue" onclick="showPage('earnings')">
+<span>💷</span>
+View Earnings
+</button>
+
+</div>
+
+
+<div class="card" style="margin-top:14px;text-align:center">
+<div style="font-size:16px;font-weight:750">
+“A clean space is a happy place ♡”
+</div>
+<div style="font-size:11px;color:var(--muted);margin-top:5px">
+Pure Shine Cleaning
+</div>
+</div>
+
+</div>
+</section>
+
+
+<!-- SCHEDULE -->
+<section id="schedulePage" class="appPage" style="display:none">
+
+<div class="pageScroll">
+
+<div class="pageTitle">Schedule</div>
+<div class="pageSub">Your weekly cleaning schedule</div>
+
+<div class="weekSwitch">
+<button class="weekBtn active" id="weekA" onclick="setWeek('A')">
+Week A
+</button>
+<button class="weekBtn" id="weekB" onclick="setWeek('B')">
+Week B
+</button>
+</div>
+
+<div id="scheduleList"></div>
+
+</div>
+</section>
+
+
+<!-- CLIENTS -->
+<section id="clientsPage" class="appPage" style="display:none">
+
+<div class="pageScroll">
+
+<div class="pageTitle">Clients</div>
+<div class="pageSub">Manage your cleaning clients</div>
+
+<input
+class="search"
+id="clientSearch"
+placeholder="Search clients..."
+oninput="renderClients()">
+
+<div class="filters">
+
+<button class="filter active" onclick="setClientFilter('all',this)">
+All
+</button>
+
+<button class="filter" onclick="setClientFilter('private',this)">
+Private
+</button>
+
+<button class="filter" onclick="setClientFilter('agency',this)">
+Agency
+</button>
+
+</div>
+
+<div id="clientsList"></div>
+
+</div>
+</section>
+
+
+<!-- JOBS -->
+<section id="jobsPage" class="appPage" style="display:none">
+
+<div class="pageScroll">
+
+<div class="pageTitle">Jobs</div>
+<div class="pageSub">Your completed and upcoming jobs</div>
+
+<div class="jobFilters">
+
+<button class="filter active" onclick="setJobFilter('all',this)">
+All
+</button>
+
+<button class="filter" onclick="setJobFilter('paid',this)">
+Paid
+</button>
+
+<button class="filter" onclick="setJobFilter('pending',this)">
+Pending
+</button>
+
+<button class="filter" onclick="setJobFilter('debt',this)">
+Debt
+</button>
+
+</div>
+
+<div id="jobsList"></div>
+
+</div>
+</section>
+
+
+<!-- EARNINGS -->
+<section id="earningsPage" class="appPage" style="display:none">
+
+<div class="pageScroll">
+
+<div class="pageTitle">Earnings</div>
+<div class="pageSub">Track your cleaning income</div>
+
+<div class="earnGrid">
+
+<div class="earnCard totalCard">
+<div class="earnLabel">Total Earnings</div>
+<div class="earnValue" id="earnTotal">£0</div>
+</div>
+
+<div class="earnCard paidCard">
+<div class="earnLabel">Paid</div>
+<div class="earnValue" id="earnPaid">£0</div>
+</div>
+
+<div class="earnCard pendingCard">
+<div class="earnLabel">Pending</div>
+<div class="earnValue" id="earnPending">£0</div>
+</div>
+
+<div class="earnCard debtCard">
+<div class="earnLabel">Debt</div>
+<div class="earnValue" id="earnDebt">£0</div>
+</div>
+
+</div>
+
+
+<div class="card" style="margin-top:14px">
+
+<div style="font-weight:800;margin-bottom:4px">
+Weekly hours
+</div>
+
+<div style="font-size:11px;color:var(--muted)">
+Hours worked
+</div>
+
+<div class="chart" id="earnChart"></div>
+
+</div>
+
+</div>
+</section>
+
+</main>
+
+
+<!-- NAV -->
+<nav class="bottomNav">
+
+<button class="navBtn active" id="navHome" onclick="showPage('home')">
+<span>🏠</span>
+Home
+</button>
+
+<button class="navBtn" id="navSchedule" onclick="showPage('schedule')">
+<span>📅</span>
+Schedule
+</button>
+
+<button class="navBtn" id="navClients" onclick="showPage('clients')">
+<span>👥</span>
+Clients
+</button>
+
+<button class="navBtn" id="navJobs" onclick="showPage('jobs')">
+<span>📋</span>
+Jobs
+</button>
+
+<button class="navBtn" id="navEarnings" onclick="showPage('earnings')">
+<span>💷</span>
+Earnings
+</button>
+
+</nav>
+
+</section>
+
+
+<!-- ADD JOB MODAL -->
+<div class="modal" id="jobModal">
+
+<div class="modalCard">
+
+<div class="modalTitle">Add Job</div>
+
+<div class="field">
+<label>Client</label>
+<select id="jobClient"></select>
+</div>
+
+<div class="field">
+<label>Date</label>
+<input type="date" id="jobDate">
+</div>
+
+<div class="field">
+<label>Start Time</label>
+<input type="time" id="jobStart">
+</div>
+
+<div class="field">
+<label>End Time</label>
+<input type="time" id="jobEnd">
+</div>
+
+<div class="field">
+<label>Payment Status</label>
+<select id="jobStatus">
+<option value="Paid">Paid</option>
+<option value="Pending">Pending</option>
+<option value="Debt">Debt</option>
+</select>
+</div>
+
+<button class="primary" onclick="saveJob()">
+Save Job
+</button>
+
+<button class="secondary" onclick="closeModal('jobModal')">
+Cancel
+</button>
+
+</div>
+</div>
+
+
+<!-- ADD CLIENT MODAL -->
+<div class="modal" id="clientModal">
+
+<div class="modalCard">
+
+<div class="modalTitle">Add Client</div>
+
+<div class="field">
+<label>Name</label>
+<input id="newClientName" placeholder="Client name">
+</div>
+
+<div class="field">
+<label>Type</label>
+<select id="newClientType">
+<option value="private">Private</option>
+<option value="agency">Agency</option>
+</select>
+</div>
+
+<div class="field">
+<label>Hourly Rate</label>
+<input id="newClientRate" type="number" step="0.01" placeholder="18">
+</div>
+
+<div class="field">
+<label>Day</label>
+<select id="newClientDay">
+<option>Monday</option>
+<option>Tuesday</option>
+<option>Wednesday</option>
+<option>Thursday</option>
+<option>Friday</option>
+<option>Saturday</option>
+<option>Sunday</option>
+</select>
+</div>
+
+<div class="field">
+<label>Start Time</label>
+<input id="newClientStart" type="time">
+</div>
+
+<div class="field">
+<label>End Time</label>
+<input id="newClientEnd" type="time">
+</div>
+
+<button class="primary" onclick="saveClient()">
+Save Client
+</button>
+
+<button class="secondary" onclick="closeModal('clientModal')">
+Cancel
+</button>
+
+</div>
+</div>
+
+
+<script>
+
+/* =========================
+   DATA
+========================= */
+
+const KEY="pureShineCleaningManager";
+
+const defaultClients=[
+{
+id:1,
+name:"Tosca",
+type:"agency",
+rate:16,
+day:"Monday",
+start:"09:00",
+end:"12:00",
+freq:"weekly",
+week:"A"
+},
+{
+id:2,
+name:"Lottie",
+type:"agency",
+rate:16,
+day:"Monday",
+start:"13:00",
+end:"15:00",
+freq:"weekly",
+week:"A"
+},
+{
+id:3,
+name:"Christine",
+type:"private",
+rate:18,
+day:"Tuesday",
+start:"09:30",
+end:"12:30",
+freq:"weekly",
+week:"A"
+},
+{
+id:4,
+name:"Matt",
+type:"agency",
+rate:16,
+day:"Tuesday",
+start:"13:00",
+end:"17:00",
+freq:"weekly",
+week:"A",
+variable:true
+},
+{
+id:5,
+name:"Sonia",
+type:"agency",
+rate:16,
+day:"Wednesday",
+start:"09:00",
+end:"14:00",
+freq:"weekly",
+week:"A",
+variable:true
+},
+{
+id:6,
+name:"Gill",
+type:"agency",
+rate:16,
+day:"Wednesday",
+start:"15:00",
+end:"18:00",
+freq:"weekly",
+week:"A"
+},
+{
+id:7,
+name:"Laura",
+type:"private",
+rate:18,
+day:"Thursday",
+start:"09:00",
+end:"13:00",
+freq:"weekly",
+week:"A",
+variable:true
+},
+{
+id:8,
+name:"Hannah",
+type:"agency",
+rate:16,
+day:"Thursday",
+start:"13:00",
+end:"16:00",
+freq:"weekly",
+week:"A"
+},
+{
+id:9,
+name:"Joanna",
+type:"private",
+rate:18,
+day:"Friday",
+start:"09:30",
+end:"13:30",
+freq:"fortnightly",
+week:"A",
+variable:true
+},
+{
+id:10,
+name:"Sindu",
+type:"agency",
+rate:16,
+day:"Friday",
+start:"09:30",
+end:"12:30",
+freq:"fortnightly",
+week:"B"
+}
+];
+
+let data=JSON.parse(localStorage.getItem(KEY)||"null")||{
+clients:defaultClients,
+jobs:[],
+week:"A"
+};
+
+let currentPage="home";
+let clientFilter="all";
+let jobFilter="all";
+
+
+/* =========================
+   UTILITIES
+========================= */
+
+function save(){
+localStorage.setItem(KEY,JSON.stringify(data));
+}
+
+function money(n){
+return "£"+Number(n||0).toFixed(2);
+}
+
+function minutes(start,end){
+if(!start||!end)return 0;
+
+let [h1,m1]=start.split(":").map(Number);
+let [h2,m2]=end.split(":").map(Number);
+
+return Math.max(0,(h2*60+m2)-(h1*60+m1));
+}
+
+function hours(start,end){
+return minutes(start,end)/60;
+}
+
+function todayISO(){
+let d=new Date();
+return d.toISOString().slice(0,10);
+}
+
+function dayName(date){
+return new Date(date+"T12:00:00")
+.toLocaleDateString("en-GB",{weekday:"long"});
+}
+
+function initials(name){
+return name
+.split(" ")
+.map(x=>x[0])
+.join("")
+.slice(0,2)
+.toUpperCase();
 }
 
 
-/* start button */
+/* =========================
+   APP OPEN
+========================= */
 
-.start-button{
+function openApp(){
 
-    width:100%;
+document.getElementById("startPage").style.display="none";
+document.getElementById("mainApp").style.display="flex";
 
-    padding:17px 20px;
+localStorage.setItem("pureShineSeen","1");
 
-    border-radius:19px;
+renderAll();
 
-    background:
-        linear-gradient(
-            90deg,
-            #d979a4,
-            #c65c89
-        );
-
-    color:white;
-
-    font-size:17px;
-
-    font-weight:700;
-
-    box-shadow:
-        0 12px 28px
-        rgba(190,85,130,.28);
-}
-
-.start-button:active{
-
-    transform:scale(.98);
-}
-
-.start-login{
-
-    margin-top:13px;
-
-    font-size:12px;
-
-    color:#91717e;
-}
-
-.start-login span{
-
-    color:#b45b84;
-
-    font-weight:700;
-}
-
-.start-tagline{
-
-    margin-top:16px;
-
-    font-family:
-        Georgia,
-        serif;
-
-    font-size:11px;
-
-    letter-spacing:1px;
-
-    color:#a1808c;
 }
 
 
-/* =====================================================
-   APP
-===================================================== */
+/* =========================
+   NAVIGATION
+========================= */
 
-.app{
+function showPage(page){
 
-    display:none;
+currentPage=page;
 
-    min-height:100vh;
+document
+.querySelectorAll(".appPage")
+.forEach(x=>x.style.display="none");
 
-    padding-bottom:
-        env(safe-area-inset-bottom);
-}
+document
+.getElementById(page+"Page")
+.style.display="block";
 
-.app.visible{
-    display:block;
-}
+document
+.querySelectorAll(".navBtn")
+.forEach(x=>x.classList.remove("active"));
 
+let nav=document.getElementById("nav"+page.charAt(0).toUpperCase()+page.slice(1));
 
-.app-header{
+if(nav)nav.classList.add("active");
 
-    position:sticky;
+renderAll();
 
-    top:0;
-
-    z-index:20;
-
-    padding:
-        15px
-        15px
-        11px;
-
-    text-align:center;
-
-    background:
-        rgba(255,249,251,.96);
-
-    backdrop-filter:
-        blur(15px);
-
-    border-bottom:
-        1px solid #efdce4;
-}
-
-.app-logo{
-
-    font-family:
-        Georgia,
-        serif;
-
-    font-size:25px;
-
-    color:#a84f79;
-}
-
-.app-label{
-
-    margin-top:4px;
-
-    font-size:9px;
-
-    letter-spacing:3px;
-
-    color:#9d818c;
 }
 
 
-/* navigation */
+/* =========================
+   HOME
+========================= */
 
-.navigation{
+function renderHome(){
 
-    position:sticky;
+let jobs=data.jobs||[];
 
-    top:66px;
+let totalHours=jobs.reduce((s,j)=>s+Number(j.hours||0),0);
+let totalEarn=jobs.reduce((s,j)=>s+Number(j.total||0),0);
 
-    z-index:19;
+let paid=jobs
+.filter(j=>j.status==="Paid")
+.reduce((s,j)=>s+Number(j.total||0),0);
 
-    display:flex;
+let pending=jobs
+.filter(j=>j.status==="Pending")
+.reduce((s,j)=>s+Number(j.total||0),0);
 
-    gap:7px;
+let debt=jobs
+.filter(j=>j.status==="Debt")
+.reduce((s,j)=>s+Number(j.total||0),0);
 
-    overflow-x:auto;
+document.getElementById("statJobs").textContent=jobs.length;
+document.getElementById("statHours").textContent=totalHours.toFixed(1)+"h";
+document.getElementById("statEarned").textContent=money(totalEarn);
+document.getElementById("statAvailable").textContent=money(paid);
 
-    padding:10px;
+document.getElementById("todayDate").textContent=
+new Date().toLocaleDateString("en-GB",{
+weekday:"long",
+day:"numeric",
+month:"long"
+});
 
-    background:#fff;
+let today=todayISO();
 
-    border-bottom:
-        1px solid #efdce4;
+let todayJobs=jobs.filter(j=>j.date===today);
 
-    scrollbar-width:none;
+if(!todayJobs.length){
+
+let scheduled=scheduledForDay(dayName(today));
+
+document.getElementById("todayJobs").innerHTML=
+scheduled.length
+?scheduled.map(clientJobHTML).join("")
+:`<div class="card" style="text-align:center;color:var(--muted)">
+No cleaning scheduled today ✨
+</div>`;
+
+}else{
+
+document.getElementById("todayJobs").innerHTML=
+todayJobs.map(jobHTML).join("");
+
 }
 
-.navigation::-webkit-scrollbar{
-    display:none;
 }
 
-.navigation button{
 
-    flex:0 0 auto;
+/* =========================
+   SCHEDULE
+========================= */
 
-    white-space:nowrap;
+function setWeek(w){
 
-    padding:10px 15px;
+data.week=w;
 
-    border-radius:20px;
+save();
 
-    background:#fff0f5;
+document.getElementById("weekA")
+.classList.toggle("active",w==="A");
 
-    color:#995673;
+document.getElementById("weekB")
+.classList.toggle("active",w==="B");
 
-    font-size:14px;
+renderSchedule();
+
 }
 
-.navigation button.active{
+function scheduledForDay(day){
 
-    background:#d878a2;
+return data.clients.filter(c=>{
 
-    color:#fff;
+if(c.day!==day)return false;
 
-    box-shadow:
-        0 5px 13px
-        rgba(200,95,140,.2);
+if(c.freq==="weekly")return true;
+
+return c.week===data.week;
+
+});
+
 }
+
+function renderSchedule(){
+
+let days=[
+"Monday",
+"Tuesday",
+"Wednesday",
+"Thursday",
+"Friday",
+"Saturday",
+"Sunday"
+];
+
+let html="";
+
+days.forEach(day=>{
+
+let clients=scheduledForDay(day);
+
+if(!clients.length)return;
+
+html+=`
+<div class="dayBlock">
+
+<div class="dayTitle">
+<strong>${day}</strong>
+<span>${clients.length} job${clients.length>1?"s":""}</span>
+</div>
+
+${clients.map(clientJobHTML).join("")}
+
+</div>
+`;
+
+});
+
+document.getElementById("scheduleList").innerHTML=
+html||
+`<div class="card" style="text-align:center;color:var(--muted)">
+No scheduled clients.
+</div>`;
+
+}
+
+
+/* =========================
+   CLIENTS
+========================= */
+
+function setClientFilter(filter,button){
+
+clientFilter=filter;
+
+document
+.querySelectorAll("#clientsPage .filter")
+.forEach(x=>x.classList.remove("active"));
+
+button.classList.add("active");
+
+renderClients();
+
+}
+
+function renderClients(){
+
+let search=
+(document.getElementById("clientSearch").value||"")
+.toLowerCase();
+
+let clients=data.clients.filter(c=>{
+
+if(clientFilter!=="all"&&c.type!==clientFilter)
+return false;
+
+if(search&&!c.name.toLowerCase().includes(search))
+return false;
+
+return true;
+
+});
+
+document.getElementById("clientsList").innerHTML=
+clients.map(c=>`
+
+<div class="clientCard">
+
+<div class="clientAvatar">
+${initials(c.name)}
+</div>
+
+<div class="clientInfo">
+
+<div class="clientName">
+${c.name}
+</div>
+
+<div class="clientMeta">
+${c.type==="private"?"Private":"Agency"} ·
+${c.day} ·
+${c.start}–${c.end}
+</div>
+
+</div>
+
+<div class="rate">
+${money(c.rate)}/h
+</div>
+
+</div>
+
+`).join("")||
+`<div class="card" style="text-align:center;color:var(--muted)">
+No clients found.
+</div>`;
+
+}
+
+
+/* =========================
+   JOBS
+========================= */
+
+function setJobFilter(filter,button){
+
+jobFilter=filter;
+
+document
+.querySelectorAll(".jobFilters .filter")
+.forEach(x=>x.classList.remove("active"));
+
+button.classList.add("active");
+
+renderJobs();
+
+}
+
+function renderJobs(){
+
+let jobs=data.jobs||[];
+
+if(jobFilter!=="all"){
+jobs=jobs.filter(j=>j.status.toLowerCase()===jobFilter);
+}
+
+jobs=[...jobs].sort((a,b)=>
+(b.date||"").localeCompare(a.date||"")
+);
+
+document.getElementById("jobsList").innerHTML=
+jobs.map(jobHTML).join("")||
+`<div class="card" style="text-align:center;color:var(--muted)">
+No jobs yet.
+</div>`;
+
+}
+
+function jobHTML(j){
+
+return `
+<div class="jobCard">
+
+<div class="jobDot"></div>
+
+<div class="jobInfo">
+
+<div class="jobName">
+${j.clientName}
+</div>
+
+<div class="jobTime">
+${formatDate(j.date)} · ${j.start}–${j.end}
+</div>
+
+<div style="font-size:11px;color:var(--muted);margin-top:4px">
+${Number(j.hours||0).toFixed(2)} hours · ${money(j.rate)}/h
+</div>
+
+<div class="jobActions">
+
+<span class="status ${j.status.toLowerCase()}">
+${j.status}
+</span>
+
+<button class="smallBtn" onclick="editJob(${j.id})">
+Edit
+</button>
+
+<button class="smallBtn" onclick="deleteJob(${j.id})">
+Delete
+</button>
+
+</div>
+
+</div>
+
+<div class="jobMoney">
+${money(j.total)}
+</div>
+
+</div>
+`;
+
+}
+
+
+/* =========================
+   CLIENT SCHEDULE CARD
+========================= */
+
+function clientJobHTML(c){
+
+let h=hours(c.start,c.end);
+
+return `
+<div class="jobCard">
+
+<div class="jobDot"></div>
+
+<div class="jobInfo">
+
+<div class="jobName">
+${c.name}
+</div>
+
+<div class="jobTime">
+${c.start}–${c.end}
+</div>
+
+<div style="font-size:11px;color:var(--muted);margin-top:3px">
+${c.type==="private"?"Private":"Agency"} ·
+${money(c.rate)}/hour
+</div>
+
+</div>
+
+<div class="jobMoney">
+${money(h*c.rate)}
+</div>
+
+</div>
+`;
+
+}
+
+
+/* =========================
+   EARNINGS
+========================= */
+
+function renderEarnings(){
+
+let jobs=data.jobs||[];
+
+let total=jobs.reduce((s,j)=>s+Number(j.total||0),0);
+
+let paid=jobs
+.filter(j=>j.status==="Paid")
+.reduce((s,j)=>s+Number(j.total||0),0);
+
+let pending=jobs
+.filter(j=>j.status==="Pending")
+.reduce((s,j)=>s+Number(j.total||0),0);
+
+let debt=jobs
+.filter(j=>j.status==="Debt")
+.reduce((s,j)=>s+Number(j.total||0),0);
+
+document.getElementById("earnTotal").textContent=money(total);
+document.getElementById("earnPaid").textContent=money(paid);
+document.getElementById("earnPending").textContent=money(pending);
+document.getElementById("earnDebt").textContent=money(debt);
+
+let days=[
+"Mon",
+"Tue",
+"Wed",
+"Thu",
+"Fri",
+"Sat",
+"Sun"
+];
+
+let now=new Date();
+let monday=new Date(now);
+
+let day=now.getDay();
+let diff=day===0?-6:1-day;
+
+monday.setDate(now.getDate()+diff);
+
+let values=[];
+
+for(let i=0;i<7;i++){
+
+let d=new Date(monday);
+d.setDate(monday.getDate()+i);
+
+let iso=d.toISOString().slice(0,10);
+
+let h=jobs
+.filter(j=>j.date===iso)
+.reduce((s,j)=>s+Number(j.hours||0),0);
+
+values.push(h);
+
+}
+
+let max=Math.max(...values,1);
+
+document.getElementById("earnChart").innerHTML=
+values.map((v,i)=>`
+
+<div class="barWrap">
+
+<div
+class="bar"
+style="height:${Math.max(5,(v/max)*125)}px"
+></div>
+
+<div class="barLabel">
+${days[i]}
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================
+   ADD JOB
+========================= */
+
+function openAddJob(){
+
+let select=document.getElementById("jobClient");
+
+select.innerHTML=
+data.clients.map(c=>
+`<option value="${c.id}">${c.name}</option>`
+).join("");
+
+document.getElementById("jobDate").value=todayISO();
+
+document.getElementById("jobStart").value="";
+document.getElementById("jobEnd").value="";
+document.getElementById("jobStatus").value="Pending";
+
+document.getElementById("jobModal").classList.add("show");
+
+}
+
+function saveJob(){
+
+let client=data.clients.find(
+c=>String(c.id)===document.getElementById("jobClient").value
+);
+
+if(!client)return;
+
+let date=document.getElementById("jobDate").value;
+let start=document.getElementById("jobStart").value;
+let end=document.getElementById("jobEnd").value;
+
+if(!date||!start||!end){
+alert("Please enter the date and times.");
+return;
+}
+
+let h=hours(start,end);
+
+let job={
+id:Date.now(),
+clientId:client.id,
+clientName:client.name,
+date,
+start,
+end,
+hours:h,
+rate:Number(client.rate),
+total:h*Number(client.rate),
+status:document.getElementById("jobStatus").value
+};
+
+data.jobs.push(job);
+
+save();
+
+closeModal("jobModal");
+
+renderAll();
+
+}
+
+function editJob(id){
+
+let job=data.jobs.find(j=>j.id===id);
+
+if(!job)return;
+
+let status=prompt(
+"Payment status: Paid, Pending or Debt",
+job.status
+);
+
+if(status&&["Paid","Pending","Debt"].includes(status)){
+job.status=status;
+save();
+renderAll();
+}
+
+}
+
+function deleteJob(id){
+
+if(!confirm("Delete this job?"))return;
+
+data.jobs=data.jobs.filter(j=>j.id!==id);
+
+save();
+
+renderAll();
+
+}
+
+
+/* =========================
+   ADD CLIENT
+========================= */
+
+function openAddClient(){
+
+document.getElementById("newClientName").value="";
+document.getElementById("newClientRate").value="";
+document.getElementById("newClientStart").value="";
+document.getElementById("newClientEnd").value="";
+
+document.getElementById("clientModal").classList.add("show");
+
+}
+
+function saveClient(){
+
+let name=document.getElementById("newClientName").value.trim();
+
+let type=document.getElementById("newClientType").value;
+
+let rate=Number(document.getElementById("newClientRate").value);
+
+let day=document.getElementById("newClientDay").value;
+
+let start=document.getElementById("newClientStart").value;
+
+let end=document.getElementById("newClientEnd").value;
+
+if(!name||!rate||!start||!end){
+alert("Please complete all fields.");
+return;
+}
+
+data.clients.push({
+
+id:Date.now(),
+name,
+type,
+rate,
+day,
+start,
+end,
+freq:"weekly",
+week:"A"
+
+});
+
+save();
+
+closeModal("clientModal");
+
+renderAll();
+
+}
+
+
+/* =========================
+   MODALS
+========================= */
+
+function closeModal(id){
+
+document
+.getElementById(id)
+.classList.remove("show");
+
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function formatDate(date){
+
+if(!date)return "";
+
+return new Date(date+"T12:00:00")
+.toLocaleDateString("en-GB",{
+day:"numeric",
+month:"short",
+year:"numeric"
+});
+
+}
+
+
+/* =========================
+   RENDER ALL
+========================= */
+
+function renderAll(){
+
+renderHome();
+renderSchedule();
+renderClients();
+renderJobs();
+renderEarnings();
+
+}
+
+
+/* =========================
+   STARTUP
+========================= */
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+if(localStorage.getItem("pureShineSeen")==="1"){
+openApp();
+}
+
+renderAll();
+
+});
+
+</script>
+
+</body>
+</html>
