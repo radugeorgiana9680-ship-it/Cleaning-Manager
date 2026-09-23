@@ -1,2409 +1,543 @@
-<script>
-const KEY="pureShineFinalOneFile";
+<!DOCTYPE html>
+<html lang="en">
 
-const seed={
- clients:[
-  {id:1,name:"Tosca",type:"agency",rate:16,day:"Monday",start:"09:00",end:"12:00",frequency:"weekly",week:"A"},
-  {id:2,name:"Lottie",type:"agency",rate:16,day:"Monday",start:"13:00",end:"15:00",frequency:"weekly",week:"A"},
-  {id:3,name:"Christine",type:"private",rate:18,day:"Tuesday",start:"09:30",end:"12:30",frequency:"weekly",week:"A"},
-  {id:4,name:"Matt",type:"agency",rate:16,day:"Tuesday",start:"13:00",end:"17:00",frequency:"weekly",week:"A",variable:true},
-  {id:5,name:"Sonia",type:"agency",rate:16,day:"Wednesday",start:"09:00",end:"14:00",frequency:"weekly",week:"A",variable:true},
-  {id:6,name:"Gill",type:"agency",rate:16,day:"Wednesday",start:"15:00",end:"18:00",frequency:"weekly",week:"A"},
-  {id:7,name:"Laura",type:"private",rate:18,day:"Thursday",start:"09:00",end:"13:00",frequency:"weekly",week:"A",variable:true},
-  {id:8,name:"Hannah",type:"agency",rate:16,day:"Thursday",start:"13:00",end:"16:00",frequency:"weekly",week:"A"}
- ],
- jobs:[],
- holidays:[],
- week:"A"
-};
+<head>
 
-let data=JSON.parse(localStorage.getItem(KEY)||"null")||seed;
+<meta charset="UTF-8">
 
-let timerId=null;
-let timerStart=0;
+<meta name="viewport"
+      content="width=device-width,
+      initial-scale=1.0,
+      viewport-fit=cover">
 
+<meta name="theme-color"
+      content="#f3a9c5">
 
-/* =========================
-   GENERAL FUNCTIONS
-========================= */
+<link rel="manifest"
+      href="manifest.json">
 
-function save(){
- localStorage.setItem(KEY,JSON.stringify(data));
+<link rel="apple-touch-icon"
+      href="icon.png">
+
+<title>Pure Shine Cleaning Manager</title>
+
+<style>
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+*{
+    box-sizing:border-box;
 }
 
-function mins(t){
- if(!t)return 0;
- let [a,b]=t.split(":").map(Number);
- return a*60+b;
-}
-
-function dur(a,b){
- return Math.max(0,(mins(b)-mins(a))/60);
-}
-
-function money(n){
- return "£"+Number(n||0).toFixed(2);
-}
-
-function esc(s){
- return String(s??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;",
-  "<":"&lt;",
-  ">":"&gt;",
-  '"':"&quot;",
-  "'":"&#39;"
- }[c]));
-}
-
-function dateKey(d=new Date()){
- return d.toISOString().slice(0,10);
-}
-
-function day(d){
- return d.toLocaleDateString("en-GB",{weekday:"long"});
-}
-
-function fmt(m){
- return String(Math.floor(m/60)).padStart(2,"0")
-  +":"+
-  String(m%60).padStart(2,"0");
-}
-
-function closeModal(){
-
- if(timerId){
-  clearInterval(timerId);
-  timerId=null;
- }
-
- document.getElementById("overlay")
-  .classList.remove("show");
-}
-
-function show(html){
-
- document.getElementById("modal").innerHTML=html;
-
- document.getElementById("overlay")
-  .classList.add("show");
-}
-
-document.getElementById("overlay")
-.addEventListener("click",e=>{
- if(e.target.id==="overlay"){
-  closeModal();
- }
-});
-
-
-/* =========================
-   APP START
-========================= */
-
-function enterApp(){
-
- document.getElementById("welcome")
-  .style.display="none";
-
- document.getElementById("app")
-  .style.display="block";
-
- document.getElementById("bottom")
-  .classList.add("show");
-
- localStorage.setItem(
-  "pureShineEntered",
-  "1"
- );
-
- render();
-}
-
-if(
- localStorage.getItem("pureShineEntered")==="1"
-){
- enterApp();
-}
-
-
-/* =========================
-   HOLIDAYS / SCHEDULE
-========================= */
-
-function holiday(id,d){
-
- return data.holidays.some(h=>
-  h.clientId===id &&
-  d>=h.from &&
-  d<=h.to
- );
-}
-
-function todays(){
-
- let d=new Date();
- let dn=day(d);
- let dk=dateKey(d);
-
- return data.clients
-  .filter(c=>
-   c.day===dn &&
-   (
-    c.frequency!=="fortnightly" ||
-    c.week===data.week
-   ) &&
-   !holiday(c.id,dk)
-  )
-  .sort((a,b)=>
-   mins(a.start)-mins(b.start)
-  );
-}
-
-
-/* =========================
-   DASHBOARD
-========================= */
-
-function render(){
-
- let d=new Date();
-
- let jobs=todays();
-
- let h=jobs.reduce(
-  (s,c)=>s+dur(c.start,c.end),
-  0
- );
-
- let e=jobs.reduce(
-  (s,c)=>s+
-   dur(c.start,c.end)*c.rate,
-  0
- );
-
- document.getElementById("date")
-  .textContent=
-  d.toLocaleDateString(
-   "en-GB",
-   {
-    weekday:"long",
-    day:"numeric",
-    month:"long"
-   }
-  );
-
- document.getElementById("jobsCount")
-  .textContent=jobs.length;
-
- document.getElementById("hours")
-  .textContent=
-   Math.floor(h)+"h "+
-   Math.round((h%1)*60)+"m";
-
- document.getElementById("earned")
-  .textContent=money(e);
-
- document.getElementById("available")
-  .textContent=
-   Math.max(0,8-h)
-   .toFixed(1)
-   .replace(".0","")+"h";
-
-
- document.getElementById("todaySchedule")
- .innerHTML=
-
- jobs.length
-
- ?
-
- jobs.map((c,i)=>`
-
-  <div class="job ${i%2?"jb":"jp"}">
-
-   <div>
-
-    <strong>
-     ${esc(c.name)}
-    </strong>
-
-    <small>
-     ${c.start} – ${c.end}
-     · ${dur(c.start,c.end)}h
-     · ${c.type==="private"
-       ?"Private"
-       :"Agency"}
-    </small>
-
-   </div>
-
-   <div class="price">
-    ${money(
-     dur(c.start,c.end)*c.rate
-    )}
-   </div>
-
-  </div>
-
- `).join("")
-
- :
-
- `
-
- <div class="empty">
-
-  <div class="big">♡</div>
-
-  <b>
-   No cleaning jobs today 🌸
-  </b>
-
-  <small>
-   Add one with the + button.
-  </small>
-
-  <button
-   class="pinkBtn"
-   onclick="openJob()">
-
-   ＋ Add cleaning job
-
-  </button>
-
- </div>
-
- `;
-
- save();
-}
-
-
-/* =========================
-   NAVIGATION
-========================= */
-
-function setNav(btn){
-
- document.querySelectorAll(".nav")
- .forEach(x=>
-  x.classList.remove("active")
- );
-
- if(btn)
-  btn.classList.add("active");
-}
-
-function home(btn){
-
- setNav(btn);
-
- closeModal();
-
- render();
-}
-
-
-/* =========================
-   JOBS
-========================= */
-
-function openJob(pref={}){
-
- let jobId=pref.jobId||null;
-
- let existing=
-  jobId
-  ?
-  data.jobs.find(j=>j.id===jobId)
-  :
-  null;
-
- let today=
-  existing?.date||
-  pref.date||
-  dateKey(new Date());
-
- let selectedClient=
-  existing?.clientId||
-  pref.clientId||
-  data.clients[0]?.id;
-
- let status=
-  existing?.status||
-  pref.status||
-  "Pending";
-
-
- show(`
-
- <div class="modalHead">
-
-  <h2>
-   ${jobId
-    ?"Edit cleaning job"
-    :"Add cleaning job"}
-  </h2>
-
-  <button
-   class="close"
-   onclick="closeModal()">
-
-   ×
-
-  </button>
-
- </div>
-
-
- <label>Client</label>
-
- <select id="jc">
-
-  ${data.clients.map(c=>`
-
-   <option
-    value="${c.id}"
-    ${Number(c.id)===Number(selectedClient)
-      ?"selected"
-      :""}>
-
-    ${esc(c.name)}
-    — £${Number(c.rate).toFixed(2)}/h
-
-   </option>
-
-  `).join("")}
-
- </select>
-
-
- <label>Date</label>
-
- <input
-  id="jd"
-  type="date"
-  value="${today}">
-
-
- <div class="row">
-
-  <div>
-
-   <label>Start</label>
-
-   <input
-    id="js"
-    type="time"
-    value="${existing?.start||pref.start||""}">
-
-  </div>
-
-  <div>
-
-   <label>End</label>
-
-   <input
-    id="je"
-    type="time"
-    value="${existing?.end||pref.end||""}">
-
-  </div>
-
- </div>
-
-
- <label>
-  Payment status
- </label>
-
- <select id="jst">
-
-  <option
-   value="Paid"
-   ${status==="Paid"?"selected":""}>
-
-   ✓ Paid
-
-  </option>
-
-  <option
-   value="Pending"
-   ${status==="Pending"||
-     status==="Completed"
-     ?"selected"
-     :""}>
-
-   ⏳ Pending
-
-  </option>
-
-  <option
-   value="Debt"
-   ${status==="Debt"?"selected":""}>
-
-   £ Debt / Owed
-
-  </option>
-
- </select>
-
-
- <button
-  class="pinkBtn"
-  onclick="saveJob(${jobId||0})">
-
-  ${jobId
-   ?"Save changes"
-   :"Save cleaning job"}
-
- </button>
-
-
- ${
-  jobId
-  ?
-
-  `
-
-  <button
-   class="pinkBtn"
-   style="
-    background:#fff0f4;
-    color:#c12f59;
-    margin-top:9px
-   "
-   onclick="deleteJob(${jobId})">
-
-   🗑️ Delete job
-
-  </button>
-
-  `
-
-  :
-
-  ""
-
- }
-
- `);
-}
-
-
-function saveJob(jobId=0){
-
- let clientId=
-  Number(
-   document.getElementById("jc").value
-  );
-
- let date=
-  document.getElementById("jd").value;
-
- let start=
-  document.getElementById("js").value;
-
- let end=
-  document.getElementById("je").value;
-
- let status=
-  document.getElementById("jst").value;
-
-
- if(
-  !date||
-  !start||
-  !end||
-  mins(end)<=mins(start)
- ){
-
-  return alert(
-   "Please enter a valid start and end time."
-  );
-
- }
-
-
- let client=
-  data.clients.find(
-   x=>x.id===clientId
-  );
-
-
- let hours=
-  dur(start,end);
-
-
- let price=
-  hours*
-  Number(client?.rate||0);
-
-
- /* EDIT EXISTING JOB */
-
- if(jobId){
-
-  let job=
-   data.jobs.find(
-    j=>j.id===jobId
-   );
-
-  if(job){
-
-   Object.assign(job,{
-
-    clientId,
-    date,
-    start,
-    end,
-    price,
-    status,
-
-    /*
-     Keep the original
-     timer duration if this
-     job came from Timer.
-    */
-    timerSeconds:
-     job.timerSeconds||null
-
-   });
-
-  }
-
- }
-
-
- /* NEW JOB */
-
- else{
-
-  data.jobs.push({
-
-   id:Date.now(),
-
-   clientId,
-
-   date,
-
-   start,
-
-   end,
-
-   price,
-
-   status,
-
-   timerSeconds:null
-
-  });
-
- }
-
-
- save();
-
- closeModal();
-
- render();
-}
-
-
-/* DELETE JOB */
-
-function deleteJob(id){
-
- if(
-  confirm(
-   "Delete this cleaning job?"
-  )
- ){
-
-  data.jobs=
-   data.jobs.filter(
-    j=>j.id!==id
-   );
-
-  save();
-
-  openEarnings();
-
-  render();
- }
-}
-
-
-/* =========================
-   CLIENTS
-========================= */
-
-function openClients(){
-
- show(`
-
- <div class="modalHead">
-
-  <h2>Clients 👥</h2>
-
-  <button
-   class="close"
-   onclick="closeModal()">
-
-   ×
-
-  </button>
-
- </div>
-
-
- <button
-  class="pinkBtn"
-  onclick="clientForm()">
-
-  ＋ Add new client
-
- </button>
-
-
- <div style="margin-top:14px">
-
- ${data.clients.map(c=>`
-
-  <div class="list">
-
-   <div class="listTitle">
-
-    ${esc(c.name)}
-
-    <span
-     class="badge ${
-      c.type==="private"
-      ?"private"
-      :"agency"
-     }">
-
-     ${c.type==="private"
-      ?"Private"
-      :"Agency"}
-
-     · £${c.rate}/h
-
-    </span>
-
-   </div>
-
-
-   <div class="muted">
-
-    ${c.day}
-    · ${c.start}–${c.end}
-    · ${
-      c.frequency==="fortnightly"
-      ?
-      "Every 2 weeks · Week "+c.week
-      :
-      "Weekly"
-    }
-
-   </div>
-
-
-   ${
-    c.variable
-    ?
-    '<div class="muted">Variable duration</div>'
-    :
-    ""
-   }
-
-
-   <div class="actions">
-
-    <button
-     class="secondary"
-     onclick="clientForm(${c.id})">
-
-     ✏️ Edit
-
-    </button>
-
-
-    <button
-     class="secondary"
-     onclick="holidayForm(${c.id})">
-
-     🏖️ Holiday
-
-    </button>
-
-
-    <button
-     class="secondary danger"
-     onclick="deleteClient(${c.id})">
-
-     🗑️ Delete
-
-    </button>
-
-   </div>
-
-  </div>
-
- `).join("")}
-
- </div>
-
- `);
-}
-
-
-function clientForm(id=0){
-
- let c=
-  data.clients.find(
-   x=>x.id===id
-  )||{};
-
-
- show(`
-
- <div class="modalHead">
-
-  <h2>
-   ${id?"Edit":"Add"} client
-  </h2>
-
-  <button
-   class="close"
-   onclick="openClients()">
-
-   ×
-
-  </button>
-
- </div>
-
-
- <label>Name</label>
-
- <input
-  id="cn"
-  value="${esc(c.name||"")}">
-
-
- <label>Type</label>
-
- <select id="ct">
-
-  <option
-   value="private"
-   ${c.type==="private"
-    ?"selected"
-    :""}>
-
-   Private
-
-  </option>
-
-  <option
-   value="agency"
-   ${c.type==="agency"
-    ?"selected"
-    :""}>
-
-   Agency
-
-  </option>
-
- </select>
-
-
- <label>Hourly rate (£)</label>
-
- <input
-  id="cr"
-  type="number"
-  value="${c.rate||16}">
-
-
- <div class="row">
-
-  <div>
-
-   <label>Day</label>
-
-   <select id="cd">
-
-    ${
-     [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday"
-     ]
-     .map(x=>`
-
-      <option
-       ${c.day===x
-        ?"selected"
-        :""}>
-
-       ${x}
-
-      </option>
-
-     `)
-     .join("")
-    }
-
-   </select>
-
-  </div>
-
-
-  <div>
-
-   <label>Frequency</label>
-
-   <select id="cf">
-
-    <option
-     value="weekly"
-     ${c.frequency!=="fortnightly"
-      ?"selected"
-      :""}>
-
-     Weekly
-
-    </option>
-
-    <option
-     value="fortnightly"
-     ${c.frequency==="fortnightly"
-      ?"selected"
-      :""}>
-
-     Fortnightly
-
-    </option>
-
-   </select>
-
-  </div>
-
- </div>
-
-
- <div class="row">
-
-  <div>
-
-   <label>Start</label>
-
-   <input
-    id="cs"
-    type="time"
-    value="${c.start||""}">
-
-  </div>
-
-
-  <div>
-
-   <label>End</label>
-
-   <input
-    id="ce"
-    type="time"
-    value="${c.end||""}">
-
-  </div>
-
- </div>
-
-
- <label>
-  Fortnight week
- </label>
-
- <select id="cw">
-
-  <option
-   ${c.week!=="B"
-    ?"selected"
-    :""}>
-
-   A
-
-  </option>
-
-  <option
-   ${c.week==="B"
-    ?"selected"
-    :""}>
-
-   B
-
-  </option>
-
- </select>
-
-
- <button
-  class="pinkBtn"
-  onclick="saveClient(${id})">
-
-  Save changes
-
- </button>
-
- `);
-}
-
-
-function saveClient(id){
-
- let n=
-  document.getElementById("cn")
-  .value.trim();
-
- let s=
-  document.getElementById("cs")
-  .value;
-
- let e=
-  document.getElementById("ce")
-  .value;
-
-
- if(
-  !n||
-  !s||
-  !e||
-  mins(e)<=mins(s)
- ){
-
-  return alert(
-   "Please complete the client details."
-  );
-
- }
-
-
- let obj={
-
-  id:id||Date.now(),
-
-  name:n,
-
-  type:
-   document.getElementById("ct")
-   .value,
-
-  rate:
-   Number(
-    document.getElementById("cr")
-    .value
-   )||0,
-
-  day:
-   document.getElementById("cd")
-   .value,
-
-  start:s,
-
-  end:e,
-
-  frequency:
-   document.getElementById("cf")
-   .value,
-
-  week:
-   document.getElementById("cw")
-   .value
-
- };
-
-
- let old=
-  data.clients.find(
-   x=>x.id===id
-  );
-
-
- if(old)
-  Object.assign(old,obj);
-
- else
-  data.clients.push(obj);
-
-
- save();
-
- openClients();
-
- render();
-}
-
-
-function deleteClient(id){
-
- let c=
-  data.clients.find(
-   x=>x.id===id
-  );
-
-
- if(
-  c&&
-  confirm(
-   "Delete "+c.name+
-   "? This also removes saved jobs and holidays."
-  )
- ){
-
-  data.clients=
-   data.clients.filter(
-    x=>x.id!==id
-   );
-
-  data.jobs=
-   data.jobs.filter(
-    j=>j.clientId!==id
-   );
-
-  data.holidays=
-   data.holidays.filter(
-    h=>h.clientId!==id
-   );
-
-  save();
-
-  openClients();
-
-  render();
- }
-}
-
-
-/* =========================
-   SCHEDULE
-========================= */
-
-function openSchedule(btn){
-
- setNav(btn);
-
- let days=[
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday"
- ];
-
-
- show(`
-
- <div class="modalHead">
-
-  <h2>Schedule 📅</h2>
-
-  <button
-   class="close"
-   onclick="closeModal()">
-
-   ×
-
-  </button>
-
- </div>
-
-
- <div class="tabs">
-
-  <button
-   class="tab ${data.week==="A"?"active":""}"
-   onclick="data.week='A';save();openSchedule()">
-
-   Week A
-
-  </button>
-
-
-  <button
-   class="tab ${data.week==="B"?"active":""}"
-   onclick="data.week='B';save();openSchedule()">
-
-   Week B
-
-  </button>
-
- </div>
-
-
- <div class="note">
-
-  Use <b>Edit</b> to change a client's
-  day, hours, rate or frequency.
-
- </div>
-
-
- ${days.map(d=>`
-
-  <div class="list">
-
-   <div class="listTitle">
-    ${d}
-   </div>
-
-
-   ${
-    data.clients
-
-    .filter(c=>
-     c.day===d&&
-     (
-      c.frequency!=="fortnightly"||
-      c.week===data.week
-     )
-    )
-
-    .sort(
-     (a,b)=>
-      mins(a.start)-mins(b.start)
-    )
-
-    .map(c=>`
-
-     <div
-      style="
-       margin-top:10px;
-       padding-top:10px;
-       border-top:1px solid #eee
-      ">
-
-      <b>
-       ${esc(c.name)}
-      </b>
-
-      <span
-       class="badge ${
-        c.type==="private"
-        ?"private"
-        :"agency"
-       }">
-
-       ${c.type==="private"
-        ?"Private"
-        :"Agency"}
-
-      </span>
-
-
-      <div class="muted">
-
-       ${c.start}–${c.end}
-       · £${c.rate}/h
-
-      </div>
-
-
-      <button
-       class="small"
-       style="margin-top:7px"
-       onclick="clientForm(${c.id})">
-
-       ✏️ Edit
-
-      </button>
-
-     </div>
-
-    `)
-    .join("")
-
-    ||
-
-    `
-    <div class="muted"
-     style="margin-top:7px">
-
-     No clients scheduled.
-
-    </div>
-    `
-   }
-
-  </div>
-
- `).join("")}
-
- `);
-}
-
-
-/* =========================
-   TIMER
-========================= */
-
-function openTimer(btn){
-
- setNav(btn);
-
- show(`
-
- <div class="modalHead">
-
-  <h2>
-   Cleaning timer ⏱️
-  </h2>
-
-  <button
-   class="close"
-   onclick="closeModal()">
-
-   ×
-
-  </button>
-
- </div>
-
-
- <label>Client</label>
-
- <select id="tc">
-
-  ${data.clients.map(c=>`
-
-   <option value="${c.id}">
-
-    ${esc(c.name)}
-    — £${c.rate}/h
-
-   </option>
-
-  `).join("")}
-
- </select>
-
-
- <div
-  class="timer"
-  id="clock">
-
-  00:00:00
-
- </div>
-
-
- <button
-  class="pinkBtn"
-  id="timerBtn"
-  onclick="toggleTimer()">
-
-  Start timer
-
- </button>
-
-
- <div class="note">
-
-  Timer calculates your pay from the
-  <b>exact time worked</b>.
-
-  When stopped, the job is automatically
-  saved as <b>Pending</b>.
-
- </div>
-
- `);
-}
-
-
-function toggleTimer(){
-
- let b=
-  document.getElementById("timerBtn");
-
- let clock=
-  document.getElementById("clock");
-
-
- /* STOP TIMER */
-
- if(timerId){
-
-  clearInterval(timerId);
-
-  timerId=null;
-
-
-  const elapsedMs=
-   Math.max(
-    0,
-    Date.now()-timerStart
-   );
-
-
-  const totalSeconds=
-   Math.floor(
-    elapsedMs/1000
-   );
-
-
-  const hours=
-   totalSeconds/3600;
-
-
-  const h=
-   Math.floor(
-    totalSeconds/3600
-   );
-
-
-  const m=
-   Math.floor(
-    (totalSeconds%3600)/60
-   );
-
-
-  const x=
-   totalSeconds%60;
-
-
-  clock.textContent=
-   [
-    h,m,x
-   ]
-   .map(n=>
-    String(n).padStart(2,"0")
-   )
-   .join(":");
-
-
-  const clientId=
-   Number(
-    document.getElementById("tc")?.value
-   );
-
-
-  const client=
-   data.clients.find(
-    c=>Number(c.id)===clientId
-   );
-
-
-  const rate=
-   Number(client?.rate)||0;
-
-
-  const earned=
-   hours*rate;
-
-
-  /* SAVE TIMER JOB AS PENDING */
-
-  if(
-   client&&
-   totalSeconds>0
-  ){
-
-   const startDate=
-    new Date(timerStart);
-
-   const endDate=
-    new Date();
-
-
-   const pad=
-    n=>String(n).padStart(2,"0");
-
-
-   const startTime=
-    pad(startDate.getHours())+
-    ":"+
-    pad(startDate.getMinutes());
-
-
-   const endTime=
-    pad(endDate.getHours())+
-    ":"+
-    pad(endDate.getMinutes());
-
-
-   data.jobs.push({
-
-    id:Date.now(),
-
-    clientId:client.id,
-
-    date:dateKey(endDate),
-
-    start:startTime,
-
-    end:endTime,
-
-    price:earned,
-
-    status:"Pending",
-
-    timerSeconds:totalSeconds
-
-   });
-
-
-   save();
-
-   render();
-  }
-
-
-  /* RESULT */
-
-  let result=
-   document.getElementById(
-    "timerResult"
-   );
-
-
-  if(!result){
-
-   result=
-    document.createElement("div");
-
-   result.id="timerResult";
-
-   result.className="earn";
-
-   clock.parentElement
-    .insertBefore(
-     result,
-     clock.nextSibling
-    );
-  }
-
-
-  result.innerHTML=`
-
-   <div class="muted">
-    ✨ Cleaning completed
-   </div>
-
-   <div
-    style="
-     font-size:18px;
-     font-weight:800;
-     margin-top:4px
-    ">
-
-    ${client
-      ?esc(client.name)
-      :"Client"}
-
-   </div>
-
-
-   <div style="margin-top:8px">
-
-    <b>
-
-     ${h}h
-     ${String(m).padStart(2,"0")}m
-     ${String(x).padStart(2,"0")}s
-
-    </b>
-
-   </div>
-
-
-   <div
-    class="muted"
-    style="margin-top:4px">
-
-    Rate:
-    £${rate.toFixed(2)}/hour
-
-   </div>
-
-
-   <div
-    class="bigMoney"
-    style="
-     font-size:28px;
-     margin-top:6px
-    ">
-
-    £${earned.toFixed(2)}
-
-   </div>
-
-
-   <div
-    class="muted"
-    style="
-     font-size:12px;
-     margin-top:3px
-    ">
-
-    Saved as
-    <b>Pending</b>.
-
-   </div>
-
-  `;
-
-
-  b.textContent=
-   "Start timer";
-
-  return;
- }
-
-
- /* START TIMER */
-
- timerStart=Date.now();
-
- b.textContent=
-  "Stop timer";
-
-
- const oldResult=
-  document.getElementById(
-   "timerResult"
-  );
-
-
- if(oldResult)
-  oldResult.remove();
-
-
- const tick=()=>{
-
-  let s=
-   Math.floor(
-    (Date.now()-timerStart)/1000
-   );
-
-
-  let h=
-   Math.floor(s/3600);
-
-
-  let m=
-   Math.floor(
-    (s%3600)/60
-   );
-
-
-  let x=
-   s%60;
-
-
-  clock.textContent=
-   [
-    h,m,x
-   ]
-   .map(n=>
-    String(n).padStart(2,"0")
-   )
-   .join(":");
-
- };
-
-
- tick();
-
- timerId=
-  setInterval(
-   tick,
-   500
-  );
-}
-
-
-/* =========================
-   FREE TIME
-========================= */
-
-function openFreeTime(btn){
-
- setNav(btn);
-
- let d=new Date();
-
-
- show(`
-
- <div class="modalHead">
-
-  <h2>
-   Find free time 🔎
-  </h2>
-
-  <button
-   class="close"
-   onclick="closeModal()">
-
-   ×
-
-  </button>
-
- </div>
-
-
- <label>Date</label>
-
- <input
-  id="fd"
-  type="date"
-  value="${dateKey(d)}"
-  onchange="refreshFree()">
-
-
- <div id="freeResults"></div>
-
- `);
-
-
- refreshFree();
-}
-
-
-function refreshFree(){
-
- let v=
-  document.getElementById("fd")
-  .value;
-
-
- if(!v)return;
-
-
- let d=
-  new Date(v+"T12:00:00");
-
-
- let dn=
-  day(d);
-
-
- let jobs=
-  data.clients
-
-  .filter(c=>
-   c.day===dn&&
-   (
-    c.frequency!=="fortnightly"||
-    c.week===data.week
-   )&&
-   !holiday(c.id,v)
-  )
-
-  .sort(
-   (a,b)=>
-    mins(a.start)-mins(b.start)
-  );
-
-
- let cursor=
-  8*60;
-
- let end=
-  18*60;
-
- let slots=[];
-
-
- jobs.forEach(j=>{
-
-  let a=mins(j.start);
-  let b=mins(j.end);
-
-
-  if(a>cursor)
-   slots.push([
-    cursor,
-    a
-   ]);
-
-
-  cursor=
-   Math.max(cursor,b);
-
- });
-
-
- if(cursor<end)
-  slots.push([
-   cursor,
-   end
-  ]);
-
-
- document.getElementById(
-  "freeResults"
- )
- .innerHTML=
-
- `
-
- <div class="note">
-
-  ${dn}
-
-  · Available gaps between
-  08:00 and 18:00.
-
- </div>
-
-
- ${
-  slots.length
-
-  ?
-
-  slots.map(s=>`
-
-   <div class="slot">
-
-    <div>
-
-     <b>
-      ${fmt(s[0])} – ${fmt(s[1])}
-     </b>
-
-     <div class="muted">
-
-      ${Math.floor(
-       (s[1]-s[0])/60
-      )}h
-
-      ${(s[1]-s[0])%60}m
-      available
-
-     </div>
-
-    </div>
-
-
-    <button
-     class="small"
-     onclick="openJob({
-      date:'${v}',
-      start:'${fmt(s[0])}',
-      end:'${fmt(s[1])}'
-     })">
-
-     ＋ Add job
-
-    </button>
-
-   </div>
-
-  `).join("")
-
-  :
-
-  `
-  <div class="empty">
-   No free gaps found 🌸
-  </div>
-  `
- }
-
- `;
-}
-
-
-/* =========================
-   PAYMENT STATUS
-========================= */
-
-function paymentBadge(status){
-
- let normalized=
-  status==="Completed"
-  ?"Pending"
-  :(status||"Pending");
-
-
- let cls=
-  normalized==="Paid"
-  ?"paid"
-  :
-  normalized==="Debt"
-  ?"debt"
-  :
-  "pending";
-
-
- let label=
-  normalized==="Paid"
-  ?"✓ Paid"
-  :
-  normalized==="Debt"
-  ?"£ Debt / Owed"
-  :
-  "⏳ Pending";
-
-
- return `
-  <span
-   class="paymentBadge ${cls}">
-
-   ${label}
-
-  </span>
- `;
-}
-
-
-/* =========================
-   EARNINGS
-========================= */
-
-function openEarnings(btn){
-
- setNav(btn);
-
-
- let jobs=
-  data.jobs.filter(
-   j=>j.status!=="Cancelled"
-  );
-
-
- let h=
-  jobs.reduce(
-   (s,j)=>
-    s+
-    Number(
-     j.timerSeconds
-     ?
-     j.timerSeconds/3600
-     :
-     dur(j.start,j.end)
-    ),
-   0
-  );
-
-
- let total=
-  jobs.reduce(
-   (s,j)=>
-    s+Number(j.price||0),
-   0
-  );
-
-
- let paid=
-  jobs
-
-  .filter(
-   j=>j.status==="Paid"
-  )
-
-  .reduce(
-   (s,j)=>
-    s+Number(j.price||0),
-   0
-  );
-
-
- let pending=
-  jobs
-
-  .filter(
-   j=>
-    !j.status||
-    j.status==="Pending"||
-    j.status==="Completed"
-  )
-
-  .reduce(
-   (s,j)=>
-    s+Number(j.price||0),
-   0
-  );
-
-
- let debt=
-  jobs
-
-  .filter(
-   j=>j.status==="Debt"
-  )
-
-  .reduce(
-   (s,j)=>
-    s+Number(j.price||0),
-   0
-  );
-
-
- show(`
-
- <div class="modalHead">
-
-  <h2>
-   Earnings 📊
-  </h2>
-
-  <button
-   class="close"
-   onclick="closeModal()">
-
-   ×
-
-  </button>
-
- </div>
-
-
- <div class="earn">
-
-  <div class="muted">
-   Total earned
-  </div>
-
-  <div class="bigMoney">
-   ${money(total)}
-  </div>
-
-  <div class="muted">
-
-   ${h.toFixed(1)}
-   hours ·
-   ${jobs.length}
-   jobs
-
-  </div>
-
- </div>
-
-
- <div
-  class="row"
-  style="margin-bottom:15px">
-
-  <div
-   class="list"
-   style="
+html,
+body{
     margin:0;
-    background:#e7f6ec
-   ">
+    padding:0;
+    min-height:100%;
+}
 
-   <div class="muted">
-    ✓ Paid
-   </div>
+body{
+    background:#fff8fb;
+    color:#533d47;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
 
-   <b style="color:#28744b">
-    ${money(paid)}
-   </b>
+button,
+input,
+select{
+    font:inherit;
+}
 
-  </div>
+button{
+    border:0;
+    cursor:pointer;
+}
 
 
-  <div
-   class="list"
-   style="
+/* =====================================================
+   WELCOME SCREEN
+===================================================== */
+
+.start-screen{
+
+    min-height:100vh;
+    min-height:100svh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:
+        calc(25px + env(safe-area-inset-top))
+        22px
+        calc(25px + env(safe-area-inset-bottom));
+
+    position:relative;
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            #ffffff 0%,
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 90% 25%,
+            #f8d3e2 0%,
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            #fffafc,
+            #fce8f1 55%,
+            #f5d4e1
+        );
+}
+
+
+/* decorative bubbles */
+
+.start-screen:before{
+
+    content:"";
+
+    position:absolute;
+
+    width:260px;
+    height:260px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.8),
+            rgba(255,255,255,0)
+        );
+
+    top:-90px;
+    right:-70px;
+}
+
+.start-screen:after{
+
+    content:"";
+
+    position:absolute;
+
+    width:220px;
+    height:220px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(201,164,92,.15),
+            transparent 70%
+        );
+
+    bottom:-80px;
+    left:-70px;
+}
+
+
+.start-content{
+
+    width:100%;
+    max-width:430px;
+
+    text-align:center;
+
+    position:relative;
+    z-index:2;
+}
+
+
+/* logo */
+
+.welcome-logo{
+
+    width:145px;
+    height:145px;
+
+    margin:0 auto 18px;
+
+    border-radius:50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fff,
+            #f8c9dc
+        );
+
+    border:3px solid #c9a45c;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    box-shadow:
+        0 18px 45px
+        rgba(160,75,110,.18);
+
+    position:relative;
+}
+
+.welcome-logo:after{
+
+    content:"✦";
+
+    position:absolute;
+
+    top:8px;
+    right:18px;
+
+    color:#c9a45c;
+
+    font-size:22px;
+}
+
+.logo-inner{
+
+    font-family:
+        Georgia,
+        serif;
+
+    color:#ad537d;
+
+    font-size:24px;
+
+    line-height:1.05;
+}
+
+.logo-inner span{
+
+    display:block;
+
+    font-family:
+        "Brush Script MT",
+        cursive;
+
+    font-size:28px;
+
+    color:#d67da4;
+
+    margin-top:5px;
+}
+
+
+/* title */
+
+.welcome-title{
+
     margin:0;
-    background:#fff0f3
-   ">
 
-   <div class="muted">
-    ⏳ Pending
-   </div>
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
 
-   <b style="color:#b12f5e">
-    ${money(pending)}
-   </b>
+    font-size:43px;
 
-  </div>
+    line-height:1;
 
- </div>
+    color:#a84f79;
 
+    letter-spacing:-1px;
+}
 
- <div
-  class="list"
-  style="background:#fff7e5">
+.welcome-subtitle{
 
-  <div class="muted">
-   £ Debt / Owed
-  </div>
+    margin-top:8px;
 
-  <b style="color:#9b671c">
-   ${money(debt)}
-  </b>
+    font-family:
+        Georgia,
+        serif;
 
- </div>
+    font-size:12px;
 
+    letter-spacing:4px;
 
- <h3>
-  Saved jobs
- </h3>
-
-
- ${
-  jobs.length
-
-  ?
-
-  jobs
-   .slice()
-   .reverse()
-   .map(j=>{
-
-    let c=
-     data.clients.find(
-      x=>x.id===j.clientId
-     );
-
-
-    let hours=
-     j.timerSeconds
-     ?
-     j.timerSeconds/3600
-     :
-     dur(j.start,j.end);
-
-
-    return `
-
-     <div class="list">
-
-      <div
-       style="
-        display:flex;
-        justify-content:space-between;
-        gap:10px;
-        align-items:flex-start
-       ">
-
-       <div>
-
-        <b>
-         ${esc(
-          c?.name||
-          "Client"
-         )}
-        </b>
-
-        ${paymentBadge(
-         j.status
-        )}
-
-        <div class="muted">
-
-         ${j.date}
-         · ${j.start}–${j.end}
-         · ${hours.toFixed(2)}h
-
-        </div>
-
-       </div>
-
-
-       <b>
-        ${money(j.price)}
-       </b>
-
-      </div>
-
-
-      <div class="actions">
-
-       <button
-        class="small"
-        onclick="
-         openJob({
-          jobId:${j.id}
-         })
-        ">
-
-        ✏️ Edit job / payment
-
-       </button>
-
-
-       <button
-        class="small danger"
-        onclick="
-         deleteJob(${j.id})
-        ">
-
-        🗑️ Delete
-
-       </button>
-
-      </div>
-
-     </div>
-
-    `;
-
-   })
-   .join("")
-
-  :
-
-  `
-   <div class="empty">
-    No saved jobs yet.
-   </div>
-  `
- }
-
- `);
+    color:#92707e;
 }
 
 
-/* =========================
-   HOLIDAYS
-========================= */
+/* slogan */
 
-function holidayForm(id){
+.welcome-slogan{
 
- let c=
-  data.clients.find(
-   x=>x.id===id
-  );
+    margin:22px auto 20px;
 
+    font-family:
+        "Brush Script MT",
+        "Segoe Script",
+        cursive;
 
- show(`
+    font-size:29px;
 
- <div class="modalHead">
+    line-height:1.05;
 
-  <h2>
-   Holiday —
-   ${esc(c.name)} 🏖️
-  </h2>
+    color:#bd638d;
+}
 
-  <button
-   class="close"
-   onclick="openClients()">
+.welcome-slogan b{
 
-   ×
-
-  </button>
-
- </div>
-
-
- <label>From</label>
-
- <input
-  id="hf"
-  type="date">
-
-
- <label>To</label>
-
- <input
-  id="ht"
-  type="date">
-
-
- <button
-  class="pinkBtn"
-  onclick="saveHoliday(${id})">
-
-  Save holiday
-
- </button>
-
-
- <h3>
-  Existing holidays
- </h3>
-
-
- ${
-  data.holidays
-   .filter(
-    h=>h.clientId===id
-   )
-   .map(h=>`
-
-    <div class="list">
-
-     ${h.from}
-     →
-     ${h.to}
-
-     <button
-      class="small"
-      onclick="
-       delHoliday(
-        ${h.id},
-        ${id}
-       )
-      ">
-
-      Delete
-
-     </button>
-
-    </div>
-
-   `)
-   .join("")
-
-  ||
-
-  '<div class="muted">None</div>'
- }
-
- `);
+    color:#9e4d75;
 }
 
 
-function saveHoliday(id){
+/* feature buttons */
 
- let f=
-  document.getElementById("hf")
-  .value;
+.features{
 
- let t=
-  document.getElementById("ht")
-  .value;
+    display:grid;
 
+    grid-template-columns:
+        repeat(4,1fr);
 
- if(
-  !f||
-  !t||
-  t<f
- ){
+    gap:8px;
 
-  return alert(
-   "Choose a valid period."
-  );
+    margin:18px 0 22px;
+}
 
- }
+.feature{
 
+    min-height:94px;
 
- data.holidays.push({
+    padding:9px 3px;
 
-  id:Date.now(),
+    border-radius:19px;
 
-  clientId:id,
+    background:
+        rgba(255,255,255,.82);
 
-  from:f,
+    border:
+        1px solid
+        rgba(210,157,179,.35);
 
-  to:t
+    box-shadow:
+        0 9px 25px
+        rgba(130,65,90,.08);
 
- });
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
 
+.feature-icon{
 
- save();
+    font-size:27px;
 
- openClients();
+    margin-bottom:6px;
+}
 
- render();
+.feature-text{
+
+    font-size:10px;
+
+    line-height:1.2;
+
+    font-weight:700;
+
+    color:#765361;
 }
 
 
-function delHoliday(id,cid){
+/* start button */
 
- data.holidays=
-  data.holidays.filter(
-   h=>h.id!==id
-  );
+.start-button{
 
- save();
+    width:100%;
 
- holidayForm(cid);
+    padding:17px 20px;
 
- render();
+    border-radius:19px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #d979a4,
+            #c65c89
+        );
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:700;
+
+    box-shadow:
+        0 12px 28px
+        rgba(190,85,130,.28);
+}
+
+.start-button:active{
+
+    transform:scale(.98);
+}
+
+.start-login{
+
+    margin-top:13px;
+
+    font-size:12px;
+
+    color:#91717e;
+}
+
+.start-login span{
+
+    color:#b45b84;
+
+    font-weight:700;
+}
+
+.start-tagline{
+
+    margin-top:16px;
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size:11px;
+
+    letter-spacing:1px;
+
+    color:#a1808c;
 }
 
 
-function openHolidays(){
+/* =====================================================
+   APP
+===================================================== */
 
- show(`
+.app{
 
- <div class="modalHead">
+    display:none;
 
-  <h2>
-   Holidays 🏖️
-  </h2>
+    min-height:100vh;
 
-  <button
-   class="close"
-   onclick="closeModal()">
+    padding-bottom:
+        env(safe-area-inset-bottom);
+}
 
-   ×
-
-  </button>
-
- </div>
-
-
- ${
-  data.holidays.length
-
-  ?
-
-  data.holidays
-   .map(h=>{
-
-    let c=
-     data.clients.find(
-      x=>x.id===h.clientId
-     );
-
-    return `
-
-     <div class="list">
-
-      <b>
-       ${esc(
-        c?.name||
-        "Client"
-       )}
-      </b>
-
-      <div class="muted">
-
-       ${h.from}
-       →
-       ${h.to}
-
-      </div>
-
-     </div>
-
-    `;
-
-   })
-   .join("")
-
-  :
-
-  `
-   <div class="empty">
-    No holidays added yet 🌸
-   </div>
-  `
- }
-
- `);
+.app.visible{
+    display:block;
 }
 
 
-/* =========================
-   INITIALISE
-========================= */
+.app-header{
 
-render();
+    position:sticky;
 
-</script>
+    top:0;
+
+    z-index:20;
+
+    padding:
+        15px
+        15px
+        11px;
+
+    text-align:center;
+
+    background:
+        rgba(255,249,251,.96);
+
+    backdrop-filter:
+        blur(15px);
+
+    border-bottom:
+        1px solid #efdce4;
+}
+
+.app-logo{
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size:25px;
+
+    color:#a84f79;
+}
+
+.app-label{
+
+    margin-top:4px;
+
+    font-size:9px;
+
+    letter-spacing:3px;
+
+    color:#9d818c;
+}
+
+
+/* navigation */
+
+.navigation{
+
+    position:sticky;
+
+    top:66px;
+
+    z-index:19;
+
+    display:flex;
+
+    gap:7px;
+
+    overflow-x:auto;
+
+    padding:10px;
+
+    background:#fff;
+
+    border-bottom:
+        1px solid #efdce4;
+
+    scrollbar-width:none;
+}
+
+.navigation::-webkit-scrollbar{
+    display:none;
+}
+
+.navigation button{
+
+    flex:0 0 auto;
+
+    white-space:nowrap;
+
+    padding:10px 15px;
+
+    border-radius:20px;
+
+    background:#fff0f5;
+
+    color:#995673;
+
+    font-size:14px;
+}
+
+.navigation button.active{
+
+    background:#d878a2;
+
+    color:#fff;
+
+    box-shadow:
+        0 5px 13px
+        rgba(200,95,140,.2);
+}
