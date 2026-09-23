@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 
 <meta name="viewport"
@@ -8,7 +10,8 @@
       initial-scale=1,
       viewport-fit=cover">
 
-<meta name="theme-color" content="#f7d5e3">
+<meta name="theme-color"
+      content="#f5d0df">
 
 <meta name="apple-mobile-web-app-capable"
       content="yes">
@@ -16,12 +19,15 @@
 <meta name="apple-mobile-web-app-status-bar-style"
       content="light">
 
+<link rel="apple-touch-icon"
+      href="icon.png">
+
 <title>Pure Shine Cleaning Manager ✨</title>
 
 <style>
 
 /* =====================================================
-   PURE SHINE CLEANING MANAGER
+   GLOBAL
 ===================================================== */
 
 *{
@@ -38,23 +44,21 @@ body{
 
 body{
 
-    color:#343348;
-
     font-family:
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
 
+    color:#343348;
+
     background:
         linear-gradient(
-            rgba(250,247,252,.82),
-            rgba(250,247,252,.92)
+            rgba(249,246,251,.78),
+            rgba(249,246,251,.90)
         ),
         url("background.jpg")
-        center center /
-        cover
-        fixed;
+        center center / cover fixed;
 
     overflow-x:hidden;
 }
@@ -70,25 +74,33 @@ button{
     cursor:pointer;
 }
 
+button:active{
+    transform:scale(.98);
+}
+
+input,
+select{
+    outline:none;
+}
+
 /* =====================================================
    APP
 ===================================================== */
 
 #app{
     min-height:100vh;
-    padding-bottom:100px;
 }
 
 .app{
-    width:100%;
-    max-width:760px;
-    margin:auto;
     min-height:100vh;
+    max-width:780px;
+    margin:auto;
 
     background:
-        rgba(249,247,251,.72);
+        rgba(249,247,251,.67);
 
-    backdrop-filter:blur(4px);
+    padding-bottom:
+        calc(90px + env(safe-area-inset-bottom));
 }
 
 /* =====================================================
@@ -99,12 +111,12 @@ button{
 
     position:sticky;
     top:0;
-    z-index:50;
+    z-index:100;
 
-    min-height:96px;
+    min-height:112px;
 
     padding:
-        15px
+        16px
         18px;
 
     display:flex;
@@ -112,48 +124,75 @@ button{
     justify-content:space-between;
 
     background:
-        rgba(255,255,255,.95);
+        rgba(255,255,255,.96);
 
     border-bottom:
-        1px solid #eee6ef;
+        1px solid #eee5ed;
 
-    backdrop-filter:blur(15px);
+    backdrop-filter:blur(18px);
 }
 
 .brand{
+
     display:flex;
     align-items:center;
-    gap:13px;
+    gap:14px;
+
+    min-width:0;
 }
 
-.logo{
+/* REAL PURE SHINE THUMBNAIL */
 
-    width:62px;
-    height:62px;
+.brand-logo{
 
-    border-radius:21px;
+    width:70px;
+    height:70px;
 
-    display:flex;
+    border-radius:22px;
+
+    object-fit:cover;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f7b9d1,
+            #e889b0
+        );
+
+    border:
+        2px solid #efc2d5;
+
+    box-shadow:
+        0 8px 22px
+        rgba(180,90,130,.18);
+
+    flex-shrink:0;
+}
+
+/* fallback if icon.png does not exist */
+
+.brand-logo-fallback{
+
+    display:none;
+
+    width:70px;
+    height:70px;
+
+    border-radius:22px;
+
     align-items:center;
     justify-content:center;
 
     background:
         linear-gradient(
             145deg,
-            #fff,
-            #f8d3e3
+            #f7b9d1,
+            #e889b0
         );
 
-    border:
-        2px solid #e5bfd0;
+    font-size:32px;
 
-    box-shadow:
-        0 7px 20px
-        rgba(100,60,80,.12);
-
-    font-size:31px;
-
-    flex-shrink:0;
+    color:white;
 }
 
 .brand-title{
@@ -162,23 +201,24 @@ button{
         Georgia,
         serif;
 
-    font-size:25px;
+    font-size:27px;
+
     font-weight:800;
 
-    color:#39364d;
+    color:#353348;
 }
 
 .brand-subtitle{
 
-    margin-top:2px;
+    margin-top:3px;
+
+    color:#8b879c;
 
     font-family:
         Georgia,
         serif;
 
     font-size:15px;
-
-    color:#8d899e;
 }
 
 .header-actions{
@@ -189,10 +229,10 @@ button{
 
 .header-button{
 
-    width:53px;
-    height:53px;
+    width:56px;
+    height:56px;
 
-    border-radius:19px;
+    border-radius:20px;
 
     display:flex;
     align-items:center;
@@ -200,21 +240,22 @@ button{
 
     font-size:25px;
 
-    background:#f3b3ce;
-    color:#fff;
+    color:white;
+
+    background:#efabc8;
 
     box-shadow:
-        0 8px 20px
-        rgba(230,150,185,.28);
+        0 7px 18px
+        rgba(215,120,165,.20);
 }
 
 .header-button.timer{
-    background:#e3d8f7;
-    color:#5e5577;
+    background:#ddd1f4;
+    color:#655b7d;
 }
 
 /* =====================================================
-   CONTENT
+   MAIN
 ===================================================== */
 
 .content{
@@ -222,28 +263,29 @@ button{
     padding:
         30px
         20px
-        125px;
+        30px;
 }
 
 .greeting{
 
     margin:0;
 
-    font-size:42px;
+    font-size:41px;
+
     line-height:1;
 
-    font-weight:800;
-
     letter-spacing:-1.5px;
+
+    font-weight:850;
 }
 
 .date-text{
 
-    margin-top:10px;
+    margin-top:9px;
 
-    color:#89869c;
+    color:#89859a;
 
-    font-size:18px;
+    font-size:17px;
 }
 
 /* =====================================================
@@ -262,40 +304,40 @@ button{
     margin-top:30px;
 }
 
-.stat-card{
+.stat{
 
-    min-height:155px;
+    min-height:150px;
 
-    padding:21px;
+    padding:20px;
 
-    border-radius:28px;
+    border-radius:27px;
 }
 
-.stat-card.jobs{
-    background:#f9dfeb;
+.stat.jobs{
+    background:#f8dce8;
 }
 
-.stat-card.hours{
-    background:#ebe2f8;
+.stat.hours{
+    background:#e9e0f8;
 }
 
-.stat-card.earned{
-    background:#def2e7;
+.stat.earned{
+    background:#ddf1e6;
 }
 
-.stat-card.available{
-    background:#fff0cb;
+.stat.available{
+    background:#fff0c9;
 }
 
 .stat-icon{
-    font-size:28px;
+    font-size:27px;
 }
 
 .stat-label{
 
     margin-top:9px;
 
-    color:#77748b;
+    color:#777388;
 
     font-size:16px;
 }
@@ -304,11 +346,9 @@ button{
 
     margin-top:5px;
 
-    font-size:31px;
+    font-size:30px;
 
-    font-weight:800;
-
-    color:#343348;
+    font-weight:850;
 }
 
 /* =====================================================
@@ -323,162 +363,183 @@ button{
 
     display:flex;
 
-    justify-content:space-between;
     align-items:center;
+    justify-content:space-between;
 
-    margin-bottom:15px;
+    margin-bottom:14px;
 }
 
 .section-title{
 
     margin:0;
 
-    font-size:26px;
+    font-size:27px;
 
-    font-weight:800;
+    letter-spacing:-.6px;
 
-    letter-spacing:-.5px;
+    font-weight:850;
 }
 
-.section-link{
+.text-button{
 
     background:none;
 
-    color:#b45f88;
+    color:#b25d87;
 
     font-weight:800;
-
-    font-size:15px;
 }
 
 /* =====================================================
-   TODAY SCHEDULE
+   SCHEDULE CARD
 ===================================================== */
 
 .schedule-card{
+
+    background:white;
+
+    border-radius:25px;
+
+    padding:16px;
+
+    margin-bottom:11px;
 
     display:flex;
 
     align-items:center;
 
-    background:#fff;
-
-    border-radius:24px;
-
-    padding:17px;
-
-    margin-bottom:11px;
+    gap:13px;
 
     box-shadow:
-        0 6px 22px
-        rgba(65,50,80,.07);
+        0 7px 23px
+        rgba(60,50,75,.07);
 }
 
-.schedule-accent{
+.schedule-line{
 
     width:9px;
-    height:60px;
+
+    min-height:65px;
 
     border-radius:20px;
 
-    background:#e7a9c7;
-
-    margin-right:15px;
+    background:#e6a7c5;
 
     flex-shrink:0;
 }
 
-.schedule-main{
+.schedule-info{
     flex:1;
     min-width:0;
 }
 
-.schedule-client{
+.schedule-name{
 
-    font-size:21px;
+    font-size:20px;
 
-    font-weight:800;
-
-    color:#37344b;
+    font-weight:850;
 }
 
 .schedule-time{
 
     margin-top:4px;
 
-    font-size:15px;
+    color:#8a869a;
 
-    color:#8b879c;
+    font-size:15px;
 }
 
-.schedule-controls{
+.schedule-actions{
 
     display:flex;
 
     align-items:center;
 
-    gap:7px;
+    gap:6px;
 }
 
 .hours-input{
 
-    width:73px;
+    width:72px;
 
-    height:42px;
+    height:43px;
 
-    padding:5px 7px;
+    padding:5px;
 
     margin:0;
 
+    text-align:center;
+
     border:
-        1px solid #e1d9e5;
+        1px solid #ded7e3;
 
     border-radius:13px;
 
     background:#faf8fc;
 
-    text-align:center;
+    color:#39364a;
 
     font-weight:800;
-
-    color:#3c394e;
 }
 
-.timer-mini{
+.icon-button{
 
-    width:42px;
-    height:42px;
+    width:43px;
+    height:43px;
 
     border-radius:13px;
 
-    background:#e8def8;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-    color:#67598c;
+    background:#eee6f8;
 
-    font-size:19px;
+    color:#655982;
+
+    font-size:18px;
 }
 
-.timer-mini.running{
+.icon-button.pink{
 
-    background:#e7a2c4;
+    background:#f5d9e7;
 
-    color:#fff;
+    color:#a65078;
+}
 
-    animation:pulse 1.5s infinite;
+.icon-button.red{
+
+    background:#ffe8ee;
+
+    color:#bf5875;
+}
+
+.timer-running{
+
+    background:#df98b9 !important;
+
+    color:white !important;
+
+    animation:pulse 1.4s infinite;
 }
 
 @keyframes pulse{
 
     0%{
-        box-shadow:0 0 0 0 rgba(220,130,170,.45);
+        box-shadow:
+            0 0 0 0
+            rgba(220,125,165,.45);
     }
 
     70%{
-        box-shadow:0 0 0 9px rgba(220,130,170,0);
+        box-shadow:
+            0 0 0 9px
+            rgba(220,125,165,0);
     }
 
     100%{
-        box-shadow:0 0 0 0 rgba(220,130,170,0);
+        box-shadow:
+            0 0 0 0
+            rgba(220,125,165,0);
     }
 }
 
@@ -496,35 +557,35 @@ button{
     gap:13px;
 }
 
-.quick-button{
+.quick{
 
-    min-height:92px;
-
-    border-radius:24px;
+    min-height:94px;
 
     padding:17px;
 
+    border-radius:24px;
+
     text-align:left;
 
-    font-weight:800;
-
     color:#403c51;
+
+    font-weight:800;
 }
 
-.quick-button.pink{
-    background:#f8dfeb;
+.quick.pink{
+    background:#f8dce8;
 }
 
-.quick-button.purple{
-    background:#ebe2f8;
+.quick.purple{
+    background:#e9e0f8;
 }
 
-.quick-button.green{
-    background:#def1e6;
+.quick.green{
+    background:#ddf1e6;
 }
 
-.quick-button.blue{
-    background:#e4f1f8;
+.quick.blue{
+    background:#e1eef8;
 }
 
 .quick-icon{
@@ -533,7 +594,7 @@ button{
 
     font-size:27px;
 
-    margin-bottom:6px;
+    margin-bottom:7px;
 }
 
 /* =====================================================
@@ -542,19 +603,19 @@ button{
 
 .quote{
 
-    margin-top:18px;
+    margin-top:19px;
 
     padding:23px;
 
     border-radius:25px;
 
-    background:#fff;
+    background:white;
 
     text-align:center;
 
     box-shadow:
         0 7px 22px
-        rgba(70,55,80,.06);
+        rgba(60,50,75,.06);
 }
 
 .quote-main{
@@ -563,16 +624,16 @@ button{
         Georgia,
         serif;
 
-    font-size:19px;
+    font-size:18px;
 
     font-weight:700;
 }
 
 .quote-sub{
 
-    margin-top:5px;
+    margin-top:6px;
 
-    color:#9a93a5;
+    color:#9993a4;
 
     font-size:13px;
 }
@@ -589,7 +650,7 @@ button{
     right:0;
     bottom:0;
 
-    z-index:80;
+    z-index:150;
 
     height:
         calc(78px + env(safe-area-inset-bottom));
@@ -606,93 +667,160 @@ button{
         rgba(255,255,255,.97);
 
     border-top:
-        1px solid #e8e2eb;
+        1px solid #e9e3eb;
 
-    backdrop-filter:blur(15px);
+    backdrop-filter:blur(18px);
 }
 
-.nav-button{
+.nav{
 
     background:none;
 
     display:flex;
+
     flex-direction:column;
 
-    justify-content:center;
     align-items:center;
+    justify-content:center;
 
     gap:3px;
 
-    color:#888498;
+    color:#8a8698;
 
     font-size:11px;
 
-    font-weight:700;
+    font-weight:800;
 }
 
 .nav-icon{
     font-size:22px;
 }
 
-.nav-button.active{
+.nav.active{
     color:#b45d87;
+}
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.primary{
+
+    min-height:50px;
+
+    padding:
+        0
+        19px;
+
+    border-radius:16px;
+
+    background:#df99ba;
+
+    color:white;
+
+    font-weight:800;
+
+    box-shadow:
+        0 8px 19px
+        rgba(215,125,165,.20);
+}
+
+.secondary{
+
+    min-height:46px;
+
+    padding:
+        0
+        17px;
+
+    border-radius:14px;
+
+    background:#eee7f8;
+
+    color:#665a83;
+
+    font-weight:800;
+}
+
+.danger{
+
+    min-height:46px;
+
+    padding:
+        0
+        17px;
+
+    border-radius:14px;
+
+    background:#ffe8ee;
+
+    color:#bd5473;
+
+    font-weight:800;
+}
+
+.gold{
+
+    background:#caa45d;
+
+    color:white;
 }
 
 /* =====================================================
    MODAL
 ===================================================== */
 
-.modal-overlay{
+.modal-backdrop{
 
     position:fixed;
 
     inset:0;
 
-    z-index:200;
+    z-index:500;
 
     display:flex;
 
     align-items:flex-end;
-
     justify-content:center;
 
     background:
-        rgba(42,35,52,.38);
+        rgba(35,29,44,.40);
 }
 
 .modal{
 
     width:100%;
-    max-width:600px;
 
-    max-height:92vh;
+    max-width:620px;
+
+    max-height:93vh;
 
     overflow-y:auto;
 
     padding:
-        25px
-        21px
+        23px
+        20px
         40px;
 
     border-radius:
-        32px
-        32px
+        31px
+        31px
         0
         0;
 
     background:#fbf9fc;
 
     box-shadow:
-        0 -10px 45px
-        rgba(40,30,50,.18);
+        0 -15px 50px
+        rgba(35,25,45,.20);
 }
 
 .modal-header{
 
     display:flex;
 
-    justify-content:space-between;
     align-items:center;
+    justify-content:space-between;
 
     margin-bottom:22px;
 }
@@ -701,27 +829,27 @@ button{
 
     margin:0;
 
-    font-size:28px;
+    font-size:27px;
 
-    font-weight:800;
+    font-weight:850;
 }
 
-.close-button{
+.close{
 
-    width:45px;
-    height:45px;
+    width:44px;
+    height:44px;
 
     border-radius:50%;
 
     background:#eee8f1;
 
-    color:#5b566a;
+    color:#595469;
 
-    font-size:26px;
+    font-size:25px;
 }
 
 /* =====================================================
-   FORM
+   FORMS
 ===================================================== */
 
 .form-group{
@@ -734,92 +862,140 @@ button{
 
     margin-bottom:7px;
 
-    color:#777388;
+    color:#777287;
 
-    font-size:14px;
+    font-size:13px;
 
-    font-weight:700;
+    font-weight:800;
 }
 
 .form-control{
 
     width:100%;
 
-    min-height:53px;
+    min-height:52px;
 
-    padding:12px 14px;
+    padding:
+        11px
+        13px;
 
     margin:0;
 
     border:
-        1px solid #e0d9e4;
+        1px solid #ddd6e2;
 
     border-radius:15px;
 
-    background:#fff;
+    background:white;
 
-    outline:none;
-
-    color:#363347;
+    color:#383548;
 }
 
 .form-control:focus{
 
-    border-color:#e2a1c2;
+    border-color:#dc98ba;
 
     box-shadow:
         0 0 0 3px
-        rgba(226,161,194,.15);
+        rgba(220,152,186,.13);
 }
 
-.two-columns{
+.two{
 
     display:grid;
 
     grid-template-columns:
         1fr 1fr;
 
-    gap:12px;
+    gap:11px;
 }
 
-.primary-button{
+/* =====================================================
+   CLIENT / JOB CARD
+===================================================== */
 
-    width:100%;
+.client-card,
+.job-card{
 
-    min-height:55px;
+    padding:18px;
 
-    margin-top:8px;
+    margin-bottom:12px;
 
-    border-radius:17px;
+    border-radius:23px;
 
-    background:#e39abe;
-
-    color:#fff;
-
-    font-weight:800;
-
-    font-size:17px;
+    background:white;
 
     box-shadow:
-        0 8px 20px
-        rgba(220,145,180,.25);
+        0 7px 22px
+        rgba(60,50,75,.06);
 }
 
-.danger-button{
+.card-top{
 
-    width:100%;
+    display:flex;
 
-    min-height:52px;
+    justify-content:space-between;
 
-    margin-top:10px;
+    gap:10px;
+}
 
-    border-radius:17px;
+.card-name{
 
-    background:#fff0f4;
+    font-size:20px;
 
-    color:#c04f72;
+    font-weight:850;
+}
+
+.card-details{
+
+    margin-top:7px;
+
+    color:#858094;
+
+    font-size:14px;
+
+    line-height:1.55;
+}
+
+.badge{
+
+    height:max-content;
+
+    padding:
+        6px
+        10px;
+
+    border-radius:10px;
+
+    font-size:10px;
 
     font-weight:800;
+}
+
+.badge.agency{
+
+    background:#e9e0f8;
+
+    color:#6c5a92;
+}
+
+.badge.private{
+
+    background:#f8dce8;
+
+    color:#a54f76;
+}
+
+.card-actions{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:8px;
+
+    margin-top:14px;
 }
 
 /* =====================================================
@@ -835,8 +1011,8 @@ button{
     background:
         linear-gradient(
             135deg,
-            #f9dce9,
-            #e9e0f8
+            #f8dce8,
+            #e8def7
         );
 
     text-align:center;
@@ -844,236 +1020,102 @@ button{
 
 .timer-display{
 
-    margin:10px 0 22px;
+    margin:12px 0 22px;
 
     font-size:48px;
 
-    font-weight:800;
+    font-weight:850;
 
     letter-spacing:2px;
 }
 
-.timer-client{
-
-    margin-bottom:13px;
-}
-
-.timer-buttons{
-
-    display:grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap:10px;
-}
-
-.timer-start{
-    background:#dd9bbb;
-}
-
-.timer-stop{
-    background:#756b83;
-}
-
-.timer-info{
+.timer-money{
 
     margin-top:15px;
 
-    color:#756f81;
+    padding:17px;
 
-    font-size:13px;
+    border-radius:19px;
 
-    line-height:1.45;
+    background:
+        rgba(255,255,255,.70);
+
+    font-size:17px;
 }
 
-.timer-result{
+.timer-money strong{
 
-    margin-top:17px;
+    display:block;
 
-    padding:16px;
+    margin-top:5px;
 
-    border-radius:20px;
+    font-size:28px;
 
-    background:rgba(255,255,255,.7);
+    color:#b04f7c;
 }
 
-/* =====================================================
-   JOBS
-===================================================== */
-
-.search{
-
-    width:100%;
-
-    margin-bottom:12px;
-}
-
-.filters{
-
-    display:flex;
-
-    gap:7px;
-
-    overflow-x:auto;
-
-    padding-bottom:8px;
-
-    margin-bottom:17px;
-}
-
-.filter{
-
-    flex-shrink:0;
-
-    padding:9px 14px;
-
-    border-radius:20px;
-
-    background:#eeeaf2;
-
-    color:#777286;
-
-    font-weight:700;
-
-    font-size:13px;
-}
-
-.filter.active{
-
-    background:#e3a1c1;
-
-    color:#fff;
-}
-
-.job-card{
-
-    padding:19px;
-
-    margin-bottom:13px;
-
-    border-radius:23px;
-
-    background:#fff;
-
-    box-shadow:
-        0 6px 22px
-        rgba(60,50,75,.07);
-}
-
-.job-top{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    gap:10px;
-}
-
-.job-name{
-
-    font-size:21px;
-
-    font-weight:800;
-}
-
-.job-details{
-
-    margin-top:7px;
-
-    color:#817c90;
-
-    font-size:14px;
-
-    line-height:1.55;
-}
-
-.job-actions{
-
-    display:flex;
-
-    gap:9px;
+.timer-note{
 
     margin-top:14px;
-}
 
-.edit-button,
-.delete-button{
+    color:#756e80;
 
-    flex:1;
+    font-size:13px;
 
-    min-height:43px;
-
-    border-radius:13px;
-
-    font-weight:800;
-}
-
-.edit-button{
-
-    background:#e8def7;
-
-    color:#66598a;
-}
-
-.delete-button{
-
-    background:#fff0f4;
-
-    color:#c04f72;
+    line-height:1.5;
 }
 
 /* =====================================================
    EARNINGS
 ===================================================== */
 
-.earning-grid{
+.earnings-grid{
 
     display:grid;
 
     grid-template-columns:
         1fr 1fr;
 
-    gap:12px;
+    gap:13px;
 }
 
-.earning-card{
+.earning{
 
     padding:20px;
 
-    border-radius:23px;
+    border-radius:24px;
 }
 
-.earning-card.green{
-    background:#def2e7;
+.earning.green{
+    background:#ddf1e6;
 }
 
-.earning-card.blue{
-    background:#e3edf9;
+.earning.pink{
+    background:#f8dce8;
 }
 
-.earning-card.pink{
-    background:#f9e0eb;
+.earning.yellow{
+    background:#fff0c9;
 }
 
-.earning-card.purple{
-    background:#ebe2f8;
+.earning.purple{
+    background:#e9e0f8;
 }
 
 .earning-label{
 
-    color:#777387;
+    color:#777287;
 
-    font-size:14px;
+    font-size:13px;
 }
 
 .earning-value{
 
     margin-top:6px;
 
-    font-size:27px;
+    font-size:28px;
 
-    font-weight:800;
+    font-weight:850;
 }
 
 /* =====================================================
@@ -1082,18 +1124,18 @@ button{
 
 .empty{
 
-    padding:40px 20px;
+    padding:35px 15px;
 
     text-align:center;
 
-    color:#8d8799;
+    color:#8d8798;
 }
 
 .empty-icon{
 
-    font-size:45px;
+    font-size:43px;
 
-    margin-bottom:10px;
+    margin-bottom:9px;
 }
 
 /* =====================================================
@@ -1103,37 +1145,88 @@ button{
 @media(max-width:500px){
 
     .content{
-        padding:28px 20px 120px;
+        padding:
+            28px
+            18px
+            30px;
     }
 
     .greeting{
-        font-size:39px;
+        font-size:38px;
     }
 
-    .stat-card{
-        min-height:145px;
-        padding:18px;
+    .brand-title{
+        font-size:24px;
     }
 
-    .stat-value{
-        font-size:29px;
+    .brand-subtitle{
+        font-size:14px;
     }
 
-    .schedule-client{
-        font-size:19px;
+    .brand-logo,
+    .brand-logo-fallback{
+        width:63px;
+        height:63px;
     }
 
-    .schedule-controls{
-        gap:5px;
+    .header-button{
+        width:51px;
+        height:51px;
+    }
+
+    .schedule-card{
+        padding:14px;
+    }
+
+    .schedule-name{
+        font-size:18px;
+    }
+
+    .schedule-actions{
+        gap:4px;
     }
 
     .hours-input{
-        width:67px;
+        width:63px;
+    }
+
+}
+
+/* =====================================================
+   SMALL PHONE
+===================================================== */
+
+@media(max-width:370px){
+
+    .dashboard{
+        gap:9px;
+    }
+
+    .stat{
+        padding:15px;
+        min-height:135px;
+    }
+
+    .stat-value{
+        font-size:25px;
+    }
+
+    .schedule-card{
+        gap:8px;
+    }
+
+    .schedule-line{
+        width:7px;
+    }
+
+    .hours-input{
+        width:58px;
     }
 
 }
 
 </style>
+
 </head>
 
 <body>
@@ -1143,17 +1236,20 @@ button{
 <script>
 
 /* =====================================================
-   DATA
+   STORAGE
 ===================================================== */
 
-const STORAGE =
-    "pureShineCleaningManager_2026";
+const STORAGE_KEY =
+    "pureShineManager_V5";
 
-/*
-   GILL IS INTENTIONALLY NOT HERE.
-*/
+const TIMER_KEY =
+    "pureShineActiveTimer_V5";
 
-const defaultClients = [
+/* =====================================================
+   DEFAULT CLIENTS
+===================================================== */
+
+const DEFAULT_CLIENTS = [
 
     {
         id:1,
@@ -1162,8 +1258,7 @@ const defaultClients = [
         rate:16,
         day:"Monday",
         start:"13:00",
-        end:"15:00",
-        defaultHours:2
+        end:"15:00"
     },
 
     {
@@ -1173,8 +1268,7 @@ const defaultClients = [
         rate:18,
         day:"Tuesday",
         start:"09:30",
-        end:"12:30",
-        defaultHours:3
+        end:"12:30"
     },
 
     {
@@ -1184,8 +1278,7 @@ const defaultClients = [
         rate:16,
         day:"Tuesday",
         start:"13:30",
-        end:"17:30",
-        defaultHours:4
+        end:"17:30"
     },
 
     {
@@ -1195,8 +1288,17 @@ const defaultClients = [
         rate:16,
         day:"Wednesday",
         start:"09:00",
-        end:"14:00",
-        defaultHours:5
+        end:"14:00"
+    },
+
+    {
+        id:5,
+        name:"Gill",
+        type:"Agency",
+        rate:16,
+        day:"Wednesday",
+        start:"15:00",
+        end:"18:00"
     },
 
     {
@@ -1206,8 +1308,7 @@ const defaultClients = [
         rate:18,
         day:"Thursday",
         start:"09:00",
-        end:"13:00",
-        defaultHours:4
+        end:"13:00"
     },
 
     {
@@ -1217,91 +1318,85 @@ const defaultClients = [
         rate:16,
         day:"Thursday",
         start:"13:00",
-        end:"16:00",
-        defaultHours:3
+        end:"16:00"
     }
 
 ];
 
-let stored =
-    localStorage.getItem(STORAGE);
+/* =====================================================
+   LOAD DATA
+===================================================== */
+
+let saved =
+    localStorage.getItem(
+        STORAGE_KEY
+    );
 
 let data;
 
 try{
 
     data =
-        stored
-        ? JSON.parse(stored)
+        saved
+        ? JSON.parse(saved)
         : {
-            clients:defaultClients,
+            clients:DEFAULT_CLIENTS,
             jobs:[]
-          };
+        };
 
 }catch(e){
 
     data={
-        clients:defaultClients,
+        clients:DEFAULT_CLIENTS,
         jobs:[]
     };
 
 }
 
-/*
-   Remove Gill automatically from old data.
-*/
+if(!Array.isArray(data.clients)){
+    data.clients=[...DEFAULT_CLIENTS];
+}
 
-data.clients =
-    data.clients.filter(
-        c =>
-            c.name.toLowerCase()
-            !== "gill"
-    );
+if(!Array.isArray(data.jobs)){
+    data.jobs=[];
+}
 
 save();
 
 /* =====================================================
-   TIMER STATE
+   TIMER
 ===================================================== */
 
-let timerState;
+let timer={
+    running:false,
+    clientId:null,
+    startedAt:null,
+    seconds:0
+};
 
 try{
 
-    timerState =
-        JSON.parse(
-            localStorage.getItem(
-                "pureShineActiveTimer"
-            )
-        ) || {
+    const oldTimer =
+        localStorage.getItem(
+            TIMER_KEY
+        );
 
-            running:false,
-            clientId:null,
-            startedAt:null,
-            accumulated:0
+    if(oldTimer){
 
-        };
+        timer =
+            JSON.parse(oldTimer);
 
-}catch(e){
+    }
 
-    timerState={
+}catch(e){}
 
-        running:false,
-        clientId:null,
-        startedAt:null,
-        accumulated:0
-
-    };
-
-}
+saveTimer();
 
 /* =====================================================
-   SCREEN
+   APP STATE
 ===================================================== */
 
-let screen="home";
-
-let filter="All";
+let page="home";
 
 /* =====================================================
    SAVE
@@ -1310,35 +1405,95 @@ let filter="All";
 function save(){
 
     localStorage.setItem(
-        STORAGE,
+        STORAGE_KEY,
         JSON.stringify(data)
     );
 
 }
 
+function saveTimer(){
+
+    localStorage.setItem(
+        TIMER_KEY,
+        JSON.stringify(timer)
+    );
+
+}
+
 /* =====================================================
-   DATE
+   HELPERS
 ===================================================== */
 
-function today(){
+function escapeHTML(value){
 
-    return new Date()
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+function money(value){
+
+    return "£"+
+        Number(value||0)
+        .toFixed(2);
+
+}
+
+function todayISO(){
+
+    const d=new Date();
+
+    return d
         .toISOString()
         .slice(0,10);
 
 }
 
-function currentDay(){
+function todayName(){
 
     return new Date()
         .toLocaleDateString(
             "en-GB",
-            {weekday:"long"}
+            {
+                weekday:"long"
+            }
         );
 
 }
 
-function prettyDate(date){
+function timeToMinutes(time){
+
+    if(!time) return 0;
+
+    const p=
+        time
+        .split(":")
+        .map(Number);
+
+    return p[0]*60+p[1];
+
+}
+
+function calculateHours(
+    start,
+    end
+){
+
+    return Math.max(
+        0,
+        (
+            timeToMinutes(end)-
+            timeToMinutes(start)
+        )/60
+    );
+
+}
+
+function formatDate(date){
 
     return new Date(
         date+"T12:00:00"
@@ -1354,99 +1509,60 @@ function prettyDate(date){
 }
 
 /* =====================================================
-   TIME
-===================================================== */
-
-function timeMinutes(time){
-
-    if(!time)
-        return 0;
-
-    const p =
-        time.split(":")
-        .map(Number);
-
-    return p[0]*60+p[1];
-
-}
-
-function hoursBetween(start,end){
-
-    const value =
-        (
-            timeMinutes(end) -
-            timeMinutes(start)
-        ) / 60;
-
-    return Math.max(
-        0,
-        value
-    );
-
-}
-
-function formatMoney(value){
-
-    return "£"+
-        Number(value||0)
-        .toFixed(2);
-
-}
-
-/* =====================================================
-   TIMER CALCULATION
+   TIMER HELPERS
 ===================================================== */
 
 function timerSeconds(){
 
-    if(!timerState.running){
+    if(!timer.running){
 
         return Number(
-            timerState.accumulated || 0
+            timer.seconds||0
         );
 
     }
 
     return Number(
-        timerState.accumulated || 0
+        timer.seconds||0
     )
     +
     Math.floor(
         (
-            Date.now() -
-            timerState.startedAt
-        ) / 1000
+            Date.now()-
+            Number(timer.startedAt)
+        )/1000
     );
 
 }
 
-function formatTimer(seconds){
+function timerString(seconds){
 
-    seconds=Math.max(
-        0,
-        Math.floor(seconds)
-    );
+    seconds=
+        Math.max(
+            0,
+            Math.floor(seconds)
+        );
 
-    const h =
+    const h=
         Math.floor(
             seconds/3600
         );
 
-    const m =
+    const m=
         Math.floor(
             (seconds%3600)/60
         );
 
-    const s =
+    const s=
         seconds%60;
 
     return (
 
         String(h).padStart(2,"0")
-        +":"+
-        String(m).padStart(2,"0")
-        +":"+
-        String(s).padStart(2,"0")
+        +":"
+        +String(m).padStart(2,"0")
+        +":"
+        +String(s).padStart(2,"0")
 
     );
 
@@ -1462,29 +1578,48 @@ function timerHours(){
    HOME
 ===================================================== */
 
-function home(){
+function homePage(){
 
-    const schedule =
-        todaySchedule();
-
-    const completed =
+    const jobsToday=
         data.jobs.filter(
-            j=>j.date===today()
+            j=>j.date===todayISO()
         );
 
-    const earned =
-        completed.reduce(
+    const earned=
+        jobsToday.reduce(
             (sum,j)=>
                 sum+
                 Number(j.price||0),
             0
         );
 
-    const hours =
-        completed.reduce(
+    const hours=
+        jobsToday.reduce(
             (sum,j)=>
                 sum+
                 Number(j.hours||0),
+            0
+        );
+
+    const todayClients=
+        data.clients
+        .filter(
+            c=>c.day===todayName()
+        )
+        .sort(
+            (a,b)=>
+                timeToMinutes(a.start)-
+                timeToMinutes(b.start)
+        );
+
+    const available=
+        todayClients.reduce(
+            (sum,c)=>
+                sum+
+                calculateHours(
+                    c.start,
+                    c.end
+                ),
             0
         );
 
@@ -1495,6 +1630,7 @@ function home(){
         </h1>
 
         <div class="date-text">
+
             ${
                 new Date()
                 .toLocaleDateString(
@@ -1506,11 +1642,12 @@ function home(){
                     }
                 )
             }
+
         </div>
 
         <div class="dashboard">
 
-            <div class="stat-card jobs">
+            <div class="stat jobs">
 
                 <div class="stat-icon">
                     🧹
@@ -1521,15 +1658,2581 @@ function home(){
                 </div>
 
                 <div class="stat-value">
-                    ${completed.length}
+                    ${jobsToday.length}
                 </div>
 
             </div>
 
-            <div class="stat-card hours">
+            <div class="stat hours">
 
                 <div class="stat-icon">
                     ⏰
                 </div>
 
-               
+                <div class="stat-label">
+                    Hours
+                </div>
+
+                <div class="stat-value">
+                    ${hours.toFixed(2)}h
+                </div>
+
+            </div>
+
+            <div class="stat earned">
+
+                <div class="stat-icon">
+                    💷
+                </div>
+
+                <div class="stat-label">
+                    Earned
+                </div>
+
+                <div class="stat-value">
+                    ${money(earned)}
+                </div>
+
+            </div>
+
+            <div class="stat available">
+
+                <div class="stat-icon">
+                    ✨
+                </div>
+
+                <div class="stat-label">
+                    Available
+                </div>
+
+                <div class="stat-value">
+                    ${available.toFixed(1)}h
+                </div>
+
+            </div>
+
+        </div>
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+                    Today's schedule
+                </h2>
+
+                <button
+                    class="text-button"
+                    onclick="
+                        go('schedule')
+                    ">
+
+                    View all
+
+                </button>
+
+            </div>
+
+            ${
+                todayClients.length
+                ?todayClients
+                    .map(
+                        scheduleCard
+                    )
+                    .join("")
+                :`
+
+                    <div class="empty">
+
+                        <div class="empty-icon">
+                            ✨
+                        </div>
+
+                        No cleaning scheduled today.
+
+                    </div>
+
+                `
+            }
+
+        </section>
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+                    Quick actions
+                </h2>
+
+            </div>
+
+            <div class="quick-grid">
+
+                <button
+                    class="quick pink"
+                    onclick="openTimerSelector()">
+
+                    <span class="quick-icon">
+                        ⏱️
+                    </span>
+
+                    Start Timer
+
+                </button>
+
+                <button
+                    class="quick purple"
+                    onclick="openJobForm()">
+
+                    <span class="quick-icon">
+                        ➕
+                    </span>
+
+                    Add Cleaning Job
+
+                </button>
+
+                <button
+                    class="quick green"
+                    onclick="
+                        go('jobs')
+                    ">
+
+                    <span class="quick-icon">
+                        📋
+                    </span>
+
+                    View Jobs
+
+                </button>
+
+                <button
+                    class="quick blue"
+                    onclick="
+                        go('earnings')
+                    ">
+
+                    <span class="quick-icon">
+                        💷
+                    </span>
+
+                    Earnings
+
+                </button>
+
+            </div>
+
+        </section>
+
+        <div class="quote">
+
+            <div class="quote-main">
+                “A clean space is a happy place ♡”
+            </div>
+
+            <div class="quote-sub">
+                Pure Shine Cleaning
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =====================================================
+   SCHEDULE CARD
+===================================================== */
+
+function scheduleCard(client){
+
+    const existing=
+        data.jobs.find(
+            j=>
+                j.date===todayISO() &&
+                Number(j.clientId)===Number(client.id)
+        );
+
+    const actual=
+        existing
+        ?Number(existing.hours||0)
+        :calculateHours(
+            client.start,
+            client.end
+        );
+
+    const running=
+        timer.running &&
+        Number(timer.clientId)===Number(client.id);
+
+    return `
+
+        <div class="schedule-card">
+
+            <div class="schedule-line"></div>
+
+            <div class="schedule-info">
+
+                <div class="schedule-name">
+
+                    ${escapeHTML(
+                        client.name
+                    )}
+
+                </div>
+
+                <div class="schedule-time">
+
+                    ${client.start}
+                    –
+                    ${client.end}
+
+                </div>
+
+            </div>
+
+            <div class="schedule-actions">
+
+                <input
+                    class="hours-input"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value="${actual.toFixed(2)}"
+                    onchange="
+                        changeTodayHours(
+                            ${client.id},
+                            this.value
+                        )
+                    "
+                    title="Actual hours">
+
+                <button
+                    class="
+                        icon-button
+                        ${
+                            running
+                            ?"timer-running"
+                            :""
+                        }
+                    "
+                    onclick="
+                        ${
+                            running
+                            ?"stopTimer()"
+                            :"startTimerFor("+client.id+")"
+                        }
+                    "
+                    title="Timer">
+
+                    ${
+                        running
+                        ?"⏹"
+                        :"⏱️"
+                    }
+
+                </button>
+
+                <button
+                    class="icon-button pink"
+                    onclick="
+                        editClient(
+                            ${client.id}
+                        )
+                    "
+                    title="Edit client">
+
+                    ✏️
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =====================================================
+   CHANGE TODAY HOURS
+===================================================== */
+
+function changeTodayHours(
+    clientId,
+    value
+){
+
+    const client=
+        data.clients.find(
+            c=>Number(c.id)===Number(clientId)
+        );
+
+    if(!client)
+        return;
+
+    const hours=
+        Math.max(
+            0,
+            Number(value)||0
+        );
+
+    let job=
+        data.jobs.find(
+            j=>
+                j.date===todayISO() &&
+                Number(j.clientId)===Number(clientId)
+        );
+
+    if(!job){
+
+        job={
+
+            id:Date.now(),
+
+            clientId:Number(clientId),
+
+            date:todayISO(),
+
+            start:client.start,
+
+            end:client.end,
+
+            hours,
+
+            price:
+                hours*
+                Number(client.rate),
+
+            status:"Paid",
+
+            timerSeconds:0
+
+        };
+
+        data.jobs.push(job);
+
+    }else{
+
+        job.hours=hours;
+
+        job.price=
+            hours*
+            Number(client.rate);
+
+    }
+
+    save();
+
+    render();
+
+}
+
+/* =====================================================
+   SCHEDULE PAGE
+===================================================== */
+
+function schedulePage(){
+
+    const days=[
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+    ];
+
+    return `
+
+        <div class="section-header">
+
+            <h2 class="section-title">
+                Weekly Schedule
+            </h2>
+
+            <button
+                class="primary"
+                onclick="
+                    openJobForm()
+                ">
+
+                + Job
+
+            </button>
+
+        </div>
+
+        ${
+            days
+            .map(
+                day=>{
+
+                    const list=
+                        data.clients
+                        .filter(
+                            c=>c.day===day
+                        )
+                        .sort(
+                            (a,b)=>
+                                timeToMinutes(
+                                    a.start
+                                )-
+                                timeToMinutes(
+                                    b.start
+                                )
+                        );
+
+                    if(!list.length)
+                        return "";
+
+                    return `
+
+                        <section
+                            class="section">
+
+                            <h2
+                                class="section-title"
+                                style="
+                                    font-size:22px;
+                                    margin-bottom:12px;
+                                ">
+
+                                ${day}
+
+                            </h2>
+
+                            ${
+                                list
+                                .map(
+                                    scheduleCard
+                                )
+                                .join("")
+                            }
+
+                        </section>
+
+                    `;
+
+                }
+            )
+            .join("")
+        }
+
+    `;
+
+}
+
+/* =====================================================
+   CLIENTS PAGE
+===================================================== */
+
+function clientsPage(){
+
+    return `
+
+        <div class="section-header">
+
+            <h2 class="section-title">
+                Clients
+            </h2>
+
+            <button
+                class="primary"
+                onclick="
+                    openClientForm()
+                ">
+
+                + Client
+
+            </button>
+
+        </div>
+
+        ${
+            data.clients.length
+            ?data.clients
+                .sort(
+                    (a,b)=>
+                        a.name.localeCompare(
+                            b.name
+                        )
+                )
+                .map(clientCard)
+                .join("")
+            :`
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        👥
+                    </div>
+
+                    No clients yet.
+
+                </div>
+
+            `
+        }
+
+    `;
+
+}
+
+function clientCard(client){
+
+    return `
+
+        <div class="client-card">
+
+            <div class="card-top">
+
+                <div>
+
+                    <div class="card-name">
+
+                        ${escapeHTML(
+                            client.name
+                        )}
+
+                    </div>
+
+                    <div class="card-details">
+
+                        ${client.type}
+
+                        ·
+
+                        ${money(
+                            client.rate
+                        )}/hour
+
+                        <br>
+
+                        ${client.day}
+
+                        ·
+
+                        ${client.start}
+                        –
+                        ${client.end}
+
+                    </div>
+
+                </div>
+
+                <span
+                    class="
+                        badge
+                        ${
+                            client.type==="Private"
+                            ?"private"
+                            :"agency"
+                        }
+                    ">
+
+                    ${client.type}
+
+                </span>
+
+            </div>
+
+            <div class="card-actions">
+
+                <button
+                    class="secondary"
+                    onclick="
+                        editClient(
+                            ${client.id}
+                        )
+                    ">
+
+                    ✏️ Edit Client
+
+                </button>
+
+                <button
+                    class="danger"
+                    onclick="
+                        deleteClient(
+                            ${client.id}
+                        )
+                    ">
+
+                    🗑️ Delete
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =====================================================
+   ADD CLIENT
+===================================================== */
+
+function openClientForm(
+    client=null
+){
+
+    const editing=
+        !!client;
+
+    modal(`
+
+        <div class="modal-header">
+
+            <h2 class="modal-title">
+
+                ${
+                    editing
+                    ?"Edit Client"
+                    :"Add Client"
+                }
+
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="form-label">
+                Client name
+            </label>
+
+            <input
+                id="clientName"
+                class="form-control"
+                value="${
+                    editing
+                    ?escapeHTML(client.name)
+                    :""
+                }"
+                placeholder="Client name">
+
+        </div>
+
+        <div class="two">
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Type
+                </label>
+
+                <select
+                    id="clientType"
+                    class="form-control">
+
+                    <option
+                        ${
+                            client?.type==="Private"
+                            ?"selected":""
+                        }>
+
+                        Private
+
+                    </option>
+
+                    <option
+                        ${
+                            client?.type==="Agency"
+                            ||!client
+                            ?"selected":""
+                        }>
+
+                        Agency
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    £ per hour
+                </label>
+
+                <input
+                    id="clientRate"
+                    class="form-control"
+                    type="number"
+                    step=".50"
+                    value="${
+                        client?.rate||
+                        16
+                    }">
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="form-label">
+                Day
+            </label>
+
+            <select
+                id="clientDay"
+                class="form-control">
+
+                ${
+                    [
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                        "Sunday"
+                    ]
+                    .map(
+                        day=>`
+
+                        <option
+                            ${
+                                client?.day===day
+                                ?"selected":""
+                            }>
+
+                            ${day}
+
+                        </option>
+
+                        `
+                    )
+                    .join("")
+                }
+
+            </select>
+
+        </div>
+
+        <div class="two">
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Start time
+                </label>
+
+                <input
+                    id="clientStart"
+                    class="form-control"
+                    type="time"
+                    value="${
+                        client?.start||
+                        "09:00"
+                    }">
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    End time
+                </label>
+
+                <input
+                    id="clientEnd"
+                    class="form-control"
+                    type="time"
+                    value="${
+                        client?.end||
+                        "12:00"
+                    }">
+
+            </div>
+
+        </div>
+
+        <button
+            class="primary"
+            style="
+                width:100%;
+                margin-top:8px;
+            "
+            onclick="
+                saveClient(
+                    ${
+                        editing
+                        ?client.id
+                        :0
+                    }
+                )
+            ">
+
+            ${
+                editing
+                ?"Save Changes"
+                :"Add Client"
+            }
+
+            ✨
+
+        </button>
+
+        ${
+            editing
+            ?`
+
+                <button
+                    class="danger"
+                    style="
+                        width:100%;
+                        margin-top:10px;
+                    "
+                    onclick="
+                        deleteClient(
+                            ${client.id},
+                            true
+                        )
+                    ">
+
+                    🗑️ Delete Client
+
+                </button>
+
+            `
+            :""
+        }
+
+    `);
+
+}
+
+function saveClient(id){
+
+    const name=
+        document.getElementById(
+            "clientName"
+        ).value.trim();
+
+    const type=
+        document.getElementById(
+            "clientType"
+        ).value;
+
+    const rate=
+        Number(
+            document.getElementById(
+                "clientRate"
+            ).value
+        );
+
+    const day=
+        document.getElementById(
+            "clientDay"
+        ).value;
+
+    const start=
+        document.getElementById(
+            "clientStart"
+        ).value;
+
+    const end=
+        document.getElementById(
+            "clientEnd"
+        ).value;
+
+    if(!name){
+
+        alert(
+            "Please enter the client name."
+        );
+
+        return;
+
+    }
+
+    if(!rate || rate<=0){
+
+        alert(
+            "Please enter a valid hourly rate."
+        );
+
+        return;
+
+    }
+
+    if(id){
+
+        const client=
+            data.clients.find(
+                c=>Number(c.id)===Number(id)
+            );
+
+        if(client){
+
+            client.name=name;
+            client.type=type;
+            client.rate=rate;
+            client.day=day;
+            client.start=start;
+            client.end=end;
+
+        }
+
+    }else{
+
+        data.clients.push({
+
+            id:Date.now(),
+
+            name,
+
+            type,
+
+            rate,
+
+            day,
+
+            start,
+
+            end
+
+        });
+
+    }
+
+    save();
+
+    closeModal();
+
+    render();
+
+}
+
+/* =====================================================
+   EDIT CLIENT
+===================================================== */
+
+function editClient(id){
+
+    const client=
+        data.clients.find(
+            c=>Number(c.id)===Number(id)
+        );
+
+    if(client){
+
+        openClientForm(client);
+
+    }
+
+}
+
+/* =====================================================
+   DELETE CLIENT
+===================================================== */
+
+function deleteClient(
+    id,
+    fromModal=false
+){
+
+    const client=
+        data.clients.find(
+            c=>Number(c.id)===Number(id)
+        );
+
+    if(!client)
+        return;
+
+    const confirmed=
+        confirm(
+            `Delete ${client.name} from your clients?`
+        );
+
+    if(!confirmed)
+        return;
+
+    data.clients=
+        data.clients.filter(
+            c=>Number(c.id)!==Number(id)
+        );
+
+    /*
+       Jobs are kept so historical
+       earnings are NOT lost.
+    */
+
+    save();
+
+    if(fromModal)
+        closeModal();
+
+    render();
+
+}
+
+/* =====================================================
+   JOBS PAGE
+===================================================== */
+
+function jobsPage(){
+
+    const list=
+        [...data.jobs]
+        .sort(
+            (a,b)=>
+                b.date.localeCompare(
+                    a.date
+                )
+        );
+
+    return `
+
+        <div class="section-header">
+
+            <h2 class="section-title">
+                Cleaning Jobs
+            </h2>
+
+            <button
+                class="primary"
+                onclick="
+                    openJobForm()
+                ">
+
+                + Job
+
+            </button>
+
+        </div>
+
+        ${
+            list.length
+            ?list.map(
+                jobCard
+            ).join("")
+            :`
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        📋
+                    </div>
+
+                    No cleaning jobs yet.
+
+                </div>
+
+            `
+        }
+
+    `;
+
+}
+
+function jobCard(job){
+
+    const client=
+        data.clients.find(
+            c=>Number(c.id)===Number(job.clientId)
+        );
+
+    const name=
+        client?.name||
+        job.clientName||
+        "Deleted client";
+
+    const rate=
+        client?.rate||
+        Number(job.rate||0);
+
+    return `
+
+        <div class="job-card">
+
+            <div class="card-top">
+
+                <div>
+
+                    <div class="card-name">
+
+                        ${escapeHTML(
+                            name
+                        )}
+
+                    </div>
+
+                    <div class="card-details">
+
+                        ${formatDate(
+                            job.date
+                        )}
+
+                        <br>
+
+                        ${job.start}
+                        –
+                        ${job.end}
+
+                        <br>
+
+                        ${Number(
+                            job.hours||0
+                        ).toFixed(2)} hours
+
+                        ·
+
+                        ${money(
+                            job.price
+                        )}
+
+                        <br>
+
+                        Rate:
+                        ${money(rate)}/hour
+
+                        <br>
+
+                        ${
+                            job.status==="Owed"
+                            ?"💷 Owed"
+                            :"✓ Paid"
+                        }
+
+                    </div>
+
+                </div>
+
+                <span
+                    class="
+                        badge
+                        ${
+                            client?.type==="Private"
+                            ?"private"
+                            :"agency"
+                        }
+                    ">
+
+                    ${
+                        client?.type||
+                        "Job"
+                    }
+
+                </span>
+
+            </div>
+
+            <div class="card-actions">
+
+                <button
+                    class="secondary"
+                    onclick="
+                        editJob(
+                            ${job.id}
+                        )
+                    ">
+
+                    ✏️ Edit Job
+
+                </button>
+
+                <button
+                    class="danger"
+                    onclick="
+                        deleteJob(
+                            ${job.id}
+                        )
+                    ">
+
+                    🗑️ Delete
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+/* =====================================================
+   JOB FORM
+===================================================== */
+
+function openJobForm(
+    job=null
+){
+
+    const editing=
+        !!job;
+
+    modal(`
+
+        <div class="modal-header">
+
+            <h2 class="modal-title">
+
+                ${
+                    editing
+                    ?"Edit Job"
+                    :"Add Cleaning Job"
+                }
+
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="form-label">
+                Client
+            </label>
+
+            <select
+                id="jobClient"
+                class="form-control">
+
+                ${
+                    data.clients
+                    .map(
+                        c=>`
+
+                        <option
+                            value="${c.id}"
+                            ${
+                                Number(
+                                    job?.clientId
+                                )===Number(c.id)
+                                ?"selected":""
+                            }>
+
+                            ${escapeHTML(
+                                c.name
+                            )}
+
+                        </option>
+
+                        `
+                    )
+                    .join("")
+                }
+
+            </select>
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="form-label">
+                Date
+            </label>
+
+            <input
+                id="jobDate"
+                class="form-control"
+                type="date"
+                value="${
+                    job?.date||
+                    todayISO()
+                }">
+
+        </div>
+
+        <div class="two">
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Start
+                </label>
+
+                <input
+                    id="jobStart"
+                    class="form-control"
+                    type="time"
+                    value="${
+                        job?.start||
+                        "09:00"
+                    }">
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    End
+                </label>
+
+                <input
+                    id="jobEnd"
+                    class="form-control"
+                    type="time"
+                    value="${
+                        job?.end||
+                        "12:00"
+                    }">
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="form-label">
+                Actual hours worked
+            </label>
+
+            <input
+                id="jobHours"
+                class="form-control"
+                type="number"
+                min="0"
+                step=".01"
+                value="${
+                    job?.hours??
+                    ""
+                }"
+                placeholder="Example: 4.50">
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="form-label">
+                Payment
+            </label>
+
+            <select
+                id="jobStatus"
+                class="form-control">
+
+                <option
+                    value="Paid"
+                    ${
+                        !job ||
+                        job.status==="Paid"
+                        ?"selected":""
+                    }>
+
+                    Paid
+
+                </option>
+
+                <option
+                    value="Owed"
+                    ${
+                        job?.status==="Owed"
+                        ?"selected":""
+                    }>
+
+                    Owed
+
+                </option>
+
+            </select>
+
+        </div>
+
+        <button
+            class="primary"
+            style="
+                width:100%;
+            "
+            onclick="
+                saveJob(
+                    ${
+                        editing
+                        ?job.id
+                        :0
+                    }
+                )
+            ">
+
+            ${
+                editing
+                ?"Save Changes"
+                :"Save Job"
+            }
+
+            ✨
+
+        </button>
+
+        ${
+            editing
+            ?`
+
+                <button
+                    class="danger"
+                    style="
+                        width:100%;
+                        margin-top:10px;
+                    "
+                    onclick="
+                        deleteJob(
+                            ${job.id},
+                            true
+                        )
+                    ">
+
+                    🗑️ Delete Job
+
+                </button>
+
+            `
+            :""
+        }
+
+    `);
+
+}
+
+/* =====================================================
+   SAVE JOB
+===================================================== */
+
+function saveJob(id){
+
+    const clientId=
+        Number(
+            document.getElementById(
+                "jobClient"
+            ).value
+        );
+
+    const client=
+        data.clients.find(
+            c=>Number(c.id)===clientId
+        );
+
+    if(!client)
+        return;
+
+    const date=
+        document.getElementById(
+            "jobDate"
+        ).value;
+
+    const start=
+        document.getElementById(
+            "jobStart"
+        ).value;
+
+    const end=
+        document.getElementById(
+            "jobEnd"
+        ).value;
+
+    let hours=
+        Number(
+            document.getElementById(
+                "jobHours"
+            ).value
+        );
+
+    const status=
+        document.getElementById(
+            "jobStatus"
+        ).value;
+
+    if(!hours){
+
+        hours=
+            calculateHours(
+                start,
+                end
+            );
+
+    }
+
+    const price=
+        hours*
+        Number(client.rate);
+
+    if(id){
+
+        const job=
+            data.jobs.find(
+                j=>Number(j.id)===Number(id)
+            );
+
+        if(job){
+
+            job.clientId=clientId;
+            job.date=date;
+            job.start=start;
+            job.end=end;
+            job.hours=hours;
+            job.price=price;
+            job.status=status;
+
+        }
+
+    }else{
+
+        data.jobs.push({
+
+            id:Date.now(),
+
+            clientId,
+
+            clientName:client.name,
+
+            rate:client.rate,
+
+            date,
+
+            start,
+
+            end,
+
+            hours,
+
+            price,
+
+            status,
+
+            timerSeconds:0
+
+        });
+
+    }
+
+    save();
+
+    closeModal();
+
+    render();
+
+}
+
+/* =====================================================
+   EDIT JOB
+===================================================== */
+
+function editJob(id){
+
+    const job=
+        data.jobs.find(
+            j=>Number(j.id)===Number(id)
+        );
+
+    if(job){
+
+        openJobForm(job);
+
+    }
+
+}
+
+/* =====================================================
+   DELETE JOB
+===================================================== */
+
+function deleteJob(
+    id,
+    fromModal=false
+){
+
+    if(
+        !confirm(
+            "Delete this cleaning job?"
+        )
+    ){
+
+        return;
+
+    }
+
+    data.jobs=
+        data.jobs.filter(
+            j=>Number(j.id)!==Number(id)
+        );
+
+    save();
+
+    if(fromModal)
+        closeModal();
+
+    render();
+
+}
+
+/* =====================================================
+   EARNINGS PAGE
+===================================================== */
+
+function earningsPage(){
+
+    const total=
+        data.jobs.reduce(
+            (sum,j)=>
+                sum+
+                Number(j.price||0),
+            0
+        );
+
+    const paid=
+        data.jobs
+        .filter(
+            j=>j.status!=="Owed"
+        )
+        .reduce(
+            (sum,j)=>
+                sum+
+                Number(j.price||0),
+            0
+        );
+
+    const owed=
+        data.jobs
+        .filter(
+            j=>j.status==="Owed"
+        )
+        .reduce(
+            (sum,j)=>
+                sum+
+                Number(j.price||0),
+            0
+        );
+
+    const hours=
+        data.jobs.reduce(
+            (sum,j)=>
+                sum+
+                Number(j.hours||0),
+            0
+        );
+
+    return `
+
+        <div class="section-header">
+
+            <h2 class="section-title">
+                Earnings
+            </h2>
+
+        </div>
+
+        <div class="earnings-grid">
+
+            <div class="earning green">
+
+                <div class="earning-label">
+                    Total
+                </div>
+
+                <div class="earning-value">
+                    ${money(total)}
+                </div>
+
+            </div>
+
+            <div class="earning pink">
+
+                <div class="earning-label">
+                    Paid
+                </div>
+
+                <div class="earning-value">
+                    ${money(paid)}
+                </div>
+
+            </div>
+
+            <div class="earning yellow">
+
+                <div class="earning-label">
+                    Owed
+                </div>
+
+                <div class="earning-value">
+                    ${money(owed)}
+                </div>
+
+            </div>
+
+            <div class="earning purple">
+
+                <div class="earning-label">
+                    Hours
+                </div>
+
+                <div class="earning-value">
+                    ${hours.toFixed(2)}h
+                </div>
+
+            </div>
+
+        </div>
+
+        <section class="section">
+
+            <h2 class="section-title"
+                style="
+                    margin-bottom:14px;
+                ">
+
+                Recent jobs
+
+            </h2>
+
+            ${
+                data.jobs.length
+                ?[...data.jobs]
+                    .sort(
+                        (a,b)=>
+                            b.date.localeCompare(
+                                a.date
+                            )
+                    )
+                    .map(jobCard)
+                    .join("")
+                :`
+
+                    <div class="empty">
+
+                        <div class="empty-icon">
+                            💷
+                        </div>
+
+                        No earnings yet.
+
+                    </div>
+
+                `
+            }
+
+        </section>
+
+    `;
+
+}
+
+/* =====================================================
+   TIMER SELECTOR
+===================================================== */
+
+function openTimerSelector(){
+
+    if(timer.running){
+
+        openTimer(
+            timer.clientId
+        );
+
+        return;
+
+    }
+
+    modal(`
+
+        <div class="modal-header">
+
+            <h2 class="modal-title">
+                Start Timer ⏱️
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="form-label">
+                Choose client
+            </label>
+
+            <select
+                id="timerClient"
+                class="form-control">
+
+                <option value="">
+                    Select client
+                </option>
+
+                ${
+                    data.clients
+                    .map(
+                        c=>`
+
+                        <option value="${c.id}">
+                            ${escapeHTML(c.name)}
+                        </option>
+
+                        `
+                    )
+                    .join("")
+                }
+
+            </select>
+
+        </div>
+
+        <button
+            class="primary"
+            style="
+                width:100%;
+            "
+            onclick="startSelectedTimer()">
+
+            ▶ Start Timer
+
+        </button>
+
+    `);
+
+}
+
+function startSelectedTimer(){
+
+    const id=
+        Number(
+            document.getElementById(
+                "timerClient"
+            ).value
+        );
+
+    if(!id){
+
+        alert(
+            "Please choose a client."
+        );
+
+        return;
+
+    }
+
+    startTimerFor(id);
+
+}
+
+/* =====================================================
+   START TIMER
+===================================================== */
+
+function startTimerFor(clientId){
+
+    if(timer.running){
+
+        if(
+            Number(timer.clientId)===Number(clientId)
+        ){
+
+            openTimer(clientId);
+
+        }else{
+
+            alert(
+                "A timer is already running for another client."
+            );
+
+        }
+
+        return;
+
+    }
+
+    timer={
+
+        running:true,
+
+        clientId:Number(clientId),
+
+        startedAt:Date.now(),
+
+        seconds:0
+
+    };
+
+    saveTimer();
+
+    openTimer(clientId);
+
+}
+
+/* =====================================================
+   TIMER MODAL
+===================================================== */
+
+function openTimer(clientId){
+
+    const client=
+        data.clients.find(
+            c=>Number(c.id)===Number(clientId)
+        );
+
+    if(!client)
+        return;
+
+    modal(`
+
+        <div class="modal-header">
+
+            <h2 class="modal-title">
+
+                ${escapeHTML(
+                    client.name
+                )}
+
+                ⏱️
+
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <div class="timer-box">
+
+            <div
+                id="timerDisplay"
+                class="timer-display">
+
+                ${timerString(
+                    timerSeconds()
+                )}
+
+            </div>
+
+            <button
+                class="primary"
+                style="
+                    width:100%;
+                    background:#766c82;
+                "
+                onclick="stopTimer()">
+
+                ⏹ Stop & Save
+
+            </button>
+
+            <div
+                class="timer-money">
+
+                Current hours
+
+                <strong
+                    id="timerHoursDisplay">
+
+                    ${timerHours().toFixed(2)} h
+
+                </strong>
+
+                Current earnings
+
+                <strong
+                    id="timerMoneyDisplay">
+
+                    ${money(
+                        timerHours()*
+                        Number(client.rate)
+                    )}
+
+                </strong>
+
+            </div>
+
+            <div class="timer-note">
+
+                The timer uses the real clock time.
+                If Safari is put in the background,
+                the calculation continues from the
+                original start time when you return.
+
+            </div>
+
+        </div>
+
+    `);
+
+}
+
+/* =====================================================
+   STOP TIMER
+===================================================== */
+
+function stopTimer(){
+
+    if(!timer.running)
+        return;
+
+    const client=
+        data.clients.find(
+            c=>Number(c.id)===Number(timer.clientId)
+        );
+
+    if(!client){
+
+        resetTimer();
+
+        return;
+
+    }
+
+    const seconds=
+        timerSeconds();
+
+    const hours=
+        Number(
+            (seconds/3600)
+            .toFixed(4)
+        );
+
+    const now=
+        new Date();
+
+    const started=
+        new Date(
+            Number(timer.startedAt)
+        );
+
+    const start=
+        started.toLocaleTimeString(
+            "en-GB",
+            {
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        );
+
+    const end=
+        now.toLocaleTimeString(
+            "en-GB",
+            {
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        );
+
+    let job=
+        data.jobs.find(
+            j=>
+                j.date===todayISO() &&
+                Number(j.clientId)===Number(client.id)
+        );
+
+    if(job){
+
+        job.start=start;
+        job.end=end;
+        job.hours=hours;
+        job.price=
+            hours*
+            Number(client.rate);
+
+        job.timerSeconds=seconds;
+
+    }else{
+
+        data.jobs.push({
+
+            id:Date.now(),
+
+            clientId:client.id,
+
+            clientName:client.name,
+
+            rate:client.rate,
+
+            date:todayISO(),
+
+            start,
+
+            end,
+
+            hours,
+
+            price:
+                hours*
+                Number(client.rate),
+
+            status:"Paid",
+
+            timerSeconds:seconds
+
+        });
+
+    }
+
+    resetTimer();
+
+    save();
+
+    closeModal();
+
+    render();
+
+}
+
+/* =====================================================
+   RESET TIMER
+===================================================== */
+
+function resetTimer(){
+
+    timer={
+
+        running:false,
+
+        clientId:null,
+
+        startedAt:null,
+
+        seconds:0
+
+    };
+
+    saveTimer();
+
+}
+
+/* =====================================================
+   TIMER LIVE UPDATE
+===================================================== */
+
+setInterval(
+
+    ()=>{
+
+        if(!timer.running)
+            return;
+
+        const display=
+            document.getElementById(
+                "timerDisplay"
+            );
+
+        if(display){
+
+            display.textContent=
+                timerString(
+                    timerSeconds()
+                );
+
+        }
+
+        const h=
+            document.getElementById(
+                "timerHoursDisplay"
+            );
+
+        const m=
+            document.getElementById(
+                "timerMoneyDisplay"
+            );
+
+        const client=
+            data.clients.find(
+                c=>Number(c.id)===Number(timer.clientId)
+            );
+
+        if(h){
+
+            h.textContent=
+                timerHours()
+                .toFixed(2)
+                +" h";
+
+        }
+
+        if(m && client){
+
+            m.textContent=
+                money(
+                    timerHours()*
+                    Number(client.rate)
+                );
+
+        }
+
+    },
+
+    1000
+
+);
+
+/*
+   Recalculate immediately after returning
+   from background.
+*/
+
+document.addEventListener(
+    "visibilitychange",
+    ()=>{
+
+        if(
+            !document.hidden &&
+            timer.running
+        ){
+
+            const display=
+                document.getElementById(
+                    "timerDisplay"
+                );
+
+            if(display){
+
+                display.textContent=
+                    timerString(
+                        timerSeconds()
+                    );
+
+            }
+
+        }
+
+    }
+);
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+function modal(content){
+
+    closeModal();
+
+    const backdrop=
+        document.createElement(
+            "div"
+        );
+
+    backdrop.id="modal";
+
+    backdrop.className=
+        "modal-backdrop";
+
+    backdrop.innerHTML=`
+
+        <div
+            class="modal"
+            onclick="
+                event.stopPropagation()
+            ">
+
+            ${content}
+
+        </div>
+
+    `;
+
+    backdrop.onclick=
+        closeModal;
+
+    document.body.appendChild(
+        backdrop
+    );
+
+}
+
+function closeModal(){
+
+    const old=
+        document.getElementById(
+            "modal"
+        );
+
+    if(old)
+        old.remove();
+
+}
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function go(target){
+
+    page=target;
+
+    closeModal();
+
+    render();
+
+}
+
+function navigation(){
+
+    return `
+
+        <nav class="bottom-nav">
+
+            <button
+                class="
+                    nav
+                    ${
+                        page==="home"
+                        ?"active":""
+                    }
+                "
+                onclick="
+                    go('home')
+                ">
+
+                <span class="nav-icon">
+                    🏠
+                </span>
+
+                Home
+
+            </button>
+
+            <button
+                class="
+                    nav
+                    ${
+                        page==="schedule"
+                        ?"active":""
+                    }
+                "
+                onclick="
+                    go('schedule')
+                ">
+
+                <span class="nav-icon">
+                    📅
+                </span>
+
+                Schedule
+
+            </button>
+
+            <button
+                class="
+                    nav
+                    ${
+                        page==="clients"
+                        ?"active":""
+                    }
+                "
+                onclick="
+                    go('clients')
+                ">
+
+                <span class="nav-icon">
+                    👥
+                </span>
+
+                Clients
+
+            </button>
+
+            <button
+                class="
+                    nav
+                    ${
+                        page==="jobs"
+                        ?"active":""
+                    }
+                "
+                onclick="
+                    go('jobs')
+                ">
+
+                <span class="nav-icon">
+                    📋
+                </span>
+
+                Jobs
+
+            </button>
+
+            <button
+                class="
+                    nav
+                    ${
+                        page==="earnings"
+                        ?"active":""
+                    }
+                "
+                onclick="
+                    go('earnings')
+                ">
+
+                <span class="nav-icon">
+                    💷
+                </span>
+
+                Earnings
+
+            </button>
+
+        </nav>
+
+    `;
+
+}
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function render(){
+
+    let content="";
+
+    if(page==="home")
+        content=homePage();
+
+    if(page==="schedule")
+        content=schedulePage();
+
+    if(page==="clients")
+        content=clientsPage();
+
+    if(page==="jobs")
+        content=jobsPage();
+
+    if(page==="earnings")
+        content=earningsPage();
+
+    document.getElementById(
+        "app"
+    ).innerHTML=`
+
+        <div class="app">
+
+            <header class="header">
+
+                <div class="brand">
+
+                    <img
+                        class="brand-logo"
+                        src="icon.png"
+                        alt="Pure Shine">
+
+                    <div
+                        class="
+                            brand-logo-fallback
+                        "
+                        id="logoFallback">
+
+                        ✨
+
+                    </div>
+
+                    <div>
+
+                        <div class="brand-title">
+                            Pure Shine
+                        </div>
+
+                        <div class="brand-subtitle">
+                            Cleaning Manager ✨
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="header-actions">
+
+                    <button
+                        class="
+                            header-button
+                            timer
+                        "
+                        onclick="
+                            openTimerSelector()
+                        "
+                        title="Timer">
+
+                        ⏱️
+
+                    </button>
+
+                    <button
+                        class="header-button"
+                        onclick="
+                            openJobForm()
+                        "
+                        title="Add">
+
+                        +
+
+                    </button>
+
+                </div>
+
+            </header>
+
+            <main class="content">
+
+                ${content}
+
+            </main>
+
+        </div>
+
+        ${navigation()}
+
+    `;
+
+    const logo=
+        document.querySelector(
+            ".brand-logo"
+        );
+
+    const fallback=
+        document.getElementById(
+            "logoFallback"
+        );
+
+    if(logo && fallback){
+
+        logo.onerror=()=>{
+
+            logo.style.display="none";
+
+            fallback.style.display="flex";
+
+        };
+
+    }
+
+}
+
+/* =====================================================
+   START
+===================================================== */
+
+render();
+
+</script>
+
+</body>
+</html>
