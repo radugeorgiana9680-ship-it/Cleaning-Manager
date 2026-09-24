@@ -2,4192 +2,3441 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-
-<meta name="theme-color" content="#f7d5e3">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#f4c6da">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-
-<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-status-bar-style" content="light">
 <link rel="apple-touch-icon" href="icon.png">
-
 <title>Pure Shine Cleaning Manager ✨</title>
 
 <style>
-:root{
-  --pink:#e9a4c7;
-  --pink-soft:#f7d5e3;
-  --pink-dark:#b95c91;
-  --purple:#e7dcf8;
-  --green:#dcefe6;
-  --yellow:#fff0c9;
-  --blue:#dcecf8;
-  --peach:#f8dfd6;
-  --ink:#30334d;
-  --muted:#85899a;
-  --white:#fff;
-  --line:#eeeaf1;
-  --shadow:0 8px 24px rgba(72,55,90,.09);
-}
-
 *{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
-html,
-body{
-  margin:0;
-  padding:0;
-  width:100%;
-  min-height:100%;
-  overflow-x:hidden;
-  -webkit-text-size-adjust:100%;
-  background:
-    linear-gradient(rgba(255,255,255,.88),rgba(255,255,255,.94)),
-    url("background.jpg") center/cover fixed;
-  color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+    -webkit-text-size-adjust:100%;
 }
 
 body{
-  overscroll-behavior-x:none;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    color:#343348;
+    background:
+        linear-gradient(rgba(249,246,251,.82),rgba(249,246,251,.92)),
+        url("background.jpg") center/cover fixed no-repeat;
+    overscroll-behavior-x:none;
 }
 
-button,
-input,
-select,
-textarea{
-  font:inherit;
+button,input,select,textarea{
+    font:inherit;
 }
 
-input,
-select,
-textarea{
-  font-size:16px !important;
+input,select,textarea{
+    font-size:16px !important;
 }
 
 button{
-  border:0;
-  touch-action:manipulation;
+    border:0;
+    touch-action:manipulation;
 }
 
 .app{
-  width:100%;
-  max-width:560px;
-  min-height:100vh;
-  margin:auto;
-  padding-bottom:110px;
+    min-height:100vh;
+    width:100%;
+    max-width:100%;
+    padding-bottom:95px;
+    overflow-x:hidden;
 }
 
-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:
-    calc(12px + env(safe-area-inset-top))
-    18px
-    12px;
-  background:rgba(255,255,255,.94);
-  position:sticky;
-  top:0;
-  z-index:50;
-  backdrop-filter:blur(18px);
-  border-bottom:1px solid #eee8ef;
+.header{
+    position:sticky;
+    top:0;
+    z-index:20;
+    min-height:110px;
+    width:100%;
+    padding:15px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:rgba(255,255,255,.96);
+    border-bottom:1px solid #eee5ed;
+    backdrop-filter:blur(15px);
 }
 
 .brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  min-width:0;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    min-width:0;
+    flex:1;
 }
 
-.brand img{
-  width:68px;
-  height:68px;
-  border-radius:20px;
-  object-fit:cover;
-  background:#fff;
-  box-shadow:var(--shadow);
+.brand > div:last-child{
+    min-width:0;
 }
 
-.brand h1{
-  margin:0;
-  font-size:26px;
-  line-height:1.05;
-  white-space:nowrap;
+.brand-title{
+    font-size:27px;
+    font-weight:850;
+    white-space:nowrap;
 }
 
-.brand p{
-  margin:6px 0 0;
-  color:var(--muted);
-  font-size:15px;
+.brand-subtitle{
+    color:#8b879c;
+    font-size:15px;
+    margin-top:3px;
 }
 
-.head-actions{
-  display:flex;
-  gap:8px;
-  flex-shrink:0;
+.logo{
+    width:68px;
+    height:68px;
+    flex:0 0 68px;
+    border-radius:21px;
+    object-fit:cover;
+    background:#f2b8d0;
+    box-shadow:0 7px 20px rgba(180,90,130,.18);
 }
 
-.icon-btn{
-  width:56px;
-  height:56px;
-  border-radius:19px;
-  background:var(--purple);
-  color:var(--ink);
-  font-size:24px;
+.logo-fallback{
+    display:none;
+    width:68px;
+    height:68px;
+    flex:0 0 68px;
+    border-radius:21px;
+    align-items:center;
+    justify-content:center;
+    background:#f2b8d0;
+    font-size:32px;
 }
 
-.icon-btn.plus{
-  background:var(--pink);
-  color:white;
-  font-size:31px;
+.header-actions{
+    display:flex;
+    gap:8px;
+    flex-shrink:0;
 }
 
-main{
-  padding:0 18px;
+.header-btn{
+    width:54px;
+    height:54px;
+    border-radius:19px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    background:#efabc8;
+    color:white;
 }
 
-.page{
-  display:none;
+.header-btn.timer{
+    background:#e5daf7;
+    color:#655b7d;
 }
 
-.page.active{
-  display:block;
+.content{
+    width:100%;
+    max-width:780px;
+    margin:auto;
+    padding:29px 20px 35px;
 }
 
-.date-card{
-  margin:10px 0 17px;
-  padding:15px 18px;
-  border-radius:25px;
-  background:var(--pink-soft);
-  color:#725d70;
-  font-size:18px;
+.greeting{
+    margin:0;
+    font-size:40px;
+    line-height:1;
+    letter-spacing:-1.5px;
 }
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:9px;
-  margin-bottom:29px;
+.date{
+    color:#8b879c;
+    font-size:17px;
+    margin-top:9px;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:13px;
+    margin-top:29px;
 }
 
 .stat{
-  overflow:hidden;
-  border-radius:24px;
-  box-shadow:var(--shadow);
-  background:white;
+    min-height:145px;
+    padding:19px;
+    border-radius:27px;
 }
 
-.stat-photo{
-  height:86px;
-  background-position:center;
-  background-size:cover;
-  background-repeat:no-repeat;
+.stat.jobs{background:#f8dce8}
+.stat.hours{background:#e9e0f8}
+.stat.earned{background:#ddf1e6}
+.stat.available{background:#fff0c9}
+
+.stat-icon{font-size:27px}
+
+.stat-label{
+    color:#777388;
+    margin-top:8px;
+    font-size:16px;
 }
 
-.stat:nth-child(1){
-  background:#f4d6e3;
+.stat-value{
+    font-size:30px;
+    font-weight:850;
+    margin-top:4px;
 }
 
-.stat:nth-child(2){
-  background:#e7def8;
+.section{
+    margin-top:30px;
 }
 
-.stat:nth-child(3){
-  background:#dcefe6;
-}
-
-.stat:nth-child(4){
-  background:#fff0c9;
-}
-
-.stat:nth-child(1) .stat-photo{
-  background-image:url("photo-cleaning.jpg");
-}
-
-.stat:nth-child(2) .stat-photo{
-  background-image:url("photo-clock.jpg");
-}
-
-.stat:nth-child(3) .stat-photo{
-  background-image:url("photo-earnings.jpg");
-}
-
-.stat:nth-child(4) .stat-photo{
-  background-image:url("photo-flowers.jpg");
-}
-
-.stat-body{
-  padding:10px 10px 14px;
-}
-
-.stat .value{
-  font-size:24px;
-  font-weight:800;
-  line-height:1.1;
-  white-space:nowrap;
-}
-
-.stat .label{
-  margin-top:5px;
-  font-size:14px;
-  color:#686b7d;
+.section-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:13px;
 }
 
 .section-title{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:15px;
+    margin:0;
+    font-size:27px;
+    font-weight:850;
 }
 
-.section-title h2,
-.quick-title{
-  margin:0;
-  font-size:28px;
-}
-
-.section-title button{
-  background:none;
-  color:var(--pink-dark);
-  font-size:17px;
-  font-weight:800;
+.text-btn{
+    background:none;
+    color:#b25d87;
+    font-weight:800;
 }
 
 .schedule-card{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  background:#fff;
-  border-radius:25px;
-  padding:15px;
-  margin-bottom:12px;
-  box-shadow:var(--shadow);
+    background:white;
+    border-radius:24px;
+    padding:16px;
+    margin-bottom:11px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    box-shadow:0 7px 22px rgba(60,50,75,.07);
+    min-width:0;
 }
 
-.schedule-bar{
-  width:8px;
-  align-self:stretch;
-  min-height:58px;
-  border-radius:20px;
-  background:var(--pink);
+.schedule-line{
+    width:9px;
+    min-height:60px;
+    flex:0 0 9px;
+    border-radius:20px;
+    background:#e6a7c5;
 }
 
-.schedule-main{
-  flex:1;
-  min-width:0;
+.schedule-info{
+    flex:1;
+    min-width:0;
 }
 
 .schedule-name{
-  font-size:20px;
-  font-weight:800;
+    font-size:20px;
+    font-weight:850;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
 .schedule-time{
-  color:var(--muted);
-  margin-top:5px;
-  font-size:16px;
+    color:#8a869a;
+    font-size:15px;
+    margin-top:4px;
 }
 
 .schedule-actions{
-  display:flex;
-  align-items:center;
-  gap:7px;
+    display:flex;
+    gap:5px;
+    align-items:center;
+    flex-shrink:0;
 }
 
 .hours-input{
-  width:70px;
-  height:48px;
-  border:1px solid #ded9e3;
-  border-radius:15px;
-  text-align:center;
-  font-weight:700;
-  color:var(--ink);
+    width:70px;
+    height:42px;
+    border:1px solid #ddd6e2;
+    border-radius:12px;
+    text-align:center;
+    background:#faf8fc;
+    font-weight:800;
 }
 
 .small-btn{
-  width:48px;
-  height:48px;
-  border-radius:17px;
-  background:var(--purple);
-  font-size:21px;
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    background:#eee6f8;
+    color:#655982;
+    flex:0 0 42px;
 }
 
-.small-btn.edit{
-  background:#f7dce9;
+.small-btn.pink{
+    background:#f5d9e7;
 }
 
-.quick-title{
-  margin:29px 0 14px;
+.small-btn.red{
+    background:#ffe8ee;
+    color:#bd5473;
+}
+
+.running{
+    background:#d993b7!important;
+    color:white!important;
 }
 
 .quick-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:13px;
 }
 
 .quick{
-  min-height:112px;
-  border-radius:25px;
-  padding:17px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  box-shadow:var(--shadow);
-  text-align:left;
-  color:var(--ink);
+    min-height:94px;
+    padding:17px;
+    border-radius:23px;
+    text-align:left;
+    color:#403c51;
+    font-weight:800;
 }
 
-.quick .qicon{
-  font-size:24px;
-}
+.quick.pink{background:#f8dce8}
+.quick.purple{background:#e9e0f8}
+.quick.green{background:#ddf1e6}
+.quick.blue{background:#e1eef8}
 
-.quick strong{
-  font-size:17px;
+.quick-icon{
+    display:block;
+    font-size:27px;
+    margin-bottom:7px;
 }
-
-.quick.pink{background:#f4d6e3}
-.quick.purple{background:#e7def8}
-.quick.green{background:#dcefe6}
-.quick.blue{background:#dcecf8}
-.quick.yellow{background:#fff0c9}
-.quick.peach{background:#f8dfd6}
 
 .quote{
-  position:relative;
-  overflow:hidden;
-  min-height:185px;
-  margin-top:20px;
-  border-radius:25px;
-  background:
-    linear-gradient(rgba(248,217,229,.78),rgba(248,217,229,.78)),
-    url("photo-flowers.jpg") center/cover no-repeat;
-  box-shadow:var(--shadow);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:25px;
+    position:relative;
+    overflow:hidden;
+    min-height:172px;
+    margin-top:18px;
+    padding:28px 22px;
+    border-radius:24px;
+    background:rgba(255,255,255,.94);
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 7px 22px rgba(60,50,75,.06);
 }
 
-.quote-content{
-  position:relative;
-  z-index:2;
+.quote::before{
+    content:"";
+    position:absolute;
+    left:-10px;
+    bottom:-12px;
+    width:155px;
+    height:125px;
+    background:url("decor.svg") center/contain no-repeat;
+    opacity:.88;
+    pointer-events:none;
 }
 
-.quote-text{
-  font-family:cursive;
-  font-size:29px;
-  line-height:1.15;
-  color:#7e4264;
+.quote::after{
+    content:"";
+    position:absolute;
+    right:-20px;
+    top:-28px;
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:#f8dce8;
+    opacity:.42;
+    pointer-events:none;
 }
 
-.quote-small{
-  margin-top:9px;
-  color:#806d7d;
-  font-size:16px;
+.quote-main,
+.quote-sub{
+    position:relative;
+    z-index:2;
+}
+
+.quote-main{
+    font-family:Georgia,serif;
+    font-size:18px;
+    font-weight:700;
+}
+
+.quote-sub{
+    margin-top:6px;
+    color:#9993a4;
+    font-size:13px;
 }
 
 .bottom-nav{
-  position:fixed;
-  z-index:60;
-  bottom:calc(10px + env(safe-area-inset-bottom));
-  left:50%;
-  transform:translateX(-50%);
-  width:min(520px,calc(100% - 18px));
-  background:rgba(255,255,255,.96);
-  backdrop-filter:blur(18px);
-  box-shadow:0 8px 28px rgba(50,40,60,.15);
-  border-radius:30px;
-  padding:7px;
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:100;
+    height:80px;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    background:rgba(255,255,255,.98);
+    border-top:1px solid #e9e3eb;
+    padding-bottom:env(safe-area-inset-bottom);
 }
 
-.nav-btn{
-  min-width:0;
-  min-height:65px;
-  border-radius:22px;
-  background:transparent;
-  color:#747785;
-  font-size:11px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:4px;
-}
-
-.nav-btn.active{
-  background:#f8dce9;
-  color:var(--pink-dark);
+.nav{
+    background:none;
+    color:#8a8698;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:3px;
+    font-size:11px;
+    font-weight:800;
 }
 
 .nav-icon{
-  font-size:22px;
+    font-size:22px;
 }
 
-.page-heading{
-  margin:20px 0 16px;
-}
-
-.page-heading h2{
-  margin:0;
-  font-size:31px;
-}
-
-.page-heading p{
-  margin:5px 0 0;
-  color:var(--muted);
-}
-
-.client-card,
-.job-card,
-.setting-card{
-  background:#fff;
-  border-radius:24px;
-  padding:18px;
-  margin-bottom:13px;
-  box-shadow:var(--shadow);
-}
-
-.client-top,
-.job-top{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-}
-
-.client-name,
-.job-name{
-  font-size:20px;
-  font-weight:800;
-}
-
-.meta{
-  color:var(--muted);
-  margin-top:5px;
-  line-height:1.5;
-}
-
-.card-actions{
-  display:flex;
-  gap:7px;
-}
-
-.card-actions button{
-  width:44px;
-  height:44px;
-  border-radius:14px;
-  background:var(--purple);
-}
-
-.card-actions .delete{
-  background:#f8dfe4;
+.nav.active{
+    color:#b45d87;
 }
 
 .primary{
-  background:var(--pink);
-  color:#fff;
-  border-radius:17px;
-  padding:14px 19px;
-  font-weight:800;
+    min-height:48px;
+    padding:0 18px;
+    border-radius:15px;
+    background:#df99ba;
+    color:white;
+    font-weight:800;
 }
 
 .secondary{
-  background:#f0edf3;
-  color:var(--ink);
-  border-radius:17px;
-  padding:14px 19px;
-  font-weight:700;
+    min-height:45px;
+    padding:0 15px;
+    border-radius:14px;
+    background:#eee7f8;
+    color:#665a83;
+    font-weight:800;
 }
 
-.full-btn{
-  width:100%;
-  margin-bottom:13px;
+.danger{
+    min-height:45px;
+    padding:0 15px;
+    border-radius:14px;
+    background:#ffe8ee;
+    color:#bd5473;
+    font-weight:800;
 }
 
 .empty{
-  background:#fff;
-  border-radius:24px;
-  padding:32px 18px;
-  text-align:center;
-  color:var(--muted);
-  box-shadow:var(--shadow);
+    background:rgba(255,255,255,.75);
+    border-radius:23px;
+    padding:35px 15px;
+    text-align:center;
+    color:#8d8798;
 }
 
-.day-block{
-  margin-bottom:24px;
+.empty-icon{
+    font-size:42px;
+    margin-bottom:8px;
 }
 
-.day-title{
-  font-size:21px;
-  font-weight:800;
-  margin-bottom:10px;
-  color:var(--pink-dark);
+.card{
+    background:white;
+    padding:18px;
+    border-radius:23px;
+    margin-bottom:12px;
+    box-shadow:0 7px 22px rgba(60,50,75,.06);
 }
 
-.day-job{
-  background:#fff;
-  border-radius:20px;
-  padding:14px;
-  margin-bottom:8px;
-  box-shadow:var(--shadow);
+.card-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
 }
 
-.day-job strong{
-  font-size:18px;
+.card-name{
+    font-size:20px;
+    font-weight:850;
 }
 
-.frequency{
-  color:var(--pink-dark);
-  font-size:14px;
-  font-weight:700;
-  margin-top:4px;
+.card-details{
+    color:#858094;
+    font-size:14px;
+    line-height:1.6;
+    margin-top:6px;
+}
+
+.badge{
+    height:max-content;
+    padding:6px 10px;
+    border-radius:10px;
+    font-size:10px;
+    font-weight:800;
+}
+
+.badge.agency{
+    background:#e9e0f8;
+    color:#6c5a92;
+}
+
+.badge.private{
+    background:#f8dce8;
+    color:#a54f76;
+}
+
+.card-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:14px;
+}
+
+.modal-bg{
+    position:fixed;
+    inset:0;
+    z-index:500;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    background:rgba(35,29,44,.42);
 }
 
 .modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:100;
-  background:rgba(30,25,35,.35);
-  align-items:flex-end;
+    width:100%;
+    max-width:620px;
+    max-height:92vh;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    padding:23px 20px 40px;
+    border-radius:30px 30px 0 0;
+    background:#fbf9fc;
 }
 
-.modal.open{
-  display:flex;
+.modal-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:20px;
 }
 
-.sheet{
-  width:100%;
-  max-height:90vh;
-  overflow:auto;
-  background:#fff;
-  border-radius:30px 30px 0 0;
-  padding:20px;
-}
-
-.sheet-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:16px;
-}
-
-.sheet-head h3{
-  margin:0;
-  font-size:25px;
+.modal-title{
+    margin:0;
+    font-size:27px;
+    font-weight:850;
 }
 
 .close{
-  width:45px;
-  height:45px;
-  border-radius:15px;
-  background:#f2eef4;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:#eee8f1;
+    font-size:25px;
+    color:#595469;
+    flex:0 0 44px;
 }
 
-label{
-  display:block;
-  margin:10px 0 6px;
-  font-weight:650;
+.form-group{
+    margin-bottom:15px;
 }
 
-input,
-select,
-textarea{
-  width:100%;
-  border:1px solid #ded9e3;
-  border-radius:15px;
-  padding:13px;
-  background:#fff;
-  color:var(--ink);
+.label{
+    display:block;
+    margin-bottom:7px;
+    color:#777287;
+    font-size:13px;
+    font-weight:800;
 }
 
-textarea{
-  resize:vertical;
+.control{
+    width:100%;
+    min-height:52px;
+    padding:11px 13px;
+    border:1px solid #ddd6e2;
+    border-radius:15px;
+    background:white;
+    color:#383548;
 }
 
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.form-actions{
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-  margin-top:18px;
-}
-
-.setting-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  padding:15px 0;
-  border-bottom:1px solid var(--line);
-}
-
-.setting-row:last-child{
-  border-bottom:0;
-}
-
-.setting-info{
-  flex:1;
-}
-
-.setting-info strong{
-  display:block;
-  font-size:17px;
-}
-
-.setting-info span{
-  display:block;
-  margin-top:4px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.toggle{
-  width:54px;
-  height:32px;
-  border-radius:30px;
-  background:#ddd8df;
-  padding:3px;
-  flex-shrink:0;
-}
-
-.toggle span{
-  display:block;
-  width:26px;
-  height:26px;
-  border-radius:50%;
-  background:#fff;
-  transition:.2s;
-}
-
-.toggle.on{
-  background:var(--pink);
-}
-
-.toggle.on span{
-  transform:translateX(22px);
+.two{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:11px;
 }
 
 .timer-box{
-  background:linear-gradient(135deg,#f5dcea,#e8def8);
-  border-radius:29px;
-  padding:30px 20px;
-  text-align:center;
-  margin:20px 0;
+    padding:24px;
+    border-radius:27px;
+    background:linear-gradient(135deg,#f8dce8,#e8def7);
+    text-align:center;
 }
 
-.timer-time{
-  font-size:48px;
-  font-weight:800;
+.timer-display{
+    font-size:48px;
+    font-weight:850;
+    margin:12px 0 22px;
+    letter-spacing:2px;
 }
 
-.timer-client{
-  margin-top:6px;
-  color:var(--muted);
+.timer-info{
+    margin-top:15px;
+    padding:16px;
+    border-radius:18px;
+    background:rgba(255,255,255,.72);
 }
 
-.compact-mode .schedule-card{
-  padding:10px;
-  margin-bottom:8px;
+.timer-big{
+    display:block;
+    margin:5px 0 12px;
+    font-size:28px;
+    font-weight:850;
+    color:#b04f7c;
 }
 
-.compact-mode .quick{
-  min-height:92px;
+.timer-banner{
+    position:sticky;
+    top:0;
+    z-index:25;
+    width:100%;
+    min-height:46px;
+    padding:9px 15px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    background:linear-gradient(90deg,#d98eb2,#aa8fcf);
+    color:white;
+    font-size:13px;
+    font-weight:750;
+    box-shadow:0 5px 18px rgba(80,50,90,.15);
 }
 
-.large-text .app{
-  font-size:1.08em;
+.timer-banner strong{
+    font-size:16px;
+    letter-spacing:1px;
 }
 
-@media(max-width:430px){
+.earnings-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:13px;
+}
 
-  main{
-    padding:0 14px;
-  }
+.earning{
+    padding:20px;
+    border-radius:23px;
+}
 
-  .brand img{
-    width:63px;
-    height:63px;
-  }
+.earning.green{background:#ddf1e6}
+.earning.pink{background:#f8dce8}
+.earning.yellow{background:#fff0c9}
+.earning.purple{background:#e9e0f8}
 
-  .brand h1{
-    font-size:23px;
-  }
+.earning-label{
+    color:#777388;
+    font-size:13px;
+    font-weight:800;
+}
 
-  .brand p{
-    font-size:14px;
-  }
+.earning-value{
+    margin-top:7px;
+    font-size:27px;
+    font-weight:850;
+}
 
-  .icon-btn{
-    width:52px;
-    height:52px;
-  }
-
-  .stats{
-    gap:7px;
-  }
-
-  .stat-photo{
-    height:80px;
-  }
-
-  .stat-body{
-    padding:8px 7px 12px;
-  }
-
-  .stat .value{
-    font-size:20px;
-  }
-
-  .stat .label{
+.note{
+    color:#918b9c;
     font-size:12px;
-  }
+    line-height:1.5;
+    margin-top:7px;
+}
 
-  .section-title h2,
-  .quick-title{
-    font-size:25px;
-  }
+@media(max-width:390px){
 
-  .schedule-card{
-    padding:13px 10px;
-  }
+    .header{
+        padding-left:12px;
+        padding-right:12px;
+    }
 
-  .schedule-name{
-    font-size:18px;
-  }
+    .brand{
+        gap:9px;
+    }
 
-  .hours-input{
-    width:61px;
-  }
+    .brand-title{
+        font-size:23px;
+    }
 
-  .small-btn{
-    width:43px;
-    height:43px;
-  }
+    .brand-subtitle{
+        font-size:13px;
+    }
 
-  .bottom-nav{
-    width:calc(100% - 12px);
-  }
+    .logo,
+    .logo-fallback{
+        width:60px;
+        height:60px;
+        flex-basis:60px;
+    }
 
-  .nav-btn{
-    font-size:9px;
-  }
+    .header-btn{
+        width:48px;
+        height:48px;
+        border-radius:17px;
+    }
 
-  .nav-icon{
-    font-size:19px;
-  }
+    .content{
+        padding-left:14px;
+        padding-right:14px;
+    }
+
+    .schedule-card{
+        padding:13px 10px;
+        gap:8px;
+    }
+
+    .schedule-actions{
+        gap:3px;
+    }
+
+    .hours-input{
+        width:58px;
+    }
+
+    .small-btn{
+        width:38px;
+        height:38px;
+        flex-basis:38px;
+    }
+
+    .schedule-name{
+        font-size:18px;
+    }
+
+    .schedule-time{
+        font-size:13px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
-
-<header>
-
-  <div class="brand">
-
-    <img src="icon.png"
-         alt="Pure Shine"
-         onerror="this.src='icon.png'">
-
-    <div>
-      <h1>Pure Shine</h1>
-      <p>Cleaning Manager ✨</p>
-    </div>
-
-  </div>
-
-  <div class="head-actions">
-
-    <button class="icon-btn"
-            onclick="openTimer()">
-      ⏱️
-    </button>
-
-    <button class="icon-btn plus"
-            onclick="openJobModal()">
-      +
-    </button>
-
-  </div>
-
-</header>
-
-
-<main>
-
-<!-- HOME -->
-
-<section id="page-home" class="page active">
-
-  <div class="date-card"
-       id="homeDate"></div>
-
-  <div class="stats">
-
-    <div class="stat">
-      <div class="stat-photo"></div>
-      <div class="stat-body">
-        <div class="value"
-             id="statJobs">0</div>
-        <div class="label">Jobs</div>
-      </div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-photo"></div>
-      <div class="stat-body">
-        <div class="value"
-             id="statHours">0h</div>
-        <div class="label">Hours</div>
-      </div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-photo"></div>
-      <div class="stat-body">
-        <div class="value"
-             id="statEarned">£0.00</div>
-        <div class="label">Earned</div>
-      </div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-photo"></div>
-      <div class="stat-body">
-        <div class="value"
-             id="statAvailable">0h</div>
-        <div class="label">Available</div>
-      </div>
-    </div>
-
-  </div>
-
-
-  <div class="section-title">
-
-    <h2>Today's schedule</h2>
-
-    <button onclick="showPage('schedule')">
-      See all
-    </button>
-
-  </div>
-
-  <div id="todaySchedule"></div>
-
-
-  <h2 class="quick-title">
-    Quick actions
-  </h2>
-
-  <div class="quick-grid">
-
-    <button class="quick pink"
-            onclick="openTimer()">
-      <span class="qicon">⏱️</span>
-      <strong>Start Timer</strong>
-    </button>
-
-    <button class="quick purple"
-            onclick="openJobModal()">
-      <span class="qicon">＋</span>
-      <strong>Add Cleaning Job</strong>
-    </button>
-
-    <button class="quick green"
-            onclick="showPage('jobs')">
-      <span class="qicon">📋</span>
-      <strong>View Jobs</strong>
-    </button>
-
-    <button class="quick blue"
-            onclick="showPage('earnings')">
-      <span class="qicon">💷</span>
-      <strong>Earnings</strong>
-    </button>
-
-    <button class="quick yellow"
-            onclick="showPage('schedule')">
-      <span class="qicon">📅</span>
-      <strong>Schedule</strong>
-    </button>
-
-    <button class="quick peach"
-            onclick="showPage('settings')">
-      <span class="qicon">⚙️</span>
-      <strong>Settings</strong>
-    </button>
-
-  </div>
-
-
-  <div class="quote">
-
-    <div class="quote-content">
-
-      <div class="quote-text">
-        “A clean space is a happy place ♡”
-      </div>
-
-      <div class="quote-small">
-        Pure Shine Cleaning
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- SCHEDULE -->
-
-<section id="page-schedule"
-         class="page">
-
-  <div class="page-heading">
-    <h2>Schedule</h2>
-    <p>Your weekly cleaning routine</p>
-  </div>
-
-  <button class="primary full-btn"
-          onclick="openJobModal()">
-    + Add cleaning job
-  </button>
-
-  <div id="scheduleList"></div>
-
-</section>
-
-
-<!-- CLIENTS -->
-
-<section id="page-clients"
-         class="page">
-
-  <div class="page-heading">
-    <h2>Clients</h2>
-    <p>Manage your cleaning clients</p>
-  </div>
-
-  <button class="primary full-btn"
-          onclick="openClientModal()">
-    + Add client
-  </button>
-
-  <div id="clientsList"></div>
-
-</section>
-
-
-<!-- JOBS -->
-
-<section id="page-jobs"
-         class="page">
-
-  <div class="page-heading">
-    <h2>Jobs</h2>
-    <p>Completed and planned cleaning jobs</p>
-  </div>
-
-  <button class="primary full-btn"
-          onclick="openJobModal()">
-    + Add cleaning job
-  </button>
-
-  <div id="jobsList"></div>
-
-</section>
-
-
-<!-- EARNINGS -->
-
-<section id="page-earnings"
-         class="page">
-
-  <div class="page-heading">
-    <h2>Earnings</h2>
-    <p>Your cleaning income</p>
-  </div>
-
-  <div id="earningsContent"></div>
-
-</section>
-
-
-<!-- SETTINGS -->
-
-<section id="page-settings"
-         class="page">
-
-  <div class="page-heading">
-    <h2>⚙️ Settings</h2>
-    <p>Customize your Pure Shine app</p>
-  </div>
-
-
-  <div class="setting-card">
-
-    <h3>🎨 Appearance</h3>
-
-    <div class="setting-row">
-
-      <div class="setting-info">
-        <strong>App size / Zoom</strong>
-        <span>Make the application smaller or larger</span>
-      </div>
-
-      <div style="width:145px">
-
-        <input id="scaleRange"
-               type="range"
-               min="90"
-               max="115"
-               value="100"
-               step="5"
-               oninput="changeScale(this.value)">
-
-        <div id="scaleText"
-             style="text-align:center;font-weight:700">
-          100%
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="setting-row">
-
-      <div class="setting-info">
-        <strong>Large text</strong>
-        <span>Increase text size</span>
-      </div>
-
-      <button id="textToggle"
-              class="toggle"
-              onclick="toggleSetting('largeText')">
-
-        <span></span>
-
-      </button>
-
-    </div>
-
-
-    <div class="setting-row">
-
-      <div class="setting-info">
-        <strong>Compact spacing</strong>
-        <span>Fit more information on screen</span>
-      </div>
-
-      <button id="compactToggle"
-              class="toggle"
-              onclick="toggleSetting('compact')">
-
-        <span></span>
-
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <div class="setting-card">
-
-    <h3>🏠 Home page</h3>
-
-    <div class="setting-row">
-
-      <div class="setting-info">
-        <strong>Statistics</strong>
-        <span>Show statistics cards</span>
-      </div>
-
-      <button id="statsToggle"
-              class="toggle"
-              onclick="toggleSetting('showStats')">
-
-        <span></span>
-
-      </button>
-
-    </div>
-
-
-    <div class="setting-row">
-
-      <div class="setting-info">
-        <strong>Quick actions</strong>
-        <span>Show quick action buttons</span>
-      </div>
-
-      <button id="quickToggle"
-              class="toggle"
-              onclick="toggleSetting('showQuick')">
-
-        <span></span>
-
-      </button>
-
-    </div>
-
-
-    <div class="setting-row">
-
-      <div class="setting-info">
-        <strong>Quote banner</strong>
-        <span>Show inspirational banner</span>
-      </div>
-
-      <button id="quoteToggle"
-              class="toggle"
-              onclick="toggleSetting('showQuote')">
-
-        <span></span>
-
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <div class="setting-card">
-
-    <h3>⏱️ Timer</h3>
-
-    <div class="setting-row">
-
-      <div class="setting-info">
-        <strong>Timer rounding</strong>
-        <span>How worked time is recorded</span>
-      </div>
-
-      <select id="roundingSelect"
-              onchange="updateSetting('rounding',this.value)"
-              style="width:125px">
-
-        <option value="exact">Exact</option>
-        <option value="5">5 min</option>
-        <option value="10">10 min</option>
-        <option value="15">15 min</option>
-
-      </select>
-
-    </div>
-
-  </div>
-
-
-  <div class="setting-card">
-
-    <h3>💷 Default rates</h3>
-
-    <div class="setting-row">
-
-      <div class="setting-info">
-        <strong>Agency rate</strong>
-        <span>Default hourly rate</span>
-      </div>
-
-      <input id="agencyRate"
-             type="number"
-             step="0.01"
-             style="width:100px"
-             onchange="updateSetting('agencyRate',this.value)">
-
-    </div>
-
-
-    <div class="setting-row">
-
-      <div class="setting-info">
-        <strong>Private rate</strong>
-        <span>Default private hourly rate</span>
-      </div>
-
-      <input id="privateRate"
-             type="number"
-             step="0.01"
-             style="width:100px"
-             onchange="updateSetting('privateRate',this.value)">
-
-    </div>
-
-  </div>
-
-
-  <div class="setting-card">
-
-    <h3>💾 Data</h3>
-
-    <button class="primary full-btn"
-            onclick="exportData()">
-      Export backup
-    </button>
-
-    <label class="secondary"
-           style="display:block;text-align:center">
-
-      Import backup
-
-      <input type="file"
-             accept=".json"
-             onchange="importData(event)"
-             style="display:none">
-
-    </label>
-
-  </div>
-
-
-  <div class="setting-card">
-
-    <h3>🔄 Reset</h3>
-
-    <button class="secondary full-btn"
-            onclick="resetSettings()">
-      Reset appearance settings
-    </button>
-
-    <button class="secondary full-btn"
-            onclick="resetSchedule()">
-      Restore default cleaning schedule
-    </button>
-
-  </div>
-
-</section>
-
-</main>
-
-
-<!-- BOTTOM NAV -->
-
-<nav class="bottom-nav">
-
-  <button class="nav-btn active"
-          data-page="home"
-          onclick="showPage('home')">
-    <span class="nav-icon">🏠</span>
-    Home
-  </button>
-
-  <button class="nav-btn"
-          data-page="schedule"
-          onclick="showPage('schedule')">
-    <span class="nav-icon">📅</span>
-    Schedule
-  </button>
-
-  <button class="nav-btn"
-          data-page="clients"
-          onclick="showPage('clients')">
-    <span class="nav-icon">👥</span>
-    Clients
-  </button>
-
-  <button class="nav-btn"
-          data-page="jobs"
-          onclick="showPage('jobs')">
-    <span class="nav-icon">📋</span>
-    Jobs
-  </button>
-
-  <button class="nav-btn"
-          data-page="earnings"
-          onclick="showPage('earnings')">
-    <span class="nav-icon">💷</span>
-    Earnings
-  </button>
-
-  <button class="nav-btn"
-          data-page="settings"
-          onclick="showPage('settings')">
-    <span class="nav-icon">⚙️</span>
-    Settings
-  </button>
-
-</nav>
-
-
-<!-- CLIENT MODAL -->
-
-<div id="clientModal"
-     class="modal">
-
-  <div class="sheet">
-
-    <div class="sheet-head">
-
-      <h3 id="clientModalTitle">
-        Add Client
-      </h3>
-
-      <button class="close"
-              onclick="closeModal('clientModal')">
-        ✕
-      </button>
-
-    </div>
-
-    <input id="clientId"
-           type="hidden">
-
-    <label>Client name</label>
-
-    <input id="clientName"
-           placeholder="Client name">
-
-    <label>Type</label>
-
-    <select id="clientType">
-
-      <option value="Agency">
-        Agency
-      </option>
-
-      <option value="Private">
-        Private
-      </option>
-
-    </select>
-
-    <label>Hourly rate (£)</label>
-
-    <input id="clientRate"
-           type="number"
-           step="0.01">
-
-    <div class="form-actions">
-
-      <button class="secondary"
-              onclick="closeModal('clientModal')">
-        Cancel
-      </button>
-
-      <button class="primary"
-              onclick="saveClient()">
-        Save
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- JOB MODAL -->
-
-<div id="jobModal"
-     class="modal">
-
-  <div class="sheet">
-
-    <div class="sheet-head">
-
-      <h3 id="jobModalTitle">
-        Add Cleaning Job
-      </h3>
-
-      <button class="close"
-              onclick="closeModal('jobModal')">
-        ✕
-      </button>
-
-    </div>
-
-    <input id="jobId"
-           type="hidden">
-
-    <label>Client</label>
-
-    <select id="jobClient"></select>
-
-    <div class="form-grid">
-
-      <div>
-
-        <label>Day</label>
-
-        <select id="jobDay">
-
-          <option>Monday</option>
-          <option>Tuesday</option>
-          <option>Wednesday</option>
-          <option>Thursday</option>
-          <option>Friday</option>
-          <option>Saturday</option>
-          <option>Sunday</option>
-
-        </select>
-
-      </div>
-
-      <div>
-
-        <label>Specific date</label>
-
-        <input id="jobDate"
-               type="date">
-
-      </div>
-
-    </div>
-
-
-    <div class="form-grid">
-
-      <div>
-
-        <label>Start</label>
-
-        <input id="jobStart"
-               type="time">
-
-      </div>
-
-      <div>
-
-        <label>End</label>
-
-        <input id="jobEnd"
-               type="time">
-
-      </div>
-
-    </div>
-
-
-    <div class="form-grid">
-
-      <div>
-
-        <label>Hours</label>
-
-        <input id="jobHours"
-               type="number"
-               step="0.01">
-
-      </div>
-
-      <div>
-
-        <label>Rate (£/h)</label>
-
-        <input id="jobRate"
-               type="number"
-               step="0.01">
-
-      </div>
-
-    </div>
-
-
-    <label>Frequency</label>
-
-    <select id="jobFrequency">
-
-      <option value="weekly">
-        Weekly
-      </option>
-
-      <option value="fortnightly">
-        Fortnightly
-      </option>
-
-      <option value="one-off">
-        One-off
-      </option>
-
-    </select>
-
-
-    <label>Notes</label>
-
-    <textarea id="jobNotes"
-              rows="3"
-              placeholder="Notes"></textarea>
-
-
-    <div class="form-actions">
-
-      <button class="secondary"
-              onclick="closeModal('jobModal')">
-        Cancel
-      </button>
-
-      <button class="primary"
-              onclick="saveJob()">
-        Save
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- TIMER MODAL -->
-
-<div id="timerModal"
-     class="modal">
-
-  <div class="sheet">
-
-    <div class="sheet-head">
-
-      <h3>⏱️ Cleaning Timer</h3>
-
-      <button class="close"
-              onclick="closeModal('timerModal')">
-        ✕
-      </button>
-
-    </div>
-
-    <label>Client</label>
-
-    <select id="timerClient"></select>
-
-    <div class="timer-box">
-
-      <div id="timerDisplay"
-           class="timer-time">
-        00:00:00
-      </div>
-
-      <div id="timerClientName"
-           class="timer-client">
-      </div>
-
-    </div>
-
-    <button id="timerStartBtn"
-            class="primary full-btn"
-            onclick="toggleTimer()">
-      Start timer
-    </button>
-
-  </div>
-
-</div>
-
+<div id="app"></div>
 
 <script>
 
-/* =========================================================
-   STORAGE
-   ========================================================= */
+const STORAGE_KEY="pureShineCleaningManager_FINAL";
+const TIMER_KEY="pureShineCleaningManager_TIMER";
 
-const STORAGE_KEY =
-  "pure_shine_manager_v10";
-
-
-const TIMER_KEY =
-  "pure_shine_timer_v10";
-
-
-/* =========================================================
-   HELPERS
-   ========================================================= */
-
-const dayNames = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday"
+const defaultClients=[
+    {
+        id:1,
+        name:"Tosca",
+        type:"agency",
+        rate:16,
+        day:"Monday",
+        start:"09:00",
+        end:"12:00",
+        freq:"weekly",
+        week:"A"
+    },
+    {
+        id:2,
+        name:"Lottie",
+        type:"agency",
+        rate:16,
+        day:"Monday",
+        start:"13:00",
+        end:"15:00",
+        freq:"weekly",
+        week:"A"
+    },
+    {
+        id:3,
+        name:"Christine",
+        type:"private",
+        rate:18,
+        day:"Tuesday",
+        start:"09:30",
+        end:"12:30",
+        freq:"weekly",
+        week:"A"
+    },
+    {
+        id:4,
+        name:"Matt",
+        type:"agency",
+        rate:16,
+        day:"Tuesday",
+        start:"13:00",
+        end:"17:00",
+        freq:"weekly",
+        week:"A",
+        variable:true,
+        maxHours:6
+    },
+    {
+        id:5,
+        name:"Sonia",
+        type:"agency",
+        rate:16,
+        day:"Wednesday",
+        start:"09:00",
+        end:"14:00",
+        freq:"weekly",
+        week:"A",
+        variable:true
+    },
+    {
+        id:7,
+        name:"Laura",
+        type:"private",
+        rate:18,
+        day:"Thursday",
+        start:"09:00",
+        end:"13:00",
+        freq:"weekly",
+        week:"A",
+        variable:true
+    },
+    {
+        id:8,
+        name:"Hannah",
+        type:"agency",
+        rate:16,
+        day:"Thursday",
+        start:"13:00",
+        end:"16:00",
+        freq:"weekly",
+        week:"A"
+    },
+    {
+        id:9,
+        name:"Joanna",
+        type:"private",
+        rate:18,
+        day:"Friday",
+        start:"09:30",
+        end:"13:30",
+        freq:"fortnightly",
+        week:"A",
+        variable:true
+    },
+    {
+        id:10,
+        name:"Sindu",
+        type:"agency",
+        rate:16,
+        day:"Friday",
+        start:"09:30",
+        end:"12:30",
+        freq:"fortnightly",
+        week:"B"
+    }
 ];
 
+/* --------------------------------------------------
+   DATA
+-------------------------------------------------- */
 
-function clone(value){
-  return JSON.parse(
-    JSON.stringify(value)
-  );
+var data;
+
+try{
+    data=JSON.parse(localStorage.getItem(STORAGE_KEY));
+}catch(e){
+    data=null;
 }
 
-
-function money(value){
-  return "£" +
-    Number(value || 0)
-      .toFixed(2);
+if(!data || !Array.isArray(data.clients)){
+    data={
+        clients:defaultClients,
+        jobs:[]
+    };
 }
 
-
-function todayISO(){
-  const d = new Date();
-
-  const offset =
-    d.getTimezoneOffset();
-
-  const local =
-    new Date(
-      d.getTime() -
-      offset * 60000
-    );
-
-  return local
-    .toISOString()
-    .slice(0,10);
+if(!Array.isArray(data.jobs)){
+    data.jobs=[];
 }
 
+/* Gill removed */
+data.clients=data.clients.filter(function(c){
+    return String(c.name||"").toLowerCase()!=="gill";
+});
 
-function parseDate(value){
-  if(!value) return null;
+data.jobs=data.jobs.filter(function(j){
+    return String(j.clientName||"").toLowerCase()!=="gill";
+});
 
-  const parts =
-    value.split("-");
-
-  return new Date(
-    Number(parts[0]),
-    Number(parts[1])-1,
-    Number(parts[2])
-  );
+function saveData(){
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
 }
 
+saveData();
 
-function dateDiffDays(a,b){
+/* --------------------------------------------------
+   TIMER
+-------------------------------------------------- */
 
-  const one =
-    24 * 60 * 60 * 1000;
-
-  return Math.round(
-    (b-a)/one
-  );
-}
-
-
-function escapeHTML(value){
-
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-
-/* =========================================================
-   CLIENTS
-   ========================================================= */
-
-const defaultClients = [
-
-  {
-    id:"lottie",
-    name:"Lottie",
-    type:"Agency",
-    rate:16
-  },
-
-  {
-    id:"matt",
-    name:"Matt",
-    type:"Agency",
-    rate:16
-  },
-
-  {
-    id:"christine",
-    name:"Christine",
-    type:"Private",
-    rate:18
-  },
-
-  {
-    id:"sonia",
-    name:"Sonia",
-    type:"Agency",
-    rate:16
-  },
-
-  {
-    id:"laura",
-    name:"Laura",
-    type:"Private",
-    rate:18
-  },
-
-  {
-    id:"hannah",
-    name:"Hannah",
-    type:"Agency",
-    rate:16
-  },
-
-  {
-    id:"hannah-mum",
-    name:"Hannah's mum",
-    type:"Private",
-    rate:18
-  },
-
-  {
-    id:"joanna",
-    name:"Joanna",
-    type:"Private",
-    rate:18
-  },
-
-  {
-    id:"sindu",
-    name:"Sindu",
-    type:"Private",
-    rate:18
-  }
-
-];
-
-
-/* =========================================================
-   DEFAULT JOBS
-   ========================================================= */
-
-const defaultJobs = [
-
-  {
-    id:"lottie-mon",
-    clientId:"lottie",
-    day:"Monday",
-    start:"13:00",
-    end:"15:00",
-    hours:2,
-    rate:16,
-    frequency:"weekly",
-    reference:"",
-    notes:"Weekly"
-  },
-
-  {
-    id:"matt-tue",
-    clientId:"matt",
-    day:"Tuesday",
-    start:"14:30",
-    end:"18:30",
-    hours:4,
-    rate:16,
-    frequency:"weekly",
-    reference:"",
-    notes:"Weekly"
-  },
-
-  {
-    id:"christine-tue",
-    clientId:"christine",
-    day:"Tuesday",
-    start:"09:30",
-    end:"12:30",
-    hours:3,
-    rate:18,
-    frequency:"fortnightly",
-    reference:"2026-10-13",
-    notes:"Fortnightly. Next reference visit: 13 October 2026."
-  },
-
-  {
-    id:"sonia-wed",
-    clientId:"sonia",
-    day:"Wednesday",
-    start:"09:00",
-    end:"12:00",
-    hours:3,
-    rate:16,
-    frequency:"weekly",
-    reference:"",
-    notes:"Normally 3 hours."
-  },
-
-  {
-    id:"laura-thu",
-    clientId:"laura",
-    day:"Thursday",
-    start:"09:00",
-    end:"13:00",
-    hours:4,
-    rate:18,
-    frequency:"weekly",
-    reference:"",
-    notes:"Normally 4 hours."
-  },
-
-  {
-    id:"hannah-thu",
-    clientId:"hannah",
-    day:"Thursday",
-    start:"13:00",
-    end:"16:00",
-    hours:3,
-    rate:16,
-    frequency:"weekly",
-    reference:"",
-    notes:"Can move between Thursday and Friday."
-  },
-
-  {
-    id:"hannah-mum-thu",
-    clientId:"hannah-mum",
-    day:"Thursday",
-    start:"16:00",
-    end:"17:00",
-    hours:1,
-    rate:18,
-    frequency:"weekly",
-    reference:"",
-    notes:"Weekly private."
-  },
-
-  {
-    id:"sindu-fri",
-    clientId:"sindu",
-    day:"Friday",
-    start:"09:30",
-    end:"12:30",
-    hours:3,
-    rate:18,
-    frequency:"fortnightly",
-    reference:"2026-09-25",
-    notes:"Fortnightly. 25 September 2026 = Sindu."
-  },
-
-  {
-    id:"joanna-fri",
-    clientId:"joanna",
-    day:"Friday",
-    start:"09:30",
-    end:"13:30",
-    hours:4,
-    rate:18,
-    frequency:"fortnightly",
-    reference:"2026-10-02",
-    notes:"Fortnightly. 2 October 2026 = Joanna."
-  }
-
-];
-
-
-/* =========================================================
-   SETTINGS
-   ========================================================= */
-
-const defaultSettings = {
-
-  scale:100,
-
-  largeText:false,
-
-  compact:false,
-
-  showStats:true,
-
-  showQuick:true,
-
-  showQuote:true,
-
-  rounding:"exact",
-
-  agencyRate:16,
-
-  privateRate:18
-
+var timer={
+    running:false,
+    clientId:null,
+    startedAt:null,
+    accumulated:0
 };
 
+try{
+    var savedTimer=JSON.parse(localStorage.getItem(TIMER_KEY));
+    if(savedTimer && typeof savedTimer==="object"){
+        timer=savedTimer;
+    }
+}catch(e){}
 
-let clients =
-  clone(defaultClients);
+function saveTimer(){
+    try{
+        localStorage.setItem(TIMER_KEY,JSON.stringify(timer));
+    }catch(e){}
+}
 
-let jobs =
-  clone(defaultJobs);
+/*
+   IMPORTANT:
+   The timer does NOT depend on setInterval to keep time.
 
-let settings =
-  clone(defaultSettings);
+   startedAt is stored in milliseconds.
+   Therefore, if iPhone suspends Safari/PWA in the
+   background, the next calculation uses Date.now()
+   and automatically catches up with the real elapsed time.
+*/
 
-let timer = null;
+function timerSeconds(){
 
-
-/* =========================================================
-   LOAD DATA
-   ========================================================= */
-
-function loadData(){
-
-  try{
-
-    const saved =
-      localStorage.getItem(
-        STORAGE_KEY
-      );
-
-    if(saved){
-
-      const data =
-        JSON.parse(saved);
-
-      if(Array.isArray(data.clients)){
-
-        clients =
-          data.clients.filter(
-            c =>
-              c.name &&
-              c.name
-                .toLowerCase()
-                !== "gill"
-          );
-
-      }
-
-      if(Array.isArray(data.jobs)){
-
-        jobs =
-          data.jobs.filter(
-            j =>
-              j.clientId !== "gill"
-          );
-
-      }
-
-      if(data.settings){
-
-        settings = {
-          ...defaultSettings,
-          ...data.settings
-        };
-
-      }
-
+    if(!timer.running){
+        return Number(timer.accumulated||0);
     }
 
-  }catch(e){
+    var started=Number(timer.startedAt||0);
 
-    console.log(
-      "Could not load saved data",
-      e
-    );
+    if(!started){
+        return Number(timer.accumulated||0);
+    }
 
-  }
-
-
-  try{
-
-    const savedTimer =
-      localStorage.getItem(
-        TIMER_KEY
-      );
-
-    if(savedTimer){
-
-      timer =
-        JSON.parse(
-          savedTimer
+    return Number(timer.accumulated||0)
+        +
+        Math.max(
+            0,
+            Math.floor(
+                (Date.now()-started)/1000
+            )
         );
+}
 
+function timerText(seconds){
+
+    seconds=Math.max(
+        0,
+        Math.floor(Number(seconds)||0)
+    );
+
+    var h=Math.floor(seconds/3600);
+
+    var m=Math.floor(
+        (seconds%3600)/60
+    );
+
+    var s=seconds%60;
+
+    return String(h).padStart(2,"0")
+        +":"
+        +String(m).padStart(2,"0")
+        +":"
+        +String(s).padStart(2,"0");
+}
+
+function timerHours(){
+    return timerSeconds()/3600;
+}
+
+/* --------------------------------------------------
+   HELPERS
+-------------------------------------------------- */
+
+function esc(value){
+
+    return String(value==null?"":value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+function money(value){
+
+    return "£"
+        +Number(value||0)
+        .toFixed(2);
+}
+
+function today(){
+
+    var d=new Date();
+
+    return d.getFullYear()
+        +"-"
+        +String(d.getMonth()+1).padStart(2,"0")
+        +"-"
+        +String(d.getDate()).padStart(2,"0");
+}
+
+function todayDay(){
+
+    return new Date()
+        .toLocaleDateString(
+            "en-GB",
+            {weekday:"long"}
+        );
+}
+
+function minutes(time){
+
+    if(!time)return 0;
+
+    var p=time.split(":");
+
+    return Number(p[0])*60
+        +Number(p[1]);
+}
+
+function durationMinutes(start,end){
+
+    return Math.max(
+        0,
+        minutes(end)-minutes(start)
+    );
+}
+
+function duration(start,end){
+
+    return durationMinutes(start,end)/60;
+}
+
+/*
+   Human readable exact duration.
+   Example:
+   09:15 -> 13:40
+   = 4h 25m
+*/
+
+function formatDuration(hours){
+
+    var totalMinutes=Math.round(
+        Number(hours||0)*60
+    );
+
+    var h=Math.floor(
+        totalMinutes/60
+    );
+
+    var m=totalMinutes%60;
+
+    if(h && m){
+        return h+"h "
+            +String(m).padStart(2,"0")
+            +"m";
     }
 
-  }catch(e){
+    if(h){
+        return h+"h";
+    }
 
-    timer = null;
-
-  }
-
+    return m+"m";
 }
 
+function formatDate(date){
 
-function saveAll(){
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify({
-      clients,
-      jobs,
-      settings
-    })
-  );
-
-  if(timer){
-
-    localStorage.setItem(
-      TIMER_KEY,
-      JSON.stringify(timer)
+    return new Date(
+        date+"T12:00:00"
+    ).toLocaleDateString(
+        "en-GB",
+        {
+            day:"numeric",
+            month:"short",
+            year:"numeric"
+        }
     );
-
-  }else{
-
-    localStorage.removeItem(
-      TIMER_KEY
-    );
-
-  }
-
 }
 
+function findClient(id){
 
-/* =========================================================
-   CLIENT HELPERS
-   ========================================================= */
-
-function clientById(id){
-
-  return clients.find(
-    c => c.id === id
-  );
-
+    return data.clients.find(
+        function(c){
+            return Number(c.id)
+                ===Number(id);
+        }
+    );
 }
 
+/* --------------------------------------------------
+   START TIMER
+-------------------------------------------------- */
 
-function jobClient(job){
+function startTimer(id){
 
-  return clientById(
-    job.clientId
-  );
+    id=Number(id);
 
-}
+    if(!id){
+        return;
+    }
 
+    if(timer.running){
 
-/* =========================================================
-   FORTNIGHTLY LOGIC
-   ========================================================= */
-
-function isFortnightlyActive(
-  job,
-  date
-){
-
-  if(
-    job.frequency !==
-    "fortnightly"
-  ){
-
-    return true;
-
-  }
-
-  if(!job.reference){
-
-    return true;
-
-  }
-
-  const ref =
-    parseDate(
-      job.reference
-    );
-
-  if(!ref){
-
-    return true;
-
-  }
-
-  const diff =
-    dateDiffDays(
-      ref,
-      date
-    );
-
-  return (
-    diff % 14 === 0
-  );
-
-}
-
-
-function isJobActiveOnDate(
-  job,
-  date
-){
-
-  const day =
-    dayNames[
-      date.getDay()
-    ];
-
-  if(job.day !== day){
-
-    return false;
-
-  }
-
-  return isFortnightlyActive(
-    job,
-    date
-  );
-
-}
-
-
-/* =========================================================
-   TODAY
-   ========================================================= */
-
-function todayJobs(){
-
-  const today =
-    new Date();
-
-  return jobs.filter(
-    j =>
-      isJobActiveOnDate(
-        j,
-        today
-      )
-  );
-
-}
-
-
-/* =========================================================
-   PAGE NAVIGATION
-   ========================================================= */
-
-function showPage(page){
-
-  document
-    .querySelectorAll(".page")
-    .forEach(
-      p =>
-        p.classList.remove(
-          "active"
-        )
-    );
-
-  const target =
-    document.getElementById(
-      "page-"+page
-    );
-
-  if(target){
-
-    target.classList.add(
-      "active"
-    );
-
-  }
-
-
-  document
-    .querySelectorAll(".nav-btn")
-    .forEach(btn => {
-
-      btn.classList.toggle(
-        "active",
-        btn.dataset.page === page
-      );
-
-    });
-
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-}
-
-
-/* =========================================================
-   HOME
-   ========================================================= */
-
-function renderHome(){
-
-  const today =
-    new Date();
-
-  document.getElementById(
-    "homeDate"
-  ).textContent =
-    today.toLocaleDateString(
-      "en-GB",
-      {
-        weekday:"long",
-        day:"numeric",
-        month:"long"
-      }
-    );
-
-
-  const todayList =
-    todayJobs();
-
-
-  const totalHours =
-    todayList.reduce(
-      (sum,j) =>
-        sum +
-        Number(j.hours || 0),
-      0
-    );
-
-
-  const totalEarned =
-    todayList.reduce(
-      (sum,j) =>
-        sum +
-        Number(j.hours || 0) *
-        Number(j.rate || 0),
-      0
-    );
-
-
-  document.getElementById(
-    "statJobs"
-  ).textContent =
-    todayList.length;
-
-
-  document.getElementById(
-    "statHours"
-  ).textContent =
-    totalHours.toFixed(2)+"h";
-
-
-  document.getElementById(
-    "statEarned"
-  ).textContent =
-    money(totalEarned);
-
-
-  const available =
-    Math.max(
-      0,
-      16-totalHours
-    );
-
-  document.getElementById(
-    "statAvailable"
-  ).textContent =
-    available.toFixed(1)+"h";
-
-
-  const area =
-    document.getElementById(
-      "todaySchedule"
-    );
-
-
-  if(!todayList.length){
-
-    area.innerHTML =
-      `<div class="empty">
-        No cleaning jobs scheduled today.
-      </div>`;
-
-    return;
-
-  }
-
-
-  area.innerHTML =
-    todayList.map(
-      job => {
-
-        const client =
-          jobClient(job);
-
-        if(!client){
-
-          return "";
-
+        if(Number(timer.clientId)===id){
+            showTimer(id);
+        }else{
+            alert(
+                "A timer is already running for another client."
+            );
         }
 
-        return `
-
-          <div class="schedule-card">
-
-            <div class="schedule-bar"></div>
-
-            <div class="schedule-main">
-
-              <div class="schedule-name">
-                ${escapeHTML(client.name)}
-              </div>
-
-              <div class="schedule-time">
-                ${job.start} – ${job.end}
-              </div>
-
-            </div>
-
-            <div class="schedule-actions">
-
-              <input
-                class="hours-input"
-                type="number"
-                step="0.01"
-                value="${Number(job.hours || 0)}"
-                onchange="changeJobHours('${job.id}',this.value)">
-
-              <button
-                class="small-btn"
-                onclick="startTimerFor('${client.id}')">
-                ⏱️
-              </button>
-
-              <button
-                class="small-btn edit"
-                onclick="openJobModal('${job.id}')">
-                ✏️
-              </button>
-
-            </div>
-
-          </div>
-
-        `;
-
-      }
-    ).join("");
-
-}
-
-
-/* =========================================================
-   SCHEDULE
-   ========================================================= */
-
-function renderSchedule(){
-
-  const area =
-    document.getElementById(
-      "scheduleList"
-    );
-
-
-  const order = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"
-  ];
-
-
-  area.innerHTML =
-    order.map(day => {
-
-      const dayJobs =
-        jobs.filter(
-          j =>
-            j.day === day
-        );
-
-      if(!dayJobs.length){
-
-        return "";
-
-      }
-
-
-      return `
-
-        <div class="day-block">
-
-          <div class="day-title">
-            ${day}
-          </div>
-
-          ${dayJobs.map(job => {
-
-            const client =
-              jobClient(job);
-
-            if(!client){
-
-              return "";
-
-            }
-
-            let frequency =
-              job.frequency;
-
-            if(
-              frequency ===
-              "fortnightly"
-            ){
-
-              frequency =
-                "Every 2 weeks";
-
-            }
-
-            return `
-
-              <div class="day-job">
-
-                <div style="
-                  display:flex;
-                  justify-content:space-between;
-                  gap:10px;
-                ">
-
-                  <div>
-
-                    <strong>
-                      ${escapeHTML(client.name)}
-                    </strong>
-
-                    <div class="meta">
-                      ${job.start} – ${job.end}
-                      · ${job.hours}h
-                    </div>
-
-                    <div class="frequency">
-                      ${frequency}
-                    </div>
-
-                  </div>
-
-                  <div class="card-actions">
-
-                    <button
-                      onclick="openJobModal('${job.id}')">
-                      ✏️
-                    </button>
-
-                    <button
-                      class="delete"
-                      onclick="deleteJob('${job.id}')">
-                      🗑️
-                    </button>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            `;
-
-          }).join("")}
-
-        </div>
-
-      `;
-
-    }).join("");
-
-}
-
-
-/* =========================================================
-   CLIENTS
-   ========================================================= */
-
-function renderClients(){
-
-  const area =
-    document.getElementById(
-      "clientsList"
-    );
-
-
-  if(!clients.length){
-
-    area.innerHTML =
-      `<div class="empty">
-        No clients yet.
-      </div>`;
-
-    return;
-
-  }
-
-
-  area.innerHTML =
-    clients.map(c => {
-
-      const clientJobs =
-        jobs.filter(
-          j =>
-            j.clientId === c.id
-        );
-
-
-      return `
-
-        <div class="client-card">
-
-          <div class="client-top">
-
-            <div>
-
-              <div class="client-name">
-                ${escapeHTML(c.name)}
-              </div>
-
-              <div class="meta">
-                ${c.type}
-                · ${money(c.rate)}/hour
-              </div>
-
-              <div class="meta">
-                ${clientJobs.length}
-                scheduled jobs
-              </div>
-
-            </div>
-
-            <div class="card-actions">
-
-              <button
-                onclick="openClientModal('${c.id}')">
-                ✏️
-              </button>
-
-              <button
-                class="delete"
-                onclick="deleteClient('${c.id}')">
-                🗑️
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      `;
-
-    }).join("");
-
-}
-
-
-/* =========================================================
-   JOBS
-   ========================================================= */
-
-function renderJobs(){
-
-  const area =
-    document.getElementById(
-      "jobsList"
-    );
-
-
-  if(!jobs.length){
-
-    area.innerHTML =
-      `<div class="empty">
-        No jobs yet.
-      </div>`;
-
-    return;
-
-  }
-
-
-  area.innerHTML =
-    jobs.slice()
-      .reverse()
-      .map(job => {
-
-        const client =
-          jobClient(job);
-
-        if(!client){
-
-          return "";
-
-        }
-
-
-        return `
-
-          <div class="job-card">
-
-            <div class="job-top">
-
-              <div>
-
-                <div class="job-name">
-                  ${escapeHTML(client.name)}
-                </div>
-
-                <div class="meta">
-                  ${job.day}
-                  · ${job.start} – ${job.end}
-                </div>
-
-                <div class="meta">
-                  ${Number(job.hours || 0).toFixed(2)}h
-                  · ${money(
-                    Number(job.hours || 0) *
-                    Number(job.rate || 0)
-                  )}
-                </div>
-
-                <div class="meta">
-                  ${job.frequency || "weekly"}
-                </div>
-
-              </div>
-
-              <div class="card-actions">
-
-                <button
-                  onclick="openJobModal('${job.id}')">
-                  ✏️
-                </button>
-
-                <button
-                  class="delete"
-                  onclick="deleteJob('${job.id}')">
-                  🗑️
-                </button>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        `;
-
-      }).join("");
-
-}
-
-
-/* =========================================================
-   EARNINGS
-   ========================================================= */
-
-function renderEarnings(){
-
-  const area =
-    document.getElementById(
-      "earningsContent"
-    );
-
-
-  const totalHours =
-    jobs.reduce(
-      (sum,j) =>
-        sum +
-        Number(j.hours || 0),
-      0
-    );
-
-
-  const totalEarned =
-    jobs.reduce(
-      (sum,j) =>
-        sum +
-        Number(j.hours || 0) *
-        Number(j.rate || 0),
-      0
-    );
-
-
-  area.innerHTML = `
-
-    <div class="setting-card">
-
-      <h3>Total hours</h3>
-
-      <div style="
-        font-size:38px;
-        font-weight:800;
-      ">
-        ${totalHours.toFixed(2)}h
-      </div>
-
-    </div>
-
-
-    <div class="setting-card">
-
-      <h3>Total earnings</h3>
-
-      <div style="
-        font-size:38px;
-        font-weight:800;
-      ">
-        ${money(totalEarned)}
-      </div>
-
-    </div>
-
-
-    <div class="setting-card">
-
-      <h3>Active clients</h3>
-
-      <div style="
-        font-size:38px;
-        font-weight:800;
-      ">
-        ${clients.length}
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================================================
-   CLIENT MODAL
-   ========================================================= */
-
-function openClientModal(id){
-
-  document
-    .getElementById(
-      "clientModal"
-    )
-    .classList.add("open");
-
-
-  if(id){
-
-    const c =
-      clientById(id);
-
-    if(!c) return;
-
-
-    document.getElementById(
-      "clientModalTitle"
-    ).textContent =
-      "Edit Client";
-
-
-    document.getElementById(
-      "clientId"
-    ).value =
-      c.id;
-
-
-    document.getElementById(
-      "clientName"
-    ).value =
-      c.name;
-
-
-    document.getElementById(
-      "clientType"
-    ).value =
-      c.type;
-
-
-    document.getElementById(
-      "clientRate"
-    ).value =
-      c.rate;
-
-  }else{
-
-    document.getElementById(
-      "clientModalTitle"
-    ).textContent =
-      "Add Client";
-
-
-    document.getElementById(
-      "clientId"
-    ).value =
-      "";
-
-
-    document.getElementById(
-      "clientName"
-    ).value =
-      "";
-
-
-    document.getElementById(
-      "clientType"
-    ).value =
-      "Private";
-
-
-    document.getElementById(
-      "clientRate"
-    ).value =
-      settings.privateRate;
-
-  }
-
-}
-
-
-function saveClient(){
-
-  const id =
-    document.getElementById(
-      "clientId"
-    ).value;
-
-
-  const name =
-    document.getElementById(
-      "clientName"
-    ).value.trim();
-
-
-  if(!name){
-
-    alert(
-      "Please enter a client name."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    name.toLowerCase()
-      === "gill"
-  ){
-
-    alert(
-      "Gill is excluded from this app."
-    );
-
-    return;
-
-  }
-
-
-  const type =
-    document.getElementById(
-      "clientType"
-    ).value;
-
-
-  const rate =
-    Number(
-      document.getElementById(
-        "clientRate"
-      ).value
-    ) || 0;
-
-
-  if(id){
-
-    const c =
-      clientById(id);
-
-    if(c){
-
-      c.name =
-        name;
-
-      c.type =
-        type;
-
-      c.rate =
-        rate;
-
+        return;
     }
 
-  }else{
+    timer={
+        running:true,
+        clientId:id,
+        startedAt:Date.now(),
+        accumulated:0
+    };
 
-    clients.push({
+    saveTimer();
 
-      id:
-        "client-"+Date.now(),
+    closeModal();
 
-      name,
+    render();
 
-      type,
-
-      rate
-
-    });
-
-  }
-
-
-  saveAll();
-
-  closeModal(
-    "clientModal"
-  );
-
-  renderAll();
-
+    showTimer(id);
 }
 
-
-/* =========================================================
-   DELETE CLIENT
-   ========================================================= */
-
-function deleteClient(id){
-
-  const c =
-    clientById(id);
-
-  if(!c) return;
-
-
-  if(
-    !confirm(
-      `Delete ${c.name}?`
-    )
-  ){
-
-    return;
-
-  }
-
-
-  clients =
-    clients.filter(
-      x =>
-        x.id !== id
-    );
-
-
-  jobs =
-    jobs.filter(
-      j =>
-        j.clientId !== id
-    );
-
-
-  saveAll();
-
-  renderAll();
-
-}
-
-
-/* =========================================================
-   JOB MODAL
-   ========================================================= */
-
-function fillClientSelect(){
-
-  const select =
-    document.getElementById(
-      "jobClient"
-    );
-
-
-  select.innerHTML =
-    clients.map(
-      c =>
-        `<option value="${c.id}">
-          ${escapeHTML(c.name)}
-        </option>`
-    ).join("");
-
-}
-
-
-function openJobModal(id){
-
-  fillClientSelect();
-
-
-  document
-    .getElementById(
-      "jobModal"
-    )
-    .classList.add("open");
-
-
-  if(id){
-
-    const job =
-      jobs.find(
-        j =>
-          j.id === id
-      );
-
-    if(!job) return;
-
-
-    document.getElementById(
-      "jobModalTitle"
-    ).textContent =
-      "Edit Cleaning Job";
-
-
-    document.getElementById(
-      "jobId"
-    ).value =
-      job.id;
-
-
-    document.getElementById(
-      "jobClient"
-    ).value =
-      job.clientId;
-
-
-    document.getElementById(
-      "jobDay"
-    ).value =
-      job.day;
-
-
-    document.getElementById(
-      "jobDate"
-    ).value =
-      job.date || "";
-
-
-    document.getElementById(
-      "jobStart"
-    ).value =
-      job.start;
-
-
-    document.getElementById(
-      "jobEnd"
-    ).value =
-      job.end;
-
-
-    document.getElementById(
-      "jobHours"
-    ).value =
-      job.hours;
-
-
-    document.getElementById(
-      "jobRate"
-    ).value =
-      job.rate;
-
-
-    document.getElementById(
-      "jobFrequency"
-    ).value =
-      job.frequency || "weekly";
-
-
-    document.getElementById(
-      "jobNotes"
-    ).value =
-      job.notes || "";
-
-  }else{
-
-    const c =
-      clients[0];
-
-
-    document.getElementById(
-      "jobModalTitle"
-    ).textContent =
-      "Add Cleaning Job";
-
-
-    document.getElementById(
-      "jobId"
-    ).value =
-      "";
-
-
-    document.getElementById(
-      "jobClient"
-    ).value =
-      c ? c.id : "";
-
-
-    document.getElementById(
-      "jobDay"
-    ).value =
-      dayNames[
-        new Date().getDay()
-      ];
-
-
-    document.getElementById(
-      "jobDate"
-    ).value =
-      "";
-
-
-    document.getElementById(
-      "jobStart"
-    ).value =
-      "09:00";
-
-
-    document.getElementById(
-      "jobEnd"
-    ).value =
-      "12:00";
-
-
-    document.getElementById(
-      "jobHours"
-    ).value =
-      "3";
-
-
-    document.getElementById(
-      "jobRate"
-    ).value =
-      c
-        ? c.rate
-        : settings.privateRate;
-
-
-    document.getElementById(
-      "jobFrequency"
-    ).value =
-      "weekly";
-
-
-    document.getElementById(
-      "jobNotes"
-    ).value =
-      "";
-
-  }
-
-}
-
-
-function saveJob(){
-
-  const id =
-    document.getElementById(
-      "jobId"
-    ).value;
-
-
-  const clientId =
-    document.getElementById(
-      "jobClient"
-    ).value;
-
-
-  const client =
-    clientById(clientId);
-
-
-  if(!client){
-
-    alert(
-      "Please select a client."
-    );
-
-    return;
-
-  }
-
-
-  const job = {
-
-    id:
-      id ||
-      "job-"+Date.now(),
-
-    clientId,
-
-    day:
-      document.getElementById(
-        "jobDay"
-      ).value,
-
-    date:
-      document.getElementById(
-        "jobDate"
-      ).value,
-
-    start:
-      document.getElementById(
-        "jobStart"
-      ).value,
-
-    end:
-      document.getElementById(
-        "jobEnd"
-      ).value,
-
-    hours:
-      Number(
-        document.getElementById(
-          "jobHours"
-        ).value
-      ) || 0,
-
-    rate:
-      Number(
-        document.getElementById(
-          "jobRate"
-        ).value
-      ) || client.rate,
-
-    frequency:
-      document.getElementById(
-        "jobFrequency"
-      ).value,
-
-    notes:
-      document.getElementById(
-        "jobNotes"
-      ).value
-
-  };
-
-
-  if(id){
-
-    const index =
-      jobs.findIndex(
-        j =>
-          j.id === id
-      );
-
-    if(index >= 0){
-
-      jobs[index] =
-        job;
-
-    }
-
-  }else{
-
-    jobs.push(job);
-
-  }
-
-
-  saveAll();
-
-  closeModal(
-    "jobModal"
-  );
-
-  renderAll();
-
-}
-
-
-/* =========================================================
-   DELETE JOB
-   ========================================================= */
-
-function deleteJob(id){
-
-  if(
-    !confirm(
-      "Delete this cleaning job?"
-    )
-  ){
-
-    return;
-
-  }
-
-
-  jobs =
-    jobs.filter(
-      j =>
-        j.id !== id
-    );
-
-
-  saveAll();
-
-  renderAll();
-
-}
-
-
-/* =========================================================
-   EDIT HOURS
-   ========================================================= */
-
-function changeJobHours(
-  id,
-  value
-){
-
-  const job =
-    jobs.find(
-      j =>
-        j.id === id
-    );
-
-  if(!job) return;
-
-
-  job.hours =
-    Number(value) || 0;
-
-
-  saveAll();
-
-  renderAll();
-
-}
-
-
-/* =========================================================
-   TIMER
-   ========================================================= */
-
-function openTimer(){
-
-  fillTimerClients();
-
-
-  document
-    .getElementById(
-      "timerModal"
-    )
-    .classList.add("open");
-
-
-  updateTimerUI();
-
-}
-
-
-function fillTimerClients(){
-
-  const select =
-    document.getElementById(
-      "timerClient"
-    );
-
-
-  select.innerHTML =
-    clients.map(
-      c =>
-        `<option value="${c.id}">
-          ${escapeHTML(c.name)}
-        </option>`
-    ).join("");
-
-
-  if(
-    timer &&
-    timer.clientId
-  ){
-
-    select.value =
-      timer.clientId;
-
-  }
-
-}
-
-
-function startTimerFor(
-  clientId
-){
-
-  fillTimerClients();
-
-  document.getElementById(
-    "timerClient"
-  ).value =
-    clientId;
-
-  openTimer();
-
-}
-
-
-function toggleTimer(){
-
-  if(timer){
-
-    stopTimer();
-
-    return;
-
-  }
-
-
-  const clientId =
-    document.getElementById(
-      "timerClient"
-    ).value;
-
-
-  if(!clientId){
-
-    alert(
-      "Choose a client."
-    );
-
-    return;
-
-  }
-
-
-  timer = {
-
-    clientId,
-
-    startedAt:
-      Date.now()
-
-  };
-
-
-  saveAll();
-
-  updateTimerUI();
-
-}
-
+/* --------------------------------------------------
+   STOP TIMER
+-------------------------------------------------- */
 
 function stopTimer(){
 
-  if(!timer){
+    if(!timer.running){
+        return;
+    }
 
-    return;
-
-  }
-
-
-  const elapsed =
-    Date.now() -
-    Number(
-      timer.startedAt
+    var client=findClient(
+        timer.clientId
     );
 
+    if(!client){
 
-  let minutes =
-    elapsed / 60000;
+        resetTimer();
 
+        render();
 
-  if(
-    settings.rounding !==
-    "exact"
-  ){
+        return;
+    }
 
-    const step =
-      Number(
-        settings.rounding
-      );
+    var seconds=timerSeconds();
 
-    minutes =
-      Math.round(
-        minutes / step
-      ) * step;
+    /*
+       Keep exact seconds.
+       This means 6h 26m is not rounded to 6.25h.
+    */
 
-  }
+    var hours=seconds/3600;
 
+    var now=new Date();
 
-  const hours =
-    minutes / 60;
-
-
-  const client =
-    clientById(
-      timer.clientId
+    var started=new Date(
+        Number(timer.startedAt)
     );
 
+    var start=started.toLocaleTimeString(
+        "en-GB",
+        {
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    );
 
-  if(client){
+    var end=now.toLocaleTimeString(
+        "en-GB",
+        {
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    );
 
-    const now =
-      new Date();
+    var existing=data.jobs.find(
+        function(j){
 
-
-    const day =
-      dayNames[
-        now.getDay()
-      ];
-
-
-    const existing =
-      todayJobs().find(
-        j =>
-          j.clientId ===
-          client.id
-      );
-
+            return j.date===today()
+                &&
+                Number(j.clientId)
+                ===Number(client.id)
+                &&
+                j.timerSeconds>0;
+        }
+    );
 
     if(existing){
 
-      existing.hours =
-        Number(
-          existing.hours || 0
-        ) + hours;
+        existing.start=start;
+        existing.end=end;
+        existing.hours=hours;
+        existing.price=
+            hours*Number(client.rate);
+        existing.timerSeconds=seconds;
 
     }else{
 
-      jobs.push({
+        data.jobs.push({
 
-        id:
-          "timer-"+Date.now(),
+            id:Date.now(),
 
-        clientId:
-          client.id,
+            clientId:client.id,
 
-        day,
+            clientName:client.name,
 
-        date:
-          todayISO(),
+            rate:Number(client.rate),
 
-        start:
-          now.toTimeString()
-            .slice(0,5),
+            date:today(),
 
-        end:
-          now.toTimeString()
-            .slice(0,5),
+            start:start,
 
-        hours,
+            end:end,
 
-        rate:
-          client.rate,
+            hours:hours,
 
-        frequency:
-          "weekly",
+            price:
+                hours*Number(client.rate),
 
-        notes:
-          "Timer entry"
+            status:"Paid",
 
-      });
-
+            timerSeconds:seconds
+        });
     }
 
-  }
+    resetTimer();
 
+    saveData();
 
-  timer = null;
+    closeModal();
 
-  saveAll();
-
-  updateTimerUI();
-
-  renderAll();
-
+    render();
 }
 
-
-function updateTimerUI(){
-
-  const display =
-    document.getElementById(
-      "timerDisplay"
-    );
-
-  const btn =
-    document.getElementById(
-      "timerStartBtn"
-    );
-
-
-  if(!display || !btn){
-
-    return;
-
-  }
-
-
-  if(!timer){
-
-    display.textContent =
-      "00:00:00";
-
-    btn.textContent =
-      "Start timer";
-
-    return;
-
-  }
-
-
-  const elapsed =
-    Date.now() -
-    Number(
-      timer.startedAt
-    );
-
-
-  const totalSeconds =
-    Math.floor(
-      elapsed / 1000
-    );
-
-
-  const hours =
-    Math.floor(
-      totalSeconds / 3600
-    );
-
-
-  const minutes =
-    Math.floor(
-      (totalSeconds % 3600) /
-      60
-    );
-
-
-  const seconds =
-    totalSeconds % 60;
-
-
-  display.textContent =
-    String(hours)
-      .padStart(2,"0")+
-    ":"+
-    String(minutes)
-      .padStart(2,"0")+
-    ":"+
-    String(seconds)
-      .padStart(2,"0");
-
-
-  const client =
-    clientById(
-      timer.clientId
-    );
-
-
-  document.getElementById(
-    "timerClientName"
-  ).textContent =
-    client
-      ? client.name
-      : "";
-
-
-  btn.textContent =
-    "Stop & save";
-
-}
-
-
-setInterval(
-  updateTimerUI,
-  1000
-);
-
-
-/* =========================================================
-   SETTINGS
-   ========================================================= */
-
-function renderSettings(){
-
-  document.getElementById(
-    "scaleRange"
-  ).value =
-    settings.scale;
-
-
-  document.getElementById(
-    "scaleText"
-  ).textContent =
-    settings.scale+"%";
-
-
-  document.getElementById(
-    "roundingSelect"
-  ).value =
-    settings.rounding;
-
-
-  document.getElementById(
-    "agencyRate"
-  ).value =
-    settings.agencyRate;
-
-
-  document.getElementById(
-    "privateRate"
-  ).value =
-    settings.privateRate;
-
-
-  setToggle(
-    "textToggle",
-    settings.largeText
-  );
-
-  setToggle(
-    "compactToggle",
-    settings.compact
-  );
-
-  setToggle(
-    "statsToggle",
-    settings.showStats
-  );
-
-  setToggle(
-    "quickToggle",
-    settings.showQuick
-  );
-
-  setToggle(
-    "quoteToggle",
-    settings.showQuote
-  );
-
-}
-
-
-function setToggle(
-  id,
-  value
-){
-
-  const el =
-    document.getElementById(
-      id
-    );
-
-  if(!el) return;
-
-  el.classList.toggle(
-    "on",
-    Boolean(value)
-  );
-
-}
-
-
-function toggleSetting(
-  key
-){
-
-  settings[key] =
-    !settings[key];
-
-  saveAll();
-
-  renderSettings();
-
-  applySettings();
-
-}
-
-
-function updateSetting(
-  key,
-  value
-){
-
-  if(
-    key ===
-    "agencyRate" ||
-    key ===
-    "privateRate"
-  ){
-
-    settings[key] =
-      Number(value) || 0;
-
-  }else{
-
-    settings[key] =
-      value;
-
-  }
-
-
-  saveAll();
-
-  applySettings();
-
-}
-
-
-function changeScale(
-  value
-){
-
-  settings.scale =
-    Number(value);
-
-
-  document.getElementById(
-    "scaleText"
-  ).textContent =
-    value+"%";
-
-
-  saveAll();
-
-  applySettings();
-
-}
-
-
-function applySettings(){
-
-  document.body.classList.toggle(
-    "large-text",
-    settings.largeText
-  );
-
-
-  document.body.classList.toggle(
-    "compact-mode",
-    settings.compact
-  );
-
-
-  document.body.style.zoom =
-    Number(settings.scale) /
-    100;
-
-
-  const stats =
-    document.querySelector(
-      ".stats"
-    );
-
-  if(stats){
-
-    stats.style.display =
-      settings.showStats
-        ? "grid"
-        : "none";
-
-  }
-
-
-  const quickGrid =
-    document.querySelector(
-      ".quick-grid"
-    );
-
-  const quickTitle =
-    document.querySelector(
-      ".quick-title"
-    );
-
-
-  if(quickGrid){
-
-    quickGrid.style.display =
-      settings.showQuick
-        ? "grid"
-        : "none";
-
-  }
-
-
-  if(quickTitle){
-
-    quickTitle.style.display =
-      settings.showQuick
-        ? "block"
-        : "none";
-
-  }
-
-
-  const quote =
-    document.querySelector(
-      ".quote"
-    );
-
-  if(quote){
-
-    quote.style.display =
-      settings.showQuote
-        ? "flex"
-        : "none";
-
-  }
-
-}
-
-
-function resetSettings(){
-
-  if(
-    !confirm(
-      "Reset appearance settings?"
-    )
-  ){
-
-    return;
-
-  }
-
-
-  settings =
-    clone(
-      defaultSettings
-    );
-
-  saveAll();
-
-  renderSettings();
-
-  applySettings();
-
-}
-
-
-function resetSchedule(){
-
-  if(
-    !confirm(
-      "Restore the Pure Shine default schedule?"
-    )
-  ){
-
-    return;
-
-  }
-
-
-  clients =
-    clone(
-      defaultClients
-    );
-
-  jobs =
-    clone(
-      defaultJobs
-    );
-
-  saveAll();
-
-  renderAll();
-
-}
-
-
-/* =========================================================
-   BACKUP
-   ========================================================= */
-
-function exportData(){
-
-  const data = {
-
-    clients,
-
-    jobs,
-
-    settings,
-
-    exportedAt:
-      new Date().toISOString()
-
-  };
-
-
-  const blob =
-    new Blob(
-      [
-        JSON.stringify(
-          data,
-          null,
-          2
-        )
-      ],
-      {
-        type:"application/json"
-      }
-    );
-
-
-  const url =
-    URL.createObjectURL(
-      blob
-    );
-
-
-  const a =
-    document.createElement(
-      "a"
-    );
-
-  a.href =
-    url;
-
-  a.download =
-    "pure-shine-backup.json";
-
-  a.click();
-
-  URL.revokeObjectURL(
-    url
-  );
-
-}
-
-
-function importData(event){
-
-  const file =
-    event.target.files[0];
-
-  if(!file){
-
-    return;
-
-  }
-
-
-  const reader =
-    new FileReader();
-
-
-  reader.onload =
-    function(){
-
-      try{
-
-        const data =
-          JSON.parse(
-            reader.result
-          );
-
-
-        if(
-          Array.isArray(
-            data.clients
-          )
-        ){
-
-          clients =
-            data.clients.filter(
-              c =>
-                c.name &&
-                c.name
-                  .toLowerCase()
-                  !== "gill"
-            );
-
-        }
-
-
-        if(
-          Array.isArray(
-            data.jobs
-          )
-        ){
-
-          jobs =
-            data.jobs;
-
-        }
-
-
-        if(data.settings){
-
-          settings = {
-            ...defaultSettings,
-            ...data.settings
-          };
-
-        }
-
-
-        saveAll();
-
-        renderAll();
-
-        alert(
-          "Backup imported successfully."
-        );
-
-      }catch(e){
-
-        alert(
-          "The backup file is not valid."
-        );
-
-      }
-
+/* --------------------------------------------------
+   RESET TIMER
+-------------------------------------------------- */
+
+function resetTimer(){
+
+    timer={
+        running:false,
+        clientId:null,
+        startedAt:null,
+        accumulated:0
     };
 
-
-  reader.readAsText(file);
-
+    saveTimer();
 }
 
+/* --------------------------------------------------
+   HOME
+-------------------------------------------------- */
 
-/* =========================================================
-   MODALS
-   ========================================================= */
+function homePage(){
 
-function closeModal(id){
+    var todayClients=
+        data.clients.filter(
+            function(c){
+                return c.day===todayDay();
+            }
+        );
 
-  const modal =
+    todayClients.sort(
+        function(a,b){
+            return minutes(a.start)
+                -minutes(b.start);
+        }
+    );
+
+    var todayJobs=
+        data.jobs.filter(
+            function(j){
+                return j.date===today();
+            }
+        );
+
+    var totalHours=
+        todayJobs.reduce(
+            function(sum,j){
+                return sum+
+                    Number(j.hours||0);
+            },
+            0
+        );
+
+    var earned=
+        todayJobs.reduce(
+            function(sum,j){
+                return sum+
+                    Number(j.price||0);
+            },
+            0
+        );
+
+    var available=
+        todayClients.reduce(
+            function(sum,c){
+
+                return sum+
+                    duration(
+                        c.start,
+                        c.end
+                    );
+
+            },
+            0
+        );
+
+    var html="";
+
+    html+='<h1 class="greeting">Hello ✨</h1>';
+
+    html+='<div class="date">'
+        +new Date().toLocaleDateString(
+            "en-GB",
+            {
+                weekday:"long",
+                day:"numeric",
+                month:"long"
+            }
+        )
+        +"</div>";
+
+    html+='<div class="dashboard">';
+
+    html+='<div class="stat jobs">';
+    html+='<div class="stat-icon">🧹</div>';
+    html+='<div class="stat-label">Jobs</div>';
+    html+='<div class="stat-value">'
+        +todayJobs.length
+        +"</div>";
+    html+='</div>';
+
+    html+='<div class="stat hours">';
+    html+='<div class="stat-icon">⏱️</div>';
+    html+='<div class="stat-label">Hours</div>';
+    html+='<div class="stat-value">'
+        +formatDuration(totalHours)
+        +"</div>";
+    html+='</div>';
+
+    html+='<div class="stat earned">';
+    html+='<div class="stat-icon">💷</div>';
+    html+='<div class="stat-label">Earned</div>';
+    html+='<div class="stat-value">'
+        +money(earned)
+        +"</div>";
+    html+='</div>';
+
+    html+='<div class="stat available">';
+    html+='<div class="stat-icon">🌸</div>';
+    html+='<div class="stat-label">Available</div>';
+    html+='<div class="stat-value">'
+        +formatDuration(available)
+        +"</div>";
+    html+='</div>';
+
+    html+='</div>';
+
+    html+='<section class="section">';
+
+    html+='<div class="section-head">';
+    html+='<h2 class="section-title">Today\'s schedule</h2>';
+    html+='<button class="text-btn" onclick="go(\'schedule\')">See all</button>';
+    html+='</div>';
+
+    if(todayClients.length){
+
+        todayClients.forEach(
+            function(c){
+
+                var running=
+                    timer.running &&
+                    Number(timer.clientId)
+                    ===Number(c.id);
+
+                var jobToday=
+                    todayJobs.find(
+                        function(j){
+                            return Number(j.clientId)
+                                ===Number(c.id);
+                        }
+                    );
+
+                var actualHours=
+                    jobToday
+                        ?Number(jobToday.hours||0)
+                        :duration(c.start,c.end);
+
+                html+='<div class="schedule-card">';
+
+                html+='<div class="schedule-line"></div>';
+
+                html+='<div class="schedule-info">';
+
+                html+='<div class="schedule-name">'
+                    +esc(c.name)
+                    +"</div>";
+
+                html+='<div class="schedule-time">'
+                    +esc(c.start)
+                    +" – "
+                    +esc(c.end)
+                    +"</div>";
+
+                html+='</div>';
+
+                html+='<div class="schedule-actions">';
+
+                html+='<input '
+                    +'class="hours-input" '
+                    +'type="number" '
+                    +'step="0.0001" '
+                    +'value="'+Number(actualHours).toFixed(4)+'" '
+                    +'onchange="setQuickHours('+c.id+',this.value)">';
+
+                html+='<button '
+                    +'class="small-btn '
+                    +(running?"running":"")
+                    +'" '
+                    +'onclick="'
+                    +(running
+                        ?"showTimer("+c.id+")"
+                        :"startTimer("+c.id+")")
+                    +'">'
+                    +(running?"⏱":"⏱️")
+                    +"</button>";
+
+                html+='<button '
+                    +'class="small-btn pink" '
+                    +'onclick="openJobFormByClient('+c.id+')">'
+                    +"✏️"
+                    +"</button>";
+
+                html+='</div>';
+
+                html+='</div>';
+            }
+        );
+
+    }else{
+
+        html+='<div class="empty">';
+        html+='<div class="empty-icon">🌸</div>';
+        html+='No cleaning jobs scheduled today.';
+        html+='</div>';
+    }
+
+    html+='</section>';
+
+    html+='<section class="section">';
+
+    html+='<div class="section-head">';
+    html+='<h2 class="section-title">Quick actions</h2>';
+    html+='</div>';
+
+    html+='<div class="quick-grid">';
+
+    html+='<button class="quick pink" onclick="openJobForm()">';
+    html+='<span class="quick-icon">➕</span>';
+    html+='Add cleaning job';
+    html+='</button>';
+
+    html+='<button class="quick purple" onclick="openTimerSelector()">';
+    html+='<span class="quick-icon">⏱️</span>';
+    html+='Start timer';
+    html+='</button>';
+
+    html+='<button class="quick green" onclick="go(\'clients\')">';
+    html+='<span class="quick-icon">👥</span>';
+    html+='Manage clients';
+    html+='</button>';
+
+    html+='<button class="quick blue" onclick="go(\'earnings\')">';
+    html+='<span class="quick-icon">💷</span>';
+    html+='View earnings';
+    html+='</button>';
+
+    html+='</div>';
+
+    html+='</section>';
+
+    html+='<div class="quote">';
+    html+='<div class="quote-main">';
+    html+='A clean space is a happy place ♡';
+    html+='</div>';
+    html+='<div class="quote-sub">';
+    html+='Organise. Track. Shine ✨';
+    html+='</div>';
+    html+='</div>';
+
+    return html;
+}
+
+/* --------------------------------------------------
+   QUICK HOURS
+-------------------------------------------------- */
+
+function setQuickHours(clientId,value){
+
+    var client=findClient(clientId);
+
+    if(!client){
+        return;
+    }
+
+    var hours=Number(value);
+
+    if(!Number.isFinite(hours)||hours<0){
+        return;
+    }
+
+    var job=data.jobs.find(
+        function(j){
+            return j.date===today()
+                &&
+                Number(j.clientId)
+                ===Number(clientId);
+        }
+    );
+
+    if(!job){
+
+        data.jobs.push({
+
+            id:Date.now(),
+
+            clientId:client.id,
+
+            clientName:client.name,
+
+            rate:Number(client.rate),
+
+            date:today(),
+
+            start:client.start,
+
+            end:client.end,
+
+            hours:hours,
+
+            price:
+                hours*Number(client.rate),
+
+            status:"Paid",
+
+            timerSeconds:0
+        });
+
+    }else{
+
+        job.hours=hours;
+
+        job.price=
+            hours*Number(client.rate);
+    }
+
+    saveData();
+
+    render();
+}
+
+/* --------------------------------------------------
+   SCHEDULE
+-------------------------------------------------- */
+
+function schedulePage(){
+
+    var days=[
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+    ];
+
+    var html="";
+
+    html+='<div class="section-head">';
+    html+='<h2 class="section-title">Weekly Schedule</h2>';
+    html+='<button class="primary" onclick="openJobForm()">＋ Add</button>';
+    html+='</div>';
+
+    days.forEach(
+        function(day){
+
+            var clients=
+                data.clients.filter(
+                    function(c){
+                        return c.day===day;
+                    }
+                );
+
+            if(!clients.length){
+                return;
+            }
+
+            html+='<section class="section">';
+
+            html+='<h2 class="section-title" style="margin-bottom:13px">'
+                +day
+                +"</h2>";
+
+            clients.sort(
+                function(a,b){
+                    return minutes(a.start)
+                        -minutes(b.start);
+                }
+            );
+
+            clients.forEach(
+                function(c){
+
+                    var running=
+                        timer.running &&
+                        Number(timer.clientId)
+                        ===Number(c.id);
+
+                    html+='<div class="card">';
+
+                    html+='<div class="card-top">';
+
+                    html+='<div>';
+
+                    html+='<div class="card-name">'
+                        +esc(c.name)
+                        +"</div>";
+
+                    html+='<div class="card-details">';
+
+                    html+=esc(c.start)
+                        +" – "
+                        +esc(c.end)
+                        +"<br>";
+
+                    html+=c.freq==="fortnightly"
+                        ?"Every 2 weeks"
+                        :"Weekly";
+
+                    html+=" · £"
+                        +Number(c.rate)
+                        +"/hour";
+
+                    if(c.variable){
+                        html+="<br>Variable duration";
+                    }
+
+                    html+='</div>';
+
+                    html+='</div>';
+
+                    html+='<span class="badge '
+                        +(c.type==="private"
+                            ?"private"
+                            :"agency")
+                        +'">'
+                        +(c.type==="private"
+                            ?"Private"
+                            :"Agency")
+                        +"</span>";
+
+                    html+='</div>';
+
+                    html+='<div class="card-actions">';
+
+                    html+='<button class="secondary" onclick="'
+                        +(running
+                            ?"showTimer("+c.id+")"
+                            :"startTimer("+c.id+")")
+                        +'">'
+                        +(running
+                            ?"⏱️ Running"
+                            :"⏱️ Timer")
+                        +"</button>";
+
+                    html+='<button class="secondary" onclick="openJobFormByClient('+c.id+')">✏️ Job</button>';
+
+                    html+='</div>';
+
+                    html+='</div>';
+                }
+            );
+
+            html+='</section>';
+        }
+    );
+
+    return html;
+}
+
+/* --------------------------------------------------
+   CLIENTS
+-------------------------------------------------- */
+
+function clientsPage(){
+
+    var html="";
+
+    html+='<div class="section-head">';
+    html+='<h2 class="section-title">Clients 👥</h2>';
+    html+='<button class="primary" onclick="openClientForm()">＋ Add</button>';
+    html+='</div>';
+
+    if(!data.clients.length){
+
+        html+='<div class="empty">';
+        html+='<div class="empty-icon">👥</div>';
+        html+='No clients yet.';
+        html+='</div>';
+
+        return html;
+    }
+
+    data.clients.forEach(
+        function(c){
+
+            html+='<div class="card">';
+
+            html+='<div class="card-top">';
+
+            html+='<div>';
+
+            html+='<div class="card-name">'
+                +esc(c.name)
+                +"</div>";
+
+            html+='<div class="card-details">'
+                +esc(c.day)
+                +" · "
+                +esc(c.start)
+                +" – "
+                +esc(c.end)
+                +"<br>£"
+                +Number(c.rate)
+                +"/hour · "
+                +(c.freq==="fortnightly"
+                    ?"Every 2 weeks"
+                    :"Weekly")
+                +"</div>";
+
+            html+='</div>';
+
+            html+='<span class="badge '
+                +(c.type==="private"
+                    ?"private"
+                    :"agency")
+                +'">'
+                +(c.type==="private"
+                    ?"Private"
+                    :"Agency")
+                +"</span>";
+
+            html+='</div>';
+
+            if(c.variable){
+
+                html+='<div class="note">';
+                html+='Variable duration';
+                html+='</div>';
+            }
+
+            html+='<div class="card-actions">';
+
+            html+='<button class="secondary" onclick="openClientForm('+c.id+')">✏️ Edit</button>';
+
+            html+='<button class="danger" onclick="deleteClient('+c.id+')">🗑️ Delete</button>';
+
+            html+='</div>';
+
+            html+='</div>';
+        }
+    );
+
+    return html;
+}
+
+function openClientForm(id){
+
+    var editing=Boolean(id);
+
+    var client=
+        editing
+            ?findClient(id)
+            :{
+                name:"",
+                type:"private",
+                rate:18,
+                day:"Monday",
+                start:"09:00",
+                end:"12:00",
+                freq:"weekly",
+                week:"A",
+                variable:false
+            };
+
+    if(!client){
+        return;
+    }
+
+    var html="";
+
+    html+='<div class="modal-head">';
+    html+='<h2 class="modal-title">'
+        +(editing?"Edit":"Add")
+        +" Client</h2>";
+    html+='<button class="close" onclick="closeModal()">×</button>';
+    html+='</div>';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Name</label>';
+    html+='<input id="clientName" class="control" value="'+esc(client.name)+'">';
+    html+='</div>';
+
+    html+='<div class="two">';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Type</label>';
+    html+='<select id="clientType" class="control">';
+
+    html+='<option value="private" '
+        +(client.type==="private"?"selected":"")
+        +'>Private</option>';
+
+    html+='<option value="agency" '
+        +(client.type==="agency"?"selected":"")
+        +'>Agency</option>';
+
+    html+='</select>';
+    html+='</div>';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Hourly rate (£)</label>';
+    html+='<input id="clientRate" class="control" type="number" step="0.01" value="'+Number(client.rate||0)+'">';
+    html+='</div>';
+
+    html+='</div>';
+
+    html+='<div class="two">';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Day</label>';
+    html+='<select id="clientDay" class="control">';
+
+    [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+    ].forEach(
+        function(day){
+
+            html+='<option '
+                +(client.day===day?"selected":"")
+                +'>'
+                +day
+                +"</option>";
+        }
+    );
+
+    html+='</select>';
+    html+='</div>';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Frequency</label>';
+    html+='<select id="clientFreq" class="control">';
+
+    html+='<option value="weekly" '
+        +(client.freq!=="fortnightly"?"selected":"")
+        +'>Weekly</option>';
+
+    html+='<option value="fortnightly" '
+        +(client.freq==="fortnightly"?"selected":"")
+        +'>Every 2 weeks</option>';
+
+    html+='</select>';
+    html+='</div>';
+
+    html+='</div>';
+
+    html+='<div class="two">';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Start</label>';
+    html+='<input id="clientStart" class="control" type="time" value="'+esc(client.start||"09:00")+'">';
+    html+='</div>';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">End</label>';
+    html+='<input id="clientEnd" class="control" type="time" value="'+esc(client.end||"12:00")+'">';
+    html+='</div>';
+
+    html+='</div>';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Variable duration?</label>';
+    html+='<select id="clientVariable" class="control">';
+
+    html+='<option value="no" '
+        +(!client.variable?"selected":"")
+        +'>No</option>';
+
+    html+='<option value="yes" '
+        +(client.variable?"selected":"")
+        +'>Yes</option>';
+
+    html+='</select>';
+    html+='</div>';
+
+    html+='<button class="primary" style="width:100%" onclick="saveClient('+(
+        editing?id:0
+    )+')">'
+        +(editing?"Save Changes":"Add Client")
+        +" ✨</button>";
+
+    openModal(html);
+}
+
+function saveClient(id){
+
+    var name=
+        document.getElementById(
+            "clientName"
+        ).value.trim();
+
+    var type=
+        document.getElementById(
+            "clientType"
+        ).value;
+
+    var rate=
+        Number(
+            document.getElementById(
+                "clientRate"
+            ).value
+        );
+
+    var day=
+        document.getElementById(
+            "clientDay"
+        ).value;
+
+    var freq=
+        document.getElementById(
+            "clientFreq"
+        ).value;
+
+    var start=
+        document.getElementById(
+            "clientStart"
+        ).value;
+
+    var end=
+        document.getElementById(
+            "clientEnd"
+        ).value;
+
+    var variable=
+        document.getElementById(
+            "clientVariable"
+        ).value==="yes";
+
+    if(!name){
+        alert("Please enter the client name.");
+        return;
+    }
+
+    if(!start||!end||minutes(end)<=minutes(start)){
+        alert("Please enter a valid Start and End time.");
+        return;
+    }
+
+    if(!Number.isFinite(rate)||rate<0){
+        alert("Please enter a valid hourly rate.");
+        return;
+    }
+
+    if(id){
+
+        var existing=findClient(id);
+
+        if(existing){
+
+            existing.name=name;
+            existing.type=type;
+            existing.rate=rate;
+            existing.day=day;
+            existing.freq=freq;
+            existing.start=start;
+            existing.end=end;
+            existing.variable=variable;
+        }
+
+    }else{
+
+        data.clients.push({
+
+            id:Date.now(),
+
+            name:name,
+
+            type:type,
+
+            rate:rate,
+
+            day:day,
+
+            start:start,
+
+            end:end,
+
+            freq:freq,
+
+            week:"A",
+
+            variable:variable
+        });
+    }
+
+    saveData();
+
+    closeModal();
+
+    render();
+}
+
+function deleteClient(id){
+
+    var client=findClient(id);
+
+    if(!client){
+        return;
+    }
+
+    if(!confirm(
+        "Delete "+client.name+"?"
+    )){
+        return;
+    }
+
+    data.clients=
+        data.clients.filter(
+            function(c){
+                return Number(c.id)
+                    !==Number(id);
+            }
+        );
+
+    data.jobs=
+        data.jobs.filter(
+            function(j){
+                return Number(j.clientId)
+                    !==Number(id);
+            }
+        );
+
+    if(timer.running &&
+       Number(timer.clientId)===Number(id)){
+        resetTimer();
+    }
+
+    saveData();
+
+    render();
+}
+
+/* --------------------------------------------------
+   JOBS
+-------------------------------------------------- */
+
+function jobsPage(){
+
+    var html="";
+
+    html+='<div class="section-head">';
+    html+='<h2 class="section-title">Jobs 📋</h2>';
+    html+='<button class="primary" onclick="openJobForm()">＋ Add</button>';
+    html+='</div>';
+
+    if(!data.jobs.length){
+
+        html+='<div class="empty">';
+        html+='<div class="empty-icon">📋</div>';
+        html+='No jobs recorded yet.';
+        html+='</div>';
+
+        return html;
+    }
+
+    var jobs=
+        data.jobs.slice().sort(
+            function(a,b){
+
+                var dateCompare=
+                    b.date.localeCompare(
+                        a.date
+                    );
+
+                if(dateCompare!==0){
+                    return dateCompare;
+                }
+
+                return String(
+                    b.start||""
+                ).localeCompare(
+                    String(a.start||"")
+                );
+            }
+        );
+
+    jobs.forEach(
+        function(job){
+
+            var client=findClient(
+                job.clientId
+            );
+
+            var name=
+                client
+                    ?client.name
+                    :(job.clientName||"Unknown");
+
+            html+='<div class="card">';
+
+            html+='<div class="card-top">';
+
+            html+='<div>';
+
+            html+='<div class="card-name">'
+                +esc(name)
+                +"</div>";
+
+            html+='<div class="card-details">';
+
+            html+=formatDate(job.date);
+
+            if(job.start&&job.end){
+
+                html+='<br>'
+                    +esc(job.start)
+                    +" – "
+                    +esc(job.end);
+            }
+
+            html+='<br>';
+
+            html+=formatDuration(
+                Number(job.hours||0)
+            );
+
+            html+=" · "
+                +money(job.price);
+
+            html+='</div>';
+
+            html+='</div>';
+
+            html+='<span class="badge '
+                +(job.status==="Owed"
+                    ?"private"
+                    :"agency")
+                +'">'
+                +esc(job.status||"Paid")
+                +"</span>";
+
+            html+='</div>';
+
+            html+='<div class="card-actions">';
+
+            html+='<button class="secondary" onclick="editJob('+job.id+')">✏️ Edit</button>';
+
+            html+='<button class="danger" onclick="deleteJob('+job.id+')">🗑️ Delete</button>';
+
+            html+='</div>';
+
+            html+='</div>';
+        }
+    );
+
+    return html;
+}
+
+/* --------------------------------------------------
+   JOB FORM
+-------------------------------------------------- */
+
+function openJobFormByClient(clientId){
+
+    var client=findClient(clientId);
+
+    if(!client){
+        return;
+    }
+
+    var existing=data.jobs.find(
+        function(j){
+
+            return j.date===today()
+                &&
+                Number(j.clientId)
+                ===Number(clientId);
+        }
+    );
+
+    openJobForm(
+        existing||{
+            id:0,
+            clientId:client.id,
+            date:today(),
+            start:client.start,
+            end:client.end,
+            hours:duration(
+                client.start,
+                client.end
+            ),
+            price:
+                duration(
+                    client.start,
+                    client.end
+                )*Number(client.rate),
+            status:"Paid"
+        }
+    );
+}
+
+function openJobForm(job){
+
+    var editing=
+        job &&
+        Number(job.id)>0;
+
+    job=job||{
+        id:0,
+        clientId:
+            data.clients.length
+                ?data.clients[0].id
+                :"",
+        date:today(),
+        start:"09:00",
+        end:"12:00",
+        hours:3,
+        price:0,
+        status:"Paid"
+    };
+
+    var html="";
+
+    html+='<div class="modal-head">';
+    html+='<h2 class="modal-title">';
+    html+=editing
+        ?"Edit Cleaning Job"
+        :"Add Cleaning Job";
+    html+='</h2>';
+    html+='<button class="close" onclick="closeModal()">×</button>';
+    html+='</div>';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Client</label>';
+    html+='<select id="jobClient" class="control">';
+
+    data.clients.forEach(
+        function(c){
+
+            html+='<option value="'+c.id+'" '
+                +(Number(c.id)===Number(job.clientId)
+                    ?"selected"
+                    :"")
+                +'>'
+                +esc(c.name)
+                +"</option>";
+        }
+    );
+
+    html+='</select>';
+    html+='</div>';
+
+    html+='<div class="two">';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Date</label>';
+    html+='<input id="jobDate" class="control" type="date" value="'+esc(job.date||today())+'">';
+    html+='</div>';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Day</label>';
+    html+='<select id="jobDay" class="control">';
+
+    [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+    ].forEach(
+        function(day){
+
+            html+='<option '
+                +(new Date(
+                    (job.date||today())+"T12:00:00"
+                ).toLocaleDateString(
+                    "en-GB",
+                    {weekday:"long"}
+                )===day
+                    ?"selected"
+                    :"")
+                +'>'
+                +day
+                +"</option>";
+        }
+    );
+
+    html+='</select>';
+    html+='</div>';
+
+    html+='</div>';
+
+    html+='<div class="two">';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Start</label>';
+    html+='<input id="jobStart" class="control" type="time" value="'+esc(job.start||"09:00")+'">';
+    html+='</div>';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">End</label>';
+    html+='<input id="jobEnd" class="control" type="time" value="'+esc(job.end||"12:00")+'">';
+    html+='</div>';
+
+    html+='</div>';
+
+    html+='<div class="two">';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Hours</label>';
+    html+='<input id="jobHours" class="control" type="number" step="0.0001" value="">';
+    html+='<div id="jobHoursExact" class="note"></div>';
+    html+='</div>';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Rate (£/h)</label>';
+    html+='<input id="jobRate" class="control" type="number" step="0.01" value="">';
+    html+='</div>';
+
+    html+='</div>';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Payment</label>';
+    html+='<select id="jobStatus" class="control">';
+
+    html+='<option value="Paid" '
+        +(!editing||job.status==="Paid"
+            ?"selected"
+            :"")
+        +'>Paid</option>';
+
+    html+='<option value="Owed" '
+        +(editing&&job.status==="Owed"
+            ?"selected"
+            :"")
+        +'>Owed</option>';
+
+    html+='</select>';
+    html+='</div>';
+
+    html+='<button class="primary" style="width:100%" onclick="saveJob('
+        +(editing?job.id:0)
+        +')">'
+        +(editing
+            ?"Save Changes"
+            :"Save Job")
+        +" ✨</button>";
+
+    if(editing){
+
+        html+='<button class="danger" style="width:100%;margin-top:10px" onclick="deleteJob('+job.id+',true)">🗑️ Delete Job</button>';
+    }
+
+    openModal(html);
+
+    var clientSelect=
+        document.getElementById(
+            "jobClient"
+        );
+
+    var startInput=
+        document.getElementById(
+            "jobStart"
+        );
+
+    var endInput=
+        document.getElementById(
+            "jobEnd"
+        );
+
+    var hoursInput=
+        document.getElementById(
+            "jobHours"
+        );
+
+    var rateInput=
+        document.getElementById(
+            "jobRate"
+        );
+
+    var exactLabel=
+        document.getElementById(
+            "jobHoursExact"
+        );
+
+    function updateJobFromClient(){
+
+        var client=findClient(
+            Number(clientSelect.value)
+        );
+
+        if(!client){
+            return;
+        }
+
+        rateInput.value=
+            Number(client.rate);
+
+        updateJobDuration();
+    }
+
+    function updateJobDuration(){
+
+        var start=startInput.value;
+
+        var end=endInput.value;
+
+        if(
+            !start ||
+            !end ||
+            minutes(end)<=minutes(start)
+        ){
+
+            hoursInput.value="";
+
+            exactLabel.textContent=
+                "Enter a valid Start and End time.";
+
+            return;
+        }
+
+        var exact=duration(
+            start,
+            end
+        );
+
+        /*
+           Exact decimal value is stored internally.
+
+           Example:
+           09:15 -> 13:40
+           265 minutes / 60
+           = 4.416666...
+        */
+
+        hoursInput.value=
+            exact.toFixed(4);
+
+        exactLabel.textContent=
+            formatDuration(exact)
+            +" · calculated exactly from Start and End";
+    }
+
+    clientSelect.addEventListener(
+        "change",
+        updateJobFromClient
+    );
+
+    startInput.addEventListener(
+        "input",
+        updateJobDuration
+    );
+
+    endInput.addEventListener(
+        "input",
+        updateJobDuration
+    );
+
+    /*
+       Date changes automatically update Day.
+    */
+
     document.getElementById(
-      id
+        "jobDate"
+    ).addEventListener(
+        "change",
+        function(){
+
+            var d=new Date(
+                this.value+"T12:00:00"
+            );
+
+            document.getElementById(
+                "jobDay"
+            ).value=
+                d.toLocaleDateString(
+                    "en-GB",
+                    {weekday:"long"}
+                );
+        }
     );
 
-  if(modal){
+    updateJobFromClient();
+}
 
-    modal.classList.remove(
-      "open"
+/* --------------------------------------------------
+   SAVE JOB
+-------------------------------------------------- */
+
+function saveJob(id){
+
+    var clientId=
+        Number(
+            document.getElementById(
+                "jobClient"
+            ).value
+        );
+
+    var client=findClient(
+        clientId
     );
 
-  }
+    if(!client){
+        return;
+    }
 
+    var date=
+        document.getElementById(
+            "jobDate"
+        ).value;
+
+    var start=
+        document.getElementById(
+            "jobStart"
+        ).value;
+
+    var end=
+        document.getElementById(
+            "jobEnd"
+        ).value;
+
+    var hours=
+        duration(
+            start,
+            end
+        );
+
+    var status=
+        document.getElementById(
+            "jobStatus"
+        ).value;
+
+    if(
+        !date ||
+        !start ||
+        !end ||
+        minutes(end)<=minutes(start)
+    ){
+
+        alert(
+            "Please enter a valid Start and End time."
+        );
+
+        return;
+    }
+
+    /*
+       IMPORTANT:
+       Never use the manually displayed rounded value
+       to calculate the money.
+
+       Always calculate directly from Start and End.
+    */
+
+    var exactMinutes=
+        durationMinutes(
+            start,
+            end
+        );
+
+    var exactHours=
+        exactMinutes/60;
+
+    var price=
+        exactHours*
+        Number(client.rate);
+
+    if(id){
+
+        var job=data.jobs.find(
+            function(j){
+                return Number(j.id)
+                    ===Number(id);
+            }
+        );
+
+        if(job){
+
+            job.clientId=
+                client.id;
+
+            job.clientName=
+                client.name;
+
+            job.rate=
+                Number(client.rate);
+
+            job.date=date;
+
+            job.start=start;
+
+            job.end=end;
+
+            job.hours=
+                exactHours;
+
+            job.price=
+                price;
+
+            job.status=
+                status;
+        }
+
+    }else{
+
+        data.jobs.push({
+
+            id:Date.now(),
+
+            clientId:
+                client.id,
+
+            clientName:
+                client.name,
+
+            rate:
+                Number(client.rate),
+
+            date:
+                date,
+
+            start:
+                start,
+
+            end:
+                end,
+
+            /*
+               EXACT decimal hours
+            */
+
+            hours:
+                exactHours,
+
+            /*
+               EXACT earnings
+            */
+
+            price:
+                price,
+
+            status:
+                status,
+
+            timerSeconds:
+                0
+        });
+    }
+
+    saveData();
+
+    closeModal();
+
+    render();
 }
 
+/* --------------------------------------------------
+   EDIT / DELETE JOB
+-------------------------------------------------- */
 
-/* =========================================================
-   RENDER ALL
-   ========================================================= */
+function editJob(id){
 
-function renderAll(){
+    var job=data.jobs.find(
+        function(j){
+            return Number(j.id)
+                ===Number(id);
+        }
+    );
 
-  renderHome();
-
-  renderSchedule();
-
-  renderClients();
-
-  renderJobs();
-
-  renderEarnings();
-
-  renderSettings();
-
-  applySettings();
-
+    if(job){
+        openJobForm(job);
+    }
 }
 
+function deleteJob(id,fromModal){
 
-/* =========================================================
-   START
-   ========================================================= */
+    if(!confirm(
+        "Delete this cleaning job?"
+    )){
+        return;
+    }
 
-loadData();
+    data.jobs=
+        data.jobs.filter(
+            function(j){
+                return Number(j.id)
+                    !==Number(id);
+            }
+        );
 
-renderAll();
+    saveData();
+
+    if(fromModal){
+        closeModal();
+    }
+
+    render();
+}
+
+/* --------------------------------------------------
+   EARNINGS
+-------------------------------------------------- */
+
+function earningsPage(){
+
+    var total=0;
+    var paid=0;
+    var owed=0;
+    var hours=0;
+
+    data.jobs.forEach(
+        function(j){
+
+            total+=Number(
+                j.price||0
+            );
+
+            hours+=Number(
+                j.hours||0
+            );
+
+            if(j.status==="Owed"){
+                owed+=Number(
+                    j.price||0
+                );
+            }else{
+                paid+=Number(
+                    j.price||0
+                );
+            }
+        }
+    );
+
+    var html="";
+
+    html+='<div class="section-head">';
+    html+='<h2 class="section-title">Earnings</h2>';
+    html+='</div>';
+
+    html+='<div class="earnings-grid">';
+
+    html+='<div class="earning green">';
+    html+='<div class="earning-label">Total</div>';
+    html+='<div class="earning-value">'
+        +money(total)
+        +"</div>";
+    html+='</div>';
+
+    html+='<div class="earning pink">';
+    html+='<div class="earning-label">Paid</div>';
+    html+='<div class="earning-value">'
+        +money(paid)
+        +"</div>";
+    html+='</div>';
+
+    html+='<div class="earning yellow">';
+    html+='<div class="earning-label">Owed</div>';
+    html+='<div class="earning-value">'
+        +money(owed)
+        +"</div>";
+    html+='</div>';
+
+    html+='<div class="earning purple">';
+    html+='<div class="earning-label">Hours</div>';
+    html+='<div class="earning-value">'
+        +formatDuration(hours)
+        +"</div>";
+    html+='</div>';
+
+    html+='</div>';
+
+    html+='<section class="section">';
+
+    html+='<h2 class="section-title" style="margin-bottom:13px">';
+    html+='Recent jobs';
+    html+='</h2>';
+
+    if(data.jobs.length){
+
+        var jobs=
+            data.jobs.slice().sort(
+                function(a,b){
+                    return b.date.localeCompare(
+                        a.date
+                    );
+                }
+            );
+
+        jobs.forEach(
+            function(job){
+
+                var client=findClient(
+                    job.clientId
+                );
+
+                var name=
+                    client
+                        ?client.name
+                        :(job.clientName||"Unknown");
+
+                html+='<div class="card">';
+
+                html+='<div class="card-name">'
+                    +esc(name)
+                    +"</div>";
+
+                html+='<div class="card-details">';
+
+                html+=formatDate(
+                    job.date
+                );
+
+                if(job.start&&job.end){
+
+                    html+='<br>'
+                        +esc(job.start)
+                        +" – "
+                        +esc(job.end);
+                }
+
+                html+='<br>'
+                    +formatDuration(
+                        Number(job.hours||0)
+                    )
+                    +" · "
+                    +money(job.price);
+
+                html+='</div>';
+
+                html+='<div class="card-actions">';
+
+                html+='<button class="secondary" onclick="editJob('+job.id+')">✏️ Edit</button>';
+
+                html+='<button class="danger" onclick="deleteJob('+job.id+')">🗑️ Delete</button>';
+
+                html+='</div>';
+
+                html+='</div>';
+            }
+        );
+
+    }else{
+
+        html+='<div class="empty">';
+        html+='<div class="empty-icon">💷</div>';
+        html+='No earnings yet.';
+        html+='</div>';
+    }
+
+    html+='</section>';
+
+    return html;
+}
+
+/* --------------------------------------------------
+   TIMER SELECTOR
+-------------------------------------------------- */
+
+function openTimerSelector(){
+
+    if(timer.running){
+
+        showTimer(
+            timer.clientId
+        );
+
+        return;
+    }
+
+    var html="";
+
+    html+='<div class="modal-head">';
+    html+='<h2 class="modal-title">Start Timer ⏱️</h2>';
+    html+='<button class="close" onclick="closeModal()">×</button>';
+    html+='</div>';
+
+    html+='<div class="form-group">';
+    html+='<label class="label">Choose client</label>';
+    html+='<select id="timerClient" class="control">';
+    html+='<option value="">Select client</option>';
+
+    data.clients.forEach(
+        function(c){
+
+            html+='<option value="'+c.id+'">'
+                +esc(c.name)
+                +"</option>";
+        }
+    );
+
+    html+='</select>';
+    html+='</div>';
+
+    html+='<button class="primary" style="width:100%" onclick="startSelectedTimer()">▶ Start Timer</button>';
+
+    openModal(html);
+}
+
+function startSelectedTimer(){
+
+    var id=
+        Number(
+            document.getElementById(
+                "timerClient"
+            ).value
+        );
+
+    if(!id){
+
+        alert(
+            "Please choose a client."
+        );
+
+        return;
+    }
+
+    startTimer(id);
+}
+
+/* --------------------------------------------------
+   TIMER DISPLAY
+-------------------------------------------------- */
+
+function showTimer(id){
+
+    var client=findClient(id);
+
+    if(!client){
+        return;
+    }
+
+    var html="";
+
+    html+='<div class="modal-head">';
+
+    html+='<h2 class="modal-title">'
+        +esc(client.name)
+        +" ⏱️</h2>";
+
+    html+='<button class="close" onclick="closeModal()">×</button>';
+
+    html+='</div>';
+
+    html+='<div class="timer-box">';
+
+    html+='<div id="timerDisplay" class="timer-display">'
+        +timerText(timerSeconds())
+        +"</div>";
+
+    html+='<button class="primary" style="width:100%;background:#766c82" onclick="stopTimer()">⏹ Stop & Save</button>';
+
+    html+='<div class="timer-info">';
+
+    html+='Current hours';
+
+    html+='<strong id="timerHours" class="timer-big">'
+        +formatDuration(timerHours())
+        +"</strong>";
+
+    html+='Current earnings';
+
+    html+='<strong id="timerMoney" class="timer-big">'
+        +money(
+            timerHours()*
+            Number(client.rate)
+        )
+        +"</strong>";
+
+    html+='</div>';
+
+    html+='</div>';
+
+    openModal(html);
+}
+
+/* --------------------------------------------------
+   MODAL
+-------------------------------------------------- */
+
+function openModal(content){
+
+    closeModal();
+
+    var bg=document.createElement(
+        "div"
+    );
+
+    bg.id="modal";
+
+    bg.className="modal-bg";
+
+    var box=document.createElement(
+        "div"
+    );
+
+    box.className="modal";
+
+    box.innerHTML=content;
+
+    box.onclick=function(e){
+        e.stopPropagation();
+    };
+
+    bg.appendChild(box);
+
+    bg.onclick=function(){
+        closeModal();
+    };
+
+    document.body.appendChild(bg);
+}
+
+function closeModal(){
+
+    var old=
+        document.getElementById(
+            "modal"
+        );
+
+    if(old){
+        old.remove();
+    }
+}
+
+/* --------------------------------------------------
+   NAVIGATION
+-------------------------------------------------- */
+
+var currentPage="home";
+
+function go(page){
+
+    currentPage=page;
+
+    closeModal();
+
+    render();
+}
+
+function navigation(){
+
+    var html=
+        '<nav class="bottom-nav">';
+
+    html+=navButton(
+        "home",
+        "🏠",
+        "Home"
+    );
+
+    html+=navButton(
+        "schedule",
+        "📅",
+        "Schedule"
+    );
+
+    html+=navButton(
+        "clients",
+        "👥",
+        "Clients"
+    );
+
+    html+=navButton(
+        "jobs",
+        "📋",
+        "Jobs"
+    );
+
+    html+=navButton(
+        "earnings",
+        "💷",
+        "Earnings"
+    );
+
+    html+="</nav>";
+
+    return html;
+}
+
+function navButton(
+    page,
+    icon,
+    label
+){
+
+    return '<button class="nav '
+        +(currentPage===page
+            ?"active"
+            :"")
+        +'" onclick="go(\''
+        +page
+        +'\')"><span class="nav-icon">'
+        +icon
+        +"</span>"
+        +label
+        +"</button>";
+}
+
+/* --------------------------------------------------
+   RENDER
+-------------------------------------------------- */
+
+function render(){
+
+    var content="";
+
+    if(currentPage==="home"){
+        content=homePage();
+    }
+
+    if(currentPage==="schedule"){
+        content=schedulePage();
+    }
+
+    if(currentPage==="clients"){
+        content=clientsPage();
+    }
+
+    if(currentPage==="jobs"){
+        content=jobsPage();
+    }
+
+    if(currentPage==="earnings"){
+        content=earningsPage();
+    }
+
+    var runningClient=
+        timer.running
+            ?findClient(timer.clientId)
+            :null;
+
+    var timerBanner=
+        runningClient
+            ?'<div class="timer-banner" onclick="showTimer('
+                +runningClient.id
+                +')">'
+                +'<span>⏱️ '
+                +esc(runningClient.name)
+                +'</span>'
+                +'<strong id="bannerTimer">'
+                +timerText(timerSeconds())
+                +'</strong>'
+                +'<span>Tap to open</span>'
+                +'</div>'
+            :"";
+
+    document.getElementById(
+        "app"
+    ).innerHTML=
+
+        '<div class="app">'
+
+        +timerBanner
+
+        +'<header class="header">'
+
+        +'<div class="brand">'
+
+        +'<img id="mainLogo" class="logo" src="icon.png" alt="Pure Shine">'
+
+        +'<div id="logoFallback" class="logo-fallback">✨</div>'
+
+        +'<div>'
+        +'<div class="brand-title">Pure Shine</div>'
+        +'<div class="brand-subtitle">Cleaning Manager ✨</div>'
+        +'</div>'
+
+        +'</div>'
+
+        +'<div class="header-actions">'
+
+        +'<button class="header-btn timer" onclick="openTimerSelector()">⏱️</button>'
+
+        +'<button class="header-btn" onclick="openJobForm()">+</button>'
+
+        +'</div>'
+
+        +'</header>'
+
+        +'<main class="content">'
+        +content
+        +'</main>'
+
+        +'</div>'
+
+        +navigation();
+
+    var logo=
+        document.getElementById(
+            "mainLogo"
+        );
+
+    var fallback=
+        document.getElementById(
+            "logoFallback"
+        );
+
+    if(logo){
+
+        logo.onerror=function(){
+
+            logo.style.display="none";
+
+            if(fallback){
+                fallback.style.display="flex";
+            }
+        };
+    }
+}
+
+/* --------------------------------------------------
+   TIMER UI UPDATE
+-------------------------------------------------- */
+
+setInterval(
+    function(){
+
+        if(!timer.running){
+            return;
+        }
+
+        /*
+           Date.now() recalculates the true elapsed time
+           every second. If Safari pauses JavaScript,
+           it catches up when JavaScript runs again.
+        */
+
+        var seconds=
+            timerSeconds();
+
+        var display=
+            document.getElementById(
+                "timerDisplay"
+            );
+
+        var hours=
+            document.getElementById(
+                "timerHours"
+            );
+
+        var moneyBox=
+            document.getElementById(
+                "timerMoney"
+            );
+
+        var banner=
+            document.getElementById(
+                "bannerTimer"
+            );
+
+        if(display){
+
+            display.textContent=
+                timerText(seconds);
+        }
+
+        if(banner){
+
+            banner.textContent=
+                timerText(seconds);
+        }
+
+        if(hours){
+
+            hours.textContent=
+                formatDuration(
+                    seconds/3600
+                );
+        }
+
+        var client=
+            findClient(
+                timer.clientId
+            );
+
+        if(moneyBox&&client){
+
+            moneyBox.textContent=
+                money(
+                    (seconds/3600)*
+                    Number(client.rate)
+                );
+        }
+
+    },
+    1000
+);
+
+/*
+   Save the timer before the page becomes hidden.
+   The actual elapsed time remains based on Date.now().
+*/
+
+window.addEventListener(
+    "pagehide",
+    function(){
+
+        if(timer.running){
+            saveTimer();
+        }
+    }
+);
+
+window.addEventListener(
+    "beforeunload",
+    function(){
+
+        if(timer.running){
+            saveTimer();
+        }
+    }
+);
+
+/*
+   When the app becomes visible again,
+   immediately calculate the true elapsed time.
+*/
+
+document.addEventListener(
+    "visibilitychange",
+    function(){
+
+        if(
+            !document.hidden &&
+            timer.running
+        ){
+
+            var seconds=
+                timerSeconds();
+
+            var display=
+                document.getElementById(
+                    "timerDisplay"
+                );
+
+            var banner=
+                document.getElementById(
+                    "bannerTimer"
+                );
+
+            var hours=
+                document.getElementById(
+                    "timerHours"
+                );
+
+            var moneyBox=
+                document.getElementById(
+                    "timerMoney"
+                );
+
+            if(display){
+                display.textContent=
+                    timerText(seconds);
+            }
+
+            if(banner){
+                banner.textContent=
+                    timerText(seconds);
+            }
+
+            if(hours){
+                hours.textContent=
+                    formatDuration(
+                        seconds/3600
+                    );
+            }
+
+            var client=
+                findClient(
+                    timer.clientId
+                );
+
+            if(moneyBox&&client){
+
+                moneyBox.textContent=
+                    money(
+                        (seconds/3600)*
+                        Number(client.rate)
+                    );
+            }
+        }
+    }
+);
+
+/*
+   If iOS wakes the page after a longer
+   period in the background, render again.
+*/
+
+document.addEventListener(
+    "resume",
+    function(){
+
+        if(timer.running){
+            render();
+        }
+    }
+);
+
+render();
 
 </script>
 
