@@ -1,672 +1,1399 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#f4c6da">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="light">
-<link rel="apple-touch-icon" href="icon.png">
 
-<title>Pure Shine Cleaning Manager ✨</title>
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width,
+    initial-scale=1,
+    maximum-scale=1,
+    user-scalable=no,
+    viewport-fit=cover"
+>
+
+<meta
+    name="theme-color"
+    content="#f4c6da"
+>
+
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="light"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="icon.png"
+>
+
+<title>
+Pure Shine Cleaning Manager ✨
+</title>
+
 
 <style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
+html,
+body{
+
     margin:0;
     padding:0;
+
     width:100%;
     min-height:100%;
+
     overflow-x:hidden;
+
     -webkit-text-size-adjust:100%;
 }
 
 body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
     color:#343348;
+
     background:
-        linear-gradient(rgba(249,246,251,.86),rgba(249,246,251,.94)),
-        url("background.jpg") center/cover fixed no-repeat;
+        linear-gradient(
+            rgba(249,246,251,.86),
+            rgba(249,246,251,.94)
+        ),
+        url("background.jpg")
+        center/cover
+        fixed
+        no-repeat;
 }
 
-button,input,select,textarea{
+button,
+input,
+select,
+textarea{
+
     font:inherit;
 }
 
-input,select,textarea{
-    font-size:16px!important;
+input,
+select,
+textarea{
+
+    font-size:16px !important;
 }
 
 button{
+
     border:0;
+
     touch-action:manipulation;
 }
 
-.app{
+
+/* =====================================================
+   WELCOME / LOGIN PAGE
+===================================================== */
+
+#welcomeScreen{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:99999;
+
     width:100%;
+    height:100dvh;
+
+    background-image:
+        url("splash.jpg");
+
+    background-size:cover;
+
+    background-position:center;
+
+    background-repeat:no-repeat;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    justify-content:center;
+
+    padding:
+        0
+        0
+        calc(
+            18px +
+            env(safe-area-inset-bottom)
+        );
+}
+
+
+/*
+   The actual Get Started and Log in text
+   are already part of splash.jpg.
+
+   These two transparent buttons sit over
+   those areas, so there is no duplicated text.
+*/
+
+.welcome-buttons{
+
+    width:100%;
+
+    max-width:650px;
+
+    height:150px;
+
+    position:relative;
+}
+
+.welcome-start{
+
+    position:absolute;
+
+    left:8%;
+
+    right:8%;
+
+    bottom:72px;
+
+    height:60px;
+
+    background:transparent;
+
+    border-radius:35px;
+
+    cursor:pointer;
+}
+
+.welcome-login{
+
+    position:absolute;
+
+    left:20%;
+
+    right:20%;
+
+    bottom:0;
+
+    height:45px;
+
+    background:transparent;
+
+    cursor:pointer;
+}
+
+
+/* =====================================================
+   APP
+===================================================== */
+
+.app{
+
+    width:100%;
+
     min-height:100vh;
+
     padding-bottom:90px;
 }
 
-/* HEADER */
+
+/* =====================================================
+   HEADER
+===================================================== */
 
 .header{
+
     position:sticky;
+
     top:0;
+
     z-index:50;
+
     width:100%;
+
     min-height:105px;
+
     padding:14px 17px;
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
-    background:rgba(255,255,255,.97);
-    border-bottom:1px solid #eee5ed;
-    backdrop-filter:blur(15px);
+
+    background:
+        rgba(255,255,255,.97);
+
+    border-bottom:
+        1px solid #eee5ed;
+
+    backdrop-filter:
+        blur(15px);
 }
 
 .brand{
+
     display:flex;
+
     align-items:center;
+
     gap:12px;
+
     min-width:0;
 }
 
 .logo{
+
     width:65px;
+
     height:65px;
+
     flex:0 0 65px;
+
     object-fit:cover;
+
     border-radius:20px;
-    box-shadow:0 6px 18px rgba(170,80,120,.18);
+
+    box-shadow:
+        0 6px 18px
+        rgba(170,80,120,.18);
 }
 
 .logo-fallback{
+
     display:none;
+
     width:65px;
+
     height:65px;
+
     border-radius:20px;
+
     background:#f2b8d0;
+
     align-items:center;
+
     justify-content:center;
+
     font-size:30px;
 }
 
 .brand-title{
+
     font-size:26px;
+
     font-weight:850;
+
     white-space:nowrap;
 }
 
 .brand-subtitle{
+
     color:#8b879c;
+
     font-size:14px;
+
     margin-top:3px;
 }
 
 .header-actions{
+
     display:flex;
+
     gap:8px;
 }
 
 .header-btn{
+
     width:52px;
+
     height:52px;
+
     border-radius:18px;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     font-size:24px;
+
     background:#efabc8;
+
     color:white;
 }
 
 .header-btn.timer{
+
     background:#e5daf7;
+
     color:#655b7d;
 }
 
-/* CONTENT */
+
+/* =====================================================
+   CONTENT
+===================================================== */
 
 .content{
+
     width:100%;
+
     max-width:760px;
+
     margin:auto;
-    padding:25px 18px 30px;
+
+    padding:
+        25px
+        18px
+        30px;
 }
 
 .greeting{
+
     margin:0;
+
     font-size:39px;
+
     line-height:1;
 }
 
 .date{
+
     color:#8b879c;
+
     margin-top:8px;
+
     font-size:16px;
 }
 
-/* DASHBOARD */
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
 
 .dashboard{
+
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap:12px;
+
     margin-top:25px;
 }
 
 .stat{
+
     min-height:135px;
+
     padding:17px;
+
     border-radius:25px;
 }
 
-.stat.jobs{background:#f8dce8}
-.stat.hours{background:#e9e0f8}
-.stat.earned{background:#ddf1e6}
-.stat.available{background:#fff0c9}
+.stat.jobs{
+    background:#f8dce8;
+}
+
+.stat.hours{
+    background:#e9e0f8;
+}
+
+.stat.earned{
+    background:#ddf1e6;
+}
+
+.stat.available{
+    background:#fff0c9;
+}
 
 .stat-icon{
+
     font-size:25px;
 }
 
 .stat-label{
+
     color:#777388;
+
     font-size:14px;
+
     margin-top:7px;
 }
 
 .stat-value{
+
     font-size:26px;
+
     font-weight:850;
+
     margin-top:3px;
 }
 
-/* TODAY */
+
+/* =====================================================
+   SECTIONS
+===================================================== */
 
 .section{
+
     margin-top:28px;
 }
 
+.section-head{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-bottom:15px;
+}
+
 .section-title{
+
     margin:0;
+
     font-size:26px;
+
     font-weight:850;
 }
 
+
+/* =====================================================
+   TODAY
+===================================================== */
+
 .today-card{
+
     background:white;
+
     border-radius:22px;
-    padding:17px 18px;
+
+    padding:
+        17px
+        18px;
+
     margin-top:10px;
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
-    box-shadow:0 6px 20px rgba(60,50,75,.07);
+
+    box-shadow:
+        0 6px 20px
+        rgba(60,50,75,.07);
 }
 
 .today-client{
+
     font-size:20px;
+
     font-weight:850;
 }
 
 .today-standard{
+
     color:#817b8d;
+
     margin-top:4px;
+
     font-size:15px;
 }
 
 .today-standard strong{
+
     color:#a9577e;
 }
 
-/* QUICK ACTIONS */
+
+/* =====================================================
+   QUICK ACTIONS
+===================================================== */
 
 .quick-grid{
+
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap:12px;
 }
 
 .quick{
+
     min-height:105px;
+
     padding:18px;
+
     border-radius:23px;
+
     text-align:left;
+
     font-weight:800;
+
     color:#403c51;
 }
 
-.quick.pink{background:#f8dce8}
-.quick.purple{background:#e9e0f8}
+.quick.pink{
+    background:#f8dce8;
+}
+
+.quick.purple{
+    background:#e9e0f8;
+}
 
 .quick-icon{
+
     display:block;
+
     font-size:29px;
+
     margin-bottom:9px;
 }
 
-/* TIMER BANNER */
+
+/* =====================================================
+   TIMER BAR
+===================================================== */
 
 .timer-banner{
+
     position:sticky;
+
     top:105px;
+
     z-index:40;
+
     width:100%;
+
     min-height:46px;
-    padding:9px 14px;
+
+    padding:
+        9px
+        14px;
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     gap:8px;
-    background:linear-gradient(90deg,#d88eb2,#aa8fcf);
+
+    background:
+        linear-gradient(
+            90deg,
+            #d88eb2,
+            #aa8fcf
+        );
+
     color:white;
+
     font-size:13px;
+
     font-weight:750;
 }
 
 .timer-banner strong{
+
     font-size:16px;
+
     letter-spacing:1px;
 }
 
-/* BOTTOM NAV */
+
+/* =====================================================
+   BOTTOM NAV
+===================================================== */
 
 .bottom-nav{
+
     position:fixed;
+
     left:0;
+
     right:0;
+
     bottom:0;
+
     z-index:100;
+
     height:80px;
-    padding-bottom:env(safe-area-inset-bottom);
+
+    padding-bottom:
+        env(safe-area-inset-bottom);
+
     display:grid;
-    grid-template-columns:repeat(5,1fr);
-    background:rgba(255,255,255,.98);
-    border-top:1px solid #e8e1e9;
+
+    grid-template-columns:
+        repeat(5,1fr);
+
+    background:
+        rgba(255,255,255,.98);
+
+    border-top:
+        1px solid #e8e1e9;
 }
 
 .nav{
+
     background:none;
+
     color:#8a8698;
+
     display:flex;
+
     flex-direction:column;
+
     justify-content:center;
+
     align-items:center;
+
     gap:3px;
+
     font-size:11px;
+
     font-weight:800;
 }
 
 .nav-icon{
+
     font-size:21px;
 }
 
 .nav.active{
+
     color:#b45d87;
 }
 
-/* BUTTONS */
+
+/* =====================================================
+   BUTTONS
+===================================================== */
 
 .primary{
+
     min-height:47px;
-    padding:0 18px;
+
+    padding:
+        0
+        18px;
+
     border-radius:15px;
+
     background:#df99ba;
+
     color:white;
+
     font-weight:800;
 }
 
 .secondary{
+
     min-height:44px;
-    padding:0 14px;
+
+    padding:
+        0
+        14px;
+
     border-radius:14px;
+
     background:#eee7f8;
+
     color:#665a83;
+
     font-weight:800;
 }
 
 .danger{
+
     min-height:44px;
-    padding:0 14px;
+
+    padding:
+        0
+        14px;
+
     border-radius:14px;
+
     background:#ffe8ee;
+
     color:#bd5473;
+
     font-weight:800;
 }
 
-/* CALENDAR */
+
+/* =====================================================
+   CALENDAR
+===================================================== */
 
 .calendar{
+
     margin-top:15px;
 }
 
 .calendar-header{
+
     display:grid;
-    grid-template-columns:repeat(7,1fr);
+
+    grid-template-columns:
+        repeat(7,1fr);
+
     gap:4px;
+
     margin-bottom:7px;
 }
 
 .calendar-day-name{
+
     text-align:center;
+
     color:#8b8797;
+
     font-size:11px;
+
     font-weight:800;
 }
 
 .calendar-grid{
+
     display:grid;
-    grid-template-columns:repeat(7,1fr);
+
+    grid-template-columns:
+        repeat(7,1fr);
+
     gap:5px;
 }
 
 .calendar-cell{
+
     min-height:115px;
+
     padding:7px 5px;
+
     border-radius:14px;
-    background:rgba(255,255,255,.86);
-    border:1px solid #eee8ef;
+
+    background:
+        rgba(255,255,255,.86);
+
+    border:
+        1px solid #eee8ef;
+
     overflow:hidden;
 }
 
 .calendar-cell.today{
-    border:2px solid #e0a1be;
+
+    border:
+        2px solid #e0a1be;
+
     background:#fff6fa;
 }
 
 .calendar-date{
+
     font-size:12px;
+
     font-weight:850;
+
     color:#8d8797;
+
     margin-bottom:6px;
 }
 
 .calendar-client{
+
     padding:7px 4px;
+
     border-radius:10px;
+
     background:#f3d9e5;
+
     color:#5a4350;
+
     font-size:11px;
+
     line-height:1.25;
+
     font-weight:800;
+
     word-break:break-word;
+
     margin-bottom:4px;
 }
 
 .calendar-time{
+
     margin-top:3px;
+
     font-size:9px;
+
     color:#8b7580;
+
     font-weight:600;
 }
 
-/* CARDS */
+
+/* =====================================================
+   CARDS
+===================================================== */
 
 .card{
+
     background:white;
+
     padding:18px;
+
     border-radius:23px;
+
     margin-bottom:12px;
-    box-shadow:0 7px 22px rgba(60,50,75,.06);
+
+    box-shadow:
+        0 7px 22px
+        rgba(60,50,75,.06);
 }
 
 .card-top{
+
     display:flex;
+
     justify-content:space-between;
+
     gap:10px;
 }
 
 .card-name{
+
     font-size:20px;
+
     font-weight:850;
 }
 
 .card-details{
+
     color:#858094;
+
     font-size:14px;
+
     line-height:1.65;
+
     margin-top:6px;
 }
 
 .card-actions{
+
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap:8px;
+
     margin-top:14px;
 }
 
-/* JOB HISTORY */
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:
+        6px
+        10px;
+
+    border-radius:12px;
+
+    background:#eee4f6;
+
+    color:#665b7d;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    height:max-content;
+}
+
+
+/* =====================================================
+   JOB HISTORY
+===================================================== */
 
 .client-history{
+
     margin-top:17px;
 }
 
 .client-history-title{
-    padding:14px 16px;
+
+    padding:
+        14px
+        16px;
+
     border-radius:18px;
+
     background:#f5e2eb;
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     font-weight:850;
 }
 
 .client-total{
+
     color:#a9577e;
 }
 
 .history-job{
+
     background:white;
+
     border-radius:18px;
+
     padding:15px;
+
     margin-top:7px;
-    box-shadow:0 5px 17px rgba(60,50,75,.05);
+
+    box-shadow:
+        0 5px 17px
+        rgba(60,50,75,.05);
 }
 
 .history-row{
+
     display:flex;
+
     justify-content:space-between;
+
     gap:10px;
 }
 
 .history-date{
+
     font-weight:800;
 }
 
 .history-money{
+
     font-size:19px;
+
     font-weight:850;
+
     color:#ad527c;
 }
 
 .history-hours{
+
     color:#817b8d;
+
     font-size:14px;
+
     margin-top:5px;
 }
 
 .exact-time{
+
     color:#5e586b;
+
     font-size:13px;
+
     margin-top:3px;
 }
 
-/* MODAL */
+
+/* =====================================================
+   MODAL
+===================================================== */
 
 .modal-bg{
+
     position:fixed;
+
     inset:0;
+
     z-index:500;
+
     display:flex;
+
     align-items:flex-end;
+
     justify-content:center;
-    background:rgba(35,29,44,.42);
+
+    background:
+        rgba(35,29,44,.42);
 }
 
 .modal{
+
     width:100%;
+
     max-width:620px;
+
     max-height:93vh;
+
     overflow-y:auto;
+
     -webkit-overflow-scrolling:touch;
-    padding:23px 20px 40px;
-    border-radius:30px 30px 0 0;
+
+    padding:
+        23px
+        20px
+        40px;
+
+    border-radius:
+        30px
+        30px
+        0
+        0;
+
     background:#fbf9fc;
 }
 
 .modal-head{
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     margin-bottom:20px;
 }
 
 .modal-title{
+
     margin:0;
+
     font-size:27px;
+
     font-weight:850;
 }
 
 .close{
+
     width:43px;
+
     height:43px;
+
     border-radius:50%;
+
     background:#eee8f1;
+
     font-size:24px;
+
     color:#595469;
 }
 
 .form-group{
+
     margin-bottom:15px;
 }
 
 .label{
+
     display:block;
+
     margin-bottom:7px;
+
     color:#777287;
+
     font-size:13px;
+
     font-weight:800;
 }
 
 .control{
+
     width:100%;
+
     min-height:51px;
-    padding:10px 13px;
-    border:1px solid #ddd6e2;
+
+    padding:
+        10px
+        13px;
+
+    border:
+        1px solid #ddd6e2;
+
     border-radius:15px;
+
     background:white;
+
     color:#383548;
 }
 
 .two{
+
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap:11px;
 }
 
-/* TIMER */
+
+/* =====================================================
+   TIMER
+===================================================== */
 
 .timer-box{
+
     padding:24px;
+
     border-radius:27px;
-    background:linear-gradient(135deg,#f8dce8,#e8def7);
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8dce8,
+            #e8def7
+        );
+
     text-align:center;
 }
 
 .timer-display{
+
     font-size:47px;
+
     font-weight:850;
+
     letter-spacing:2px;
-    margin:10px 0 22px;
+
+    margin:
+        10px
+        0
+        22px;
 }
 
 .timer-info{
+
     margin-top:15px;
+
     padding:16px;
+
     border-radius:18px;
-    background:rgba(255,255,255,.75);
+
+    background:
+        rgba(255,255,255,.75);
 }
 
 .timer-big{
+
     display:block;
-    margin:6px 0 13px;
+
+    margin:
+        6px
+        0
+        13px;
+
     font-size:24px;
+
     color:#b04f7c;
 }
 
-/* EMPTY */
+
+/* =====================================================
+   EMPTY
+===================================================== */
 
 .empty{
-    padding:38px 15px;
+
+    padding:
+        38px
+        15px;
+
     text-align:center;
+
     color:#8d8798;
-    background:rgba(255,255,255,.7);
+
+    background:
+        rgba(255,255,255,.7);
+
     border-radius:23px;
 }
 
 .empty-icon{
+
     font-size:40px;
+
     margin-bottom:7px;
 }
 
-/* MOBILE */
+
+/* =====================================================
+   MOBILE
+===================================================== */
 
 @media(max-width:390px){
 
     .header{
+
         padding-left:11px;
+
         padding-right:11px;
     }
 
     .logo,
     .logo-fallback{
+
         width:59px;
+
         height:59px;
+
         flex-basis:59px;
     }
 
     .brand{
+
         gap:8px;
     }
 
     .brand-title{
+
         font-size:22px;
     }
 
     .brand-subtitle{
+
         font-size:12px;
     }
 
     .header-btn{
+
         width:47px;
+
         height:47px;
     }
 
     .content{
+
         padding-left:13px;
+
         padding-right:13px;
     }
 
     .calendar-cell{
+
         min-height:105px;
     }
 
     .calendar-client{
+
         font-size:10px;
     }
+
 }
+
+
+/* =====================================================
+   WELCOME SMALL SCREEN
+===================================================== */
+
+@media(max-height:750px){
+
+    #welcomeScreen{
+
+        padding-bottom:
+            env(safe-area-inset-bottom);
+    }
+
+    .welcome-buttons{
+
+        height:135px;
+    }
+
+    .welcome-start{
+
+        bottom:62px;
+
+        height:55px;
+    }
+
+    .welcome-login{
+
+        bottom:-2px;
+
+        height:40px;
+    }
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
+<!-- =====================================================
+     WELCOME PAGE
+===================================================== -->
+
+<div id="welcomeScreen">
+
+    <div class="welcome-buttons">
+
+        <!-- Transparent area over Get Started -->
+        <button
+            class="welcome-start"
+            aria-label="Get Started"
+            onclick="enterApp()"
+        ></button>
+
+        <!-- Transparent area over Log in -->
+        <button
+            class="welcome-login"
+            aria-label="Log in"
+            onclick="enterApp()"
+        ></button>
+
+    </div>
+
+</div>
+
+
 <div id="app"></div>
+
 
 <script>
 
@@ -674,14 +1401,18 @@ button{
    STORAGE
 ===================================================== */
 
-const STORAGE_KEY="pureShineCleaningManager_200";
-const TIMER_KEY="pureShineCleaningManager_TIMER";
+const STORAGE_KEY =
+    "pureShineCleaningManager_200";
+
+const TIMER_KEY =
+    "pureShineCleaningManager_TIMER";
+
 
 /* =====================================================
    DEFAULT CLIENTS
 ===================================================== */
 
-const defaultClients=[
+const defaultClients = [
 
     {
         id:1,
@@ -794,7 +1525,9 @@ const defaultClients=[
         freq:"fortnightly",
         week:"B"
     }
+
 ];
+
 
 /* =====================================================
    LOAD DATA
@@ -804,51 +1537,65 @@ let data;
 
 try{
 
-    data=JSON.parse(
-        localStorage.getItem(
-            STORAGE_KEY
-        )
-    );
+    data =
+        JSON.parse(
+            localStorage.getItem(
+                STORAGE_KEY
+            )
+        );
 
 }catch(e){
 
-    data=null;
+    data = null;
 }
+
 
 if(
     !data ||
     !Array.isArray(data.clients)
 ){
 
-    data={
-        clients:defaultClients,
+    data = {
+
+        clients:
+            defaultClients,
+
         jobs:[]
     };
 }
 
-if(!Array.isArray(data.jobs)){
+
+if(
+    !Array.isArray(data.jobs)
+){
+
     data.jobs=[];
 }
 
-/* Gill stays removed */
 
-data.clients=
+/*
+   Gill is permanently excluded.
+*/
+
+data.clients =
     data.clients.filter(
         c =>
             String(
-                c.name||""
+                c.name || ""
             ).toLowerCase()
-            !=="gill"
+            !== "gill"
     );
 
-data.jobs=
+
+data.jobs =
     data.jobs.filter(
         j =>
             String(
-                j.clientName||""
+                j.clientName || ""
             ).toLowerCase()
-            !=="gill"
+            !== "gill"
     );
+
 
 function saveData(){
 
@@ -858,164 +1605,211 @@ function saveData(){
     );
 }
 
+
 saveData();
 
+
 /* =====================================================
-   FREQUENCY TEXT
+   FREQUENCY
 ===================================================== */
 
 function frequencyText(freq){
 
-    if(freq==="weekly"){
+    if(freq === "weekly"){
         return "Weekly";
     }
 
-    if(freq==="fortnightly"){
+    if(freq === "fortnightly"){
         return "Every 2 weeks";
     }
 
-    if(freq==="threeweekly"){
+    if(freq === "threeweekly"){
         return "Every 3 weeks";
     }
 
-    if(freq==="fourweekly"){
+    if(freq === "fourweekly"){
         return "Every 4 weeks";
     }
 
-    if(freq==="monthly"){
+    if(freq === "monthly"){
         return "Monthly";
     }
 
-    if(freq==="occasional"){
+    if(freq === "occasional"){
         return "Occasional";
     }
 
     return "Weekly";
 }
 
+
 /* =====================================================
-   EXACT TIME FORMATTING
+   EXACT TIME
 ===================================================== */
-
-/*
-   This is now ALWAYS displayed like:
-
-   4 hours 25 minutes
-
-   NOT:
-   4.25h
-   4.4167h
-   4h 25m
-*/
 
 function formatExactTime(hours){
 
-    const totalMinutes=
+    const totalMinutes =
         Math.round(
-            Number(hours||0)*60
+            Number(hours || 0) * 60
         );
 
-    const h=
+    const h =
         Math.floor(
-            totalMinutes/60
+            totalMinutes / 60
         );
 
-    const m=
-        totalMinutes%60;
+    const m =
+        totalMinutes % 60;
 
-    if(h===0 && m===0){
+
+    if(
+        h === 0 &&
+        m === 0
+    ){
+
         return "0 minutes";
     }
 
-    if(h===0){
-        return m+
-            (m===1
-                ?" minute"
-                :" minutes");
+
+    if(h === 0){
+
+        return (
+            m +
+            (
+                m === 1
+                    ? " minute"
+                    : " minutes"
+            )
+        );
     }
 
-    if(m===0){
-        return h+
-            (h===1
-                ?" hour"
-                :" hours");
+
+    if(m === 0){
+
+        return (
+            h +
+            (
+                h === 1
+                    ? " hour"
+                    : " hours"
+            )
+        );
     }
 
-    return h+
-        (h===1
-            ?" hour "
-            :" hours ")
-        +
-        m+
-        (m===1
-            ?" minute"
-            :" minutes");
+
+    return (
+        h +
+        (
+            h === 1
+                ? " hour "
+                : " hours "
+        ) +
+        m +
+        (
+            m === 1
+                ? " minute"
+                : " minutes"
+        )
+    );
 }
+
 
 function exactMinutes(
     start,
     end
 ){
 
-    if(!start || !end){
+    if(
+        !start ||
+        !end
+    ){
+
         return 0;
     }
 
-    const startParts=
+
+    const a =
         start.split(":");
 
-    const endParts=
+    const b =
         end.split(":");
 
-    const startMinutes=
-        Number(startParts[0])*60+
-        Number(startParts[1]);
 
-    const endMinutes=
-        Number(endParts[0])*60+
-        Number(endParts[1]);
+    const startMinutes =
+        Number(a[0]) * 60 +
+        Number(a[1]);
+
+
+    const endMinutes =
+        Number(b[0]) * 60 +
+        Number(b[1]);
+
 
     return Math.max(
         0,
-        endMinutes-startMinutes
+        endMinutes - startMinutes
     );
 }
+
 
 function exactHours(
     start,
     end
 ){
 
-    return exactMinutes(
-        start,
-        end
-    )/60;
+    return (
+        exactMinutes(
+            start,
+            end
+        ) / 60
+    );
 }
 
+
 /* =====================================================
-   GENERAL HELPERS
+   HELPERS
 ===================================================== */
 
 function esc(value){
 
     return String(
-        value==null
-            ?""
-            :value
+        value == null
+            ? ""
+            : value
     )
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 }
+
 
 function money(value){
 
-    return "£"+
-        Number(value||0)
-        .toFixed(2);
+    return (
+        "£" +
+        Number(value || 0)
+        .toFixed(2)
+    );
 }
+
 
 function minutes(time){
 
@@ -1023,26 +1817,34 @@ function minutes(time){
         return 0;
     }
 
-    const p=time.split(":");
+    const p =
+        time.split(":");
 
-    return Number(p[0])*60+
-        Number(p[1]);
+    return (
+        Number(p[0]) * 60 +
+        Number(p[1])
+    );
 }
+
 
 function today(){
 
-    const d=new Date();
+    const d =
+        new Date();
 
-    return d.getFullYear()+
-        "-"+
+    return (
+        d.getFullYear() +
+        "-" +
         String(
             d.getMonth()+1
-        ).padStart(2,"0")+
-        "-"+
+        ).padStart(2,"0") +
+        "-" +
         String(
             d.getDate()
-        ).padStart(2,"0");
+        ).padStart(2,"0")
+    );
 }
+
 
 function todayDay(){
 
@@ -1055,19 +1857,21 @@ function todayDay(){
         );
 }
 
+
 function findClient(id){
 
     return data.clients.find(
         c =>
-            Number(c.id)===
+            Number(c.id) ===
             Number(id)
     );
 }
 
+
 function formatDate(date){
 
     return new Date(
-        date+"T12:00:00"
+        date + "T12:00:00"
     )
     .toLocaleDateString(
         "en-GB",
@@ -1079,20 +1883,26 @@ function formatDate(date){
     );
 }
 
+
 /* =====================================================
-   TIMER
+   TIMER STORAGE
 ===================================================== */
 
-let timer={
+let timer = {
+
     running:false,
+
     clientId:null,
+
     startedAt:null,
+
     accumulated:0
 };
 
+
 try{
 
-    const savedTimer=
+    const savedTimer =
         JSON.parse(
             localStorage.getItem(
                 TIMER_KEY
@@ -1100,10 +1910,13 @@ try{
         );
 
     if(savedTimer){
-        timer=savedTimer;
+
+        timer =
+            savedTimer;
     }
 
 }catch(e){}
+
 
 function saveTimer(){
 
@@ -1113,67 +1926,84 @@ function saveTimer(){
     );
 }
 
+
 function timerSeconds(){
 
-    if(!timer.running){
+    if(
+        !timer.running
+    ){
 
         return Number(
-            timer.accumulated||0
+            timer.accumulated || 0
         );
     }
 
-    return Number(
-        timer.accumulated||0
-    )+
-    Math.max(
-        0,
-        Math.floor(
-            (
-                Date.now()-
-                Number(
-                    timer.startedAt||0
-                )
-            )/1000
+
+    return (
+        Number(
+            timer.accumulated || 0
+        ) +
+        Math.max(
+            0,
+            Math.floor(
+                (
+                    Date.now() -
+                    Number(
+                        timer.startedAt || 0
+                    )
+                ) / 1000
+            )
         )
     );
 }
 
-function timerText(seconds){
-
-    seconds=Math.max(
-        0,
-        Math.floor(
-            Number(seconds)||0
-        )
-    );
-
-    const h=
-        Math.floor(
-            seconds/3600
-        );
-
-    const m=
-        Math.floor(
-            (seconds%3600)/60
-        );
-
-    const s=
-        seconds%60;
-
-    return String(h)
-        .padStart(2,"0")
-        +":"
-        +String(m)
-        .padStart(2,"0")
-        +":"
-        +String(s)
-        .padStart(2,"0");
-}
 
 function timerHours(){
 
-    return timerSeconds()/3600;
+    return (
+        timerSeconds() / 3600
+    );
 }
+
+
+function timerText(
+    seconds
+){
+
+    seconds =
+        Math.max(
+            0,
+            Math.floor(
+                Number(seconds) || 0
+            )
+        );
+
+
+    const h =
+        Math.floor(
+            seconds / 3600
+        );
+
+
+    const m =
+        Math.floor(
+            (seconds % 3600) / 60
+        );
+
+
+    const s =
+        seconds % 60;
+
+
+    return (
+        String(h).padStart(2,"0") +
+        ":" +
+        String(m).padStart(2,"0") +
+        ":" +
+        String(s).padStart(2,"0")
+    );
+}
+
 
 /* =====================================================
    HOME
@@ -1181,49 +2011,53 @@ function timerHours(){
 
 function homePage(){
 
-    const todayJobs=
+    const todayJobs =
         data.jobs.filter(
             j =>
-                j.date===today()
+                j.date === today()
         );
 
-    const totalHours=
+
+    const totalHours =
         todayJobs.reduce(
-            (sum,j)=>
-                sum+
+            (sum,j) =>
+                sum +
                 Number(
-                    j.hours||0
+                    j.hours || 0
                 ),
             0
         );
 
-    const earned=
+
+    const earned =
         todayJobs.reduce(
-            (sum,j)=>
-                sum+
+            (sum,j) =>
+                sum +
                 Number(
-                    j.price||0
+                    j.price || 0
                 ),
             0
         );
 
-    const todayClients=
+
+    const todayClients =
         data.clients
         .filter(
             c =>
-                c.day===todayDay() &&
-                c.freq!=="occasional"
+                c.day === todayDay() &&
+                c.freq !== "occasional"
         )
         .sort(
-            (a,b)=>
-                minutes(a.start)-
+            (a,b) =>
+                minutes(a.start) -
                 minutes(b.start)
         );
 
-    const available=
+
+    const available =
         todayClients.reduce(
-            (sum,c)=>
-                sum+
+            (sum,c) =>
+                sum +
                 exactHours(
                     c.start,
                     c.end
@@ -1231,14 +2065,15 @@ function homePage(){
             0
         );
 
-    let html="";
 
-    html+=`
+    let html = `
+
         <h1 class="greeting">
             Hello ✨
         </h1>
 
         <div class="date">
+
             ${new Date()
                 .toLocaleDateString(
                     "en-GB",
@@ -1248,47 +2083,89 @@ function homePage(){
                         month:"long"
                     }
                 )}
+
         </div>
+
 
         <div class="dashboard">
 
             <div class="stat jobs">
-                <div class="stat-icon">🧹</div>
-                <div class="stat-label">Jobs</div>
+
+                <div class="stat-icon">
+                    🧹
+                </div>
+
+                <div class="stat-label">
+                    Jobs
+                </div>
+
                 <div class="stat-value">
                     ${todayJobs.length}
                 </div>
+
             </div>
 
+
             <div class="stat hours">
-                <div class="stat-icon">⏱️</div>
-                <div class="stat-label">Hours</div>
+
+                <div class="stat-icon">
+                    ⏱️
+                </div>
+
+                <div class="stat-label">
+                    Hours
+                </div>
+
                 <div class="stat-value">
+
                     ${formatExactTime(
                         totalHours
                     )}
+
                 </div>
+
             </div>
 
+
             <div class="stat earned">
-                <div class="stat-icon">💷</div>
-                <div class="stat-label">Earned</div>
+
+                <div class="stat-icon">
+                    💷
+                </div>
+
+                <div class="stat-label">
+                    Earned
+                </div>
+
                 <div class="stat-value">
                     ${money(earned)}
                 </div>
+
             </div>
 
+
             <div class="stat available">
-                <div class="stat-icon">🌸</div>
-                <div class="stat-label">Available</div>
+
+                <div class="stat-icon">
+                    🌸
+                </div>
+
+                <div class="stat-label">
+                    Available
+                </div>
+
                 <div class="stat-value">
+
                     ${formatExactTime(
                         available
                     )}
+
                 </div>
+
             </div>
 
         </div>
+
 
         <section class="section">
 
@@ -1297,57 +2174,81 @@ function homePage(){
             </h2>
     `;
 
-    if(todayClients.length){
+
+    if(
+        todayClients.length
+    ){
 
         todayClients.forEach(
-            c=>{
+            c => {
 
-                html+=`
+                html += `
+
                     <div class="today-card">
 
                         <div>
 
                             <div class="today-client">
-                                ${esc(c.name)}
+
+                                ${esc(
+                                    c.name
+                                )}
+
                             </div>
 
+
                             <div class="today-standard">
+
                                 Standard:
+
                                 <strong>
+
                                     ${formatExactTime(
                                         exactHours(
                                             c.start,
                                             c.end
                                         )
                                     )}
+
                                 </strong>
+
                             </div>
 
                         </div>
+
 
                         <div>
                             ⏱️
                         </div>
 
                     </div>
+
                 `;
             }
         );
 
     }else{
 
-        html+=`
+        html += `
+
             <div class="empty">
+
                 <div class="empty-icon">
                     🌸
                 </div>
+
                 No cleaning jobs today.
+
             </div>
+
         `;
     }
 
-    html+=`
+
+    html += `
+
         </section>
+
 
         <section class="section">
 
@@ -1355,26 +2256,34 @@ function homePage(){
                 Quick actions
             </h2>
 
+
             <div class="quick-grid">
 
                 <button
                     class="quick purple"
                     onclick="openTimerSelector()"
                 >
+
                     <span class="quick-icon">
                         ⏱️
                     </span>
+
                     Timer
+
                 </button>
+
 
                 <button
                     class="quick pink"
                     onclick="openJobForm()"
                 >
+
                     <span class="quick-icon">
-                        ➕
+                        +
                     </span>
+
                     Add Job
+
                 </button>
 
             </div>
@@ -1382,8 +2291,10 @@ function homePage(){
         </section>
     `;
 
+
     return html;
 }
+
 
 /* =====================================================
    CALENDAR
@@ -1391,47 +2302,62 @@ function homePage(){
 
 function getMonday(date){
 
-    const d=new Date(date);
+    const d =
+        new Date(date);
 
-    const day=d.getDay();
+    const day =
+        d.getDay();
 
-    const diff=
-        day===0
-            ?-6
-            :1-day;
+
+    const diff =
+        day === 0
+            ? -6
+            : 1 - day;
+
 
     d.setDate(
-        d.getDate()+diff
+        d.getDate() + diff
     );
 
+
     d.setHours(
-        12,0,0,0
+        12,
+        0,
+        0,
+        0
     );
+
 
     return d;
 }
 
+
 function dateISO(d){
 
-    return d.getFullYear()+
-        "-"+
+    return (
+        d.getFullYear() +
+        "-" +
         String(
             d.getMonth()+1
-        ).padStart(2,"0")+
-        "-"+
+        ).padStart(2,"0") +
+        "-" +
         String(
             d.getDate()
-        ).padStart(2,"0");
+        ).padStart(2,"0")
+    );
 }
+
 
 function calendarPage(){
 
-    const monday=
+    const monday =
         getMonday(
             new Date()
         );
 
-    const dayNames=[
+
+    const dayNames = [
+
         "Mon",
         "Tue",
         "Wed",
@@ -1439,11 +2365,12 @@ function calendarPage(){
         "Fri",
         "Sat",
         "Sun"
+
     ];
 
-    let html="";
 
-    html+=`
+    let html = `
+
         <div class="section-head">
 
             <h2 class="section-title">
@@ -1452,41 +2379,57 @@ function calendarPage(){
 
         </div>
 
+
         <div class="calendar">
 
             <div class="calendar-header">
     `;
 
-    dayNames.forEach(
-        day=>{
 
-            html+=`
+    dayNames.forEach(
+        day => {
+
+            html += `
+
                 <div class="calendar-day-name">
                     ${day}
                 </div>
+
             `;
         }
     );
 
-    html+=`
+
+    html += `
+
             </div>
 
+
             <div class="calendar-grid">
+
     `;
 
-    for(let i=0;i<7;i++){
 
-        const d=
+    for(
+        let i=0;
+        i<7;
+        i++
+    ){
+
+        const d =
             new Date(monday);
 
+
         d.setDate(
-            monday.getDate()+i
+            monday.getDate() + i
         );
 
-        const iso=
+
+        const iso =
             dateISO(d);
 
-        const dayName=
+
+        const dayName =
             d.toLocaleDateString(
                 "en-GB",
                 {
@@ -1494,79 +2437,108 @@ function calendarPage(){
                 }
             );
 
-        /*
-           Occasional clients are not placed
-           automatically in the weekly calendar.
-        */
 
-        const clients=
+        const clients =
             data.clients
             .filter(
                 c =>
-                    c.day===dayName &&
-                    c.freq!=="occasional"
+                    c.day === dayName &&
+                    c.freq !== "occasional"
             );
 
-        const isToday=
-            iso===today();
 
-        html+=`
-            <div class="
-                calendar-cell
-                ${isToday?"today":""}
-            ">
+        const isToday =
+            iso === today();
+
+
+        html += `
+
+            <div
+                class="
+                    calendar-cell
+                    ${isToday ? "today" : ""}
+                "
+            >
 
                 <div class="calendar-date">
                     ${d.getDate()}
                 </div>
+
         `;
 
-        if(clients.length){
+
+        if(
+            clients.length
+        ){
 
             clients.forEach(
-                c=>{
+                c => {
 
-                    html+=`
+                    html += `
+
                         <div
                             class="calendar-client"
-                            onclick="openJobFormByClient(${c.id})"
+                            onclick="
+                                openJobFormByClient(
+                                    ${c.id}
+                                )
+                            "
                         >
 
                             ${esc(c.name)}
 
                             <div class="calendar-time">
+
                                 ${esc(c.start)}
                                 –
                                 ${esc(c.end)}
+
                             </div>
 
                         </div>
+
                     `;
                 }
             );
 
         }else{
 
-            html+=`
-                <div class="calendar-empty">
+            html += `
+
+                <div
+                    style="
+                        color:#bbb5c0;
+                        text-align:center;
+                        margin-top:10px;
+                    "
+                >
                     —
                 </div>
+
             `;
         }
 
-        html+=`
+
+        html += `
+
             </div>
+
         `;
     }
 
-    html+=`
+
+    html += `
+
             </div>
 
         </div>
+
     `;
+
 
     return html;
 }
+
 
 /* =====================================================
    CLIENTS
@@ -1574,14 +2546,14 @@ function calendarPage(){
 
 function clientsPage(){
 
-    let html="";
+    let html = `
 
-    html+=`
         <div class="section-head">
 
             <h2 class="section-title">
                 Clients 👥
             </h2>
+
 
             <button
                 class="primary"
@@ -1591,12 +2563,15 @@ function clientsPage(){
             </button>
 
         </div>
+
     `;
 
-    data.clients.forEach(
-        c=>{
 
-            html+=`
+    data.clients.forEach(
+        c => {
+
+            html += `
+
                 <div class="card">
 
                     <div class="card-top">
@@ -1606,6 +2581,7 @@ function clientsPage(){
                             <div class="card-name">
                                 ${esc(c.name)}
                             </div>
+
 
                             <div class="card-details">
 
@@ -1626,44 +2602,60 @@ function clientsPage(){
 
                         </div>
 
+
                         <span class="badge">
+
                             ${
-                                c.type==="private"
-                                    ?"Private"
-                                    :"Agency"
+                                c.type === "private"
+                                    ? "Private"
+                                    : "Agency"
                             }
+
                         </span>
 
                     </div>
 
+
                     ${
                         c.variable
-                            ?`
+                            ? `
+
                                 <div
                                     style="
                                         color:#858094;
                                         font-size:13px;
-                                        margin-top:6px
+                                        margin-top:6px;
                                     "
                                 >
                                     Variable duration
                                 </div>
+
                             `
-                            :""
+                            : ""
                     }
+
 
                     <div class="card-actions">
 
                         <button
                             class="secondary"
-                            onclick="openClientForm(${c.id})"
+                            onclick="
+                                openClientForm(
+                                    ${c.id}
+                                )
+                            "
                         >
                             ✏️ Edit
                         </button>
 
+
                         <button
                             class="danger"
-                            onclick="deleteClient(${c.id})"
+                            onclick="
+                                deleteClient(
+                                    ${c.id}
+                                )
+                            "
                         >
                             🗑️ Delete
                         </button>
@@ -1671,26 +2663,31 @@ function clientsPage(){
                     </div>
 
                 </div>
+
             `;
         }
     );
 
+
     return html;
 }
 
+
 /* =====================================================
-   CLIENT FORM
+   ADD / EDIT CLIENT
 ===================================================== */
 
 function openClientForm(id){
 
-    const editing=
+    const editing =
         Boolean(id);
 
-    const c=
+
+    const c =
         editing
-            ?findClient(id)
-            :{
+            ? findClient(id)
+            : {
+
                 name:"",
                 type:"private",
                 rate:18,
@@ -1699,16 +2696,24 @@ function openClientForm(id){
                 end:"12:00",
                 freq:"weekly",
                 variable:false
+
             };
 
-    let html="";
 
-    html+=`
+    let html = `
+
         <div class="modal-head">
 
             <h2 class="modal-title">
-                ${editing?"Edit":"Add"} Client
+
+                ${
+                    editing
+                        ? "Edit Client"
+                        : "Add Client"
+                }
+
             </h2>
+
 
             <button
                 class="close"
@@ -1719,19 +2724,22 @@ function openClientForm(id){
 
         </div>
 
+
         <div class="form-group">
 
             <label class="label">
                 Name
             </label>
 
+
             <input
                 id="clientName"
                 class="control"
-                value="${esc(c.name||"")}"
+                value="${esc(c.name || "")}"
             >
 
         </div>
+
 
         <div class="two">
 
@@ -1741,6 +2749,7 @@ function openClientForm(id){
                     Type
                 </label>
 
+
                 <select
                     id="clientType"
                     class="control"
@@ -1749,20 +2758,21 @@ function openClientForm(id){
                     <option
                         value="private"
                         ${
-                            c.type==="private"
-                                ?"selected"
-                                :""
+                            c.type === "private"
+                                ? "selected"
+                                : ""
                         }
                     >
                         Private
                     </option>
 
+
                     <option
                         value="agency"
                         ${
-                            c.type==="agency"
-                                ?"selected"
-                                :""
+                            c.type === "agency"
+                                ? "selected"
+                                : ""
                         }
                     >
                         Agency
@@ -1772,23 +2782,26 @@ function openClientForm(id){
 
             </div>
 
+
             <div class="form-group">
 
                 <label class="label">
                     Hourly rate (£)
                 </label>
 
+
                 <input
                     id="clientRate"
                     class="control"
                     type="number"
                     step="0.01"
-                    value="${Number(c.rate||16)}"
+                    value="${Number(c.rate || 16)}"
                 >
 
             </div>
 
         </div>
+
 
         <div class="two">
 
@@ -1798,44 +2811,51 @@ function openClientForm(id){
                     Day
                 </label>
 
+
                 <select
                     id="clientDay"
                     class="control"
                 >
 
-                    ${[
-                        "Monday",
-                        "Tuesday",
-                        "Wednesday",
-                        "Thursday",
-                        "Friday",
-                        "Saturday",
-                        "Sunday"
-                    ]
-                    .map(
-                        day=>`
-                            <option
-                                ${
-                                    c.day===day
-                                        ?"selected"
-                                        :""
-                                }
-                            >
-                                ${day}
-                            </option>
-                        `
-                    )
-                    .join("")}
+                    ${
+                        [
+                            "Monday",
+                            "Tuesday",
+                            "Wednesday",
+                            "Thursday",
+                            "Friday",
+                            "Saturday",
+                            "Sunday"
+                        ]
+                        .map(
+                            day => `
+
+                                <option
+                                    ${
+                                        c.day === day
+                                            ? "selected"
+                                            : ""
+                                    }
+                                >
+                                    ${day}
+                                </option>
+
+                            `
+                        )
+                        .join("")
+                    }
 
                 </select>
 
             </div>
+
 
             <div class="form-group">
 
                 <label class="label">
                     Frequency
                 </label>
+
 
                 <select
                     id="clientFreq"
@@ -1845,64 +2865,69 @@ function openClientForm(id){
                     <option
                         value="weekly"
                         ${
-                            c.freq==="weekly"
-                                ?"selected"
-                                :""
+                            c.freq === "weekly"
+                                ? "selected"
+                                : ""
                         }
                     >
                         Weekly
                     </option>
 
+
                     <option
                         value="fortnightly"
                         ${
-                            c.freq==="fortnightly"
-                                ?"selected"
-                                :""
+                            c.freq === "fortnightly"
+                                ? "selected"
+                                : ""
                         }
                     >
                         Every 2 weeks
                     </option>
 
+
                     <option
                         value="threeweekly"
                         ${
-                            c.freq==="threeweekly"
-                                ?"selected"
-                                :""
+                            c.freq === "threeweekly"
+                                ? "selected"
+                                : ""
                         }
                     >
                         Every 3 weeks
                     </option>
 
+
                     <option
                         value="fourweekly"
                         ${
-                            c.freq==="fourweekly"
-                                ?"selected"
-                                :""
+                            c.freq === "fourweekly"
+                                ? "selected"
+                                : ""
                         }
                     >
                         Every 4 weeks
                     </option>
 
+
                     <option
                         value="monthly"
                         ${
-                            c.freq==="monthly"
-                                ?"selected"
-                                :""
+                            c.freq === "monthly"
+                                ? "selected"
+                                : ""
                         }
                     >
                         Monthly
                     </option>
 
+
                     <option
                         value="occasional"
                         ${
-                            c.freq==="occasional"
-                                ?"selected"
-                                :""
+                            c.freq === "occasional"
+                                ? "selected"
+                                : ""
                         }
                     >
                         Occasional
@@ -1914,6 +2939,7 @@ function openClientForm(id){
 
         </div>
 
+
         <div class="two">
 
             <div class="form-group">
@@ -1922,16 +2948,18 @@ function openClientForm(id){
                     Standard Start
                 </label>
 
+
                 <input
                     id="clientStart"
                     class="control"
                     type="time"
                     value="${esc(
-                        c.start||"09:00"
+                        c.start || "09:00"
                     )}"
                 >
 
             </div>
+
 
             <div class="form-group">
 
@@ -1939,12 +2967,13 @@ function openClientForm(id){
                     Standard End
                 </label>
 
+
                 <input
                     id="clientEnd"
                     class="control"
                     type="time"
                     value="${esc(
-                        c.end||"12:00"
+                        c.end || "12:00"
                     )}"
                 >
 
@@ -1952,11 +2981,13 @@ function openClientForm(id){
 
         </div>
 
+
         <div class="form-group">
 
             <label class="label">
                 Variable duration?
             </label>
+
 
             <select
                 id="clientVariable"
@@ -1967,19 +2998,20 @@ function openClientForm(id){
                     value="no"
                     ${
                         !c.variable
-                            ?"selected"
-                            :""
+                            ? "selected"
+                            : ""
                     }
                 >
                     No
                 </option>
 
+
                 <option
                     value="yes"
                     ${
                         c.variable
-                            ?"selected"
-                            :""
+                            ? "selected"
+                            : ""
                     }
                 >
                     Yes
@@ -1989,23 +3021,37 @@ function openClientForm(id){
 
         </div>
 
+
         <button
             class="primary"
             style="width:100%"
-            onclick="saveClient(${editing?id:0})"
+            onclick="
+                saveClient(
+                    ${editing ? id : 0}
+                )
+            "
         >
-            ${editing
-                ?"Save Changes"
-                :"Add Client"} ✨
+
+            ${
+                editing
+                    ? "Save Changes"
+                    : "Add Client"
+            }
+
+            ✨
+
         </button>
+
     `;
+
 
     openModal(html);
 }
 
+
 function saveClient(id){
 
-    const name=
+    const name =
         document
         .getElementById(
             "clientName"
@@ -2013,14 +3059,16 @@ function saveClient(id){
         .value
         .trim();
 
-    const type=
+
+    const type =
         document
         .getElementById(
             "clientType"
         )
         .value;
 
-    const rate=
+
+    const rate =
         Number(
             document
             .getElementById(
@@ -2029,40 +3077,46 @@ function saveClient(id){
             .value
         );
 
-    const day=
+
+    const day =
         document
         .getElementById(
             "clientDay"
         )
         .value;
 
-    const freq=
+
+    const freq =
         document
         .getElementById(
             "clientFreq"
         )
         .value;
 
-    const start=
+
+    const start =
         document
         .getElementById(
             "clientStart"
         )
         .value;
 
-    const end=
+
+    const end =
         document
         .getElementById(
             "clientEnd"
         )
         .value;
 
-    const variable=
+
+    const variable =
         document
         .getElementById(
             "clientVariable"
         )
-        .value==="yes";
+        .value === "yes";
+
 
     if(!name){
 
@@ -2073,8 +3127,9 @@ function saveClient(id){
         return;
     }
 
+
     if(
-        minutes(end)<=
+        minutes(end) <=
         minutes(start)
     ){
 
@@ -2085,48 +3140,77 @@ function saveClient(id){
         return;
     }
 
+
     if(id){
 
-        const client=
+        const client =
             findClient(id);
+
 
         if(client){
 
-            client.name=name;
-            client.type=type;
-            client.rate=rate;
-            client.day=day;
-            client.start=start;
-            client.end=end;
-            client.freq=freq;
-            client.variable=variable;
+            client.name =
+                name;
+
+            client.type =
+                type;
+
+            client.rate =
+                rate;
+
+            client.day =
+                day;
+
+            client.start =
+                start;
+
+            client.end =
+                end;
+
+            client.freq =
+                freq;
+
+            client.variable =
+                variable;
         }
 
     }else{
 
         data.clients.push({
 
-            id:Date.now(),
+            id:
+                Date.now(),
 
-            name:name,
+            name:
+                name,
 
-            type:type,
+            type:
+                type,
 
-            rate:rate,
+            rate:
+                rate,
 
-            day:day,
+            day:
+                day,
 
-            start:start,
+            start:
+                start,
 
-            end:end,
+            end:
+                end,
 
-            freq:freq,
+            freq:
+                freq,
 
-            variable:variable,
+            variable:
+                variable,
 
-            week:"A"
+            week:
+                "A"
+
         });
     }
+
 
     saveData();
 
@@ -2135,64 +3219,72 @@ function saveClient(id){
     render();
 }
 
+
 /* =====================================================
    DELETE CLIENT
 ===================================================== */
 
 function deleteClient(id){
 
-    const client=
+    const client =
         findClient(id);
+
 
     if(!client){
         return;
     }
 
+
     if(
         !confirm(
-            "Delete "+
-            client.name+
+            "Delete " +
+            client.name +
             "?"
         )
     ){
+
         return;
     }
 
-    data.clients=
+
+    data.clients =
         data.clients.filter(
             c =>
-                Number(c.id)!==
+                Number(c.id) !==
                 Number(id)
         );
 
+
     if(
         timer.running &&
-        Number(timer.clientId)===
+        Number(timer.clientId) ===
         Number(id)
     ){
 
         resetTimer();
     }
 
+
     saveData();
 
     render();
 }
 
+
 /* =====================================================
-   JOB HISTORY
+   JOBS
 ===================================================== */
 
 function jobsPage(){
 
-    let html="";
+    let html = `
 
-    html+=`
         <div class="section-head">
 
             <h2 class="section-title">
                 Job History 📋
             </h2>
+
 
             <button
                 class="primary"
@@ -2202,11 +3294,16 @@ function jobsPage(){
             </button>
 
         </div>
+
     `;
 
-    if(!data.jobs.length){
 
-        html+=`
+    if(
+        !data.jobs.length
+    ){
+
+        html += `
+
             <div class="empty">
 
                 <div class="empty-icon">
@@ -2216,60 +3313,78 @@ function jobsPage(){
                 No completed jobs yet.
 
             </div>
+
         `;
 
         return html;
     }
 
-    const grouped={};
+
+    const grouped = {};
+
 
     data.jobs.forEach(
-        job=>{
+        job => {
 
-            const client=
+            const client =
                 findClient(
                     job.clientId
                 );
 
-            const name=
-                client
-                    ?client.name
-                    :(job.clientName||"Unknown");
 
-            if(!grouped[name]){
+            const name =
+                client
+                    ? client.name
+                    : (
+                        job.clientName ||
+                        "Unknown"
+                    );
+
+
+            if(
+                !grouped[name]
+            ){
+
                 grouped[name]=[];
             }
 
-            grouped[name].push(job);
+
+            grouped[name].push(
+                job
+            );
         }
     );
+
 
     Object.keys(grouped)
     .sort()
     .forEach(
-        name=>{
+        name => {
 
-            const jobs=
+            const jobs =
                 grouped[name]
                 .slice()
                 .sort(
-                    (a,b)=>
+                    (a,b) =>
                         b.date.localeCompare(
                             a.date
                         )
                 );
 
-            const clientTotal=
+
+            const clientTotal =
                 jobs.reduce(
-                    (sum,j)=>
-                        sum+
+                    (sum,j) =>
+                        sum +
                         Number(
-                            j.price||0
+                            j.price || 0
                         ),
                     0
                 );
 
-            html+=`
+
+            html += `
+
                 <div class="client-history">
 
                     <div class="client-history-title">
@@ -2285,27 +3400,27 @@ function jobsPage(){
                         </span>
 
                     </div>
+
             `;
 
+
             jobs.forEach(
-                job=>{
+                job => {
 
                     let workedMinutes;
 
-                    /*
-                       Timer jobs use exact timer
-                       seconds converted to minutes.
-                    */
 
                     if(
-                        Number(job.timerSeconds)>0
+                        Number(
+                            job.timerSeconds
+                        ) > 0
                     ){
 
-                        workedMinutes=
+                        workedMinutes =
                             Math.floor(
                                 Number(
                                     job.timerSeconds
-                                )/60
+                                ) / 60
                             );
 
                     }else if(
@@ -2316,80 +3431,112 @@ function jobsPage(){
                         )
                     ){
 
-                        workedMinutes=
+                        workedMinutes =
                             Number(
                                 job.workedMinutes
                             );
 
                     }else{
 
-                        workedMinutes=
+                        workedMinutes =
                             Math.round(
                                 Number(
-                                    job.hours||0
-                                )*60
+                                    job.hours || 0
+                                ) * 60
                             );
                     }
 
-                    const workedHours=
-                        workedMinutes/60;
 
-                    html+=`
+                    const workedHours =
+                        workedMinutes / 60;
+
+
+                    html += `
+
                         <div class="history-job">
 
                             <div class="history-row">
 
                                 <div class="history-date">
+
                                     ${formatDate(
                                         job.date
                                     )}
+
                                 </div>
 
+
                                 <div class="history-money">
+
                                     ${money(
                                         job.price
                                     )}
+
                                 </div>
 
                             </div>
 
+
                             <div class="history-hours">
+
                                 ⏱️ Worked:
+
                                 <strong>
+
                                     ${formatExactTime(
                                         workedHours
                                     )}
+
                                 </strong>
+
                             </div>
-                    `;
 
-                    if(
-                        job.start &&
-                        job.end
-                    ){
 
-                        html+=`
-                            <div class="exact-time">
-                                ${esc(job.start)}
-                                –
-                                ${esc(job.end)}
-                            </div>
-                        `;
-                    }
+                            ${
+                                job.start &&
+                                job.end
+                                    ? `
 
-                    html+=`
+                                        <div class="exact-time">
+
+                                            ${esc(
+                                                job.start
+                                            )}
+
+                                            –
+
+                                            ${esc(
+                                                job.end
+                                            )}
+
+                                        </div>
+
+                                    `
+                                    : ""
+                            }
+
+
                             <div class="card-actions">
 
                                 <button
                                     class="secondary"
-                                    onclick="editJob(${job.id})"
+                                    onclick="
+                                        editJob(
+                                            ${job.id}
+                                        )
+                                    "
                                 >
                                     ✏️ Edit
                                 </button>
 
+
                                 <button
                                     class="danger"
-                                    onclick="deleteJob(${job.id})"
+                                    onclick="
+                                        deleteJob(
+                                            ${job.id}
+                                        )
+                                    "
                                 >
                                     🗑️ Delete
                                 </button>
@@ -2397,41 +3544,52 @@ function jobsPage(){
                             </div>
 
                         </div>
+
                     `;
                 }
             );
 
-            html+=`
+
+            html += `
+
                 </div>
+
             `;
         }
     );
 
+
     return html;
 }
 
+
 /* =====================================================
-   JOB FORM
+   ADD / EDIT JOB
 ===================================================== */
 
 function openJobFormByClient(
     clientId
 ){
 
-    const client=
-        findClient(clientId);
+    const client =
+        findClient(
+            clientId
+        );
+
 
     if(!client){
         return;
     }
 
-    const existing=
+
+    const existing =
         data.jobs.find(
             j =>
-                j.date===today() &&
-                Number(j.clientId)===
+                j.date === today() &&
+                Number(j.clientId) ===
                 Number(clientId)
         );
+
 
     if(existing){
 
@@ -2459,65 +3617,64 @@ function openJobFormByClient(
 
             status:
                 "Paid"
+
         });
     }
 }
 
+
 function openJobForm(job){
 
-    const editing=
+    const editing =
         job &&
-        Number(job.id)>0;
+        Number(job.id) > 0;
 
-    job=job||{
 
-        id:0,
+    job =
+        job || {
 
-        clientId:
-            data.clients.length
-                ?data.clients[0].id
-                :"",
+            id:0,
 
-        date:
-            today(),
+            clientId:
+                data.clients.length
+                    ? data.clients[0].id
+                    : "",
 
-        start:
-            "09:00",
+            date:
+                today(),
 
-        end:
-            "12:00",
+            start:
+                "09:00",
 
-        status:
-            "Paid"
-    };
+            end:
+                "12:00",
 
-    const client=
+            status:
+                "Paid"
+
+        };
+
+
+    const client =
         findClient(
             job.clientId
         );
 
-    const initialHours=
-        client
-            ?exactHours(
-                job.start||
-                client.start,
-                job.end||
-                client.end
-            )
-            :0;
 
-    let html="";
+    let html = `
 
-    html+=`
         <div class="modal-head">
 
             <h2 class="modal-title">
+
                 ${
                     editing
-                        ?"Edit Cleaning Job"
-                        :"Add Cleaning Job"
+                        ? "Edit Cleaning Job"
+                        : "Add Cleaning Job"
                 }
+
             </h2>
+
 
             <button
                 class="close"
@@ -2528,64 +3685,74 @@ function openJobForm(job){
 
         </div>
 
+
         <div class="form-group">
 
             <label class="label">
                 Client
             </label>
 
+
             <select
                 id="jobClient"
                 class="control"
             >
 
-                ${data.clients
+                ${
+                    data.clients
                     .map(
-                        c=>`
+                        c => `
+
                             <option
                                 value="${c.id}"
                                 ${
-                                    Number(c.id)===
+                                    Number(c.id) ===
                                     Number(job.clientId)
-                                        ?"selected"
-                                        :""
+                                        ? "selected"
+                                        : ""
                                 }
                             >
                                 ${esc(c.name)}
                             </option>
+
                         `
                     )
-                    .join("")}
+                    .join("")
+                }
 
             </select>
 
         </div>
+
 
         <div class="two">
 
             <div class="form-group">
 
                 <label class="label">
-                    Date
+                    Specific date
                 </label>
+
 
                 <input
                     id="jobDate"
                     class="control"
                     type="date"
                     value="${esc(
-                        job.date||
+                        job.date ||
                         today()
                     )}"
                 >
 
             </div>
 
+
             <div class="form-group">
 
                 <label class="label">
                     Day
                 </label>
+
 
                 <input
                     id="jobDay"
@@ -2597,6 +3764,7 @@ function openJobForm(job){
 
         </div>
 
+
         <div class="two">
 
             <div class="form-group">
@@ -2605,21 +3773,23 @@ function openJobForm(job){
                     Start
                 </label>
 
+
                 <input
                     id="jobStart"
                     class="control"
                     type="time"
                     value="${esc(
-                        job.start||
+                        job.start ||
                         (
                             client
-                                ?client.start
-                                :"09:00"
+                                ? client.start
+                                : "09:00"
                         )
                     )}"
                 >
 
             </div>
+
 
             <div class="form-group">
 
@@ -2627,16 +3797,17 @@ function openJobForm(job){
                     End
                 </label>
 
+
                 <input
                     id="jobEnd"
                     class="control"
                     type="time"
                     value="${esc(
-                        job.end||
+                        job.end ||
                         (
                             client
-                                ?client.end
-                                :"12:00"
+                                ? client.end
+                                : "12:00"
                         )
                     )}"
                 >
@@ -2644,6 +3815,7 @@ function openJobForm(job){
             </div>
 
         </div>
+
 
         <div class="two">
 
@@ -2653,13 +3825,14 @@ function openJobForm(job){
                     Exact time worked
                 </label>
 
+
                 <input
                     id="jobHours"
                     class="control"
                     type="text"
                     readonly
-                    value=""
                 >
+
 
                 <div
                     id="jobExact"
@@ -2673,11 +3846,13 @@ function openJobForm(job){
 
             </div>
 
+
             <div class="form-group">
 
                 <label class="label">
                     Rate (£/h)
                 </label>
+
 
                 <input
                     id="jobRate"
@@ -2686,8 +3861,8 @@ function openJobForm(job){
                     step="0.01"
                     value="${
                         client
-                            ?Number(client.rate)
-                            :16
+                            ? Number(client.rate)
+                            : 16
                     }"
                 >
 
@@ -2695,11 +3870,13 @@ function openJobForm(job){
 
         </div>
 
+
         <div class="form-group">
 
             <label class="label">
                 Payment
             </label>
+
 
             <select
                 id="jobStatus"
@@ -2710,20 +3887,21 @@ function openJobForm(job){
                     value="Paid"
                     ${
                         !job.status ||
-                        job.status==="Paid"
-                            ?"selected"
-                            :""
+                        job.status === "Paid"
+                            ? "selected"
+                            : ""
                     }
                 >
                     Paid
                 </option>
 
+
                 <option
                     value="Owed"
                     ${
-                        job.status==="Owed"
-                            ?"selected"
-                            :""
+                        job.status === "Owed"
+                            ? "selected"
+                            : ""
                     }
                 >
                     Owed
@@ -2733,110 +3911,138 @@ function openJobForm(job){
 
         </div>
 
+
         <button
             class="primary"
             style="width:100%"
-            onclick="saveJob(${editing?job.id:0})"
+            onclick="
+                saveJob(
+                    ${editing ? job.id : 0}
+                )
+            "
         >
+
             ${
                 editing
-                    ?"Save Changes"
-                    :"Save Job"
-            } ✨
+                    ? "Save Changes"
+                    : "Save Job"
+            }
+
+            ✨
+
         </button>
+
     `;
+
 
     openModal(html);
 
-    const start=
+
+    const start =
         document.getElementById(
             "jobStart"
         );
 
-    const end=
+
+    const end =
         document.getElementById(
             "jobEnd"
         );
 
-    const hours=
+
+    const hours =
         document.getElementById(
             "jobHours"
         );
 
-    const exact=
+
+    const exact =
         document.getElementById(
             "jobExact"
         );
 
-    const rate=
+
+    const rate =
         document.getElementById(
             "jobRate"
         );
 
-    const day=
+
+    const day =
         document.getElementById(
             "jobDay"
         );
 
+
     function update(){
 
-        const s=start.value;
-        const e=end.value;
+        const s =
+            start.value;
+
+        const e =
+            end.value;
+
 
         if(
             !s ||
             !e ||
-            minutes(e)<=minutes(s)
+            minutes(e) <=
+            minutes(s)
         ){
 
             hours.value="";
 
-            exact.textContent=
+            exact.textContent =
                 "Enter a valid Start and End time.";
 
             return;
         }
 
-        const h=
+
+        const h =
             exactHours(
                 s,
                 e
             );
 
-        /*
-           The visible field now says:
 
-           4 hours 25 minutes
-
-           instead of 4.4167.
-        */
-
-        hours.value=
+        hours.value =
             formatExactTime(h);
 
-        exact.textContent=
+
+        exact.textContent =
             money(
-                h*
+                h *
                 Number(
-                    rate.value||0
+                    rate.value || 0
                 )
             );
-
     }
+
 
     function updateDay(){
 
-        const d=
+        const dateValue =
+            document
+            .getElementById(
+                "jobDate"
+            )
+            .value;
+
+
+        if(!dateValue){
+            return;
+        }
+
+
+        const d =
             new Date(
-                document
-                .getElementById(
-                    "jobDate"
-                )
-                .value+
+                dateValue +
                 "T12:00:00"
             );
 
-        day.value=
+
+        day.value =
             d.toLocaleDateString(
                 "en-GB",
                 {
@@ -2845,20 +4051,24 @@ function openJobForm(job){
             );
     }
 
+
     start.addEventListener(
         "input",
         update
     );
+
 
     end.addEventListener(
         "input",
         update
     );
 
+
     rate.addEventListener(
         "input",
         update
     );
+
 
     document
     .getElementById(
@@ -2869,9 +4079,12 @@ function openJobForm(job){
         updateDay
     );
 
+
     updateDay();
+
     update();
 }
+
 
 /* =====================================================
    SAVE JOB
@@ -2879,7 +4092,7 @@ function openJobForm(job){
 
 function saveJob(id){
 
-    const client=
+    const client =
         findClient(
             Number(
                 document
@@ -2890,32 +4103,37 @@ function saveJob(id){
             )
         );
 
+
     if(!client){
         return;
     }
 
-    const date=
+
+    const date =
         document
         .getElementById(
             "jobDate"
         )
         .value;
 
-    const start=
+
+    const start =
         document
         .getElementById(
             "jobStart"
         )
         .value;
 
-    const end=
+
+    const end =
         document
         .getElementById(
             "jobEnd"
         )
         .value;
 
-    const rate=
+
+    const rate =
         Number(
             document
             .getElementById(
@@ -2924,18 +4142,21 @@ function saveJob(id){
             .value
         );
 
-    const status=
+
+    const status =
         document
         .getElementById(
             "jobStatus"
         )
         .value;
 
+
     if(
         !date ||
         !start ||
         !end ||
-        minutes(end)<=minutes(start)
+        minutes(end) <=
+        minutes(start)
     ){
 
         alert(
@@ -2945,71 +4166,75 @@ function saveJob(id){
         return;
     }
 
+
     /*
-       EXACT calculation.
+       Exact calculation.
 
-       Example:
-
-       09:15 → 13:40
+       09:15 -> 13:40
        = 265 minutes
        = 4 hours 25 minutes
-       = 4.416666... decimal hours internally
 
-       Money is calculated from the exact minutes.
+       Money is calculated using
+       the exact number of minutes.
     */
 
-    const workedMinutes=
+
+    const workedMinutes =
         exactMinutes(
             start,
             end
         );
 
-    const workedHours=
-        workedMinutes/60;
 
-    const price=
-        workedHours*
+    const workedHours =
+        workedMinutes / 60;
+
+
+    const price =
+        workedHours *
         rate;
+
 
     if(id){
 
-        const job=
+        const job =
             data.jobs.find(
                 j =>
-                    Number(j.id)===
+                    Number(j.id) ===
                     Number(id)
             );
 
+
         if(job){
 
-            job.clientId=
+            job.clientId =
                 client.id;
 
-            job.clientName=
+            job.clientName =
                 client.name;
 
-            job.rate=
+            job.rate =
                 rate;
 
-            job.date=
+            job.date =
                 date;
 
-            job.start=
+            job.start =
                 start;
 
-            job.end=
+            job.end =
                 end;
 
-            job.hours=
+            job.hours =
                 workedHours;
 
-            job.workedMinutes=
+            job.workedMinutes =
                 workedMinutes;
 
-            job.price=
+            job.price =
                 price;
 
-            job.status=
+            job.status =
                 status;
         }
 
@@ -3052,8 +4277,10 @@ function saveJob(id){
 
             timerSeconds:
                 0
+
         });
     }
+
 
     saveData();
 
@@ -3062,23 +4289,29 @@ function saveJob(id){
     render();
 }
 
+
 /* =====================================================
    EDIT / DELETE JOB
 ===================================================== */
 
 function editJob(id){
 
-    const job=
+    const job =
         data.jobs.find(
             j =>
-                Number(j.id)===
+                Number(j.id) ===
                 Number(id)
         );
 
+
     if(job){
-        openJobForm(job);
+
+        openJobForm(
+            job
+        );
     }
 }
+
 
 function deleteJob(id){
 
@@ -3087,20 +4320,24 @@ function deleteJob(id){
             "Delete this job?"
         )
     ){
+
         return;
     }
 
-    data.jobs=
+
+    data.jobs =
         data.jobs.filter(
             j =>
-                Number(j.id)!==
+                Number(j.id) !==
                 Number(id)
         );
+
 
     saveData();
 
     render();
 }
+
 
 /* =====================================================
    EARNINGS
@@ -3109,33 +4346,39 @@ function deleteJob(id){
 function earningsPage(){
 
     let total=0;
+
     let hours=0;
+
     let owed=0;
 
+
     data.jobs.forEach(
-        j=>{
+        j => {
 
-            total+=
+            total +=
                 Number(
-                    j.price||0
+                    j.price || 0
                 );
 
-            hours+=
+
+            hours +=
                 Number(
-                    j.hours||0
+                    j.hours || 0
                 );
+
 
             if(
-                j.status==="Owed"
+                j.status === "Owed"
             ){
 
-                owed+=
+                owed +=
                     Number(
-                        j.price||0
+                        j.price || 0
                     );
             }
         }
     );
+
 
     return `
 
@@ -3146,6 +4389,7 @@ function earningsPage(){
             </h2>
 
         </div>
+
 
         <div class="dashboard">
 
@@ -3165,6 +4409,7 @@ function earningsPage(){
 
             </div>
 
+
             <div class="stat hours">
 
                 <div class="stat-icon">
@@ -3176,10 +4421,15 @@ function earningsPage(){
                 </div>
 
                 <div class="stat-value">
-                    ${formatExactTime(hours)}
+
+                    ${formatExactTime(
+                        hours
+                    )}
+
                 </div>
 
             </div>
+
 
             <div class="stat available">
 
@@ -3198,8 +4448,10 @@ function earningsPage(){
             </div>
 
         </div>
+
     `;
 }
+
 
 /* =====================================================
    TIMER SELECTOR
@@ -3207,7 +4459,9 @@ function earningsPage(){
 
 function openTimerSelector(){
 
-    if(timer.running){
+    if(
+        timer.running
+    ){
 
         showTimer(
             timer.clientId
@@ -3216,13 +4470,15 @@ function openTimerSelector(){
         return;
     }
 
-    let html=`
+
+    let html = `
 
         <div class="modal-head">
 
             <h2 class="modal-title">
                 Start Timer ⏱️
             </h2>
+
 
             <button
                 class="close"
@@ -3233,11 +4489,13 @@ function openTimerSelector(){
 
         </div>
 
+
         <div class="form-group">
 
             <label class="label">
                 Client
             </label>
+
 
             <select
                 id="timerClient"
@@ -3248,21 +4506,27 @@ function openTimerSelector(){
                     Select client
                 </option>
 
-                ${data.clients
+
+                ${
+                    data.clients
                     .map(
-                        c=>`
+                        c => `
+
                             <option
                                 value="${c.id}"
                             >
                                 ${esc(c.name)}
                             </option>
+
                         `
                     )
-                    .join("")}
+                    .join("")
+                }
 
             </select>
 
         </div>
+
 
         <button
             class="primary"
@@ -3271,14 +4535,19 @@ function openTimerSelector(){
         >
             ▶ Start Timer
         </button>
+
     `;
 
-    openModal(html);
+
+    openModal(
+        html
+    );
 }
+
 
 function startSelectedTimer(){
 
-    const id=
+    const id =
         Number(
             document
             .getElementById(
@@ -3286,6 +4555,7 @@ function startSelectedTimer(){
             )
             .value
         );
+
 
     if(!id){
 
@@ -3296,17 +4566,23 @@ function startSelectedTimer(){
         return;
     }
 
-    timer={
 
-        running:true,
+    timer = {
 
-        clientId:id,
+        running:
+            true,
+
+        clientId:
+            id,
 
         startedAt:
             Date.now(),
 
-        accumulated:0
+        accumulated:
+            0
+
     };
+
 
     saveTimer();
 
@@ -3315,26 +4591,36 @@ function startSelectedTimer(){
     render();
 }
 
+
 /* =====================================================
-   SHOW TIMER
+   TIMER DISPLAY
 ===================================================== */
 
 function showTimer(id){
 
-    const client=
+    const client =
         findClient(id);
+
 
     if(!client){
         return;
     }
 
-    let html=`
+
+    let html = `
 
         <div class="modal-head">
 
             <h2 class="modal-title">
-                ${esc(client.name)} ⏱️
+
+                ${esc(
+                    client.name
+                )}
+
+                ⏱️
+
             </h2>
+
 
             <button
                 class="close"
@@ -3345,27 +4631,32 @@ function showTimer(id){
 
         </div>
 
+
         <div class="timer-box">
 
             <div
                 id="timerDisplay"
                 class="timer-display"
             >
+
                 ${timerText(
                     timerSeconds()
                 )}
+
             </div>
+
 
             <button
                 class="primary"
                 style="
                     width:100%;
-                    background:#766c82
+                    background:#766c82;
                 "
                 onclick="stopTimer()"
             >
                 ⏹ Stop & Save
             </button>
+
 
             <div class="timer-info">
 
@@ -3375,10 +4666,13 @@ function showTimer(id){
                     id="timerHours"
                     class="timer-big"
                 >
+
                     ${formatExactTime(
                         timerHours()
                     )}
+
                 </strong>
+
 
                 Earned
 
@@ -3386,21 +4680,28 @@ function showTimer(id){
                     id="timerMoney"
                     class="timer-big"
                 >
+
                     ${money(
-                        timerHours()*
+                        timerHours() *
                         Number(
                             client.rate
                         )
                     )}
+
                 </strong>
 
             </div>
 
         </div>
+
     `;
 
-    openModal(html);
+
+    openModal(
+        html
+    );
 }
+
 
 /* =====================================================
    STOP TIMER
@@ -3408,14 +4709,19 @@ function showTimer(id){
 
 function stopTimer(){
 
-    if(!timer.running){
+    if(
+        !timer.running
+    ){
+
         return;
     }
 
-    const client=
+
+    const client =
         findClient(
             timer.clientId
         );
+
 
     if(!client){
 
@@ -3424,28 +4730,34 @@ function stopTimer(){
         return;
     }
 
-    const seconds=
+
+    const seconds =
         timerSeconds();
 
-    const workedMinutes=
+
+    const workedMinutes =
         Math.floor(
-            seconds/60
+            seconds / 60
         );
 
-    const workedHours=
-        workedMinutes/60;
 
-    const now=
+    const workedHours =
+        workedMinutes / 60;
+
+
+    const now =
         new Date();
 
-    const started=
+
+    const started =
         new Date(
             Number(
                 timer.startedAt
             )
         );
 
-    const start=
+
+    const start =
         started.toLocaleTimeString(
             "en-GB",
             {
@@ -3454,7 +4766,8 @@ function stopTimer(){
             }
         );
 
-    const end=
+
+    const end =
         now.toLocaleTimeString(
             "en-GB",
             {
@@ -3463,11 +4776,13 @@ function stopTimer(){
             }
         );
 
-    const price=
-        workedHours*
+
+    const price =
+        workedHours *
         Number(
             client.rate
         );
+
 
     data.jobs.push({
 
@@ -3481,7 +4796,9 @@ function stopTimer(){
             client.name,
 
         rate:
-            Number(client.rate),
+            Number(
+                client.rate
+            ),
 
         date:
             today(),
@@ -3506,7 +4823,9 @@ function stopTimer(){
 
         status:
             "Paid"
+
     });
+
 
     resetTimer();
 
@@ -3517,88 +4836,123 @@ function stopTimer(){
     render();
 }
 
+
 function resetTimer(){
 
-    timer={
+    timer = {
 
-        running:false,
+        running:
+            false,
 
-        clientId:null,
+        clientId:
+            null,
 
-        startedAt:null,
+        startedAt:
+            null,
 
-        accumulated:0
+        accumulated:
+            0
+
     };
+
 
     saveTimer();
 }
+
 
 /* =====================================================
    MODAL
 ===================================================== */
 
-function openModal(content){
+function openModal(
+    content
+){
 
     closeModal();
 
-    const bg=
+
+    const bg =
         document.createElement(
             "div"
         );
 
-    bg.id="modal";
 
-    bg.className="modal-bg";
+    bg.id =
+        "modal";
 
-    const box=
+
+    bg.className =
+        "modal-bg";
+
+
+    const box =
         document.createElement(
             "div"
         );
 
-    box.className="modal";
 
-    box.innerHTML=
+    box.className =
+        "modal";
+
+
+    box.innerHTML =
         content;
 
-    box.onclick=
+
+    box.onclick =
         e =>
             e.stopPropagation();
 
-    bg.appendChild(box);
 
-    bg.onclick=
+    bg.appendChild(
+        box
+    );
+
+
+    bg.onclick =
         closeModal;
 
-    document.body.appendChild(bg);
+
+    document.body.appendChild(
+        bg
+    );
 }
+
 
 function closeModal(){
 
-    const modal=
+    const modal =
         document.getElementById(
             "modal"
         );
 
+
     if(modal){
+
         modal.remove();
     }
 }
+
 
 /* =====================================================
    NAVIGATION
 ===================================================== */
 
-let currentPage="home";
+let currentPage =
+    "home";
+
 
 function go(page){
 
-    currentPage=
+    currentPage =
         page;
+
 
     closeModal();
 
     render();
 }
+
 
 function navButton(
     page,
@@ -3609,12 +4963,17 @@ function navButton(
     return `
 
         <button
-            class="nav ${
-                currentPage===page
-                    ?"active"
-                    :""
-            }"
-            onclick="go('${page}')"
+            class="
+                nav
+                ${
+                    currentPage === page
+                        ? "active"
+                        : ""
+                }
+            "
+            onclick="
+                go('${page}')
+            "
         >
 
             <span class="nav-icon">
@@ -3624,8 +4983,10 @@ function navButton(
             ${label}
 
         </button>
+
     `;
 }
+
 
 function navigation(){
 
@@ -3639,11 +5000,13 @@ function navigation(){
                 "Home"
             )}
 
+
             ${navButton(
                 "schedule",
                 "📅",
                 "Calendar"
             )}
+
 
             ${navButton(
                 "clients",
@@ -3651,11 +5014,13 @@ function navigation(){
                 "Clients"
             )}
 
+
             ${navButton(
                 "jobs",
                 "📋",
                 "Jobs"
             )}
+
 
             ${navButton(
                 "earnings",
@@ -3664,8 +5029,10 @@ function navigation(){
             )}
 
         </nav>
+
     `;
 }
+
 
 /* =====================================================
    RENDER
@@ -3673,89 +5040,118 @@ function navigation(){
 
 function render(){
 
-    let content="";
+    let content = "";
+
 
     if(
-        currentPage==="home"
+        currentPage === "home"
     ){
-        content=
+
+        content =
             homePage();
     }
 
+
     if(
-        currentPage==="schedule"
+        currentPage === "schedule"
     ){
-        content=
+
+        content =
             calendarPage();
     }
 
+
     if(
-        currentPage==="clients"
+        currentPage === "clients"
     ){
-        content=
+
+        content =
             clientsPage();
     }
 
+
     if(
-        currentPage==="jobs"
+        currentPage === "jobs"
     ){
-        content=
+
+        content =
             jobsPage();
     }
 
+
     if(
-        currentPage==="earnings"
+        currentPage === "earnings"
     ){
-        content=
+
+        content =
             earningsPage();
     }
 
-    let banner="";
 
-    if(timer.running){
+    let banner = "";
 
-        const client=
+
+    if(
+        timer.running
+    ){
+
+        const client =
             findClient(
                 timer.clientId
             );
 
+
         if(client){
 
-            banner=`
+            banner = `
 
                 <div
                     class="timer-banner"
-                    onclick="showTimer(${client.id})"
+                    onclick="
+                        showTimer(
+                            ${client.id}
+                        )
+                    "
                 >
 
                     <span>
-                        ⏱️ ${esc(client.name)}
+                        ⏱️
+                        ${esc(
+                            client.name
+                        )}
                     </span>
+
 
                     <strong
                         id="bannerTimer"
                     >
+
                         ${timerText(
                             timerSeconds()
                         )}
+
                     </strong>
+
 
                     <span>
                         Tap
                     </span>
 
                 </div>
+
             `;
         }
     }
 
+
     document.getElementById(
         "app"
-    ).innerHTML=`
+    ).innerHTML = `
 
         <div class="app">
 
             ${banner}
+
 
             <header class="header">
 
@@ -3768,6 +5164,7 @@ function render(){
                         alt="Pure Shine"
                     >
 
+
                     <div
                         id="logoFallback"
                         class="logo-fallback"
@@ -3775,11 +5172,13 @@ function render(){
                         ✨
                     </div>
 
+
                     <div>
 
                         <div class="brand-title">
                             Pure Shine
                         </div>
+
 
                         <div class="brand-subtitle">
                             Cleaning Manager ✨
@@ -3789,18 +5188,24 @@ function render(){
 
                 </div>
 
+
                 <div class="header-actions">
 
                     <button
                         class="header-btn timer"
-                        onclick="openTimerSelector()"
+                        onclick="
+                            openTimerSelector()
+                        "
                     >
                         ⏱️
                     </button>
 
+
                     <button
                         class="header-btn"
-                        onclick="openJobForm()"
+                        onclick="
+                            openJobForm()
+                        "
                     >
                         +
                     </button>
@@ -3809,115 +5214,139 @@ function render(){
 
             </header>
 
+
             <main class="content">
+
                 ${content}
+
             </main>
 
         </div>
 
+
         ${navigation()}
+
     `;
 
-    const logo=
+
+    const logo =
         document.getElementById(
             "mainLogo"
         );
 
-    const fallback=
+
+    const fallback =
         document.getElementById(
             "logoFallback"
         );
 
+
     if(logo){
 
-        logo.onerror=
+        logo.onerror =
             function(){
 
-                logo.style.display=
+                logo.style.display =
                     "none";
+
 
                 if(fallback){
 
-                    fallback.style.display=
+                    fallback.style.display =
                         "flex";
                 }
+
             };
     }
 }
 
+
 /* =====================================================
-   LIVE TIMER UPDATE
+   LIVE TIMER
 ===================================================== */
 
 setInterval(
     function(){
 
-        if(!timer.running){
+        if(
+            !timer.running
+        ){
+
             return;
         }
 
-        const seconds=
+
+        const seconds =
             timerSeconds();
 
-        const display=
+
+        const display =
             document.getElementById(
                 "timerDisplay"
             );
 
-        const banner=
+
+        const banner =
             document.getElementById(
                 "bannerTimer"
             );
 
-        const hours=
+
+        const hours =
             document.getElementById(
                 "timerHours"
             );
 
-        const moneyBox=
+
+        const moneyBox =
             document.getElementById(
                 "timerMoney"
             );
 
+
         if(display){
 
-            display.textContent=
+            display.textContent =
                 timerText(
                     seconds
                 );
         }
+
 
         if(banner){
 
-            banner.textContent=
+            banner.textContent =
                 timerText(
                     seconds
                 );
         }
 
+
         if(hours){
 
-            hours.textContent=
+            hours.textContent =
                 formatExactTime(
-                    seconds/3600
+                    seconds / 3600
                 );
         }
 
-        const client=
+
+        const client =
             findClient(
                 timer.clientId
             );
+
 
         if(
             moneyBox &&
             client
         ){
 
-            moneyBox.textContent=
+            moneyBox.textContent =
                 money(
                     (
-                        seconds/3600
-                    )*
+                        seconds / 3600
+                    ) *
                     Number(
                         client.rate
                     )
@@ -3928,6 +5357,7 @@ setInterval(
     1000
 );
 
+
 /* =====================================================
    BACKGROUND TIMER
 ===================================================== */
@@ -3936,9 +5366,13 @@ document.addEventListener(
     "visibilitychange",
     function(){
 
-        if(timer.running){
+        if(
+            timer.running
+        ){
+
             saveTimer();
         }
+
 
         if(
             !document.hidden &&
@@ -3947,36 +5381,141 @@ document.addEventListener(
 
             render();
         }
+
     }
 );
+
 
 window.addEventListener(
     "pagehide",
     function(){
 
-        if(timer.running){
+        if(
+            timer.running
+        ){
+
             saveTimer();
         }
+
     }
 );
+
 
 window.addEventListener(
     "beforeunload",
     function(){
 
-        if(timer.running){
+        if(
+            timer.running
+        ){
+
             saveTimer();
         }
+
     }
 );
 
+
 /* =====================================================
-   START
+   WELCOME SCREEN
+===================================================== */
+
+function enterApp(){
+
+    const welcome =
+        document.getElementById(
+            "welcomeScreen"
+        );
+
+
+    if(!welcome){
+        return;
+    }
+
+
+    welcome.style.transition =
+        "opacity .35s ease";
+
+
+    welcome.style.opacity =
+        "0";
+
+
+    setTimeout(
+        function(){
+
+            welcome.style.display =
+                "none";
+
+        },
+        350
+    );
+}
+
+
+/*
+   IMPORTANT:
+
+   We DO NOT save a login flag.
+
+   Therefore, every time the page is
+   loaded again, the welcome page appears.
+*/
+
+
+function showWelcome(){
+
+    const welcome =
+        document.getElementById(
+            "welcomeScreen"
+        );
+
+
+    if(!welcome){
+        return;
+    }
+
+
+    welcome.style.display =
+        "flex";
+
+
+    welcome.style.opacity =
+        "1";
+}
+
+
+/* =====================================================
+   START APPLICATION
 ===================================================== */
 
 render();
 
+
+/*
+   Always start with the Pure Shine
+   introduction page.
+*/
+
+showWelcome();
+
+
+/*
+   pageshow also handles cases where
+   Safari restores the page from memory.
+*/
+
+window.addEventListener(
+    "pageshow",
+    function(){
+
+        showWelcome();
+
+    }
+);
+
 </script>
 
 </body>
+
 </html>
