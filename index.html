@@ -182,7 +182,7 @@ button{
 }
 
 .stat-value{
-    font-size:28px;
+    font-size:26px;
     font-weight:850;
     margin-top:3px;
 }
@@ -396,6 +396,7 @@ button{
     line-height:1.25;
     font-weight:800;
     word-break:break-word;
+    margin-bottom:4px;
 }
 
 .calendar-time{
@@ -403,13 +404,6 @@ button{
     font-size:9px;
     color:#8b7580;
     font-weight:600;
-}
-
-.calendar-empty{
-    color:#c0bac4;
-    font-size:10px;
-    text-align:center;
-    margin-top:18px;
 }
 
 /* CARDS */
@@ -602,7 +596,7 @@ button{
 .timer-big{
     display:block;
     margin:6px 0 13px;
-    font-size:28px;
+    font-size:24px;
     color:#b04f7c;
 }
 
@@ -677,13 +671,18 @@ button{
 <script>
 
 /* =====================================================
-   DATA
+   STORAGE
 ===================================================== */
 
 const STORAGE_KEY="pureShineCleaningManager_200";
 const TIMER_KEY="pureShineCleaningManager_TIMER";
 
+/* =====================================================
+   DEFAULT CLIENTS
+===================================================== */
+
 const defaultClients=[
+
     {
         id:1,
         name:"Tosca",
@@ -695,6 +694,7 @@ const defaultClients=[
         freq:"weekly",
         week:"A"
     },
+
     {
         id:2,
         name:"Lottie",
@@ -706,6 +706,7 @@ const defaultClients=[
         freq:"weekly",
         week:"A"
     },
+
     {
         id:3,
         name:"Christine",
@@ -717,6 +718,7 @@ const defaultClients=[
         freq:"weekly",
         week:"A"
     },
+
     {
         id:4,
         name:"Matt",
@@ -729,6 +731,7 @@ const defaultClients=[
         week:"A",
         variable:true
     },
+
     {
         id:5,
         name:"Sonia",
@@ -741,6 +744,7 @@ const defaultClients=[
         week:"A",
         variable:true
     },
+
     {
         id:7,
         name:"Laura",
@@ -753,6 +757,7 @@ const defaultClients=[
         week:"A",
         variable:true
     },
+
     {
         id:8,
         name:"Hannah",
@@ -764,6 +769,7 @@ const defaultClients=[
         freq:"weekly",
         week:"A"
     },
+
     {
         id:9,
         name:"Joanna",
@@ -776,6 +782,7 @@ const defaultClients=[
         week:"A",
         variable:true
     },
+
     {
         id:10,
         name:"Sindu",
@@ -789,17 +796,30 @@ const defaultClients=[
     }
 ];
 
+/* =====================================================
+   LOAD DATA
+===================================================== */
+
 let data;
 
 try{
+
     data=JSON.parse(
-        localStorage.getItem(STORAGE_KEY)
+        localStorage.getItem(
+            STORAGE_KEY
+        )
     );
+
 }catch(e){
+
     data=null;
 }
 
-if(!data || !Array.isArray(data.clients)){
+if(
+    !data ||
+    !Array.isArray(data.clients)
+){
+
     data={
         clients:defaultClients,
         jobs:[]
@@ -810,20 +830,28 @@ if(!Array.isArray(data.jobs)){
     data.jobs=[];
 }
 
-/* Gill must stay removed */
-data.clients=data.clients.filter(
-    c =>
-        String(c.name||"").toLowerCase()
-        !=="gill"
-);
+/* Gill stays removed */
 
-data.jobs=data.jobs.filter(
-    j =>
-        String(j.clientName||"").toLowerCase()
-        !=="gill"
-);
+data.clients=
+    data.clients.filter(
+        c =>
+            String(
+                c.name||""
+            ).toLowerCase()
+            !=="gill"
+    );
+
+data.jobs=
+    data.jobs.filter(
+        j =>
+            String(
+                j.clientName||""
+            ).toLowerCase()
+            !=="gill"
+    );
 
 function saveData(){
+
     localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify(data)
@@ -833,153 +861,172 @@ function saveData(){
 saveData();
 
 /* =====================================================
-   TIMER
+   FREQUENCY TEXT
 ===================================================== */
 
-let timer={
-    running:false,
-    clientId:null,
-    startedAt:null,
-    accumulated:0
-};
+function frequencyText(freq){
 
-try{
-    const saved=
-        JSON.parse(
-            localStorage.getItem(TIMER_KEY)
-        );
-
-    if(saved){
-        timer=saved;
-    }
-}catch(e){}
-
-function saveTimer(){
-    localStorage.setItem(
-        TIMER_KEY,
-        JSON.stringify(timer)
-    );
-}
-
-/*
-   Timer is based on Date.now().
-   It therefore does NOT depend on the page
-   running every second.
-*/
-
-function timerSeconds(){
-
-    if(!timer.running){
-        return Number(
-            timer.accumulated||0
-        );
+    if(freq==="weekly"){
+        return "Weekly";
     }
 
-    return Number(
-        timer.accumulated||0
-    )+
-    Math.max(
-        0,
-        Math.floor(
-            (
-                Date.now()-
-                Number(timer.startedAt||0)
-            )/1000
-        )
-    );
-}
+    if(freq==="fortnightly"){
+        return "Every 2 weeks";
+    }
 
-function timerText(seconds){
+    if(freq==="threeweekly"){
+        return "Every 3 weeks";
+    }
 
-    seconds=Math.max(
-        0,
-        Math.floor(Number(seconds)||0)
-    );
+    if(freq==="fourweekly"){
+        return "Every 4 weeks";
+    }
 
-    const h=Math.floor(
-        seconds/3600
-    );
+    if(freq==="monthly"){
+        return "Monthly";
+    }
 
-    const m=Math.floor(
-        (seconds%3600)/60
-    );
+    if(freq==="occasional"){
+        return "Occasional";
+    }
 
-    const s=seconds%60;
-
-    return String(h).padStart(2,"0")
-        +":"
-        +String(m).padStart(2,"0")
-        +":"
-        +String(s).padStart(2,"0");
-}
-
-function timerHours(){
-    return timerSeconds()/3600;
+    return "Weekly";
 }
 
 /* =====================================================
-   HELPERS
+   EXACT TIME FORMATTING
 ===================================================== */
 
-function esc(v){
-    return String(v==null?"":v)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+/*
+   This is now ALWAYS displayed like:
+
+   4 hours 25 minutes
+
+   NOT:
+   4.25h
+   4.4167h
+   4h 25m
+*/
+
+function formatExactTime(hours){
+
+    const totalMinutes=
+        Math.round(
+            Number(hours||0)*60
+        );
+
+    const h=
+        Math.floor(
+            totalMinutes/60
+        );
+
+    const m=
+        totalMinutes%60;
+
+    if(h===0 && m===0){
+        return "0 minutes";
+    }
+
+    if(h===0){
+        return m+
+            (m===1
+                ?" minute"
+                :" minutes");
+    }
+
+    if(m===0){
+        return h+
+            (h===1
+                ?" hour"
+                :" hours");
+    }
+
+    return h+
+        (h===1
+            ?" hour "
+            :" hours ")
+        +
+        m+
+        (m===1
+            ?" minute"
+            :" minutes");
 }
 
-function money(v){
-    return "£"+
-        Number(v||0).toFixed(2);
+function exactMinutes(
+    start,
+    end
+){
+
+    if(!start || !end){
+        return 0;
+    }
+
+    const startParts=
+        start.split(":");
+
+    const endParts=
+        end.split(":");
+
+    const startMinutes=
+        Number(startParts[0])*60+
+        Number(startParts[1]);
+
+    const endMinutes=
+        Number(endParts[0])*60+
+        Number(endParts[1]);
+
+    return Math.max(
+        0,
+        endMinutes-startMinutes
+    );
 }
 
-function minutes(t){
+function exactHours(
+    start,
+    end
+){
 
-    if(!t)return 0;
-
-    const p=t.split(":");
-
-    return Number(p[0])*60+
-        Number(p[1]);
-}
-
-function exactHours(start,end){
-    return (
-        minutes(end)-
-        minutes(start)
+    return exactMinutes(
+        start,
+        end
     )/60;
 }
 
-function exactMinutes(start,end){
-    return (
-        minutes(end)-
-        minutes(start)
-    );
+/* =====================================================
+   GENERAL HELPERS
+===================================================== */
+
+function esc(value){
+
+    return String(
+        value==null
+            ?""
+            :value
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
-function formatExactHours(hours){
+function money(value){
 
-    const total=Math.round(
-        Number(hours||0)*60
-    );
+    return "£"+
+        Number(value||0)
+        .toFixed(2);
+}
 
-    const h=Math.floor(
-        total/60
-    );
+function minutes(time){
 
-    const m=total%60;
-
-    if(h && m){
-        return h+"h "+m+"min";
+    if(!time){
+        return 0;
     }
 
-    if(h){
-        return h+"h";
-    }
+    const p=time.split(":");
 
-    return m+"min";
+    return Number(p[0])*60+
+        Number(p[1]);
 }
 
 function today(){
@@ -988,9 +1035,13 @@ function today(){
 
     return d.getFullYear()+
         "-"+
-        String(d.getMonth()+1).padStart(2,"0")+
+        String(
+            d.getMonth()+1
+        ).padStart(2,"0")+
         "-"+
-        String(d.getDate()).padStart(2,"0");
+        String(
+            d.getDate()
+        ).padStart(2,"0");
 }
 
 function todayDay(){
@@ -998,7 +1049,9 @@ function todayDay(){
     return new Date()
         .toLocaleDateString(
             "en-GB",
-            {weekday:"long"}
+            {
+                weekday:"long"
+            }
         );
 }
 
@@ -1015,7 +1068,8 @@ function formatDate(date){
 
     return new Date(
         date+"T12:00:00"
-    ).toLocaleDateString(
+    )
+    .toLocaleDateString(
         "en-GB",
         {
             day:"numeric",
@@ -1026,7 +1080,103 @@ function formatDate(date){
 }
 
 /* =====================================================
-   HOME PAGE
+   TIMER
+===================================================== */
+
+let timer={
+    running:false,
+    clientId:null,
+    startedAt:null,
+    accumulated:0
+};
+
+try{
+
+    const savedTimer=
+        JSON.parse(
+            localStorage.getItem(
+                TIMER_KEY
+            )
+        );
+
+    if(savedTimer){
+        timer=savedTimer;
+    }
+
+}catch(e){}
+
+function saveTimer(){
+
+    localStorage.setItem(
+        TIMER_KEY,
+        JSON.stringify(timer)
+    );
+}
+
+function timerSeconds(){
+
+    if(!timer.running){
+
+        return Number(
+            timer.accumulated||0
+        );
+    }
+
+    return Number(
+        timer.accumulated||0
+    )+
+    Math.max(
+        0,
+        Math.floor(
+            (
+                Date.now()-
+                Number(
+                    timer.startedAt||0
+                )
+            )/1000
+        )
+    );
+}
+
+function timerText(seconds){
+
+    seconds=Math.max(
+        0,
+        Math.floor(
+            Number(seconds)||0
+        )
+    );
+
+    const h=
+        Math.floor(
+            seconds/3600
+        );
+
+    const m=
+        Math.floor(
+            (seconds%3600)/60
+        );
+
+    const s=
+        seconds%60;
+
+    return String(h)
+        .padStart(2,"0")
+        +":"
+        +String(m)
+        .padStart(2,"0")
+        +":"
+        +String(s)
+        .padStart(2,"0");
+}
+
+function timerHours(){
+
+    return timerSeconds()/3600;
+}
+
+/* =====================================================
+   HOME
 ===================================================== */
 
 function homePage(){
@@ -1039,34 +1189,41 @@ function homePage(){
 
     const totalHours=
         todayJobs.reduce(
-            (s,j)=>
-                s+Number(j.hours||0),
+            (sum,j)=>
+                sum+
+                Number(
+                    j.hours||0
+                ),
             0
         );
 
     const earned=
         todayJobs.reduce(
-            (s,j)=>
-                s+Number(j.price||0),
+            (sum,j)=>
+                sum+
+                Number(
+                    j.price||0
+                ),
             0
         );
 
     const todayClients=
         data.clients
-            .filter(
-                c =>
-                    c.day===todayDay()
-            )
-            .sort(
-                (a,b)=>
-                    minutes(a.start)-
-                    minutes(b.start)
-            );
+        .filter(
+            c =>
+                c.day===todayDay() &&
+                c.freq!=="occasional"
+        )
+        .sort(
+            (a,b)=>
+                minutes(a.start)-
+                minutes(b.start)
+        );
 
     const available=
         todayClients.reduce(
-            (s,c)=>
-                s+
+            (sum,c)=>
+                sum+
                 exactHours(
                     c.start,
                     c.end
@@ -1077,20 +1234,22 @@ function homePage(){
     let html="";
 
     html+=`
-        <h1 class="greeting">Hello ✨</h1>
-        <div class="date">
-            ${new Date().toLocaleDateString(
-                "en-GB",
-                {
-                    weekday:"long",
-                    day:"numeric",
-                    month:"long"
-                }
-            )}
-        </div>
-    `;
+        <h1 class="greeting">
+            Hello ✨
+        </h1>
 
-    html+=`
+        <div class="date">
+            ${new Date()
+                .toLocaleDateString(
+                    "en-GB",
+                    {
+                        weekday:"long",
+                        day:"numeric",
+                        month:"long"
+                    }
+                )}
+        </div>
+
         <div class="dashboard">
 
             <div class="stat jobs">
@@ -1105,7 +1264,9 @@ function homePage(){
                 <div class="stat-icon">⏱️</div>
                 <div class="stat-label">Hours</div>
                 <div class="stat-value">
-                    ${formatExactHours(totalHours)}
+                    ${formatExactTime(
+                        totalHours
+                    )}
                 </div>
             </div>
 
@@ -1121,17 +1282,16 @@ function homePage(){
                 <div class="stat-icon">🌸</div>
                 <div class="stat-label">Available</div>
                 <div class="stat-value">
-                    ${formatExactHours(available)}
+                    ${formatExactTime(
+                        available
+                    )}
                 </div>
             </div>
 
         </div>
-    `;
 
-    /* ONLY CLIENT + STANDARD HOURS ON HOME */
-
-    html+=`
         <section class="section">
+
             <h2 class="section-title">
                 Today's schedule
             </h2>
@@ -1139,52 +1299,56 @@ function homePage(){
 
     if(todayClients.length){
 
-        todayClients.forEach(c=>{
+        todayClients.forEach(
+            c=>{
 
-            html+=`
-                <div class="today-card">
+                html+=`
+                    <div class="today-card">
 
-                    <div>
-                        <div class="today-client">
-                            ${esc(c.name)}
+                        <div>
+
+                            <div class="today-client">
+                                ${esc(c.name)}
+                            </div>
+
+                            <div class="today-standard">
+                                Standard:
+                                <strong>
+                                    ${formatExactTime(
+                                        exactHours(
+                                            c.start,
+                                            c.end
+                                        )
+                                    )}
+                                </strong>
+                            </div>
+
                         </div>
 
-                        <div class="today-standard">
-                            Standard:
-                            <strong>
-                                ${formatExactHours(
-                                    exactHours(
-                                        c.start,
-                                        c.end
-                                    )
-                                )}
-                            </strong>
+                        <div>
+                            ⏱️
                         </div>
-                    </div>
 
-                    <div>
-                        ⏱️
                     </div>
-
-                </div>
-            `;
-        });
+                `;
+            }
+        );
 
     }else{
 
         html+=`
             <div class="empty">
-                <div class="empty-icon">🌸</div>
+                <div class="empty-icon">
+                    🌸
+                </div>
                 No cleaning jobs today.
             </div>
         `;
     }
 
-    html+=`</section>`;
-
-    /* ONLY TWO QUICK ACTIONS */
-
     html+=`
+        </section>
+
         <section class="section">
 
             <h2 class="section-title">
@@ -1222,7 +1386,7 @@ function homePage(){
 }
 
 /* =====================================================
-   CALENDAR PAGE
+   CALENDAR
 ===================================================== */
 
 function getMonday(date){
@@ -1240,7 +1404,9 @@ function getMonday(date){
         d.getDate()+diff
     );
 
-    d.setHours(12,0,0,0);
+    d.setHours(
+        12,0,0,0
+    );
 
     return d;
 }
@@ -1249,9 +1415,13 @@ function dateISO(d){
 
     return d.getFullYear()+
         "-"+
-        String(d.getMonth()+1).padStart(2,"0")+
+        String(
+            d.getMonth()+1
+        ).padStart(2,"0")+
         "-"+
-        String(d.getDate()).padStart(2,"0");
+        String(
+            d.getDate()
+        ).padStart(2,"0");
 }
 
 function calendarPage(){
@@ -1275,13 +1445,13 @@ function calendarPage(){
 
     html+=`
         <div class="section-head">
+
             <h2 class="section-title">
                 Weekly Calendar 📅
             </h2>
-        </div>
-    `;
 
-    html+=`
+        </div>
+
         <div class="calendar">
 
             <div class="calendar-header">
@@ -1289,6 +1459,7 @@ function calendarPage(){
 
     dayNames.forEach(
         day=>{
+
             html+=`
                 <div class="calendar-day-name">
                     ${day}
@@ -1305,24 +1476,35 @@ function calendarPage(){
 
     for(let i=0;i<7;i++){
 
-        const d=new Date(monday);
+        const d=
+            new Date(monday);
 
         d.setDate(
             monday.getDate()+i
         );
 
-        const iso=dateISO(d);
+        const iso=
+            dateISO(d);
 
         const dayName=
             d.toLocaleDateString(
                 "en-GB",
-                {weekday:"long"}
+                {
+                    weekday:"long"
+                }
             );
 
+        /*
+           Occasional clients are not placed
+           automatically in the weekly calendar.
+        */
+
         const clients=
-            data.clients.filter(
+            data.clients
+            .filter(
                 c =>
-                    c.day===dayName
+                    c.day===dayName &&
+                    c.freq!=="occasional"
             );
 
         const isToday=
@@ -1339,32 +1521,29 @@ function calendarPage(){
                 </div>
         `;
 
-        /*
-           Only clients belonging to that
-           exact day are displayed.
-        */
-
         if(clients.length){
 
-            clients.forEach(c=>{
+            clients.forEach(
+                c=>{
 
-                html+=`
-                    <div
-                        class="calendar-client"
-                        onclick="openJobFormByClient(${c.id})"
-                    >
+                    html+=`
+                        <div
+                            class="calendar-client"
+                            onclick="openJobFormByClient(${c.id})"
+                        >
 
-                        ${esc(c.name)}
+                            ${esc(c.name)}
 
-                        <div class="calendar-time">
-                            ${esc(c.start)}
-                            –
-                            ${esc(c.end)}
+                            <div class="calendar-time">
+                                ${esc(c.start)}
+                                –
+                                ${esc(c.end)}
+                            </div>
+
                         </div>
-
-                    </div>
-                `;
-            });
+                    `;
+                }
+            );
 
         }else{
 
@@ -1382,13 +1561,7 @@ function calendarPage(){
 
     html+=`
             </div>
-        </div>
-    `;
 
-    html+=`
-        <div class="note" style="margin-top:14px">
-            Each day shows only the clients scheduled
-            for that exact day.
         </div>
     `;
 
@@ -1420,892 +1593,89 @@ function clientsPage(){
         </div>
     `;
 
-    data.clients.forEach(c=>{
+    data.clients.forEach(
+        c=>{
 
-        html+=`
-            <div class="card">
+            html+=`
+                <div class="card">
 
-                <div class="card-top">
+                    <div class="card-top">
 
-                    <div>
+                        <div>
 
-                        <div class="card-name">
-                            ${esc(c.name)}
+                            <div class="card-name">
+                                ${esc(c.name)}
+                            </div>
+
+                            <div class="card-details">
+
+                                ${esc(c.day)}
+                                ·
+                                ${esc(c.start)}
+                                –
+                                ${esc(c.end)}
+
+                                <br>
+
+                                £${Number(c.rate)}
+                                /hour
+                                ·
+                                ${frequencyText(c.freq)}
+
+                            </div>
+
                         </div>
 
-                        <div class="card-details">
-                            ${esc(c.day)}
-                            ·
-                            ${esc(c.start)}
-                            –
-                            ${esc(c.end)}
-                            <br>
-                            £${Number(c.rate)}/hour
-                            ·
+                        <span class="badge">
                             ${
-                                c.freq==="fortnightly"
-                                ?"Every 2 weeks"
-                                :"Weekly"
+                                c.type==="private"
+                                    ?"Private"
+                                    :"Agency"
                             }
-                        </div>
-
-                    </div>
-
-                    <span class="badge">
-                        ${c.type==="private"
-                            ?"Private"
-                            :"Agency"}
-                    </span>
-
-                </div>
-
-                <div class="card-actions">
-
-                    <button
-                        class="secondary"
-                        onclick="openClientForm(${c.id})"
-                    >
-                        ✏️ Edit
-                    </button>
-
-                    <button
-                        class="danger"
-                        onclick="deleteClient(${c.id})"
-                    >
-                        🗑️ Delete
-                    </button>
-
-                </div>
-
-            </div>
-        `;
-    });
-
-    return html;
-}
-
-/* =====================================================
-   JOB HISTORY
-===================================================== */
-
-function jobsPage(){
-
-    let html="";
-
-    html+=`
-        <div class="section-head">
-
-            <h2 class="section-title">
-                Job History 📋
-            </h2>
-
-            <button
-                class="primary"
-                onclick="openJobForm()"
-            >
-                ＋ Add
-            </button>
-
-        </div>
-    `;
-
-    if(!data.jobs.length){
-
-        return html+
-        `
-            <div class="empty">
-                <div class="empty-icon">
-                    📋
-                </div>
-                No completed jobs yet.
-            </div>
-        `;
-    }
-
-    /*
-       GROUP HISTORY BY CLIENT
-    */
-
-    const grouped={};
-
-    data.jobs.forEach(job=>{
-
-        const client=findClient(
-            job.clientId
-        );
-
-        const name=
-            client
-                ?client.name
-                :(job.clientName||"Unknown");
-
-        if(!grouped[name]){
-            grouped[name]=[];
-        }
-
-        grouped[name].push(job);
-    });
-
-    Object.keys(grouped)
-        .sort()
-        .forEach(name=>{
-
-            const jobs=
-                grouped[name].sort(
-                    (a,b)=>
-                        b.date.localeCompare(
-                            a.date
-                        )
-                );
-
-            const clientTotal=
-                jobs.reduce(
-                    (s,j)=>
-                        s+
-                        Number(j.price||0),
-                    0
-                );
-
-            html+=`
-                <div class="client-history">
-
-                    <div class="client-history-title">
-
-                        <span>
-                            ${esc(name)}
-                        </span>
-
-                        <span class="client-total">
-                            ${money(clientTotal)}
                         </span>
 
                     </div>
-            `;
 
-            jobs.forEach(job=>{
+                    ${
+                        c.variable
+                            ?`
+                                <div
+                                    style="
+                                        color:#858094;
+                                        font-size:13px;
+                                        margin-top:6px
+                                    "
+                                >
+                                    Variable duration
+                                </div>
+                            `
+                            :""
+                    }
 
-                const exactMins=
-                    job.timerSeconds
-                        ?Math.floor(
-                            Number(
-                                job.timerSeconds
-                            )/60
-                        )
-                        :Math.round(
-                            Number(
-                                job.hours||0
-                            )*60
-                        );
+                    <div class="card-actions">
 
-                const h=Math.floor(
-                    exactMins/60
-                );
+                        <button
+                            class="secondary"
+                            onclick="openClientForm(${c.id})"
+                        >
+                            ✏️ Edit
+                        </button>
 
-                const m=exactMins%60;
-
-                let exactText="";
-
-                if(h&&m){
-                    exactText=
-                        h+
-                        " hours "+
-                        m+
-                        " minutes";
-                }else if(h){
-                    exactText=
-                        h+
-                        " hours";
-                }else{
-                    exactText=
-                        m+
-                        " minutes";
-                }
-
-                html+=`
-                    <div class="history-job">
-
-                        <div class="history-row">
-
-                            <div class="history-date">
-                                ${formatDate(
-                                    job.date
-                                )}
-                            </div>
-
-                            <div class="history-money">
-                                ${money(
-                                    job.price
-                                )}
-                            </div>
-
-                        </div>
-
-                        <div class="history-hours">
-                            ⏱️ Worked:
-                            <strong>
-                                ${exactText}
-                            </strong>
-                        </div>
-                `;
-
-                if(job.start&&job.end){
-
-                    html+=`
-                        <div class="exact-time">
-                            ${esc(job.start)}
-                            –
-                            ${esc(job.end)}
-                        </div>
-                    `;
-                }
-
-                html+=`
-                        <div class="card-actions">
-
-                            <button
-                                class="secondary"
-                                onclick="editJob(${job.id})"
-                            >
-                                ✏️ Edit
-                            </button>
-
-                            <button
-                                class="danger"
-                                onclick="deleteJob(${job.id})"
-                            >
-                                🗑️ Delete
-                            </button>
-
-                        </div>
+                        <button
+                            class="danger"
+                            onclick="deleteClient(${c.id})"
+                        >
+                            🗑️ Delete
+                        </button>
 
                     </div>
-                `;
-            });
 
-            html+=`
                 </div>
             `;
-        });
+        }
+    );
 
     return html;
-}
-
-/* =====================================================
-   EARNINGS
-===================================================== */
-
-function earningsPage(){
-
-    let total=0;
-    let hours=0;
-    let owed=0;
-
-    data.jobs.forEach(j=>{
-
-        total+=Number(j.price||0);
-
-        hours+=Number(j.hours||0);
-
-        if(j.status==="Owed"){
-            owed+=Number(j.price||0);
-        }
-    });
-
-    return `
-        <div class="section-head">
-            <h2 class="section-title">
-                Earnings 💷
-            </h2>
-        </div>
-
-        <div class="dashboard">
-
-            <div class="stat earned">
-                <div class="stat-icon">💷</div>
-                <div class="stat-label">Total earned</div>
-                <div class="stat-value">
-                    ${money(total)}
-                </div>
-            </div>
-
-            <div class="stat hours">
-                <div class="stat-icon">⏱️</div>
-                <div class="stat-label">Total hours</div>
-                <div class="stat-value">
-                    ${formatExactHours(hours)}
-                </div>
-            </div>
-
-            <div class="stat available">
-                <div class="stat-icon">💰</div>
-                <div class="stat-label">Owed</div>
-                <div class="stat-value">
-                    ${money(owed)}
-                </div>
-            </div>
-
-        </div>
-    `;
-}
-
-/* =====================================================
-   JOB FORM
-===================================================== */
-
-function openJobFormByClient(clientId){
-
-    const c=findClient(clientId);
-
-    if(!c)return;
-
-    const existing=
-        data.jobs.find(
-            j =>
-                j.date===today() &&
-                Number(j.clientId)===
-                Number(clientId)
-        );
-
-    if(existing){
-        openJobForm(existing);
-    }else{
-        openJobForm({
-            id:0,
-            clientId:c.id,
-            date:today(),
-            start:c.start,
-            end:c.end,
-            status:"Paid"
-        });
-    }
-}
-
-function openJobForm(job){
-
-    const editing=
-        job &&
-        Number(job.id)>0;
-
-    job=job||{
-        id:0,
-        clientId:
-            data.clients[0]
-                ?data.clients[0].id
-                :"",
-        date:today(),
-        start:"09:00",
-        end:"12:00",
-        status:"Paid"
-    };
-
-    const c=findClient(
-        job.clientId
-    );
-
-    const initialHours=
-        c
-        ?exactHours(
-            job.start||c.start,
-            job.end||c.end
-        )
-        :0;
-
-    let html=`
-        <div class="modal-head">
-
-            <h2 class="modal-title">
-                ${editing
-                    ?"Edit Cleaning Job"
-                    :"Add Cleaning Job"}
-            </h2>
-
-            <button
-                class="close"
-                onclick="closeModal()"
-            >
-                ×
-            </button>
-
-        </div>
-
-        <div class="form-group">
-
-            <label class="label">
-                Client
-            </label>
-
-            <select
-                id="jobClient"
-                class="control"
-            >
-    `;
-
-    data.clients.forEach(client=>{
-
-        html+=`
-            <option
-                value="${client.id}"
-                ${
-                    Number(client.id)===
-                    Number(job.clientId)
-                    ?"selected"
-                    :""
-                }
-            >
-                ${esc(client.name)}
-            </option>
-        `;
-    });
-
-    html+=`
-            </select>
-
-        </div>
-
-        <div class="two">
-
-            <div class="form-group">
-
-                <label class="label">
-                    Date
-                </label>
-
-                <input
-                    id="jobDate"
-                    class="control"
-                    type="date"
-                    value="${esc(job.date||today())}"
-                >
-
-            </div>
-
-            <div class="form-group">
-
-                <label class="label">
-                    Day
-                </label>
-
-                <input
-                    id="jobDay"
-                    class="control"
-                    readonly
-                >
-
-            </div>
-
-        </div>
-
-        <div class="two">
-
-            <div class="form-group">
-
-                <label class="label">
-                    Start
-                </label>
-
-                <input
-                    id="jobStart"
-                    class="control"
-                    type="time"
-                    value="${esc(
-                        job.start||
-                        (c?c.start:"09:00")
-                    )}"
-                >
-
-            </div>
-
-            <div class="form-group">
-
-                <label class="label">
-                    End
-                </label>
-
-                <input
-                    id="jobEnd"
-                    class="control"
-                    type="time"
-                    value="${esc(
-                        job.end||
-                        (c?c.end:"12:00")
-                    )}"
-                >
-
-            </div>
-
-        </div>
-
-        <div class="two">
-
-            <div class="form-group">
-
-                <label class="label">
-                    Exact hours
-                </label>
-
-                <input
-                    id="jobHours"
-                    class="control"
-                    type="number"
-                    step="0.000001"
-                    readonly
-                    value="${initialHours.toFixed(6)}"
-                >
-
-                <div
-                    id="jobExact"
-                    style="
-                        margin-top:6px;
-                        color:#a9577e;
-                        font-size:13px;
-                        font-weight:800;
-                    "
-                ></div>
-
-            </div>
-
-            <div class="form-group">
-
-                <label class="label">
-                    Rate (£/h)
-                </label>
-
-                <input
-                    id="jobRate"
-                    class="control"
-                    type="number"
-                    step="0.01"
-                    value="${c?Number(c.rate):16}"
-                >
-
-            </div>
-
-        </div>
-
-        <div class="form-group">
-
-            <label class="label">
-                Payment
-            </label>
-
-            <select
-                id="jobStatus"
-                class="control"
-            >
-
-                <option
-                    value="Paid"
-                    ${
-                        !job.status||
-                        job.status==="Paid"
-                        ?"selected"
-                        :""
-                    }
-                >
-                    Paid
-                </option>
-
-                <option
-                    value="Owed"
-                    ${
-                        job.status==="Owed"
-                        ?"selected"
-                        :""
-                    }
-                >
-                    Owed
-                </option>
-
-            </select>
-
-        </div>
-
-        <button
-            class="primary"
-            style="width:100%"
-            onclick="saveJob(${editing?job.id:0})"
-        >
-            ${editing
-                ?"Save Changes"
-                :"Save Job"} ✨
-        </button>
-    `;
-
-    openModal(html);
-
-    const start=
-        document.getElementById(
-            "jobStart"
-        );
-
-    const end=
-        document.getElementById(
-            "jobEnd"
-        );
-
-    const hours=
-        document.getElementById(
-            "jobHours"
-        );
-
-    const exact=
-        document.getElementById(
-            "jobExact"
-        );
-
-    const rate=
-        document.getElementById(
-            "jobRate"
-        );
-
-    const day=
-        document.getElementById(
-            "jobDay"
-        );
-
-    function update(){
-
-        const s=start.value;
-        const e=end.value;
-
-        if(
-            !s||
-            !e||
-            minutes(e)<=minutes(s)
-        ){
-
-            hours.value="";
-
-            exact.textContent=
-                "Enter a valid Start and End time.";
-
-            return;
-        }
-
-        const h=
-            exactHours(s,e);
-
-        const mins=
-            exactMinutes(s,e);
-
-        hours.value=
-            h.toFixed(6);
-
-        exact.textContent=
-            formatExactHours(h)
-            +" • "
-            +money(
-                h*Number(rate.value||0)
-            );
-    }
-
-    function updateDay(){
-
-        const d=new Date(
-            document.getElementById(
-                "jobDate"
-            ).value+
-            "T12:00:00"
-        );
-
-        day.value=
-            d.toLocaleDateString(
-                "en-GB",
-                {weekday:"long"}
-            );
-    }
-
-    start.addEventListener(
-        "input",
-        update
-    );
-
-    end.addEventListener(
-        "input",
-        update
-    );
-
-    rate.addEventListener(
-        "input",
-        update
-    );
-
-    document.getElementById(
-        "jobDate"
-    ).addEventListener(
-        "change",
-        updateDay
-    );
-
-    updateDay();
-    update();
-}
-
-/* =====================================================
-   SAVE JOB
-===================================================== */
-
-function saveJob(id){
-
-    const client=
-        findClient(
-            Number(
-                document.getElementById(
-                    "jobClient"
-                ).value
-            )
-        );
-
-    if(!client)return;
-
-    const date=
-        document.getElementById(
-            "jobDate"
-        ).value;
-
-    const start=
-        document.getElementById(
-            "jobStart"
-        ).value;
-
-    const end=
-        document.getElementById(
-            "jobEnd"
-        ).value;
-
-    const rate=
-        Number(
-            document.getElementById(
-                "jobRate"
-            ).value
-        );
-
-    const status=
-        document.getElementById(
-            "jobStatus"
-        ).value;
-
-    if(
-        !date||
-        !start||
-        !end||
-        minutes(end)<=minutes(start)
-    ){
-
-        alert(
-            "Please enter a valid Start and End time."
-        );
-
-        return;
-    }
-
-    /*
-       EXACT CALCULATION:
-       09:15 -> 13:40
-       = 265 minutes
-       = 4.4166666667 hours
-    */
-
-    const workedMinutes=
-        exactMinutes(
-            start,
-            end
-        );
-
-    const workedHours=
-        workedMinutes/60;
-
-    const price=
-        workedHours*rate;
-
-    if(id){
-
-        const job=data.jobs.find(
-            j =>
-                Number(j.id)===
-                Number(id)
-        );
-
-        if(job){
-
-            job.clientId=
-                client.id;
-
-            job.clientName=
-                client.name;
-
-            job.rate=
-                rate;
-
-            job.date=
-                date;
-
-            job.start=
-                start;
-
-            job.end=
-                end;
-
-            job.hours=
-                workedHours;
-
-            job.workedMinutes=
-                workedMinutes;
-
-            job.price=
-                price;
-
-            job.status=
-                status;
-
-        }
-
-    }else{
-
-        data.jobs.push({
-
-            id:Date.now(),
-
-            clientId:
-                client.id,
-
-            clientName:
-                client.name,
-
-            rate:
-                rate,
-
-            date:
-                date,
-
-            start:
-                start,
-
-            end:
-                end,
-
-            hours:
-                workedHours,
-
-            workedMinutes:
-                workedMinutes,
-
-            price:
-                price,
-
-            status:
-                status,
-
-            timerSeconds:
-                0
-        });
-    }
-
-    saveData();
-
-    closeModal();
-
-    render();
 }
 
 /* =====================================================
@@ -2314,22 +1684,26 @@ function saveJob(id){
 
 function openClientForm(id){
 
-    const editing=Boolean(id);
+    const editing=
+        Boolean(id);
 
     const c=
         editing
-        ?findClient(id)
-        :{
-            name:"",
-            type:"private",
-            rate:18,
-            day:"Monday",
-            start:"09:00",
-            end:"12:00",
-            freq:"weekly"
-        };
+            ?findClient(id)
+            :{
+                name:"",
+                type:"private",
+                rate:18,
+                day:"Monday",
+                start:"09:00",
+                end:"12:00",
+                freq:"weekly",
+                variable:false
+            };
 
-    let html=`
+    let html="";
+
+    html+=`
         <div class="modal-head">
 
             <h2 class="modal-title">
@@ -2374,14 +1748,22 @@ function openClientForm(id){
 
                     <option
                         value="private"
-                        ${c.type==="private"?"selected":""}
+                        ${
+                            c.type==="private"
+                                ?"selected"
+                                :""
+                        }
                     >
                         Private
                     </option>
 
                     <option
                         value="agency"
-                        ${c.type==="agency"?"selected":""}
+                        ${
+                            c.type==="agency"
+                                ?"selected"
+                                :""
+                        }
                     >
                         Agency
                     </option>
@@ -2429,13 +1811,21 @@ function openClientForm(id){
                         "Friday",
                         "Saturday",
                         "Sunday"
-                    ].map(day=>`
-                        <option
-                            ${c.day===day?"selected":""}
-                        >
-                            ${day}
-                        </option>
-                    `).join("")}
+                    ]
+                    .map(
+                        day=>`
+                            <option
+                                ${
+                                    c.day===day
+                                        ?"selected"
+                                        :""
+                                }
+                            >
+                                ${day}
+                            </option>
+                        `
+                    )
+                    .join("")}
 
                 </select>
 
@@ -2454,16 +1844,68 @@ function openClientForm(id){
 
                     <option
                         value="weekly"
-                        ${c.freq!=="fortnightly"?"selected":""}
+                        ${
+                            c.freq==="weekly"
+                                ?"selected"
+                                :""
+                        }
                     >
                         Weekly
                     </option>
 
                     <option
                         value="fortnightly"
-                        ${c.freq==="fortnightly"?"selected":""}
+                        ${
+                            c.freq==="fortnightly"
+                                ?"selected"
+                                :""
+                        }
                     >
                         Every 2 weeks
+                    </option>
+
+                    <option
+                        value="threeweekly"
+                        ${
+                            c.freq==="threeweekly"
+                                ?"selected"
+                                :""
+                        }
+                    >
+                        Every 3 weeks
+                    </option>
+
+                    <option
+                        value="fourweekly"
+                        ${
+                            c.freq==="fourweekly"
+                                ?"selected"
+                                :""
+                        }
+                    >
+                        Every 4 weeks
+                    </option>
+
+                    <option
+                        value="monthly"
+                        ${
+                            c.freq==="monthly"
+                                ?"selected"
+                                :""
+                        }
+                    >
+                        Monthly
+                    </option>
+
+                    <option
+                        value="occasional"
+                        ${
+                            c.freq==="occasional"
+                                ?"selected"
+                                :""
+                        }
+                    >
+                        Occasional
                     </option>
 
                 </select>
@@ -2484,7 +1926,9 @@ function openClientForm(id){
                     id="clientStart"
                     class="control"
                     type="time"
-                    value="${esc(c.start||"09:00")}"
+                    value="${esc(
+                        c.start||"09:00"
+                    )}"
                 >
 
             </div>
@@ -2499,10 +1943,49 @@ function openClientForm(id){
                     id="clientEnd"
                     class="control"
                     type="time"
-                    value="${esc(c.end||"12:00")}"
+                    value="${esc(
+                        c.end||"12:00"
+                    )}"
                 >
 
             </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="label">
+                Variable duration?
+            </label>
+
+            <select
+                id="clientVariable"
+                class="control"
+            >
+
+                <option
+                    value="no"
+                    ${
+                        !c.variable
+                            ?"selected"
+                            :""
+                    }
+                >
+                    No
+                </option>
+
+                <option
+                    value="yes"
+                    ${
+                        c.variable
+                            ?"selected"
+                            :""
+                    }
+                >
+                    Yes
+                </option>
+
+            </select>
 
         </div>
 
@@ -2523,67 +2006,100 @@ function openClientForm(id){
 function saveClient(id){
 
     const name=
-        document.getElementById(
+        document
+        .getElementById(
             "clientName"
-        ).value.trim();
+        )
+        .value
+        .trim();
 
     const type=
-        document.getElementById(
+        document
+        .getElementById(
             "clientType"
-        ).value;
+        )
+        .value;
 
     const rate=
         Number(
-            document.getElementById(
+            document
+            .getElementById(
                 "clientRate"
-            ).value
+            )
+            .value
         );
 
     const day=
-        document.getElementById(
+        document
+        .getElementById(
             "clientDay"
-        ).value;
+        )
+        .value;
 
     const freq=
-        document.getElementById(
+        document
+        .getElementById(
             "clientFreq"
-        ).value;
+        )
+        .value;
 
     const start=
-        document.getElementById(
+        document
+        .getElementById(
             "clientStart"
-        ).value;
+        )
+        .value;
 
     const end=
-        document.getElementById(
+        document
+        .getElementById(
             "clientEnd"
-        ).value;
+        )
+        .value;
+
+    const variable=
+        document
+        .getElementById(
+            "clientVariable"
+        )
+        .value==="yes";
 
     if(!name){
-        alert("Please enter a client name.");
+
+        alert(
+            "Please enter a client name."
+        );
+
         return;
     }
 
-    if(minutes(end)<=minutes(start)){
+    if(
+        minutes(end)<=
+        minutes(start)
+    ){
+
         alert(
             "Please enter a valid Start and End time."
         );
+
         return;
     }
 
     if(id){
 
-        const c=findClient(id);
+        const client=
+            findClient(id);
 
-        if(c){
+        if(client){
 
-            c.name=name;
-            c.type=type;
-            c.rate=rate;
-            c.day=day;
-            c.freq=freq;
-            c.start=start;
-            c.end=end;
+            client.name=name;
+            client.type=type;
+            client.rate=rate;
+            client.day=day;
+            client.start=start;
+            client.end=end;
+            client.freq=freq;
+            client.variable=variable;
         }
 
     }else{
@@ -2606,6 +2122,8 @@ function saveClient(id){
 
             freq:freq,
 
+            variable:variable,
+
             week:"A"
         });
     }
@@ -2617,24 +2135,44 @@ function saveClient(id){
     render();
 }
 
+/* =====================================================
+   DELETE CLIENT
+===================================================== */
+
 function deleteClient(id){
 
-    const c=findClient(id);
+    const client=
+        findClient(id);
 
-    if(!c)return;
+    if(!client){
+        return;
+    }
 
-    if(!confirm(
-        "Delete "+c.name+"?"
-    )){
+    if(
+        !confirm(
+            "Delete "+
+            client.name+
+            "?"
+        )
+    ){
         return;
     }
 
     data.clients=
         data.clients.filter(
-            x =>
-                Number(x.id)!==
+            c =>
+                Number(c.id)!==
                 Number(id)
         );
+
+    if(
+        timer.running &&
+        Number(timer.clientId)===
+        Number(id)
+    ){
+
+        resetTimer();
+    }
 
     saveData();
 
@@ -2642,16 +2180,900 @@ function deleteClient(id){
 }
 
 /* =====================================================
-   EDIT JOB
+   JOB HISTORY
+===================================================== */
+
+function jobsPage(){
+
+    let html="";
+
+    html+=`
+        <div class="section-head">
+
+            <h2 class="section-title">
+                Job History 📋
+            </h2>
+
+            <button
+                class="primary"
+                onclick="openJobForm()"
+            >
+                ＋ Add
+            </button>
+
+        </div>
+    `;
+
+    if(!data.jobs.length){
+
+        html+=`
+            <div class="empty">
+
+                <div class="empty-icon">
+                    📋
+                </div>
+
+                No completed jobs yet.
+
+            </div>
+        `;
+
+        return html;
+    }
+
+    const grouped={};
+
+    data.jobs.forEach(
+        job=>{
+
+            const client=
+                findClient(
+                    job.clientId
+                );
+
+            const name=
+                client
+                    ?client.name
+                    :(job.clientName||"Unknown");
+
+            if(!grouped[name]){
+                grouped[name]=[];
+            }
+
+            grouped[name].push(job);
+        }
+    );
+
+    Object.keys(grouped)
+    .sort()
+    .forEach(
+        name=>{
+
+            const jobs=
+                grouped[name]
+                .slice()
+                .sort(
+                    (a,b)=>
+                        b.date.localeCompare(
+                            a.date
+                        )
+                );
+
+            const clientTotal=
+                jobs.reduce(
+                    (sum,j)=>
+                        sum+
+                        Number(
+                            j.price||0
+                        ),
+                    0
+                );
+
+            html+=`
+                <div class="client-history">
+
+                    <div class="client-history-title">
+
+                        <span>
+                            ${esc(name)}
+                        </span>
+
+                        <span class="client-total">
+                            ${money(
+                                clientTotal
+                            )}
+                        </span>
+
+                    </div>
+            `;
+
+            jobs.forEach(
+                job=>{
+
+                    let workedMinutes;
+
+                    /*
+                       Timer jobs use exact timer
+                       seconds converted to minutes.
+                    */
+
+                    if(
+                        Number(job.timerSeconds)>0
+                    ){
+
+                        workedMinutes=
+                            Math.floor(
+                                Number(
+                                    job.timerSeconds
+                                )/60
+                            );
+
+                    }else if(
+                        Number.isFinite(
+                            Number(
+                                job.workedMinutes
+                            )
+                        )
+                    ){
+
+                        workedMinutes=
+                            Number(
+                                job.workedMinutes
+                            );
+
+                    }else{
+
+                        workedMinutes=
+                            Math.round(
+                                Number(
+                                    job.hours||0
+                                )*60
+                            );
+                    }
+
+                    const workedHours=
+                        workedMinutes/60;
+
+                    html+=`
+                        <div class="history-job">
+
+                            <div class="history-row">
+
+                                <div class="history-date">
+                                    ${formatDate(
+                                        job.date
+                                    )}
+                                </div>
+
+                                <div class="history-money">
+                                    ${money(
+                                        job.price
+                                    )}
+                                </div>
+
+                            </div>
+
+                            <div class="history-hours">
+                                ⏱️ Worked:
+                                <strong>
+                                    ${formatExactTime(
+                                        workedHours
+                                    )}
+                                </strong>
+                            </div>
+                    `;
+
+                    if(
+                        job.start &&
+                        job.end
+                    ){
+
+                        html+=`
+                            <div class="exact-time">
+                                ${esc(job.start)}
+                                –
+                                ${esc(job.end)}
+                            </div>
+                        `;
+                    }
+
+                    html+=`
+                            <div class="card-actions">
+
+                                <button
+                                    class="secondary"
+                                    onclick="editJob(${job.id})"
+                                >
+                                    ✏️ Edit
+                                </button>
+
+                                <button
+                                    class="danger"
+                                    onclick="deleteJob(${job.id})"
+                                >
+                                    🗑️ Delete
+                                </button>
+
+                            </div>
+
+                        </div>
+                    `;
+                }
+            );
+
+            html+=`
+                </div>
+            `;
+        }
+    );
+
+    return html;
+}
+
+/* =====================================================
+   JOB FORM
+===================================================== */
+
+function openJobFormByClient(
+    clientId
+){
+
+    const client=
+        findClient(clientId);
+
+    if(!client){
+        return;
+    }
+
+    const existing=
+        data.jobs.find(
+            j =>
+                j.date===today() &&
+                Number(j.clientId)===
+                Number(clientId)
+        );
+
+    if(existing){
+
+        openJobForm(
+            existing
+        );
+
+    }else{
+
+        openJobForm({
+
+            id:0,
+
+            clientId:
+                client.id,
+
+            date:
+                today(),
+
+            start:
+                client.start,
+
+            end:
+                client.end,
+
+            status:
+                "Paid"
+        });
+    }
+}
+
+function openJobForm(job){
+
+    const editing=
+        job &&
+        Number(job.id)>0;
+
+    job=job||{
+
+        id:0,
+
+        clientId:
+            data.clients.length
+                ?data.clients[0].id
+                :"",
+
+        date:
+            today(),
+
+        start:
+            "09:00",
+
+        end:
+            "12:00",
+
+        status:
+            "Paid"
+    };
+
+    const client=
+        findClient(
+            job.clientId
+        );
+
+    const initialHours=
+        client
+            ?exactHours(
+                job.start||
+                client.start,
+                job.end||
+                client.end
+            )
+            :0;
+
+    let html="";
+
+    html+=`
+        <div class="modal-head">
+
+            <h2 class="modal-title">
+                ${
+                    editing
+                        ?"Edit Cleaning Job"
+                        :"Add Cleaning Job"
+                }
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="label">
+                Client
+            </label>
+
+            <select
+                id="jobClient"
+                class="control"
+            >
+
+                ${data.clients
+                    .map(
+                        c=>`
+                            <option
+                                value="${c.id}"
+                                ${
+                                    Number(c.id)===
+                                    Number(job.clientId)
+                                        ?"selected"
+                                        :""
+                                }
+                            >
+                                ${esc(c.name)}
+                            </option>
+                        `
+                    )
+                    .join("")}
+
+            </select>
+
+        </div>
+
+        <div class="two">
+
+            <div class="form-group">
+
+                <label class="label">
+                    Date
+                </label>
+
+                <input
+                    id="jobDate"
+                    class="control"
+                    type="date"
+                    value="${esc(
+                        job.date||
+                        today()
+                    )}"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="label">
+                    Day
+                </label>
+
+                <input
+                    id="jobDay"
+                    class="control"
+                    readonly
+                >
+
+            </div>
+
+        </div>
+
+        <div class="two">
+
+            <div class="form-group">
+
+                <label class="label">
+                    Start
+                </label>
+
+                <input
+                    id="jobStart"
+                    class="control"
+                    type="time"
+                    value="${esc(
+                        job.start||
+                        (
+                            client
+                                ?client.start
+                                :"09:00"
+                        )
+                    )}"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="label">
+                    End
+                </label>
+
+                <input
+                    id="jobEnd"
+                    class="control"
+                    type="time"
+                    value="${esc(
+                        job.end||
+                        (
+                            client
+                                ?client.end
+                                :"12:00"
+                        )
+                    )}"
+                >
+
+            </div>
+
+        </div>
+
+        <div class="two">
+
+            <div class="form-group">
+
+                <label class="label">
+                    Exact time worked
+                </label>
+
+                <input
+                    id="jobHours"
+                    class="control"
+                    type="text"
+                    readonly
+                    value=""
+                >
+
+                <div
+                    id="jobExact"
+                    style="
+                        margin-top:7px;
+                        color:#a9577e;
+                        font-size:13px;
+                        font-weight:800;
+                    "
+                ></div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="label">
+                    Rate (£/h)
+                </label>
+
+                <input
+                    id="jobRate"
+                    class="control"
+                    type="number"
+                    step="0.01"
+                    value="${
+                        client
+                            ?Number(client.rate)
+                            :16
+                    }"
+                >
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="label">
+                Payment
+            </label>
+
+            <select
+                id="jobStatus"
+                class="control"
+            >
+
+                <option
+                    value="Paid"
+                    ${
+                        !job.status ||
+                        job.status==="Paid"
+                            ?"selected"
+                            :""
+                    }
+                >
+                    Paid
+                </option>
+
+                <option
+                    value="Owed"
+                    ${
+                        job.status==="Owed"
+                            ?"selected"
+                            :""
+                    }
+                >
+                    Owed
+                </option>
+
+            </select>
+
+        </div>
+
+        <button
+            class="primary"
+            style="width:100%"
+            onclick="saveJob(${editing?job.id:0})"
+        >
+            ${
+                editing
+                    ?"Save Changes"
+                    :"Save Job"
+            } ✨
+        </button>
+    `;
+
+    openModal(html);
+
+    const start=
+        document.getElementById(
+            "jobStart"
+        );
+
+    const end=
+        document.getElementById(
+            "jobEnd"
+        );
+
+    const hours=
+        document.getElementById(
+            "jobHours"
+        );
+
+    const exact=
+        document.getElementById(
+            "jobExact"
+        );
+
+    const rate=
+        document.getElementById(
+            "jobRate"
+        );
+
+    const day=
+        document.getElementById(
+            "jobDay"
+        );
+
+    function update(){
+
+        const s=start.value;
+        const e=end.value;
+
+        if(
+            !s ||
+            !e ||
+            minutes(e)<=minutes(s)
+        ){
+
+            hours.value="";
+
+            exact.textContent=
+                "Enter a valid Start and End time.";
+
+            return;
+        }
+
+        const h=
+            exactHours(
+                s,
+                e
+            );
+
+        /*
+           The visible field now says:
+
+           4 hours 25 minutes
+
+           instead of 4.4167.
+        */
+
+        hours.value=
+            formatExactTime(h);
+
+        exact.textContent=
+            money(
+                h*
+                Number(
+                    rate.value||0
+                )
+            );
+
+    }
+
+    function updateDay(){
+
+        const d=
+            new Date(
+                document
+                .getElementById(
+                    "jobDate"
+                )
+                .value+
+                "T12:00:00"
+            );
+
+        day.value=
+            d.toLocaleDateString(
+                "en-GB",
+                {
+                    weekday:"long"
+                }
+            );
+    }
+
+    start.addEventListener(
+        "input",
+        update
+    );
+
+    end.addEventListener(
+        "input",
+        update
+    );
+
+    rate.addEventListener(
+        "input",
+        update
+    );
+
+    document
+    .getElementById(
+        "jobDate"
+    )
+    .addEventListener(
+        "change",
+        updateDay
+    );
+
+    updateDay();
+    update();
+}
+
+/* =====================================================
+   SAVE JOB
+===================================================== */
+
+function saveJob(id){
+
+    const client=
+        findClient(
+            Number(
+                document
+                .getElementById(
+                    "jobClient"
+                )
+                .value
+            )
+        );
+
+    if(!client){
+        return;
+    }
+
+    const date=
+        document
+        .getElementById(
+            "jobDate"
+        )
+        .value;
+
+    const start=
+        document
+        .getElementById(
+            "jobStart"
+        )
+        .value;
+
+    const end=
+        document
+        .getElementById(
+            "jobEnd"
+        )
+        .value;
+
+    const rate=
+        Number(
+            document
+            .getElementById(
+                "jobRate"
+            )
+            .value
+        );
+
+    const status=
+        document
+        .getElementById(
+            "jobStatus"
+        )
+        .value;
+
+    if(
+        !date ||
+        !start ||
+        !end ||
+        minutes(end)<=minutes(start)
+    ){
+
+        alert(
+            "Please enter a valid Start and End time."
+        );
+
+        return;
+    }
+
+    /*
+       EXACT calculation.
+
+       Example:
+
+       09:15 → 13:40
+       = 265 minutes
+       = 4 hours 25 minutes
+       = 4.416666... decimal hours internally
+
+       Money is calculated from the exact minutes.
+    */
+
+    const workedMinutes=
+        exactMinutes(
+            start,
+            end
+        );
+
+    const workedHours=
+        workedMinutes/60;
+
+    const price=
+        workedHours*
+        rate;
+
+    if(id){
+
+        const job=
+            data.jobs.find(
+                j =>
+                    Number(j.id)===
+                    Number(id)
+            );
+
+        if(job){
+
+            job.clientId=
+                client.id;
+
+            job.clientName=
+                client.name;
+
+            job.rate=
+                rate;
+
+            job.date=
+                date;
+
+            job.start=
+                start;
+
+            job.end=
+                end;
+
+            job.hours=
+                workedHours;
+
+            job.workedMinutes=
+                workedMinutes;
+
+            job.price=
+                price;
+
+            job.status=
+                status;
+        }
+
+    }else{
+
+        data.jobs.push({
+
+            id:
+                Date.now(),
+
+            clientId:
+                client.id,
+
+            clientName:
+                client.name,
+
+            rate:
+                rate,
+
+            date:
+                date,
+
+            start:
+                start,
+
+            end:
+                end,
+
+            hours:
+                workedHours,
+
+            workedMinutes:
+                workedMinutes,
+
+            price:
+                price,
+
+            status:
+                status,
+
+            timerSeconds:
+                0
+        });
+    }
+
+    saveData();
+
+    closeModal();
+
+    render();
+}
+
+/* =====================================================
+   EDIT / DELETE JOB
 ===================================================== */
 
 function editJob(id){
 
-    const job=data.jobs.find(
-        j =>
-            Number(j.id)===
-            Number(id)
-    );
+    const job=
+        data.jobs.find(
+            j =>
+                Number(j.id)===
+                Number(id)
+        );
 
     if(job){
         openJobForm(job);
@@ -2660,9 +3082,11 @@ function editJob(id){
 
 function deleteJob(id){
 
-    if(!confirm(
-        "Delete this job?"
-    )){
+    if(
+        !confirm(
+            "Delete this job?"
+        )
+    ){
         return;
     }
 
@@ -2679,7 +3103,106 @@ function deleteJob(id){
 }
 
 /* =====================================================
-   TIMER
+   EARNINGS
+===================================================== */
+
+function earningsPage(){
+
+    let total=0;
+    let hours=0;
+    let owed=0;
+
+    data.jobs.forEach(
+        j=>{
+
+            total+=
+                Number(
+                    j.price||0
+                );
+
+            hours+=
+                Number(
+                    j.hours||0
+                );
+
+            if(
+                j.status==="Owed"
+            ){
+
+                owed+=
+                    Number(
+                        j.price||0
+                    );
+            }
+        }
+    );
+
+    return `
+
+        <div class="section-head">
+
+            <h2 class="section-title">
+                Earnings 💷
+            </h2>
+
+        </div>
+
+        <div class="dashboard">
+
+            <div class="stat earned">
+
+                <div class="stat-icon">
+                    💷
+                </div>
+
+                <div class="stat-label">
+                    Total earned
+                </div>
+
+                <div class="stat-value">
+                    ${money(total)}
+                </div>
+
+            </div>
+
+            <div class="stat hours">
+
+                <div class="stat-icon">
+                    ⏱️
+                </div>
+
+                <div class="stat-label">
+                    Total time
+                </div>
+
+                <div class="stat-value">
+                    ${formatExactTime(hours)}
+                </div>
+
+            </div>
+
+            <div class="stat available">
+
+                <div class="stat-icon">
+                    💰
+                </div>
+
+                <div class="stat-label">
+                    Owed
+                </div>
+
+                <div class="stat-value">
+                    ${money(owed)}
+                </div>
+
+            </div>
+
+        </div>
+    `;
+}
+
+/* =====================================================
+   TIMER SELECTOR
 ===================================================== */
 
 function openTimerSelector(){
@@ -2694,6 +3217,7 @@ function openTimerSelector(){
     }
 
     let html=`
+
         <div class="modal-head">
 
             <h2 class="modal-title">
@@ -2724,11 +3248,17 @@ function openTimerSelector(){
                     Select client
                 </option>
 
-                ${data.clients.map(c=>`
-                    <option value="${c.id}">
-                        ${esc(c.name)}
-                    </option>
-                `).join("")}
+                ${data.clients
+                    .map(
+                        c=>`
+                            <option
+                                value="${c.id}"
+                            >
+                                ${esc(c.name)}
+                            </option>
+                        `
+                    )
+                    .join("")}
 
             </select>
 
@@ -2750,22 +3280,31 @@ function startSelectedTimer(){
 
     const id=
         Number(
-            document.getElementById(
+            document
+            .getElementById(
                 "timerClient"
-            ).value
+            )
+            .value
         );
 
     if(!id){
+
         alert(
             "Please choose a client."
         );
+
         return;
     }
 
     timer={
+
         running:true,
+
         clientId:id,
-        startedAt:Date.now(),
+
+        startedAt:
+            Date.now(),
+
         accumulated:0
     };
 
@@ -2776,17 +3315,25 @@ function startSelectedTimer(){
     render();
 }
 
+/* =====================================================
+   SHOW TIMER
+===================================================== */
+
 function showTimer(id){
 
-    const c=findClient(id);
+    const client=
+        findClient(id);
 
-    if(!c)return;
+    if(!client){
+        return;
+    }
 
     let html=`
+
         <div class="modal-head">
 
             <h2 class="modal-title">
-                ${esc(c.name)} ⏱️
+                ${esc(client.name)} ⏱️
             </h2>
 
             <button
@@ -2828,7 +3375,7 @@ function showTimer(id){
                     id="timerHours"
                     class="timer-big"
                 >
-                    ${formatExactHours(
+                    ${formatExactTime(
                         timerHours()
                     )}
                 </strong>
@@ -2841,7 +3388,9 @@ function showTimer(id){
                 >
                     ${money(
                         timerHours()*
-                        Number(c.rate)
+                        Number(
+                            client.rate
+                        )
                     )}
                 </strong>
 
@@ -2853,18 +3402,25 @@ function showTimer(id){
     openModal(html);
 }
 
+/* =====================================================
+   STOP TIMER
+===================================================== */
+
 function stopTimer(){
 
     if(!timer.running){
         return;
     }
 
-    const c=findClient(
-        timer.clientId
-    );
+    const client=
+        findClient(
+            timer.clientId
+        );
 
-    if(!c){
+    if(!client){
+
         resetTimer();
+
         return;
     }
 
@@ -2877,13 +3433,16 @@ function stopTimer(){
         );
 
     const workedHours=
-        seconds/3600;
+        workedMinutes/60;
 
-    const now=new Date();
+    const now=
+        new Date();
 
     const started=
         new Date(
-            Number(timer.startedAt)
+            Number(
+                timer.startedAt
+            )
         );
 
     const start=
@@ -2906,33 +3465,47 @@ function stopTimer(){
 
     const price=
         workedHours*
-        Number(c.rate);
+        Number(
+            client.rate
+        );
 
     data.jobs.push({
 
-        id:Date.now(),
+        id:
+            Date.now(),
 
-        clientId:c.id,
+        clientId:
+            client.id,
 
-        clientName:c.name,
+        clientName:
+            client.name,
 
-        rate:Number(c.rate),
+        rate:
+            Number(client.rate),
 
-        date:today(),
+        date:
+            today(),
 
-        start:start,
+        start:
+            start,
 
-        end:end,
+        end:
+            end,
 
-        hours:workedHours,
+        hours:
+            workedHours,
 
-        workedMinutes:workedMinutes,
+        workedMinutes:
+            workedMinutes,
 
-        timerSeconds:seconds,
+        timerSeconds:
+            seconds,
 
-        price:price,
+        price:
+            price,
 
-        status:"Paid"
+        status:
+            "Paid"
     });
 
     resetTimer();
@@ -2947,9 +3520,13 @@ function stopTimer(){
 function resetTimer(){
 
     timer={
+
         running:false,
+
         clientId:null,
+
         startedAt:null,
+
         accumulated:0
     };
 
@@ -2980,14 +3557,17 @@ function openModal(content){
 
     box.className="modal";
 
-    box.innerHTML=content;
+    box.innerHTML=
+        content;
 
-    box.onclick=e=>
-        e.stopPropagation();
+    box.onclick=
+        e =>
+            e.stopPropagation();
 
     bg.appendChild(box);
 
-    bg.onclick=closeModal;
+    bg.onclick=
+        closeModal;
 
     document.body.appendChild(bg);
 }
@@ -3012,7 +3592,8 @@ let currentPage="home";
 
 function go(page){
 
-    currentPage=page;
+    currentPage=
+        page;
 
     closeModal();
 
@@ -3026,18 +3607,22 @@ function navButton(
 ){
 
     return `
+
         <button
             class="nav ${
                 currentPage===page
-                ?"active"
-                :""
+                    ?"active"
+                    :""
             }"
             onclick="go('${page}')"
         >
+
             <span class="nav-icon">
                 ${icon}
             </span>
+
             ${label}
+
         </button>
     `;
 }
@@ -3045,6 +3630,7 @@ function navButton(
 function navigation(){
 
     return `
+
         <nav class="bottom-nav">
 
             ${navButton(
@@ -3089,48 +3675,66 @@ function render(){
 
     let content="";
 
-    if(currentPage==="home"){
-        content=homePage();
+    if(
+        currentPage==="home"
+    ){
+        content=
+            homePage();
     }
 
-    if(currentPage==="schedule"){
-        content=calendarPage();
+    if(
+        currentPage==="schedule"
+    ){
+        content=
+            calendarPage();
     }
 
-    if(currentPage==="clients"){
-        content=clientsPage();
+    if(
+        currentPage==="clients"
+    ){
+        content=
+            clientsPage();
     }
 
-    if(currentPage==="jobs"){
-        content=jobsPage();
+    if(
+        currentPage==="jobs"
+    ){
+        content=
+            jobsPage();
     }
 
-    if(currentPage==="earnings"){
-        content=earningsPage();
+    if(
+        currentPage==="earnings"
+    ){
+        content=
+            earningsPage();
     }
 
     let banner="";
 
     if(timer.running){
 
-        const c=
+        const client=
             findClient(
                 timer.clientId
             );
 
-        if(c){
+        if(client){
 
             banner=`
+
                 <div
                     class="timer-banner"
-                    onclick="showTimer(${c.id})"
+                    onclick="showTimer(${client.id})"
                 >
 
                     <span>
-                        ⏱️ ${esc(c.name)}
+                        ⏱️ ${esc(client.name)}
                     </span>
 
-                    <strong id="bannerTimer">
+                    <strong
+                        id="bannerTimer"
+                    >
                         ${timerText(
                             timerSeconds()
                         )}
@@ -3226,19 +3830,23 @@ function render(){
 
     if(logo){
 
-        logo.onerror=function(){
+        logo.onerror=
+            function(){
 
-            logo.style.display="none";
+                logo.style.display=
+                    "none";
 
-            if(fallback){
-                fallback.style.display="flex";
-            }
-        };
+                if(fallback){
+
+                    fallback.style.display=
+                        "flex";
+                }
+            };
     }
 }
 
 /* =====================================================
-   TIMER DISPLAY UPDATE
+   LIVE TIMER UPDATE
 ===================================================== */
 
 setInterval(
@@ -3272,33 +3880,47 @@ setInterval(
             );
 
         if(display){
+
             display.textContent=
-                timerText(seconds);
+                timerText(
+                    seconds
+                );
         }
 
         if(banner){
+
             banner.textContent=
-                timerText(seconds);
+                timerText(
+                    seconds
+                );
         }
 
         if(hours){
+
             hours.textContent=
-                formatExactHours(
+                formatExactTime(
                     seconds/3600
                 );
         }
 
-        const c=
+        const client=
             findClient(
                 timer.clientId
             );
 
-        if(moneyBox&&c){
+        if(
+            moneyBox &&
+            client
+        ){
 
             moneyBox.textContent=
                 money(
-                    (seconds/3600)*
-                    Number(c.rate)
+                    (
+                        seconds/3600
+                    )*
+                    Number(
+                        client.rate
+                    )
                 );
         }
 
@@ -3306,10 +3928,9 @@ setInterval(
     1000
 );
 
-/*
-   Save timer when iOS puts the page
-   into the background.
-*/
+/* =====================================================
+   BACKGROUND TIMER
+===================================================== */
 
 document.addEventListener(
     "visibilitychange",
@@ -3348,6 +3969,10 @@ window.addEventListener(
         }
     }
 );
+
+/* =====================================================
+   START
+===================================================== */
 
 render();
 
