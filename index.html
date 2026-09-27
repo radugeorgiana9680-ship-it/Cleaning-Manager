@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#f8dce8">
+<meta name="theme-color" content="#f8e4ea">
 <title>Pure Shine Cleaning Manager</title>
 
 <style>
@@ -16,37 +16,252 @@ button,input,select{font:inherit}
 button{-webkit-tap-highlight-color:transparent}
 .hidden{display:none!important}
 
-#app{
-min-height:100vh;
-background:linear-gradient(180deg,#fffafd,#fff);
-padding-bottom:96px
-}
+/* =========================================================
+   PREFACE — DESIGN BASED ON THE REFERENCE IMAGE
+   ========================================================= */
 
-.header{
-padding:calc(env(safe-area-inset-top) + 15px) 20px 12px;
+#preface{
+position:fixed;
+z-index:99999;
+inset:0;
+width:100vw;
+height:100dvh;
+overflow:hidden;
+background:#f9e5eb;
 display:flex;
-align-items:center;
-justify-content:space-between
+align-items:stretch;
+justify-content:center;
 }
 
-.brand{display:flex;align-items:center;gap:12px}
+.preface-background{
+position:absolute;
+inset:0;
+background-image:
+linear-gradient(
+180deg,
+rgba(255,245,247,.30),
+rgba(255,239,244,.18)
+),
+url("pure-shine-cleaning-background.png");
+background-size:cover;
+background-position:center;
+filter:blur(1px);
+transform:scale(1.035);
+}
 
-.logo{
-width:60px;
-height:60px;
+.preface-overlay{
+position:absolute;
+inset:0;
+background:
+linear-gradient(
+180deg,
+rgba(255,246,248,.28) 0%,
+rgba(255,238,243,.12) 48%,
+rgba(255,238,243,.34) 100%
+);
+}
+
+.preface-content{
+position:relative;
+z-index:2;
+width:100%;
+height:100%;
+display:flex;
+flex-direction:column;
+align-items:center;
+text-align:center;
+padding:
+calc(env(safe-area-inset-top) + 7vh)
+22px
+calc(env(safe-area-inset-bottom) + 22px);
+}
+
+.preface-logo{
+width:min(63vw,310px);
+height:min(63vw,310px);
 border-radius:50%;
 object-fit:cover;
-background:linear-gradient(135deg,#f8dce8,#f5e9c9);
+display:block;
+margin:0 auto;
+filter:
+drop-shadow(0 13px 18px rgba(120,60,75,.18));
+}
+
+.preface-title{
+margin-top:5.5vh;
+font-family:"Snell Roundhand","Segoe Script","Brush Script MT",cursive;
+font-size:clamp(38px,9vw,65px);
+line-height:.93;
+font-weight:400;
+color:#a84d69;
+letter-spacing:-1px;
+text-shadow:0 1px 0 #fff6f7;
+max-width:410px;
+}
+
+.preface-heart{
+font-family:cursive;
+font-size:43px;
+line-height:1;
+color:#b85873;
+margin-top:8px;
+}
+
+.preface-features{
+width:100%;
+max-width:500px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:5px;
+margin-top:auto;
+margin-bottom:23px;
+padding:0 3px;
+}
+
+.preface-feature{
+min-height:88px;
+padding:9px 3px;
+border-radius:18px;
+background:rgba(255,255,255,.34);
+backdrop-filter:blur(3px);
+-webkit-backdrop-filter:blur(3px);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+color:#30272d;
+}
+
+.preface-feature-icon{
+height:38px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:28px;
-box-shadow:0 5px 20px #8e526522;
-border:2px solid #d3a15d
+font-size:30px;
+color:#ad5572;
+line-height:1;
 }
 
-.brand h1{font-size:21px;margin:0;font-weight:900}
-.brand p{margin:3px 0 0;color:#8a8088;font-size:13px}
+.preface-feature span{
+font-size:13px;
+line-height:1.15;
+margin-top:6px;
+font-weight:500;
+}
+
+.preface-start{
+width:calc(100% - 48px);
+max-width:460px;
+min-height:63px;
+border:0;
+border-radius:34px;
+background:linear-gradient(180deg,#e77b9d,#d9648b);
+color:#fff;
+font-size:20px;
+font-weight:500;
+letter-spacing:.1px;
+box-shadow:
+0 9px 20px rgba(180,74,108,.20),
+inset 0 1px rgba(255,255,255,.28);
+}
+
+.preface-start span{
+font-size:28px;
+vertical-align:-2px;
+margin-left:7px;
+font-weight:300;
+}
+
+.preface-login{
+margin-top:16px;
+font-size:15px;
+color:#6d5b63;
+}
+
+.preface-login button{
+border:0;
+background:none;
+padding:0;
+margin-left:4px;
+color:#ad4e6c;
+font-size:15px;
+text-decoration:underline;
+font-weight:600;
+}
+
+@media(max-height:700px){
+.preface-content{
+padding-top:calc(env(safe-area-inset-top) + 3vh);
+}
+.preface-logo{
+width:190px;
+height:190px;
+}
+.preface-title{
+margin-top:3vh;
+font-size:42px;
+}
+.preface-features{
+margin-bottom:12px;
+}
+.preface-feature{
+min-height:67px;
+}
+.preface-feature-icon{
+font-size:24px;
+height:28px;
+}
+.preface-feature span{
+font-size:11px;
+}
+.preface-start{
+min-height:53px;
+}
+}
+
+/* =========================================================
+   APP
+   ========================================================= */
+
+#app{
+min-height:100vh;
+background:linear-gradient(#fff,#fffafd);
+padding-bottom:95px;
+}
+
+.header{
+padding:calc(env(safe-area-inset-top) + 16px) 20px 12px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.logo{
+width:58px;
+height:58px;
+border-radius:19px;
+background:#fff;
+object-fit:cover;
+box-shadow:0 8px 24px #d8b9c744;
+}
+
+.brand h1{
+font-size:21px;
+margin:0;
+font-weight:900;
+}
+
+.brand p{
+margin:3px 0 0;
+color:#8a8088;
+font-size:13px;
+}
 
 .settings{
 width:48px;
@@ -55,59 +270,78 @@ border-radius:50%;
 border:0;
 background:#fff;
 box-shadow:0 8px 24px #6c4d5d18;
-font-size:22px
+font-size:22px;
 }
 
 main{padding:0 18px}
-
 .page{display:none}
 .page.active{display:block}
 
 .banner{
 margin-top:3px;
-padding:18px 20px;
-border-radius:25px;
-background:linear-gradient(135deg,#f4d1e1,#f8dce8);
+padding:22px;
+border-radius:29px;
+background:linear-gradient(135deg,#f2cfdf,#f8dce8);
 display:flex;
 justify-content:space-between;
-align-items:center
+align-items:center;
 }
 
-.banner h2{margin:0;font-size:21px;font-weight:900}
-.banner p{margin:5px 0 0;color:#786e76;font-size:14px}
-.heart{font-size:42px;color:#b5527e}
+.banner h2{
+margin:0;
+font-size:24px;
+font-weight:900;
+}
+
+.banner p{
+margin:7px 0 0;
+color:#786e76;
+font-size:14px;
+}
+
+.heart{
+font-size:48px;
+color:#b6527e;
+}
 
 .heading{
 display:flex;
 align-items:center;
 justify-content:space-between;
-margin:23px 2px 11px
+margin:23px 2px 11px;
 }
 
-.heading h2{font-size:19px;margin:0}
+.heading h2{
+font-size:19px;
+margin:0;
+}
+
 .heading button{
 border:0;
 background:none;
 color:#b5527e;
 font-weight:900;
-font-size:16px
+font-size:17px;
 }
 
 .card{
 background:#fff;
 border:1px solid #f0e3e9;
 border-radius:22px;
-box-shadow:0 9px 28px #76546812
+box-shadow:0 9px 28px #76546812;
 }
 
-.empty{padding:20px;color:#827983}
+.empty{
+padding:20px;
+color:#827983;
+}
 
 .job{
 display:flex;
 align-items:center;
 gap:12px;
 padding:14px;
-margin-bottom:10px
+margin-bottom:10px;
 }
 
 .job-icon{
@@ -118,31 +352,61 @@ background:#fff0f6;
 display:grid;
 place-items:center;
 font-size:21px;
-flex:none
+flex:none;
 }
 
-.job-info{flex:1;min-width:0}
-.job-name{font-weight:850;font-size:16px}
-.job-time{font-size:13px;color:#817780;margin-top:4px}
-.job-money{font-weight:850;color:#b5527e}
+.job-info{
+flex:1;
+min-width:0;
+}
+
+.job-name{
+font-weight:850;
+font-size:16px;
+}
+
+.job-time{
+font-size:13px;
+color:#817780;
+margin-top:4px;
+}
+
+.job-money{
+font-weight:850;
+color:#b5527e;
+}
 
 .stats{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:11px
+gap:11px;
 }
 
-.stat{padding:17px;min-height:103px}
-.stat small{color:#817780;font-size:13px}
-.stat strong{display:block;font-size:23px;margin-top:9px}
+.stat{
+padding:17px;
+min-height:103px;
+}
 
-.calendar-box{padding:12px}
+.stat small{
+color:#817780;
+font-size:13px;
+}
+
+.stat strong{
+display:block;
+font-size:23px;
+margin-top:9px;
+}
+
+.calendar-box{
+padding:12px;
+}
 
 .monthbar{
 display:flex;
 align-items:center;
 justify-content:space-between;
-margin-bottom:12px
+margin-bottom:12px;
 }
 
 .monthbar button{
@@ -151,22 +415,25 @@ height:42px;
 border:1px solid #eee0e8;
 border-radius:13px;
 background:#fff;
-font-size:25px
+font-size:25px;
 }
 
-.monthname{font-weight:900;font-size:18px}
+.monthname{
+font-weight:900;
+font-size:18px;
+}
 
 .weekdays,.days{
 display:grid;
 grid-template-columns:repeat(7,1fr);
-gap:5px
+gap:5px;
 }
 
 .weekdays div{
 text-align:center;
 color:#91858e;
 font-size:10px;
-padding:4px
+padding:4px;
 }
 
 .day{
@@ -175,12 +442,19 @@ border:1px solid #f1e5eb;
 border-radius:11px;
 padding:5px;
 background:#fffafd;
-overflow:hidden
+overflow:hidden;
 }
 
 .day.muted{opacity:.35}
-.day.today{outline:2px solid #c9a75d}
-.num{font-size:12px;font-weight:850}
+
+.day.today{
+outline:2px solid #c9a75d;
+}
+
+.num{
+font-size:12px;
+font-weight:850;
+}
 
 .mini{
 margin-top:4px;
@@ -190,26 +464,52 @@ padding:3px;
 font-size:8px;
 white-space:nowrap;
 overflow:hidden;
-text-overflow:ellipsis
+text-overflow:ellipsis;
 }
 
-.mini.agency{background:#f5e9c9}
+.mini.agency{
+background:#f5e9c9;
+}
 
-.details{margin-top:16px}
+.details{
+margin-top:16px;
+}
 
 .clients{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:10px
+gap:10px;
 }
 
-.client{padding:15px}
-.client h3{margin:0;font-size:16px}
-.client p{margin:5px 0 0;color:#817780;font-size:12px}
-.rate{margin-top:11px;color:#b5527e;font-weight:850}
+.client{
+padding:15px;
+}
 
-.free{padding:20px}
-.free h3{margin:6px 0 20px;font-size:27px}
+.client h3{
+margin:0;
+font-size:16px;
+}
+
+.client p{
+margin:5px 0 0;
+color:#817780;
+font-size:12px;
+}
+
+.rate{
+margin-top:11px;
+color:#b5527e;
+font-weight:850;
+}
+
+.free{
+padding:20px;
+}
+
+.free h3{
+margin:6px 0 20px;
+font-size:27px;
+}
 
 .free-row{
 display:flex;
@@ -217,18 +517,29 @@ justify-content:space-between;
 gap:10px;
 padding:13px 0;
 border-bottom:1px solid #eee5e9;
-font-size:13px
+font-size:13px;
 }
 
 .earn-hero{
 padding:23px;
 border-radius:28px;
-background:linear-gradient(135deg,#f3d4e1,#fff1f6)
+background:linear-gradient(135deg,#f3d4e1,#fff1f6);
 }
 
-.earn-hero small{color:#817780}
-.total{font-size:36px;font-weight:900;display:block;margin:6px 0}
-.hours{color:#756b72}
+.earn-hero small{
+color:#817780;
+}
+
+.total{
+font-size:36px;
+font-weight:900;
+display:block;
+margin:6px 0;
+}
+
+.hours{
+color:#756b72;
+}
 
 .nav{
 position:fixed;
@@ -241,7 +552,7 @@ grid-template-columns:repeat(5,1fr);
 padding:8px 8px calc(8px + env(safe-area-inset-bottom));
 background:#fffffff5;
 backdrop-filter:blur(18px);
-border-top:1px solid #eee3e9
+border-top:1px solid #eee3e9;
 }
 
 .nav button{
@@ -251,18 +562,18 @@ color:#8a8087;
 border-radius:17px;
 padding:7px 1px 5px;
 font-size:10px;
-font-weight:800
+font-weight:800;
 }
 
 .nav button span{
 display:block;
 font-size:22px;
-height:25px
+height:25px;
 }
 
 .nav button.active{
 background:#fff0f6;
-color:#b5527e
+color:#b5527e;
 }
 
 .add{
@@ -277,254 +588,8 @@ border-radius:50%;
 background:#b5527e;
 color:white;
 font-size:31px;
-box-shadow:0 12px 30px #b5527e44
+box-shadow:0 12px 30px #b5527e44;
 }
-
-
-/* =========================================================
-   PREFACE — DESIGNED TO MATCH THE REFERENCE IMAGE
-   ========================================================= */
-
-#preface{
-position:fixed;
-z-index:9999;
-inset:0;
-width:100%;
-height:100dvh;
-overflow:hidden;
-
-background:
-linear-gradient(
-180deg,
-rgba(255,238,246,.34) 0%,
-rgba(255,240,246,.22) 48%,
-rgba(255,235,243,.52) 100%
-),
-url("pure-shine-cleaning-background.png") center center/cover no-repeat;
-
-display:flex;
-align-items:flex-end;
-justify-content:center;
-
-padding:
-calc(env(safe-area-inset-top) + 30px)
-18px
-calc(env(safe-area-inset-bottom) + 22px);
-}
-
-#preface:before{
-content:"";
-position:absolute;
-inset:0;
-background:
-linear-gradient(
-180deg,
-rgba(255,250,252,.10),
-rgba(255,220,235,.08) 45%,
-rgba(255,219,232,.34)
-);
-pointer-events:none
-}
-
-.intro{
-position:relative;
-z-index:2;
-width:100%;
-max-width:510px;
-height:100%;
-max-height:900px;
-
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:flex-start;
-
-text-align:center;
-padding:35px 20px 18px;
-
-background:
-linear-gradient(
-180deg,
-rgba(255,255,255,.06),
-rgba(255,245,249,.12)
-);
-
-border-radius:38px;
-}
-
-.intro-logo{
-width:190px;
-height:190px;
-border-radius:50%;
-
-margin:2px auto 24px;
-
-background:
-url("1D0A5974-7253-48B0-8BCA-2272594D29F0.png")
-center/cover no-repeat,
-linear-gradient(135deg,#f9d9e6,#f4e7c7);
-
-border:3px solid #c79b56;
-
-box-shadow:
-0 8px 28px #8e526533,
-0 0 0 5px rgba(255,255,255,.35);
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-font-size:60px;
-color:#b7798f
-}
-
-.intro h1{
-margin:0;
-font-family:
-"Snell Roundhand",
-"Segoe Script",
-"Brush Script MT",
-cursive;
-
-font-size:45px;
-font-weight:500;
-line-height:.95;
-letter-spacing:-1px;
-
-color:#a64d67;
-
-text-shadow:0 1px 1px #fff
-}
-
-.intro h2{
-margin:18px 0 0;
-
-font-family:
-"Snell Roundhand",
-"Segoe Script",
-"Brush Script MT",
-cursive;
-
-font-size:36px;
-font-weight:500;
-line-height:1.05;
-
-color:#a64d67;
-
-max-width:390px
-}
-
-.intro p{
-margin:15px 0 0;
-
-font-family:
-"Snell Roundhand",
-"Segoe Script",
-"Brush Script MT",
-cursive;
-
-font-size:27px;
-line-height:1.05;
-
-color:#9f5368;
-
-max-width:390px
-}
-
-.intro-heart{
-font-size:39px;
-color:#b94d72;
-margin:5px 0 10px
-}
-
-.intro-grid{
-width:100%;
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:8px;
-
-margin-top:auto;
-margin-bottom:18px;
-
-padding:9px 5px;
-
-background:rgba(255,255,255,.20);
-border-radius:20px;
-backdrop-filter:blur(5px)
-}
-
-.intro-item{
-min-height:88px;
-border-radius:18px;
-
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-
-font-size:12px;
-line-height:1.15;
-color:#392c32;
-
-background:rgba(255,255,255,.42);
-
-border:1px solid rgba(255,255,255,.55)
-}
-
-.intro-item b{
-font-size:30px;
-font-weight:400;
-color:#b65373;
-margin-bottom:7px
-}
-
-.intro-item:nth-child(1){background:rgba(255,226,237,.57)}
-.intro-item:nth-child(2){background:rgba(255,236,244,.57)}
-.intro-item:nth-child(3){background:rgba(255,246,216,.57)}
-.intro-item:nth-child(4){background:rgba(255,235,240,.57)}
-
-.start{
-width:92%;
-height:60px;
-
-border:0;
-border-radius:31px;
-
-background:linear-gradient(
-90deg,
-#d96891,
-#e4779d
-);
-
-color:#fff;
-
-font-size:19px;
-font-weight:500;
-
-box-shadow:
-0 8px 22px #b84d7045,
-inset 0 1px 1px #ffffff55
-}
-
-.start:after{
-content:"›";
-font-size:27px;
-vertical-align:-2px;
-margin-left:7px
-}
-
-.login-line{
-margin-top:15px;
-font-size:14px;
-color:#624e56
-}
-
-.login-line span{
-color:#a94d6a;
-font-weight:800;
-text-decoration:underline
-}
-
 
 /* =========================================================
    MODALS
@@ -536,10 +601,12 @@ z-index:2000;
 inset:0;
 background:#241b213f;
 display:none;
-align-items:flex-end
+align-items:flex-end;
 }
 
-.modal.open{display:flex}
+.modal.open{
+display:flex;
+}
 
 .sheet{
 width:100%;
@@ -547,17 +614,20 @@ max-height:92vh;
 overflow:auto;
 background:white;
 border-radius:30px 30px 0 0;
-padding:20px 18px calc(25px + env(safe-area-inset-bottom))
+padding:20px 18px calc(25px + env(safe-area-inset-bottom));
 }
 
 .sheet-head{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:15px
+margin-bottom:15px;
 }
 
-.sheet-head h2{margin:0;font-size:23px}
+.sheet-head h2{
+margin:0;
+font-size:23px;
+}
 
 .close{
 width:40px;
@@ -566,46 +636,56 @@ border:0;
 border-radius:50%;
 background:#faeaf1;
 color:#b5527e;
-font-size:22px
+font-size:22px;
 }
 
-.field{margin:10px 0}
+.field{
+margin:10px 0;
+}
 
 .field label{
 display:block;
 color:#817780;
 font-size:12px;
 font-weight:750;
-margin-bottom:6px
+margin-bottom:6px;
 }
 
-.field input,.field select{
+.field input,
+.field select{
 width:100%;
 padding:13px;
 border:1px solid #eadde5;
 border-radius:14px;
 background:#fff;
-outline:none
+outline:none;
 }
 
 .two{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:10px
+gap:10px;
 }
 
-.primary,.secondary{
+.primary,
+.secondary{
 width:100%;
 padding:14px;
 border:0;
 border-radius:16px;
 margin-top:8px;
-font-weight:850
+font-weight:850;
 }
 
-.primary{background:#b5527e;color:#fff}
-.secondary{background:#faedf3;color:#715f68}
+.primary{
+background:#b5527e;
+color:#fff;
+}
 
+.secondary{
+background:#faedf3;
+color:#715f68;
+}
 
 /* =========================================================
    SETTINGS
@@ -620,7 +700,7 @@ margin-bottom:10px;
 border:1px solid #f0e3e9;
 border-radius:21px;
 background:#fff;
-box-shadow:0 8px 24px #76546812
+box-shadow:0 8px 24px #76546812;
 }
 
 .setting:after{
@@ -630,12 +710,12 @@ right:18px;
 top:50%;
 transform:translateY(-50%);
 font-size:27px;
-color:#b5527e
+color:#b5527e;
 }
 
 .setting strong{
 display:block;
-font-size:17px
+font-size:17px;
 }
 
 .setting small{
@@ -643,7 +723,7 @@ display:block;
 margin-top:5px;
 color:#817780;
 font-size:13px;
-line-height:1.4
+line-height:1.4;
 }
 
 .subpage{
@@ -653,19 +733,18 @@ inset:0;
 background:#fff;
 display:none;
 overflow:auto;
-padding:
-calc(env(safe-area-inset-top) + 18px)
-18px
-30px
+padding:calc(env(safe-area-inset-top) + 18px) 18px 30px;
 }
 
-.subpage.open{display:block}
+.subpage.open{
+display:block;
+}
 
 .subhead{
 display:flex;
 align-items:center;
 gap:12px;
-margin-bottom:20px
+margin-bottom:20px;
 }
 
 .back{
@@ -675,12 +754,12 @@ border:0;
 border-radius:50%;
 background:#fff0f6;
 color:#b5527e;
-font-size:28px
+font-size:28px;
 }
 
 .subhead h2{
 margin:0;
-font-size:24px
+font-size:24px;
 }
 
 .setting-box{
@@ -688,26 +767,26 @@ padding:18px;
 border-radius:21px;
 border:1px solid #f0e3e9;
 box-shadow:0 8px 24px #76546812;
-margin-bottom:11px
+margin-bottom:11px;
 }
 
 .setting-box h3{
 margin:0;
-font-size:17px
+font-size:17px;
 }
 
 .setting-box p{
 margin:6px 0 0;
 color:#817780;
 font-size:13px;
-line-height:1.45
+line-height:1.45;
 }
 
 .switchrow{
 display:flex;
 justify-content:space-between;
 align-items:center;
-gap:10px
+gap:10px;
 }
 
 .switch{
@@ -716,7 +795,7 @@ height:31px;
 border:0;
 border-radius:20px;
 background:#d8d2d5;
-padding:3px
+padding:3px;
 }
 
 .switch i{
@@ -726,62 +805,31 @@ height:25px;
 background:#fff;
 border-radius:50%;
 transition:.2s;
-box-shadow:0 2px 5px #0002
+box-shadow:0 2px 5px #0002;
 }
 
-.switch.on{background:#b5527e}
-.switch.on i{transform:translateX(21px)}
+.switch.on{
+background:#b5527e;
+}
+
+.switch.on i{
+transform:translateX(21px);
+}
 
 .zoomrow{
 display:flex;
-justify-content:space-between
+justify-content:space-between;
 }
 
 .zoomvalue{
 color:#b5527e;
-font-weight:900
+font-weight:900;
 }
 
 input[type=range]{
 width:100%;
 accent-color:#b5527e;
-margin-top:15px
-}
-
-@media(max-width:390px){
-
-.intro{
-padding-left:14px;
-padding-right:14px
-}
-
-.intro-logo{
-width:155px;
-height:155px;
-margin-bottom:17px
-}
-
-.intro h1{font-size:39px}
-.intro h2{font-size:31px}
-.intro p{font-size:23px}
-
-.intro-grid{
-gap:5px
-}
-
-.intro-item{
-min-height:76px;
-font-size:10px
-}
-
-.intro-item b{
-font-size:25px
-}
-
-.start{
-height:55px;
-font-size:17px
-}
+margin-top:15px;
 }
 
 @media(min-width:700px){
@@ -789,75 +837,213 @@ font-size:17px
 #app{
 width:620px;
 margin:auto;
-box-shadow:0 0 50px #0000000b
+box-shadow:0 0 50px #0000000b;
 }
 
 .nav{
 width:620px;
 left:50%;
 right:auto;
-transform:translateX(-50%)
+transform:translateX(-50%);
 }
 
+}
+
+/* =========================================================
+   PREFACE OVERRIDE — EXACT REFERENCE LOOK
+   ========================================================= */
+
 #preface{
-padding-left:30px;
-padding-right:30px
+background:#f6dce5;
 }
+
+.preface-background{
+background-image:
+linear-gradient(
+180deg,
+rgba(255,243,246,.38),
+rgba(255,239,244,.22)
+),
+url("pure-shine-cleaning-background.png");
+background-size:cover;
+background-position:center;
+filter:blur(1.2px);
+transform:scale(1.04);
 }
+
+.preface-overlay{
+background:
+linear-gradient(
+180deg,
+rgba(255,244,247,.25) 0%,
+rgba(255,238,242,.05) 48%,
+rgba(255,235,240,.30) 100%
+);
+}
+
+.preface-content{
+padding-top:calc(env(safe-area-inset-top) + 8vh);
+padding-left:22px;
+padding-right:22px;
+}
+
+.preface-logo{
+width:min(61vw,315px);
+height:min(61vw,315px);
+border-radius:50%;
+margin-top:0;
+object-fit:cover;
+filter:drop-shadow(0 10px 18px rgba(107,61,73,.18));
+}
+
+.preface-title{
+margin-top:5.5vh;
+font-family:"Snell Roundhand","Segoe Script","Brush Script MT",cursive;
+font-size:clamp(39px,9.5vw,66px);
+line-height:.91;
+font-weight:400;
+color:#984c65;
+letter-spacing:-1.2px;
+}
+
+.preface-heart{
+font-size:45px;
+margin-top:7px;
+color:#a64e68;
+}
+
+.preface-features{
+max-width:500px;
+grid-template-columns:repeat(4,1fr);
+gap:4px;
+margin-bottom:24px;
+}
+
+.preface-feature{
+min-height:91px;
+background:rgba(255,255,255,.30);
+border-radius:17px;
+}
+
+.preface-feature-icon{
+font-size:31px;
+color:#a94e6b;
+height:39px;
+}
+
+.preface-feature span{
+font-size:13px;
+color:#30272d;
+}
+
+.preface-start{
+height:64px;
+min-height:64px;
+max-width:470px;
+border-radius:34px;
+background:#dc6c92;
+font-size:20px;
+box-shadow:0 8px 22px rgba(179,72,108,.20);
+}
+
+.preface-login{
+margin-top:17px;
+font-size:15px;
+color:#695960;
+}
+
+/* =========================================================
+   SCRIPT
+   ========================================================= */
+
 </style>
 </head>
 
 <body>
 
-<!-- =====================================================
+<!-- =======================================================
      PREFACE
-     ===================================================== -->
+     ======================================================= -->
 
 <div id="preface">
 
-<div class="intro">
+<div class="preface-background"></div>
+<div class="preface-overlay"></div>
 
-<div class="intro-logo">✨</div>
+<div class="preface-content">
 
-<h1>Your Cleaning</h1>
-<h2>Business, Simplified</h2>
+<img
+class="preface-logo"
+src="1D0A5974-7253-48B0-8BCA-2272594D29F0.png"
+alt="Pure Shine Cleaning"
+onerror="this.style.display='none';document.getElementById('fallbackLogo').style.display='flex';"
+>
 
-<div class="intro-heart">♡</div>
+<div
+id="fallbackLogo"
+style="
+display:none;
+width:min(61vw,315px);
+height:min(61vw,315px);
+border-radius:50%;
+background:linear-gradient(135deg,#f7d2df,#f8e8ca);
+align-items:center;
+justify-content:center;
+flex-direction:column;
+color:#a44e68;
+box-shadow:0 10px 25px rgba(110,60,75,.15);
+">
+<strong style="font-family:Georgia,serif;font-size:28px;">PURE SHINE</strong>
+<span style="font-family:cursive;font-size:27px;">Cleaning ♡</span>
+</div>
 
-<div class="intro-grid">
+<div class="preface-title">
+Your Cleaning<br>
+Business, Simplified
+</div>
 
-<div class="intro-item">
-<b>▣</b>
+<div class="preface-heart">♡</div>
+
+<div class="preface-features">
+
+<div class="preface-feature">
+<div class="preface-feature-icon">▣</div>
 <span>Manage<br>Jobs</span>
 </div>
 
-<div class="intro-item">
-<b>♧</b>
+<div class="preface-feature">
+<div class="preface-feature-icon">♧</div>
 <span>Keep Track<br>of Clients</span>
 </div>
 
-<div class="intro-item">
-<b>▥</b>
+<div class="preface-feature">
+<div class="preface-feature-icon">▥</div>
 <span>Track<br>Earnings</span>
 </div>
 
-<div class="intro-item">
-<b>◷</b>
+<div class="preface-feature">
+<div class="preface-feature-icon">◷</div>
 <span>More Time<br>for You</span>
 </div>
 
 </div>
 
-<button class="start" onclick="startApp()">Get Started</button>
+<button class="preface-start" onclick="startApp()">
+Get Started <span>›</span>
+</button>
 
-<div class="login-line">
+<div class="preface-login">
 Already have an account?
-<span>Log in</span>
+<button onclick="startApp()">Log in</button>
 </div>
 
 </div>
 </div>
 
+
+<!-- =======================================================
+     APP
+     ======================================================= -->
 
 <div id="app">
 
@@ -865,13 +1051,15 @@ Already have an account?
 
 <div class="brand">
 
-<div class="logo">
-✨
-</div>
+<img
+class="logo"
+src="1D0A5974-7253-48B0-8BCA-2272594D29F0.png"
+alt="Pure Shine"
+>
 
 <div>
 <h1>Cleaning Manager</h1>
-<p>Your cleaning business ✨</p>
+<p>Pure Shine Cleaning ✨</p>
 </div>
 
 </div>
@@ -886,16 +1074,12 @@ Already have an account?
 <section id="homePage" class="page active">
 
 <div class="banner">
-
 <div>
 <h2 id="dateTitle"></h2>
 <p>Let's make today productive 🌸</p>
 </div>
-
 <div class="heart">♡</div>
-
 </div>
-
 
 <div class="heading">
 <h2>Today's Schedule</h2>
@@ -903,7 +1087,6 @@ Already have an account?
 </div>
 
 <div id="today"></div>
-
 
 <div class="heading">
 <h2>Overview</h2>
@@ -1016,29 +1199,36 @@ Already have an account?
 <nav class="nav">
 
 <button class="active" data-page="home" onclick="go('home')">
-<span>⌂</span>Home
+<span>⌂</span>
+Home
 </button>
 
 <button data-page="schedule" onclick="go('schedule')">
-<span>▣</span>Schedule
+<span>▣</span>
+Schedule
 </button>
 
 <button data-page="clients" onclick="go('clients')">
-<span>♧</span>Clients
+<span>♙</span>
+Clients
 </button>
 
 <button data-page="free" onclick="go('free')">
-<span>◷</span>Free time
+<span>◷</span>
+Free time
 </button>
 
 <button data-page="earnings" onclick="go('earnings')">
-<span>▥</span>Earnings
+<span>£</span>
+Earnings
 </button>
 
 </nav>
 
 </div>
 
+
+<!-- JOB MODAL -->
 
 <div class="modal" id="jobModal" onclick="if(event.target===this)closeJob()">
 
@@ -1094,6 +1284,8 @@ Already have an account?
 </div>
 
 
+<!-- SETTINGS MODAL -->
+
 <div class="modal" id="settingsModal" onclick="if(event.target===this)closeSettings()">
 
 <div class="sheet">
@@ -1132,6 +1324,8 @@ Already have an account?
 </div>
 
 
+<!-- DISPLAY -->
+
 <div class="subpage" id="displayPage">
 
 <div class="subhead">
@@ -1163,8 +1357,15 @@ oninput="setZoom(this.value)"
 
 </div>
 
+<div class="setting-box" onclick="setZoom(100)">
+<h3>Reset Zoom</h3>
+<p>Return the application to 100%.</p>
 </div>
 
+</div>
+
+
+<!-- NOTIFICATIONS -->
 
 <div class="subpage" id="notificationsPage">
 
@@ -1182,7 +1383,10 @@ oninput="setZoom(this.value)"
 <p>Reminder before a scheduled cleaning.</p>
 </div>
 
-<button class="switch" id="cleanSwitch" onclick="toggleSetting('clean',event)">
+<button
+class="switch"
+id="cleanSwitch"
+onclick="toggleSetting('clean',event)">
 <i></i>
 </button>
 
@@ -1199,7 +1403,10 @@ oninput="setZoom(this.value)"
 <p>Upcoming cleaning schedule notifications.</p>
 </div>
 
-<button class="switch" id="scheduleSwitch" onclick="toggleSetting('schedule',event)">
+<button
+class="switch"
+id="scheduleSwitch"
+onclick="toggleSetting('schedule',event)">
 <i></i>
 </button>
 
@@ -1209,6 +1416,8 @@ oninput="setZoom(this.value)"
 
 </div>
 
+
+<!-- CALENDAR -->
 
 <div class="subpage" id="calendarPage">
 
@@ -1235,6 +1444,8 @@ oninput="setZoom(this.value)"
 </div>
 
 
+<!-- BUSINESS -->
+
 <div class="subpage" id="businessPage">
 
 <div class="subhead">
@@ -1259,6 +1470,8 @@ oninput="setZoom(this.value)"
 
 </div>
 
+
+<!-- DATA -->
 
 <div class="subpage" id="dataPage">
 
@@ -1302,7 +1515,7 @@ try{
 jobs=JSON.parse(localStorage.getItem("pure_shine_jobs")||"[]");
 if(!Array.isArray(jobs))jobs=[];
 }catch(e){
-jobs=[]
+jobs=[];
 }
 
 function pad(n){
@@ -1327,8 +1540,7 @@ return Number(p[0])*60+Number(p[1])
 }
 
 function duration(a,b){
-let x=mins(a);
-let y=mins(b);
+let x=mins(a),y=mins(b);
 if(y<x)y+=1440;
 return y-x
 }
@@ -1359,7 +1571,6 @@ function save(){
 localStorage.setItem("pure_shine_jobs",JSON.stringify(jobs))
 }
 
-
 /* PREFACE */
 
 function startApp(){
@@ -1375,13 +1586,13 @@ document.getElementById("preface").classList.add("hidden")
 
 }
 
-
-/* NAVIGATION */
+/* NAV */
 
 function go(page){
 
-document.querySelectorAll(".page")
-.forEach(x=>x.classList.remove("active"));
+document.querySelectorAll(".page").forEach(x=>{
+x.classList.remove("active")
+});
 
 let target=document.getElementById(page+"Page");
 
@@ -1389,8 +1600,7 @@ if(!target)return;
 
 target.classList.add("active");
 
-document.querySelectorAll(".nav button")
-.forEach(x=>{
+document.querySelectorAll(".nav button").forEach(x=>{
 x.classList.toggle("active",x.dataset.page===page)
 });
 
@@ -1399,19 +1609,17 @@ render();
 window.scrollTo({
 top:0,
 behavior:"smooth"
-})
-}
+});
 
+}
 
 /* SCHEDULE */
 
 function scheduled(){
 
 let result=[];
-
 let y=monthCursor.getFullYear();
 let m=monthCursor.getMonth();
-
 let days=new Date(y,m+1,0).getDate();
 
 for(let d=1;d<=days;d++){
@@ -1447,10 +1655,9 @@ return jobs.concat(scheduled()).map(j=>({
 ...j,
 start:time(j.start),
 end:time(j.end,"10:00")
-}))
+}));
 
 }
-
 
 /* HOME */
 
@@ -1476,15 +1683,18 @@ list.map(jobCard).join(""):
 let completed=jobs.filter(x=>x.completed!==false);
 
 let h=completed.reduce(
-(s,x)=>s+duration(x.start,x.end),0
+(s,x)=>s+duration(x.start,x.end),
+0
 );
 
 let e=completed.reduce(
-(s,x)=>s+duration(x.start,x.end)*Number(x.rate||0)/60,0
+(s,x)=>s+duration(x.start,x.end)*Number(x.rate||0)/60,
+0
 );
 
 document.getElementById("homeHours").textContent=durationText(h);
-document.getElementById("homeMoney").textContent=money(e)
+document.getElementById("homeMoney").textContent=money(e);
+
 }
 
 function jobCard(j){
@@ -1500,7 +1710,9 @@ return `
 
 <div class="job-info">
 
-<div class="job-name">${j.name}</div>
+<div class="job-name">
+${j.name}
+</div>
 
 <div class="job-time">
 ${time(j.start)} – ${time(j.end)} · ${j.type}
@@ -1513,9 +1725,9 @@ ${money(amount)}
 </div>
 
 </div>
-`
-}
+`;
 
+}
 
 /* CALENDAR */
 
@@ -1525,10 +1737,13 @@ let y=monthCursor.getFullYear();
 let m=monthCursor.getMonth();
 
 document.getElementById("monthName").textContent=
-new Date(y,m,1).toLocaleDateString("en-GB",{
+new Date(y,m,1).toLocaleDateString(
+"en-GB",
+{
 month:"long",
 year:"numeric"
-});
+}
+);
 
 let first=(new Date(y,m,1).getDay()+6)%7;
 let days=new Date(y,m+1,0).getDate();
@@ -1544,14 +1759,12 @@ let muted=false;
 
 if(n<1){
 d=new Date(y,m-1,prev+n);
-muted=true
-}
-else if(n>days){
+muted=true;
+}else if(n>days){
 d=new Date(y,m+1,n-days);
-muted=true
-}
-else{
-d=new Date(y,m,n)
+muted=true;
+}else{
+d=new Date(y,m,n);
 }
 
 let dayJobs=allSchedule()
@@ -1562,7 +1775,9 @@ let today=iso(d)===iso(new Date());
 html+=`
 <div class="day ${muted?"muted":""} ${today?"today":""}">
 
-<div class="num">${d.getDate()}</div>
+<div class="num">
+${d.getDate()}
+</div>
 
 ${dayJobs.slice(0,2).map(j=>`
 
@@ -1573,7 +1788,8 @@ ${j.name} ${time(j.start)}
 `).join("")}
 
 </div>
-`
+`;
+
 }
 
 document.getElementById("calendar").innerHTML=html;
@@ -1583,7 +1799,9 @@ let prefix=y+"-"+pad(m+1)+"-";
 let monthJobs=allSchedule()
 .filter(j=>j.date.startsWith(prefix))
 .sort((a,b)=>
-(a.date+a.start).localeCompare(b.date+b.start)
+(a.date+a.start).localeCompare(
+b.date+b.start
+)
 );
 
 document.getElementById("details").innerHTML=
@@ -1592,7 +1810,6 @@ monthJobs.length?
 monthJobs.map(j=>`
 
 <div class="heading">
-
 <h2>${dateText(j.date)}</h2>
 
 <span style="color:#817780;font-size:12px">
@@ -1605,33 +1822,37 @@ ${jobCard(j)}
 
 `).join(""):
 
-'<div class="card empty">No cleaning jobs this month.</div>'
+'<div class="card empty">No cleaning jobs this month.</div>';
+
 }
 
 function month(n){
 
-monthCursor=new Date(
+monthCursor=
+new Date(
 monthCursor.getFullYear(),
 monthCursor.getMonth()+n,
 1
 );
 
-renderCalendar()
+renderCalendar();
+
 }
 
 function todayMonth(){
 
 let d=new Date();
 
-monthCursor=new Date(
+monthCursor=
+new Date(
 d.getFullYear(),
 d.getMonth(),
 1
 );
 
-renderCalendar()
-}
+renderCalendar();
 
+}
 
 /* CLIENTS */
 
@@ -1644,9 +1865,13 @@ CLIENTS.map(c=>`
 
 <h3>${c.name}</h3>
 
-<p>${c.type} · ${c.frequency}</p>
+<p>
+${c.type} · ${c.frequency}
+</p>
 
-<p>${time(c.start)} – ${time(c.end)}</p>
+<p>
+${time(c.start)} – ${time(c.end)}
+</p>
 
 <div class="rate">
 ${money(c.rate)}/hour
@@ -1654,9 +1879,9 @@ ${money(c.rate)}/hour
 
 </div>
 
-`).join("")
-}
+`).join("");
 
+}
 
 /* FREE TIME */
 
@@ -1670,7 +1895,8 @@ let d=new Date();
 
 d.setDate(d.getDate()+i);
 
-let dayJobs=allSchedule()
+let dayJobs=
+allSchedule()
 .filter(j=>j.date===iso(d))
 .sort((a,b)=>mins(a.start)-mins(b.start));
 
@@ -1686,17 +1912,24 @@ output+=`
 
 <div class="free-row">
 
-<span>${dateText(iso(d))}</span>
+<span>
+${dateText(iso(d))}
+</span>
 
 <b>
 ${clock(current)} – ${time(j.start)}
 </b>
 
 </div>
-`
+
+`;
+
 }
 
-current=Math.max(current,mins(j.end))
+current=Math.max(
+current,
+mins(j.end)
+);
 
 });
 
@@ -1706,36 +1939,45 @@ output+=`
 
 <div class="free-row">
 
-<span>${dateText(iso(d))}</span>
+<span>
+${dateText(iso(d))}
+</span>
 
 <b>
 ${clock(current)} – 18:00
 </b>
 
 </div>
-`
+
+`;
+
 }
 
 }
 
 document.getElementById("free").innerHTML=
 output||
-'<div class="empty">No free slots.</div>'
+'<div class="empty">No free slots.</div>';
+
 }
 
 function clock(n){
-return pad(Math.floor(n/60))+":"+pad(n%60)
-}
 
+return pad(Math.floor(n/60))+":"+pad(n%60)
+
+}
 
 /* EARNINGS */
 
 function renderEarnings(){
 
-let completed=jobs
+let completed=
+jobs
 .filter(x=>x.completed!==false)
 .sort((a,b)=>
-(b.date+b.start).localeCompare(a.date+a.start)
+(b.date+b.start).localeCompare(
+a.date+a.start
+)
 );
 
 let total=0;
@@ -1748,12 +1990,16 @@ let m=duration(j.start,j.end);
 hours+=m;
 
 total+=
-m*Number(j.rate||0)/60
+m*
+Number(j.rate||0)/
+60;
 
 });
 
 document.getElementById("earnTotal").textContent=money(total);
-document.getElementById("earnHours").textContent=durationText(hours);
+
+document.getElementById("earnHours").textContent=
+durationText(hours);
 
 document.getElementById("history").innerHTML=
 completed.length?
@@ -1766,7 +2012,9 @@ completed.map(j=>`
 
 <div class="job-info">
 
-<div class="job-name">${j.name}</div>
+<div class="job-name">
+${j.name}
+</div>
 
 <div class="job-time">
 ${dateText(j.date)} ·
@@ -1786,31 +2034,38 @@ Number(j.rate||0)/60
 
 `).join(""):
 
-'<div class="card empty">No completed jobs yet.</div>'
-}
+'<div class="card empty">No completed jobs yet.</div>';
 
+}
 
 /* JOB */
 
 function openJob(){
 
-let select=document.getElementById("jobClient");
+let select=
+document.getElementById("jobClient");
 
 select.innerHTML=
 CLIENTS.map(c=>
-`<option value="${c.name}">${c.name}</option>`
+`<option value="${c.name}">
+${c.name}
+</option>`
 ).join("");
 
-document.getElementById("jobDate").value=iso(new Date());
+document.getElementById("jobDate").value=
+iso(new Date());
 
 jobDefaults();
 
-document.getElementById("jobModal").classList.add("open")
+document.getElementById("jobModal")
+.classList.add("open");
+
 }
 
 function jobDefaults(){
 
-let c=client(
+let c=
+client(
 document.getElementById("jobClient").value
 );
 
@@ -1818,28 +2073,37 @@ if(!c)return;
 
 document.getElementById("jobRate").value=c.rate;
 document.getElementById("jobStart").value=time(c.start);
-document.getElementById("jobEnd").value=time(c.end)
+document.getElementById("jobEnd").value=time(c.end);
+
 }
 
 function closeJob(){
-document.getElementById("jobModal").classList.remove("open")
+
+document
+.getElementById("jobModal")
+.classList.remove("open");
+
 }
 
 function saveJob(){
 
-let name=document.getElementById("jobClient").value;
-let date=document.getElementById("jobDate").value;
+let name=
+document.getElementById("jobClient").value;
 
-let start=time(
-document.getElementById("jobStart").value
-);
+let date=
+document.getElementById("jobDate").value;
 
-let end=time(
+let start=
+time(document.getElementById("jobStart").value);
+
+let end=
+time(
 document.getElementById("jobEnd").value,
 "10:00"
 );
 
-let rate=Number(
+let rate=
+Number(
 document.getElementById("jobRate").value||0
 );
 
@@ -1848,22 +2112,16 @@ if(!name||!date||rate<=0)return;
 let c=client(name);
 
 jobs.push({
-
 id:"job-"+Date.now(),
-
 name,
 date,
 start,
 end,
 rate,
-
 type:c?c.type:"Private",
-
 notes:
 document.getElementById("jobNotes").value,
-
 completed:true
-
 });
 
 save();
@@ -1872,18 +2130,26 @@ closeJob();
 
 render();
 
-go("earnings")
-}
+go("earnings");
 
+}
 
 /* SETTINGS */
 
 function openSettings(){
-document.getElementById("settingsModal").classList.add("open")
+
+document
+.getElementById("settingsModal")
+.classList.add("open");
+
 }
 
 function closeSettings(){
-document.getElementById("settingsModal").classList.remove("open")
+
+document
+.getElementById("settingsModal")
+.classList.remove("open");
+
 }
 
 function settingsPage(name){
@@ -1894,20 +2160,24 @@ document
 .querySelectorAll(".subpage")
 .forEach(x=>x.classList.remove("open"));
 
-let p=document.getElementById(name+"Page");
+let p=
+document.getElementById(name+"Page");
 
 if(p)p.classList.add("open");
 
 if(name==="display")updateZoom();
 
-if(name==="notifications")updateSwitches()
+if(name==="notifications")
+updateSwitches();
+
 }
 
 function closeSub(){
 
 document
 .querySelectorAll(".subpage")
-.forEach(x=>x.classList.remove("open"))
+.forEach(x=>x.classList.remove("open"));
+
 }
 
 function setZoom(value){
@@ -1919,24 +2189,30 @@ localStorage.setItem(
 value
 );
 
-document.body.style.zoom=value/100;
+document.body.style.zoom=
+value/100;
 
 document.getElementById("zoom").value=value;
 
 document.getElementById("zoomValue").textContent=
-value+"%"
+value+"%";
+
 }
 
 function updateZoom(){
 
-let value=Number(
-localStorage.getItem("pure_shine_zoom")||100
+let value=
+Number(
+localStorage.getItem(
+"pure_shine_zoom"
+)||100
 );
 
 document.getElementById("zoom").value=value;
 
 document.getElementById("zoomValue").textContent=
-value+"%"
+value+"%";
+
 }
 
 function toggleSetting(type,e){
@@ -1950,47 +2226,56 @@ key,
 localStorage.getItem(key)==="1"?"0":"1"
 );
 
-updateSwitches()
+updateSwitches();
+
 }
 
 function updateSwitches(){
 
-document.getElementById("cleanSwitch")
+document
+.getElementById("cleanSwitch")
 .classList.toggle(
 "on",
 localStorage.getItem("pure_shine_clean")==="1"
 );
 
-document.getElementById("scheduleSwitch")
+document
+.getElementById("scheduleSwitch")
 .classList.toggle(
 "on",
 localStorage.getItem("pure_shine_schedule")==="1"
-)
-}
+);
 
+}
 
 /* DATA */
 
 function exportData(){
 
-let data=JSON.stringify({
-
+let data=
+JSON.stringify(
+{
 business:"Pure Shine Cleaning",
-
 clients:CLIENTS,
-
 jobs:jobs
-
-},null,2);
-
-let blob=new Blob(
-[data],
-{type:"application/json"}
+},
+null,
+2
 );
 
-let url=URL.createObjectURL(blob);
+let blob=
+new Blob(
+[data],
+{
+type:"application/json"
+}
+);
 
-let a=document.createElement("a");
+let url=
+URL.createObjectURL(blob);
+
+let a=
+document.createElement("a");
 
 a.href=url;
 
@@ -1999,7 +2284,8 @@ a.download=
 
 a.click();
 
-URL.revokeObjectURL(url)
+URL.revokeObjectURL(url);
+
 }
 
 function resetData(){
@@ -2014,9 +2300,9 @@ save();
 
 closeSub();
 
-render()
-}
+render();
 
+}
 
 /* RENDER */
 
@@ -2026,10 +2312,9 @@ renderHome();
 renderCalendar();
 renderClients();
 renderFree();
-renderEarnings()
+renderEarnings();
 
 }
-
 
 document.addEventListener(
 "DOMContentLoaded",
@@ -2037,11 +2322,14 @@ function(){
 
 let savedZoom=
 Number(
-localStorage.getItem("pure_shine_zoom")||100
+localStorage.getItem(
+"pure_shine_zoom"
+)||100
 );
 
 if(savedZoom!==100){
-document.body.style.zoom=savedZoom/100
+document.body.style.zoom=
+savedZoom/100;
 }
 
 initPreface();
