@@ -1,2418 +1,828 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#f9dce9">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="light-content">
-<title>Pure Shine Cleaning Manager</title>
-
-<style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
-html,body{
-  margin:0;
-  padding:0;
-  width:100%;
-  min-height:100%;
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
-  background:#fff8fc;
-  color:#26232d;
-}
-
-body{
-  overflow-x:hidden;
-}
-
-button,input,select{
-  font:inherit;
-}
-
-button{
-  border:0;
-}
-
-:root{
-  --pink:#e45c94;
-  --pink-dark:#c74479;
-  --pink-light:#f7d5e4;
-  --blue:#dceafb;
-  --green:#dcefe4;
-  --yellow:#fff0c7;
-  --purple:#e9ddfa;
-  --peach:#f7dfd6;
-  --text:#292631;
-  --muted:#8f8792;
-  --white:#ffffff;
-}
-
-/* APP */
-
-.app{
-  min-height:100vh;
-  padding-bottom:105px;
-  background:
-    radial-gradient(circle at 0 0,rgba(247,208,225,.35),transparent 28%),
-    radial-gradient(circle at 100% 30%,rgba(229,216,247,.18),transparent 25%),
-    #fffafd;
-}
-
-/* HEADER */
-
-.header{
-  height:88px;
-  padding:
-    max(10px,env(safe-area-inset-top))
-    22px
-    12px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:rgba(255,255,255,.97);
-  border-bottom:1px solid #f0e7ed;
-  position:sticky;
-  top:0;
-  z-index:40;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.logo{
-  width:61px;
-  height:61px;
-  object-fit:cover;
-  border-radius:18px;
-  box-shadow:0 7px 18px rgba(195,76,126,.17);
-}
-
-.brand h1{
-  margin:0;
-  font-size:23px;
-  line-height:1.05;
-  font-weight:850;
-  letter-spacing:-.7px;
-}
-
-.brand p{
-  margin:5px 0 0;
-  color:#928b95;
-  font-size:14px;
-}
-
-.header-actions{
-  display:flex;
-  gap:8px;
-}
-
-.circle-button{
-  width:52px;
-  height:52px;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:0 7px 22px rgba(100,75,100,.11);
-  font-size:23px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-/* PAGES */
-
-.page{
-  display:none;
-}
-
-.page.active{
-  display:block;
-}
-
-.content{
-  width:100%;
-  max-width:900px;
-  margin:auto;
-  padding:22px 20px;
-}
-
-/* HOME */
-
-.hero-date{
-  margin-top:2px;
-  background:linear-gradient(135deg,#f4d0df,#efc9dc);
-  border-radius:25px;
-  padding:23px 24px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  min-height:104px;
-  box-shadow:0 7px 22px rgba(190,93,135,.08);
-}
-
-.hero-date h2{
-  margin:0;
-  font-size:24px;
-  font-weight:850;
-  letter-spacing:-.6px;
-}
-
-.hero-date p{
-  margin:7px 0 0;
-  color:#77717b;
-  font-size:15px;
-}
-
-.hero-heart{
-  font-size:46px;
-  color:#c74c80;
-  line-height:1;
-}
-
-/* IMAGE BANNER */
-
-.banner{
-  margin-top:17px;
-  height:145px;
-  border-radius:23px;
-  overflow:hidden;
-  position:relative;
-  background:
-    linear-gradient(90deg,rgba(255,220,234,.9),rgba(249,225,237,.73)),
-    url("pure-shine-cleaning-background.png") center/cover;
-  box-shadow:0 8px 25px rgba(150,95,125,.09);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-}
-
-.banner-overlay{
-  position:absolute;
-  inset:0;
-  background:linear-gradient(
-    90deg,
-    rgba(255,230,239,.82),
-    rgba(255,239,245,.48)
-  );
-}
-
-.banner-content{
-  position:relative;
-  z-index:2;
-}
-
-.banner-content .script{
-  font-family:cursive;
-  font-size:30px;
-  color:#a84e73;
-  line-height:1.05;
-}
-
-.banner-content .sparkles{
-  color:white;
-  font-size:17px;
-}
-
-/* STATS */
-
-.stats{
-  margin-top:17px;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-}
-
-.stat{
-  min-height:124px;
-  border-radius:23px;
-  padding:15px 8px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-}
-
-.stat:nth-child(1){background:#f2d1df}
-.stat:nth-child(2){background:#dbe8f9}
-.stat:nth-child(3){background:#dceee4}
-.stat:nth-child(4){background:#fff0c8}
-
-.stat-icon{
-  font-size:23px;
-  margin-bottom:5px;
-}
-
-.stat-value{
-  font-size:27px;
-  font-weight:850;
-  letter-spacing:-1px;
-}
-
-.stat-label{
-  margin-top:3px;
-  font-size:14px;
-  color:#4f4952;
-}
-
-/* HOME SECTION */
-
-.section-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin:25px 1px 12px;
-}
-
-.section-header h2{
-  margin:0;
-  font-size:23px;
-  letter-spacing:-.5px;
-}
-
-.section-header button{
-  background:none;
-  color:#bd4c80;
-  font-weight:800;
-}
-
-/* EMPTY TODAY */
-
-.today-card{
-  background:#fff;
-  border-radius:26px;
-  min-height:265px;
-  box-shadow:0 8px 28px rgba(91,67,91,.07);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  text-align:center;
-}
-
-.empty-icon{
-  font-size:54px;
-  color:#d35c91;
-  margin-bottom:14px;
-}
-
-.today-card h3{
-  margin:0;
-  font-size:19px;
-}
-
-.today-card p{
-  margin:7px 0 20px;
-  color:#938b95;
-}
-
-.primary-button{
-  width:100%;
-  height:55px;
-  border-radius:18px;
-  background:linear-gradient(135deg,#e66fa2,#cc4780);
-  color:white;
-  font-weight:800;
-  font-size:17px;
-  box-shadow:0 9px 22px rgba(207,71,128,.18);
-}
-
-/* QUICK ACTIONS */
-
-.quick-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:11px;
-}
-
-.quick{
-  height:66px;
-  border-radius:18px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  font-weight:750;
-  font-size:15px;
-}
-
-.quick:nth-child(1){background:#dceafb;color:#274d88}
-.quick:nth-child(2){background:#dcefe4;color:#397453}
-.quick:nth-child(3){background:#f2d3e2;color:#b84373}
-.quick:nth-child(4){background:#fff0c8;color:#493d1c}
-.quick:nth-child(5){background:#e8dcfa;color:#6643a0}
-.quick:nth-child(6){background:#f6ddd5;color:#9c553d}
-
-.quick-icon{
-  font-size:23px;
-}
-
-/* QUOTE */
-
-.quote-banner{
-  margin-top:14px;
-  min-height:112px;
-  border-radius:20px;
-  overflow:hidden;
-  background:
-    linear-gradient(90deg,rgba(250,210,226,.96),rgba(255,224,237,.72)),
-    url("pure-shine-cleaning-background.png") center/cover;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-}
-
-.quote{
-  font-family:cursive;
-  color:#a34c72;
-  font-size:27px;
-  text-align:center;
-  line-height:1.05;
-  position:relative;
-  z-index:2;
-}
-
-/* =====================
-   SCHEDULE
-===================== */
-
-.schedule-title-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:17px;
-}
-
-.page-title{
-  font-size:29px;
-  margin:0;
-  font-weight:850;
-  letter-spacing:-.7px;
-}
-
-.add-button{
-  background:linear-gradient(135deg,#e66fa2,#cc4780);
-  color:#fff;
-  border-radius:15px;
-  padding:12px 15px;
-  font-weight:800;
-}
-
-.calendar{
-  background:#fff;
-  border-radius:26px;
-  overflow:hidden;
-  border:1px solid #eee5eb;
-  box-shadow:0 9px 30px rgba(91,67,91,.08);
-}
-
-.calendar-header{
-  padding:17px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  border-bottom:1px solid #eee6ec;
-}
-
-.month-name{
-  font-size:20px;
-  font-weight:850;
-}
-
-.calendar-controls{
-  display:flex;
-  gap:6px;
-}
-
-.calendar-controls button{
-  height:38px;
-  min-width:38px;
-  padding:0 10px;
-  border-radius:11px;
-  background:#f7e1eb;
-  color:#bb4b7d;
-  font-weight:800;
-}
-
-.weekdays{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  border-bottom:1px solid #eee6ec;
-}
-
-.weekday{
-  padding:11px 2px;
-  text-align:center;
-  color:#938b95;
-  font-size:11px;
-  font-weight:800;
-  text-transform:uppercase;
-}
-
-.calendar-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-}
-
-.calendar-day{
-  min-height:106px;
-  padding:7px;
-  border-right:1px solid #f0e8ee;
-  border-bottom:1px solid #f0e8ee;
-  background:#fff;
-}
-
-.calendar-day:nth-child(7n){
-  border-right:0;
-}
-
-.calendar-day.other{
-  background:#fffafd;
-}
-
-.day-number{
-  width:29px;
-  height:29px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:12px;
-  font-weight:800;
-  margin-bottom:5px;
-}
-
-.other .day-number{
-  color:#c8c0c8;
-}
-
-.today .day-number{
-  background:#e45c94;
-  color:white;
-}
-
-.calendar-job{
-  display:block;
-  width:100%;
-  text-align:left;
-  margin-top:4px;
-  padding:6px 5px;
-  border-radius:8px;
-  font-size:9px;
-  line-height:1.2;
-  font-weight:750;
-  overflow:hidden;
-}
-
-.calendar-job strong{
-  display:block;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.calendar-job span{
-  display:block;
-  margin-top:2px;
-  font-weight:500;
-}
-
-.private{
-  background:#f6d4e3;
-  border-left:3px solid #d9578b;
-}
-
-.agency{
-  background:#dceafb;
-  border-left:3px solid #6093db;
-}
-
-.fortnightly{
-  background:#dcefe4;
-  border-left:3px solid #5ca77e;
-}
-
-.occasional{
-  background:#e9def9;
-  border-left:3px solid #9270ce;
-}
-
-/* UPCOMING */
-
-.upcoming{
-  margin-top:20px;
-}
-
-.job-list{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.job-card{
-  background:#fff;
-  border-radius:19px;
-  padding:14px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  box-shadow:0 6px 20px rgba(91,67,91,.06);
-  border:1px solid #eee7ed;
-}
-
-.job-left{
-  display:flex;
-  align-items:center;
-  gap:11px;
-}
-
-.job-avatar{
-  width:44px;
-  height:44px;
-  border-radius:13px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#f7d8e6;
-  font-size:20px;
-}
-
-.job-name{
-  font-weight:800;
-}
-
-.job-meta{
-  margin-top:4px;
-  font-size:12px;
-  color:#918994;
-}
-
-.edit-btn{
-  background:#f8e3ed;
-  color:#bd4c80;
-  padding:9px 12px;
-  border-radius:11px;
-  font-weight:750;
-  font-size:12px;
-}
-
-/* CLIENTS */
-
-.clients-list{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.client-card{
-  background:#fff;
-  border-radius:20px;
-  padding:17px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  box-shadow:0 6px 20px rgba(91,67,91,.06);
-}
-
-.client-name{
-  font-size:17px;
-  font-weight:800;
-}
-
-.client-type{
-  color:#938b95;
-  font-size:13px;
-  margin-top:3px;
-}
-
-/* EARNINGS */
-
-.earnings-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.earning-box{
-  border-radius:22px;
-  padding:25px 15px;
-  text-align:center;
-}
-
-.earning-box:nth-child(1){background:#f3d2e1}
-.earning-box:nth-child(2){background:#dceafb}
-.earning-box:nth-child(3){background:#dcefe4}
-.earning-box:nth-child(4){background:#fff0c8}
-
-.earning-value{
-  font-size:27px;
-  font-weight:850;
-}
-
-.earning-label{
-  color:#625a63;
-  margin-top:5px;
-}
-
-/* MODAL */
-
-.modal-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(39,31,40,.44);
-  backdrop-filter:blur(7px);
-  -webkit-backdrop-filter:blur(7px);
-  z-index:100;
-  display:none;
-  align-items:flex-end;
-}
-
-.modal-backdrop.open{
-  display:flex;
-}
-
-.modal{
-  width:100%;
-  max-height:90vh;
-  overflow-y:auto;
-  background:#fffafd;
-  border-radius:30px 30px 0 0;
-  padding:23px 20px calc(25px + env(safe-area-inset-bottom));
-}
-
-.modal-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:18px;
-}
-
-.modal-header h2{
-  margin:0;
-  font-size:24px;
-}
-
-.close{
-  width:43px;
-  height:43px;
-  border-radius:50%;
-  background:#f8dce8;
-  color:#d44f83;
-  font-size:24px;
-}
-
-.form{
-  display:grid;
-  gap:14px;
-}
-
-.field label{
-  display:block;
-  font-size:13px;
-  font-weight:800;
-  color:#625a64;
-  margin-bottom:7px;
-}
-
-.field input,
-.field select{
-  width:100%;
-  height:52px;
-  border:1px solid #e9dfe6;
-  background:#fff;
-  border-radius:15px;
-  padding:0 14px;
-  outline:none;
-}
-
-.form-buttons{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:5px;
-}
-
-.save{
-  height:52px;
-  border-radius:15px;
-  background:linear-gradient(135deg,#e66fa2,#cc4780);
-  color:#fff;
-  font-weight:800;
-}
-
-.delete{
-  height:52px;
-  border-radius:15px;
-  background:#f5e1e8;
-  color:#c44879;
-  font-weight:800;
-}
-
-/* BOTTOM NAV */
-
-.bottom-nav{
-  position:fixed;
-  z-index:60;
-  left:0;
-  right:0;
-  bottom:0;
-  background:rgba(255,255,255,.98);
-  border-top:1px solid #eee6ec;
-  box-shadow:0 -8px 30px rgba(80,60,80,.09);
-  padding:
-    8px 7px
-    max(8px,env(safe-area-inset-bottom));
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-}
-
-.nav-item{
-  background:none;
-  color:#8e8791;
-  min-height:63px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-  font-size:11px;
-  font-weight:750;
-}
-
-.nav-icon{
-  width:43px;
-  height:34px;
-  border-radius:18px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:21px;
-}
-
-.nav-item.active{
-  color:#d64e87;
-}
-
-.nav-item.active .nav-icon{
-  background:#f8d9e7;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:600px){
-
-  .header{
-    height:91px;
-    padding-left:17px;
-    padding-right:17px;
-  }
-
-  .logo{
-    width:57px;
-    height:57px;
-  }
-
-  .brand h1{
-    font-size:21px;
-  }
-
-  .brand p{
-    font-size:13px;
-  }
-
-  .circle-button{
-    width:48px;
-    height:48px;
-  }
-
-  .content{
-    padding:17px 15px;
-  }
-
-  .hero-date{
-    min-height:103px;
-    padding:20px;
-  }
-
-  .hero-date h2{
-    font-size:22px;
-  }
-
-  .stats{
-    gap:8px;
-  }
-
-  .stat{
-    min-height:111px;
-    border-radius:19px;
-    padding:10px 3px;
-  }
-
-  .stat-icon{
-    font-size:19px;
-  }
-
-  .stat-value{
-    font-size:23px;
-  }
-
-  .stat-label{
-    font-size:12px;
-  }
-
-  .quick-grid{
-    gap:8px;
-  }
-
-  .quick{
-    height:61px;
-    font-size:13px;
-  }
-
-  .calendar-day{
-    min-height:80px;
-    padding:5px;
-  }
-
-  .calendar-job{
-    font-size:7.5px;
-    padding:5px 3px;
-  }
-
-  .calendar-job strong{
-    font-size:7.5px;
-  }
-
-  .calendar-job span{
-    font-size:7px;
-  }
-
-  .day-number{
-    width:26px;
-    height:26px;
-    font-size:11px;
-  }
-
-  .weekday{
-    font-size:9px;
-  }
-
-  .month-name{
-    font-size:18px;
-  }
-
-  .calendar-controls button{
-    min-width:34px;
-    height:35px;
-    font-size:12px;
-    padding:0 7px;
-  }
-}
-
-@media(min-width:700px){
-
-  .calendar-day{
-    min-height:135px;
-  }
-
-  .calendar-job{
-    font-size:11px;
-  }
-
-  .calendar-job strong{
-    font-size:11px;
-  }
-}
-</style>
-</head>
-
-<body>
-
-<div class="app">
-
-<header class="header">
-
-  <div class="brand">
-    <img
-      src="pure-shine-cleaning-manager.png"
-      class="logo"
-      alt="Pure Shine Cleaning"
-    >
-
-    <div>
-      <h1>Cleaning Manager</h1>
-      <p>Your cleaning business ✨</p>
-    </div>
-  </div>
-
-  <div class="header-actions">
-    <button class="circle-button" onclick="openSettings()">⚙️</button>
-  </div>
-
-</header>
-
-
-<!-- ================= HOME ================= -->
-
-<section id="homePage" class="page active">
-
-<main class="content">
-
-  <div class="hero-date">
-
-    <div>
-      <h2 id="homeDate"></h2>
-      <p>Let's make today productive 🌸</p>
-    </div>
-
-    <div class="hero-heart">♡</div>
-
-  </div>
-
-
-  <div class="banner">
-
-    <div class="banner-overlay"></div>
-
-    <div class="banner-content">
-      <div class="sparkles">✦　✧　✦</div>
-      <div class="script">
-        A clean space<br>
-        is a happy place ♡
-      </div>
-    </div>
-
-  </div>
-
-
-  <div class="stats">
-
-    <div class="stat">
-      <div class="stat-icon">🧹</div>
-      <div class="stat-value" id="todayJobs">0</div>
-      <div class="stat-label">Jobs</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">◷</div>
-      <div class="stat-value" id="todayHours">0h 0m</div>
-      <div class="stat-label">Hours</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">◎</div>
-      <div class="stat-value" id="todayEarned">£0</div>
-      <div class="stat-label">Earned</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">☼</div>
-      <div class="stat-value" id="availableHours">8h</div>
-      <div class="stat-label">Available</div>
-    </div>
-
-  </div>
-
-
-  <div class="section-header">
-    <h2>Today's schedule</h2>
-    <button onclick="showPage('schedule')">See all</button>
-  </div>
-
-
-  <div class="today-card" id="todayCard"></div>
-
-
-  <div class="section-header">
-    <h2>Quick actions</h2>
-  </div>
-
-
-  <div class="quick-grid">
-
-    <button class="quick" onclick="startCleaning()">
-      <span class="quick-icon">◷</span>
-      Start cleaning
-    </button>
-
-    <button class="quick" onclick="showPage('clients')">
-      <span class="quick-icon">♧</span>
-      Clients
-    </button>
-
-    <button class="quick" onclick="showPage('schedule')">
-      <span class="quick-icon">▣</span>
-      Schedule
-    </button>
-
-    <button class="quick" onclick="showFreeTime()">
-      <span class="quick-icon">⌕</span>
-      Find free time
-    </button>
-
-    <button class="quick" onclick="showPage('earnings')">
-      <span class="quick-icon">▥</span>
-      Earnings
-    </button>
-
-    <button class="quick" onclick="showHolidays()">
-      <span class="quick-icon">🏖</span>
-      Holidays
-    </button>
-
-  </div>
-
-
-  <div class="quote-banner">
-    <div class="quote">
-      ♡ A clean space<br>
-      is a happy place ♡
-    </div>
-  </div>
-
-</main>
-
-</section>
-
-
-<!-- ================= SCHEDULE ================= -->
-
-<section id="schedulePage" class="page">
-
-<main class="content">
-
-  <div class="schedule-title-row">
-
-    <h1 class="page-title">Schedule</h1>
-
-    <button class="add-button" onclick="openAddJob()">
-      ＋ Add job
-    </button>
-
-  </div>
-
-
-  <div class="calendar">
-
-    <div class="calendar-header">
-
-      <div class="month-name" id="monthName"></div>
-
-      <div class="calendar-controls">
-        <button onclick="changeMonth(-1)">‹</button>
-        <button onclick="goToday()">Today</button>
-        <button onclick="changeMonth(1)">›</button>
-      </div>
-
-    </div>
-
-
-    <div class="weekdays">
-      <div class="weekday">Mon</div>
-      <div class="weekday">Tue</div>
-      <div class="weekday">Wed</div>
-      <div class="weekday">Thu</div>
-      <div class="weekday">Fri</div>
-      <div class="weekday">Sat</div>
-      <div class="weekday">Sun</div>
-    </div>
-
-
-    <div class="calendar-grid" id="calendarGrid"></div>
-
-  </div>
-
-
-  <div class="section-header">
-    <h2>Upcoming jobs</h2>
-  </div>
-
-  <div class="job-list" id="jobList"></div>
-
-</main>
-
-</section>
-
-
-<!-- ================= CLIENTS ================= -->
-
-<section id="clientsPage" class="page">
-
-<main class="content">
-
-  <div class="schedule-title-row">
-    <h1 class="page-title">Clients</h1>
-
-    <button class="add-button" onclick="addClient()">
-      ＋ Add client
-    </button>
-  </div>
-
-  <div class="clients-list" id="clientsList"></div>
-
-</main>
-
-</section>
-
-
-<!-- ================= EARNINGS ================= -->
-
-<section id="earningsPage" class="page">
-
-<main class="content">
-
-  <div class="schedule-title-row">
-    <h1 class="page-title">Earnings</h1>
-  </div>
-
-  <div class="earnings-grid">
-
-    <div class="earning-box">
-      <div class="earning-value" id="totalEarned">£0.00</div>
-      <div class="earning-label">Total earned</div>
-    </div>
-
-    <div class="earning-box">
-      <div class="earning-value" id="totalHours">0h 0m</div>
-      <div class="earning-label">Total hours</div>
-    </div>
-
-    <div class="earning-box">
-      <div class="earning-value" id="totalJobs">0</div>
-      <div class="earning-label">Jobs</div>
-    </div>
-
-    <div class="earning-box">
-      <div class="earning-value" id="averageRate">£0</div>
-      <div class="earning-label">Average rate</div>
-    </div>
-
-  </div>
-
-</main>
-
-</section>
-
-
-<!-- ================= BOTTOM NAV ================= -->
-
-<nav class="bottom-nav">
-
-  <button class="nav-item active" data-page="home" onclick="showPage('home')">
-    <div class="nav-icon">⌂</div>
-    Home
-  </button>
-
-  <button class="nav-item" data-page="schedule" onclick="showPage('schedule')">
-    <div class="nav-icon">▣</div>
-    Schedule
-  </button>
-
-  <button class="nav-item" data-page="clients" onclick="showPage('clients')">
-    <div class="nav-icon">♧</div>
-    Clients
-  </button>
-
-  <button class="nav-item" onclick="showFreeTime()">
-    <div class="nav-icon">◷</div>
-    Free time
-  </button>
-
-  <button class="nav-item" data-page="earnings" onclick="showPage('earnings')">
-    <div class="nav-icon">▥</div>
-    Earnings
-  </button>
-
-</nav>
-
-</div>
-
-
-<!-- ================= JOB MODAL ================= -->
-
-<div class="modal-backdrop" id="jobModal">
-
-<div class="modal">
-
-  <div class="modal-header">
-
-    <h2 id="jobModalTitle">Add cleaning job</h2>
-
-    <button class="close" onclick="closeJobModal()">×</button>
-
-  </div>
-
-
-  <form class="form" onsubmit="saveJob(event)">
-
-    <div class="field">
-      <label>Client</label>
-      <input id="jobClient" type="text" required placeholder="Client name">
-    </div>
-
-    <div class="field">
-      <label>Date</label>
-      <input id="jobDate" type="date" required>
-    </div>
-
-    <div class="field">
-      <label>Start time</label>
-      <input id="jobStart" type="time" required>
-    </div>
-
-    <div class="field">
-      <label>End time</label>
-      <input id="jobEnd" type="time" required>
-    </div>
-
-    <div class="field">
-      <label>Client type</label>
-
-      <select id="jobType">
-        <option>Private</option>
-        <option>Agency</option>
-        <option>Fortnightly</option>
-        <option>Occasional</option>
-      </select>
-
-    </div>
-
-    <div class="field">
-      <label>Hourly rate (£)</label>
-      <input id="jobRate" type="number" step="0.01" required>
-    </div>
-
-
-    <div class="form-buttons">
-
-      <button
-        type="button"
-        class="delete"
-        id="deleteJobButton"
-        onclick="deleteCurrentJob()"
-        style="display:none">
-        Delete
-      </button>
-
-      <button type="submit" class="save">
-        Save job
-      </button>
-
-    </div>
-
-  </form>
-
-</div>
-
-</div>
-
-
-<!-- ================= SETTINGS ================= -->
-
-<div class="modal-backdrop" id="settingsModal">
-
-<div class="modal">
-
-  <div class="modal-header">
-
-    <h2>Settings ⚙️</h2>
-
-    <button class="close" onclick="closeSettings()">×</button>
-
-  </div>
-
-  <div class="client-card">
-    <div>
-      <div class="client-name">Pure Shine Cleaning Manager</div>
-      <div class="client-type">Your cleaning business ✨</div>
-    </div>
-  </div>
-
-  <br>
-
-  <div class="client-card">
-    <div>
-      <div class="client-name">Display</div>
-      <div class="client-type">
-        Full-screen mobile layout with pastel colours.
-      </div>
-    </div>
-  </div>
-
-  <br>
-
-  <div class="client-card">
-    <div>
-      <div class="client-name">Notifications 🔔</div>
-      <div class="client-type">
-        Cleaning reminders and schedule notifications.
-      </div>
-    </div>
-  </div>
-
-  <br>
-
-  <div class="client-card">
-    <div>
-      <div class="client-name">Calendar 📅</div>
-      <div class="client-type">
-        Your cleaning schedule can be organised here.
-      </div>
-    </div>
-  </div>
-
-</div>
-
-</div>
-
-
 <script>
+/* =========================================================
+   PURE SHINE CLEANING MANAGER — NAVIGATION + CALENDAR FIX
+   ========================================================= */
 
-/* =========================================
-   DATA
-========================================= */
+/* ---------- FIX ALL NAVIGATION BUTTONS ---------- */
+document.querySelectorAll('.bottom .nav').forEach(button => {
+    button.type = 'button';
 
-const defaultJobs = [
-  {
-    id:1,
-    client:"Lottie",
-    date:"2026-09-28",
-    start:"13:00",
-    end:"15:00",
-    type:"Agency",
-    rate:16
-  },
-  {
-    id:2,
-    client:"Christine",
-    date:"2026-09-29",
-    start:"09:30",
-    end:"12:30",
-    type:"Private",
-    rate:18
-  },
-  {
-    id:3,
-    client:"Matt",
-    date:"2026-09-29",
-    start:"13:00",
-    end:"17:00",
-    type:"Agency",
-    rate:16
-  },
-  {
-    id:4,
-    client:"Sonia",
-    date:"2026-09-30",
-    start:"09:00",
-    end:"14:00",
-    type:"Agency",
-    rate:16
-  },
-  {
-    id:5,
-    client:"Laura",
-    date:"2026-10-01",
-    start:"09:00",
-    end:"13:00",
-    type:"Private",
-    rate:18
-  },
-  {
-    id:6,
-    client:"Hannah",
-    date:"2026-10-01",
-    start:"13:00",
-    end:"16:00",
-    type:"Agency",
-    rate:16
-  },
-  {
-    id:7,
-    client:"Johanna",
-    date:"2026-10-02",
-    start:"09:00",
-    end:"12:00",
-    type:"Fortnightly",
-    rate:18
-  },
-  {
-    id:8,
-    client:"Sindu",
-    date:"2026-10-02",
-    start:"13:00",
-    end:"16:00",
-    type:"Fortnightly",
-    rate:18
-  }
-];
+    button.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
 
-let jobs = JSON.parse(
-  localStorage.getItem("pureShineJobs")
-);
+        const page = this.dataset.page;
 
-if(!Array.isArray(jobs)){
-  jobs = defaultJobs;
-  saveJobs();
-}
+        if (!page) return;
+
+        /* Close any open modal/sheet before changing page */
+        document.querySelectorAll('.modal.show').forEach(modal => {
+            modal.classList.remove('show');
+        });
+
+        /* Remove old active states */
+        document.querySelectorAll('.page').forEach(p => {
+            p.classList.remove('active');
+        });
+
+        document.querySelectorAll('.bottom .nav').forEach(n => {
+            n.classList.remove('active');
+        });
+
+        /* Open requested page */
+        const target = document.getElementById(page);
+
+        if (target) {
+            target.classList.add('active');
+            this.classList.add('active');
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
+            if (typeof render === 'function') {
+                render();
+            }
+        }
+    });
+});
 
 
-const clients = [
-  ["Lottie","Agency · £16/hour"],
-  ["Christine","Private · £18/hour"],
-  ["Matt","Agency · £16/hour"],
-  ["Sonia","Agency · £16/hour"],
-  ["Laura","Private · £18/hour"],
-  ["Hannah","Agency · £16/hour"],
-  ["Meghan","Private"],
-  ["Johanna","Fortnightly"],
-  ["Sindu","Fortnightly"],
-  ["Peter","Occasional"],
-  ["Mike","Every 3 weeks"]
-];
+/* ---------- SAFE PAGE NAVIGATION ---------- */
+window.showPage = function(pageId, button) {
 
+    const target = document.getElementById(pageId);
 
-/* =========================================
-   STORAGE
-========================================= */
+    if (!target) return;
 
-function saveJobs(){
-  localStorage.setItem(
-    "pureShineJobs",
-    JSON.stringify(jobs)
-  );
-}
-
-
-/* =========================================
-   NAVIGATION
-========================================= */
-
-function showPage(page){
-
-  document.querySelectorAll(".page").forEach(
-    p => p.classList.remove("active")
-  );
-
-  const selected =
-    document.getElementById(page + "Page");
-
-  if(selected){
-    selected.classList.add("active");
-  }
-
-  document.querySelectorAll(".nav-item").forEach(
-    item => item.classList.remove("active")
-  );
-
-  const nav =
-    document.querySelector(
-      `.nav-item[data-page="${page}"]`
-    );
-
-  if(nav){
-    nav.classList.add("active");
-  }
-
-  if(page === "schedule"){
-    renderCalendar();
-    renderJobList();
-  }
-
-  if(page === "clients"){
-    renderClients();
-  }
-
-  if(page === "earnings"){
-    renderEarnings();
-  }
-
-  window.scrollTo({
-    top:0,
-    behavior:"instant"
-  });
-}
-
-
-/* =========================================
-   HOME
-========================================= */
-
-function renderHome(){
-
-  const today = new Date();
-
-  document.getElementById("homeDate").textContent =
-    today.toLocaleDateString("en-GB",{
-      weekday:"long",
-      day:"numeric",
-      month:"long"
+    document.querySelectorAll('.modal.show').forEach(modal => {
+        modal.classList.remove('show');
     });
 
-  const iso = formatDate(today);
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
 
-  const todayJobs =
-    jobs.filter(job => job.date === iso);
+    document.querySelectorAll('.bottom .nav').forEach(nav => {
+        nav.classList.remove('active');
+    });
 
-  let minutes = 0;
-  let earned = 0;
+    target.classList.add('active');
 
-  todayJobs.forEach(job => {
+    const navButton =
+        button ||
+        document.querySelector('.bottom .nav[data-page="' + pageId + '"]');
 
-    const m = getDuration(
-      job.start,
-      job.end
-    );
+    if (navButton) {
+        navButton.classList.add('active');
+    }
 
-    minutes += m;
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 
-    earned +=
-      (m / 60) * Number(job.rate || 0);
-  });
-
-  document.getElementById("todayJobs")
-    .textContent = todayJobs.length;
-
-  document.getElementById("todayHours")
-    .textContent = formatDuration(minutes);
-
-  document.getElementById("todayEarned")
-    .textContent = "£" + earned.toFixed(2);
-
-  const available =
-    Math.max(0,480-minutes);
-
-  document.getElementById("availableHours")
-    .textContent =
-      Math.floor(available/60) +
-      "h " +
-      (available%60) +
-      "m";
+    if (typeof render === 'function') {
+        render();
+    }
+};
 
 
-  const card =
-    document.getElementById("todayCard");
+/* ---------- NORMALISE OLD / BROKEN JOB DATA ---------- */
+function normaliseCleaningJobs() {
 
-  if(!todayJobs.length){
+    if (!Array.isArray(jobs)) {
+        jobs = [];
+    }
 
-    card.innerHTML = `
-      <div class="empty-icon">♡</div>
-      <h3>No cleaning jobs today 🌸</h3>
-      <p>Add one with the + button.</p>
+    jobs = jobs.map((job, index) => {
 
-      <button
-        class="primary-button"
-        onclick="openAddJob('${iso}')">
-        ＋ Add cleaning job
-      </button>
-    `;
+        const client =
+            clients.find(c =>
+                String(c.id) === String(job.clientId)
+            );
 
-    return;
-  }
+        let start =
+            job.start ||
+            job.startTime ||
+            job.from ||
+            '';
 
+        let end =
+            job.end ||
+            job.endTime ||
+            job.to ||
+            '';
 
-  card.innerHTML =
-    todayJobs.map(job => `
-      <div class="job-card" style="width:100%;margin-bottom:8px">
+        /*
+         * Never allow undefined to reach the screen.
+         */
+        if (start === 'undefined' || start === 'null') {
+            start = '';
+        }
 
-        <div class="job-left">
+        if (end === 'undefined' || end === 'null') {
+            end = '';
+        }
 
-          <div class="job-avatar">
-            ${getIcon(job.type)}
-          </div>
+        let day =
+            job.day ||
+            job.weekday ||
+            '';
 
-          <div>
-            <div class="job-name">
-              ${escapeHtml(job.client)}
-            </div>
+        if (!day && job.date) {
+            const d = new Date(job.date + 'T12:00:00');
 
-            <div class="job-meta">
-              ${job.start}–${job.end}
-              · £${Number(job.rate).toFixed(2)}/hour
-            </div>
-          </div>
+            if (!isNaN(d.getTime())) {
+                day = days[d.getDay()];
+            }
+        }
 
-        </div>
+        if (!day) {
+            day = 'Monday';
+        }
 
-        <button
-          class="edit-btn"
-          onclick="openEditJob(${job.id})">
-          Edit
-        </button>
+        let hours = Number(job.hours);
 
-      </div>
-    `).join("") +
-    `
-      <button
-        class="primary-button"
-        onclick="openAddJob('${iso}')">
-        ＋ Add cleaning job
-      </button>
-    `;
+        if (!Number.isFinite(hours) || hours < 0) {
+            hours = 0;
+        }
+
+        if (start && end) {
+            const calculated = duration(start, end);
+
+            if (calculated > 0) {
+                hours = calculated;
+            }
+        }
+
+        return {
+            id: job.id || ('job-' + Date.now() + '-' + index),
+
+            clientId:
+                job.clientId ||
+                client?.id ||
+                '',
+
+            day: day,
+
+            date:
+                job.date ||
+                '',
+
+            start: start,
+
+            end: end,
+
+            hours: hours,
+
+            rate:
+                Number(job.rate) ||
+                Number(client?.rate) ||
+                0,
+
+            done:
+                Boolean(job.done),
+
+            notes:
+                job.notes ||
+                ''
+        };
+    });
+
+    save();
 }
 
-
-/* =========================================
-   CALENDAR
-========================================= */
-
-let calendarDate = new Date();
+normaliseCleaningJobs();
 
 
-function renderCalendar(){
+/* ---------- CALENDAR — REAL MONTH GRID ---------- */
+window.renderCalendar = function() {
 
-  const year =
-    calendarDate.getFullYear();
+    const calendar = document.getElementById('calendar');
 
-  const month =
-    calendarDate.getMonth();
+    if (!calendar) return;
 
-  document.getElementById("monthName")
-    .textContent =
-      calendarDate.toLocaleDateString(
-        "en-GB",
-        {
-          month:"long",
-          year:"numeric"
-        }
-      );
+    const now = new Date();
 
+    let currentYear =
+        window.calendarYear ||
+        now.getFullYear();
 
-  const grid =
-    document.getElementById("calendarGrid");
+    let currentMonth =
+        window.calendarMonth !== undefined
+            ? window.calendarMonth
+            : now.getMonth();
 
-  grid.innerHTML = "";
+    window.calendarYear = currentYear;
+    window.calendarMonth = currentMonth;
 
-
-  let firstDay =
-    new Date(year,month,1).getDay();
-
-  firstDay =
-    firstDay === 0
-      ? 6
-      : firstDay - 1;
-
-
-  const days =
-    new Date(year,month+1,0).getDate();
-
-  const previousDays =
-    new Date(year,month,0).getDate();
-
-
-  const total =
-    Math.ceil(
-      (firstDay + days) / 7
-    ) * 7;
-
-
-  const today =
-    new Date();
-
-
-  for(let i=0;i<total;i++){
-
-    let day;
-    let date;
-
-    const cell =
-      document.createElement("div");
-
-    cell.className = "calendar-day";
-
-
-    if(i < firstDay){
-
-      day =
-        previousDays -
-        firstDay +
-        i +
-        1;
-
-      date =
+    const monthName =
         new Date(
-          year,
-          month-1,
-          day
+            currentYear,
+            currentMonth,
+            1
+        ).toLocaleDateString(
+            'en-GB',
+            {
+                month: 'long',
+                year: 'numeric'
+            }
         );
 
-      cell.classList.add("other");
-
-    }else if(i >= firstDay + days){
-
-      day =
-        i -
-        firstDay -
-        days +
-        1;
-
-      date =
+    const firstDay =
         new Date(
-          year,
-          month+1,
-          day
-        );
+            currentYear,
+            currentMonth,
+            1
+        ).getDay();
 
-      cell.classList.add("other");
+    const mondayOffset =
+        firstDay === 0 ? 6 : firstDay - 1;
 
-    }else{
-
-      day =
-        i -
-        firstDay +
-        1;
-
-      date =
+    const daysInMonth =
         new Date(
-          year,
-          month,
-          day
-        );
+            currentYear,
+            currentMonth + 1,
+            0
+        ).getDate();
+
+    const previousMonthDays =
+        new Date(
+            currentYear,
+            currentMonth,
+            0
+        ).getDate();
+
+    let html = `
+        <div class="calendar-wrapper">
+
+            <div class="calendar-top">
+                <button
+                    type="button"
+                    class="calendar-arrow"
+                    onclick="previousCalendarMonth(event)">
+                    ‹
+                </button>
+
+                <div class="calendar-month">
+                    ${monthName}
+                </div>
+
+                <div class="calendar-controls">
+                    <button
+                        type="button"
+                        class="calendar-today"
+                        onclick="goCalendarToday(event)">
+                        Today
+                    </button>
+
+                    <button
+                        type="button"
+                        class="calendar-arrow"
+                        onclick="nextCalendarMonth(event)">
+                        ›
+                    </button>
+                </div>
+            </div>
+
+            <div class="calendar-weekdays">
+                <div>MON</div>
+                <div>TUE</div>
+                <div>WED</div>
+                <div>THU</div>
+                <div>FRI</div>
+                <div>SAT</div>
+                <div>SUN</div>
+            </div>
+
+            <div class="calendar-grid">
+    `;
+
+    /* Previous month filler */
+    for (let i = mondayOffset - 1; i >= 0; i--) {
+
+        const dayNumber =
+            previousMonthDays - i;
+
+        html += `
+            <div class="calendar-cell muted">
+                <div class="calendar-number">
+                    ${dayNumber}
+                </div>
+            </div>
+        `;
     }
 
+    /* Current month */
+    for (
+        let dayNumber = 1;
+        dayNumber <= daysInMonth;
+        dayNumber++
+    ) {
 
-    const iso =
-      formatDate(date);
+        const cellDate =
+            new Date(
+                currentYear,
+                currentMonth,
+                dayNumber
+            );
 
+        const isoDate =
+            currentYear +
+            '-' +
+            String(currentMonth + 1).padStart(2, '0') +
+            '-' +
+            String(dayNumber).padStart(2, '0');
 
-    if(
-      date.getFullYear() === today.getFullYear() &&
-      date.getMonth() === today.getMonth() &&
-      date.getDate() === today.getDate()
-    ){
-      cell.classList.add("today");
-    }
+        const weekday =
+            days[cellDate.getDay()];
 
+        const isToday =
+            cellDate.toDateString() === now.toDateString();
 
-    const number =
-      document.createElement("div");
+        const dayJobs =
+            jobs.filter(job => {
 
-    number.className =
-      "day-number";
+                if (job.date === isoDate) {
+                    return true;
+                }
 
-    number.textContent =
-      day;
+                /*
+                 * Legacy weekly jobs without dates
+                 * still appear on the correct weekday.
+                 */
+                if (!job.date && job.day === weekday) {
+                    return true;
+                }
 
-    cell.appendChild(number);
+                return false;
+            });
 
+        html += `
+            <div
+                class="calendar-cell ${isToday ? 'today-cell' : ''}"
+                onclick="calendarDayClicked('${isoDate}', '${weekday}')">
 
-    jobs
-      .filter(job => job.date === iso)
-      .forEach(job => {
+                <div class="calendar-number ${isToday ? 'today-number' : ''}">
+                    ${dayNumber}
+                </div>
 
-        const button =
-          document.createElement("button");
-
-        button.className =
-          "calendar-job " +
-          getClass(job.type);
-
-        button.innerHTML = `
-          <strong>
-            ${escapeHtml(job.client)}
-          </strong>
-          <span>
-            ${job.start}–${job.end}
-          </span>
+                <div class="calendar-jobs">
         `;
 
-        button.onclick =
-          function(e){
-            e.stopPropagation();
-            openEditJob(job.id);
-          };
+        dayJobs.forEach(job => {
 
-        cell.appendChild(button);
+            const clientName =
+                name(job.clientId);
 
-      });
+            const safeStart =
+                job.start && job.start !== 'undefined'
+                    ? job.start
+                    : '';
 
+            const safeEnd =
+                job.end && job.end !== 'undefined'
+                    ? job.end
+                    : '';
 
-    cell.onclick =
-      function(){
-        openAddJob(iso);
-      };
+            let time = '';
 
+            if (safeStart && safeEnd) {
+                time =
+                    safeStart +
+                    ' – ' +
+                    safeEnd;
+            } else if (safeStart) {
+                time = safeStart;
+            } else if (job.hours) {
+                time = timeText(job.hours);
+            }
 
-    grid.appendChild(cell);
-  }
-}
+            html += `
+                <button
+                    type="button"
+                    class="calendar-job"
+                    onclick="event.stopPropagation(); openJob('${job.id}')">
 
+                    <strong>${clientName}</strong>
 
-/* =========================================
-   JOB LIST
-========================================= */
+                    ${
+                        time
+                            ? `<span>${time}</span>`
+                            : `<span>${timeText(job.hours)}</span>`
+                    }
 
-function renderJobList(){
+                    <small>
+                        ${money(job.hours * job.rate)}
+                    </small>
 
-  const list =
-    document.getElementById("jobList");
+                </button>
+            `;
+        });
 
-  const sorted =
-    [...jobs].sort(
-      (a,b) =>
-        (a.date+a.start)
-        .localeCompare(b.date+b.start)
-    );
+        html += `
+                </div>
+            </div>
+        `;
+    }
 
+    /*
+     * Fill remaining cells so the calendar
+     * always has complete weeks.
+     */
+    const totalCells =
+        mondayOffset + daysInMonth;
 
-  if(!sorted.length){
+    const remaining =
+        totalCells % 7 === 0
+            ? 0
+            : 7 - (totalCells % 7);
 
-    list.innerHTML = `
-      <div class="job-card">
-        No cleaning jobs yet.
-      </div>
+    for (let i = 1; i <= remaining; i++) {
+
+        html += `
+            <div class="calendar-cell muted">
+                <div class="calendar-number">
+                    ${i}
+                </div>
+            </div>
+        `;
+    }
+
+    html += `
+            </div>
+
+            <button
+                type="button"
+                class="calendar-add-job"
+                onclick="openJob()">
+                ＋ Add cleaning job
+            </button>
+
+        </div>
     `;
 
-    return;
-  }
+    calendar.innerHTML = html;
+};
 
 
-  list.innerHTML =
-    sorted.slice(0,15).map(job => {
+/* ---------- CALENDAR NAVIGATION ---------- */
+window.previousCalendarMonth = function(event) {
 
-      const date =
-        new Date(job.date+"T12:00:00");
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
 
-      const readable =
-        date.toLocaleDateString(
-          "en-GB",
-          {
-            weekday:"short",
-            day:"numeric",
-            month:"short"
-          }
+    window.calendarMonth--;
+
+    if (window.calendarMonth < 0) {
+        window.calendarMonth = 11;
+        window.calendarYear--;
+    }
+
+    renderCalendar();
+};
+
+
+window.nextCalendarMonth = function(event) {
+
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    window.calendarMonth++;
+
+    if (window.calendarMonth > 11) {
+        window.calendarMonth = 0;
+        window.calendarYear++;
+    }
+
+    renderCalendar();
+};
+
+
+window.goCalendarToday = function(event) {
+
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    const today = new Date();
+
+    window.calendarYear =
+        today.getFullYear();
+
+    window.calendarMonth =
+        today.getMonth();
+
+    renderCalendar();
+};
+
+
+window.calendarDayClicked = function(date, day) {
+
+    /*
+     * Tapping an empty calendar day opens
+     * a new job already prepared for that date.
+     */
+    openJob();
+
+    const dateInput =
+        document.getElementById('jDate');
+
+    const dayInput =
+        document.getElementById('jDay');
+
+    if (dateInput) {
+        dateInput.value = date;
+    }
+
+    if (dayInput) {
+        dayInput.value = day;
+    }
+};
+
+
+/* ---------- FIX ADD / EDIT JOB ---------- */
+window.openJob = function(id) {
+
+    const modal =
+        document.getElementById('jobModal');
+
+    const clientSelect =
+        document.getElementById('jClient');
+
+    const jobId =
+        document.getElementById('jId');
+
+    if (!modal || !clientSelect) return;
+
+    const job =
+        jobs.find(
+            item => String(item.id) === String(id)
         );
 
-      return `
-        <div class="job-card">
+    clientSelect.innerHTML =
+        clients.map(client => `
+            <option value="${client.id}">
+                ${client.name} — £${Number(client.rate || 0).toFixed(2)}/hour
+            </option>
+        `).join('');
 
-          <div class="job-left">
+    if (job) {
 
-            <div class="job-avatar">
-              ${getIcon(job.type)}
-            </div>
+        jobId.value = job.id;
 
-            <div>
+        clientSelect.value =
+            job.clientId;
 
-              <div class="job-name">
-                ${escapeHtml(job.client)}
-              </div>
+        document.getElementById('jDate').value =
+            job.date || '';
 
-              <div class="job-meta">
-                ${readable}
-                · ${job.start}–${job.end}
-                · £${Number(job.rate).toFixed(2)}/hour
-              </div>
+        document.getElementById('jDay').value =
+            job.day || 'Monday';
 
-            </div>
+        document.getElementById('jStart').value =
+            job.start || '';
 
-          </div>
+        document.getElementById('jEnd').value =
+            job.end || '';
 
-          <button
-            class="edit-btn"
-            onclick="openEditJob(${job.id})">
-            Edit
-          </button>
+        document.getElementById('jRate').value =
+            job.rate || 0;
 
-        </div>
-      `;
+        document.getElementById('jNotes').value =
+            job.notes || '';
 
-    }).join("");
-}
+        document
+            .getElementById('deleteJobBtn')
+            ?.classList.remove('hidden');
 
+        document.getElementById('jobTitle').textContent =
+            'Edit Cleaning Job';
 
-/* =========================================
-   ADD / EDIT
-========================================= */
+    } else {
 
-let editingJobId = null;
+        jobId.value = '';
 
+        const firstClient =
+            clients[0];
 
-function openAddJob(date){
+        if (firstClient) {
+            clientSelect.value =
+                firstClient.id;
 
-  editingJobId = null;
+            document.getElementById('jRate').value =
+                firstClient.rate || 0;
+        }
 
-  document.getElementById("jobModalTitle")
-    .textContent = "Add cleaning job";
+        const today =
+            new Date();
 
-  document.getElementById("jobClient").value = "";
+        const iso =
+            today.getFullYear() +
+            '-' +
+            String(today.getMonth() + 1).padStart(2, '0') +
+            '-' +
+            String(today.getDate()).padStart(2, '0');
 
-  document.getElementById("jobDate").value =
-    date || formatDate(new Date());
+        document.getElementById('jDate').value =
+            iso;
 
-  document.getElementById("jobStart").value =
-    "09:00";
+        document.getElementById('jDay').value =
+            days[today.getDay()];
 
-  document.getElementById("jobEnd").value =
-    "13:00";
+        document.getElementById('jStart').value =
+            '';
 
-  document.getElementById("jobType").value =
-    "Private";
+        document.getElementById('jEnd').value =
+            '';
 
-  document.getElementById("jobRate").value =
-    "18";
+        document.getElementById('jNotes').value =
+            '';
 
-  document.getElementById("deleteJobButton")
-    .style.display = "none";
+        document
+            .getElementById('deleteJobBtn')
+            ?.classList.add('hidden');
 
-  document.getElementById("jobModal")
-    .classList.add("open");
-}
-
-
-function openEditJob(id){
-
-  const job =
-    jobs.find(j => j.id === id);
-
-  if(!job) return;
-
-  editingJobId = id;
-
-  document.getElementById("jobModalTitle")
-    .textContent = "Edit cleaning job";
-
-  document.getElementById("jobClient").value =
-    job.client;
-
-  document.getElementById("jobDate").value =
-    job.date;
-
-  document.getElementById("jobStart").value =
-    job.start;
-
-  document.getElementById("jobEnd").value =
-    job.end;
-
-  document.getElementById("jobType").value =
-    job.type;
-
-  document.getElementById("jobRate").value =
-    job.rate;
-
-  document.getElementById("deleteJobButton")
-    .style.display = "block";
-
-  document.getElementById("jobModal")
-    .classList.add("open");
-}
-
-
-function closeJobModal(){
-
-  document.getElementById("jobModal")
-    .classList.remove("open");
-}
-
-
-function saveJob(e){
-
-  e.preventDefault();
-
-  const data = {
-
-    client:
-      document.getElementById("jobClient")
-        .value.trim(),
-
-    date:
-      document.getElementById("jobDate").value,
-
-    start:
-      document.getElementById("jobStart").value,
-
-    end:
-      document.getElementById("jobEnd").value,
-
-    type:
-      document.getElementById("jobType").value,
-
-    rate:
-      Number(
-        document.getElementById("jobRate").value
-      )
-
-  };
-
-
-  if(editingJobId !== null){
-
-    const index =
-      jobs.findIndex(
-        j => j.id === editingJobId
-      );
-
-    if(index !== -1){
-
-      jobs[index] = {
-        ...jobs[index],
-        ...data
-      };
+        document.getElementById('jobTitle').textContent =
+            'Add Cleaning Job';
     }
 
-  }else{
+    if (typeof calcHours === 'function') {
+        calcHours();
+    }
 
-    jobs.push({
-      id:Date.now(),
-      ...data
+    modal.classList.add('show');
+};
+
+
+/* ---------- FIX SAVE JOB ---------- */
+window.saveJob = function() {
+
+    const clientId =
+        document.getElementById('jClient').value;
+
+    const client =
+        clients.find(
+            c => String(c.id) === String(clientId)
+        );
+
+    if (!client) return;
+
+    const id =
+        document.getElementById('jId').value;
+
+    const date =
+        document.getElementById('jDate').value;
+
+    const start =
+        document.getElementById('jStart').value;
+
+    const end =
+        document.getElementById('jEnd').value;
+
+    const day =
+        document.getElementById('jDay').value;
+
+    const hours =
+        start && end
+            ? duration(start, end)
+            : Number(client.hours || 0);
+
+    const rate =
+        Number(
+            document.getElementById('jRate').value
+        ) || Number(client.rate || 0);
+
+    const oldJob =
+        jobs.find(
+            j => String(j.id) === String(id)
+        );
+
+    const newJob = {
+        id:
+            id ||
+            'job-' +
+            Date.now(),
+
+        clientId,
+
+        date,
+
+        day,
+
+        start,
+
+        end,
+
+        hours,
+
+        rate,
+
+        done:
+            oldJob?.done || false,
+
+        notes:
+            document
+                .getElementById('jNotes')
+                .value
+                .trim()
+    };
+
+    if (id) {
+
+        jobs =
+            jobs.map(
+                j =>
+                    String(j.id) === String(id)
+                        ? newJob
+                        : j
+            );
+
+    } else {
+
+        jobs.push(newJob);
+    }
+
+    save();
+
+    document
+        .getElementById('jobModal')
+        ?.classList.remove('show');
+
+    renderCalendar();
+
+    if (typeof render === 'function') {
+        render();
+    }
+};
+
+
+/* ---------- FIX RENDER SO CALENDAR NEVER SHOWS UNDEFINED ---------- */
+const originalRender =
+    window.render;
+
+window.render = function() {
+
+    normaliseCleaningJobs();
+
+    if (typeof originalRender === 'function') {
+        originalRender();
+    }
+
+    renderCalendar();
+};
+
+
+/* ---------- FIX MODAL BUTTONS ---------- */
+document
+    .querySelectorAll('.modal button')
+    .forEach(button => {
+        button.type = 'button';
     });
-  }
 
 
-  saveJobs();
-
-  closeJobModal();
-
-  renderCalendar();
-  renderJobList();
-  renderHome();
-  renderEarnings();
-}
-
-
-function deleteCurrentJob(){
-
-  if(editingJobId === null)
-    return;
-
-  const confirmed =
-    confirm(
-      "Are you sure you want to delete this job?"
-    );
-
-  if(!confirmed)
-    return;
-
-  jobs =
-    jobs.filter(
-      j => j.id !== editingJobId
-    );
-
-  saveJobs();
-
-  editingJobId = null;
-
-  closeJobModal();
-
-  renderCalendar();
-  renderJobList();
-  renderHome();
-  renderEarnings();
-}
-
-
-/* =========================================
-   CALENDAR CONTROLS
-========================================= */
-
-function changeMonth(amount){
-
-  calendarDate =
-    new Date(
-      calendarDate.getFullYear(),
-      calendarDate.getMonth()+amount,
-      1
-    );
-
-  renderCalendar();
-}
-
-
-function goToday(){
-
-  calendarDate =
-    new Date();
-
-  renderCalendar();
-}
-
-
-/* =========================================
-   CLIENTS
-========================================= */
-
-function renderClients(){
-
-  document.getElementById("clientsList")
-    .innerHTML =
-      clients.map(c => `
-        <div class="client-card">
-
-          <div>
-            <div class="client-name">
-              ${c[0]}
-            </div>
-
-            <div class="client-type">
-              ${c[1]}
-            </div>
-          </div>
-
-          <button
-            class="edit-btn"
-            onclick="openAddJob()">
-            ＋ Job
-          </button>
-
-        </div>
-      `).join("");
-}
-
-
-function addClient(){
-
-  const name =
-    prompt("Client name:");
-
-  if(!name)
-    return;
-
-  clients.push([
-    name,
-    "New client"
-  ]);
-
-  renderClients();
-}
-
-
-/* =========================================
-   EARNINGS
-========================================= */
-
-function renderEarnings(){
-
-  let totalMinutes = 0;
-  let totalEarned = 0;
-
-  jobs.forEach(job => {
-
-    const minutes =
-      getDuration(
-        job.start,
-        job.end
-      );
-
-    totalMinutes += minutes;
-
-    totalEarned +=
-      minutes / 60 *
-      Number(job.rate || 0);
-  });
-
-
-  document.getElementById("totalEarned")
-    .textContent =
-      "£" + totalEarned.toFixed(2);
-
-  document.getElementById("totalHours")
-    .textContent =
-      formatDuration(totalMinutes);
-
-  document.getElementById("totalJobs")
-    .textContent =
-      jobs.length;
-
-  document.getElementById("averageRate")
-    .textContent =
-      totalMinutes
-        ? "£" +
-          (totalEarned/(totalMinutes/60))
-            .toFixed(2)
-        : "£0";
-}
-
-
-/* =========================================
-   SETTINGS
-========================================= */
-
-function openSettings(){
-
-  document.getElementById("settingsModal")
-    .classList.add("open");
-}
-
-
-function closeSettings(){
-
-  document.getElementById("settingsModal")
-    .classList.remove("open");
-}
-
-
-/* =========================================
-   OTHER
-========================================= */
-
-function startCleaning(){
-
-  alert(
-    "Cleaning timer will be available here."
-  );
-}
-
-
-function showFreeTime(){
-
-  alert(
-    "Free time will be calculated from your schedule."
-  );
-}
-
-
-function showHolidays(){
-
-  alert(
-    "Holiday management will be available here."
-  );
-}
-
-
-/* =========================================
-   HELPERS
-========================================= */
-
-function formatDate(date){
-
-  const y =
-    date.getFullYear();
-
-  const m =
-    String(
-      date.getMonth()+1
-    ).padStart(2,"0");
-
-  const d =
-    String(
-      date.getDate()
-    ).padStart(2,"0");
-
-  return `${y}-${m}-${d}`;
-}
-
-
-function getDuration(start,end){
-
-  const [sh,sm] =
-    start.split(":").map(Number);
-
-  const [eh,em] =
-    end.split(":").map(Number);
-
-  let minutes =
-    eh*60+em -
-    (sh*60+sm);
-
-  if(minutes < 0)
-    minutes += 24*60;
-
-  return minutes;
-}
-
-
-function formatDuration(minutes){
-
-  const h =
-    Math.floor(minutes/60);
-
-  const m =
-    minutes%60;
-
-  return `${h}h ${m}m`;
-}
-
-
-function getClass(type){
-
-  if(type === "Private")
-    return "private";
-
-  if(type === "Agency")
-    return "agency";
-
-  if(type === "Fortnightly")
-    return "fortnightly";
-
-  return "occasional";
-}
-
-
-function getIcon(type){
-
-  if(type === "Private")
-    return "✨";
-
-  if(type === "Agency")
-    return "🧹";
-
-  if(type === "Fortnightly")
-    return "🌸";
-
-  return "💜";
-}
-
-
-function escapeHtml(value){
-
-  return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
-
-
-/* =========================================
-   MODAL CLOSE
-========================================= */
-
-document.getElementById("jobModal")
-  .addEventListener(
-    "click",
-    function(e){
-
-      if(e.target === this){
-        closeJobModal();
-      }
-
-    }
-  );
-
-
-document.getElementById("settingsModal")
-  .addEventListener(
-    "click",
-    function(e){
-
-      if(e.target === this){
-        closeSettings();
-      }
-
-    }
-  );
-
-
-/* =========================================
-   START
-========================================= */
-
-renderHome();
-renderCalendar();
-renderJobList();
-renderClients();
-renderEarnings();
-
+/* ---------- FIX PAGE BUTTONS ---------- */
+document
+    .querySelectorAll('button')
+    .forEach(button => {
+
+        if (!button.type) {
+            button.type = 'button';
+        }
+    });
+
+
+/* ---------- START ON HOME ---------- */
+document
+    .querySelectorAll('.page')
+    .forEach(page => {
+        page.classList.remove('active');
+    });
+
+document
+    .getElementById('home')
+    ?.classList.add('active');
+
+document
+    .querySelectorAll('.bottom .nav')
+    .forEach(nav => {
+        nav.classList.toggle(
+            'active',
+            nav.dataset.page === 'home'
+        );
+    });
+
+
+/* ---------- REFRESH CALENDAR ---------- */
+setTimeout(() => {
+    normaliseCleaningJobs();
+    renderCalendar();
+}, 50);
 </script>
-
-</body>
-</html>
