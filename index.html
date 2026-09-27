@@ -1,828 +1,3281 @@
-<script>
-/* =========================================================
-   PURE SHINE CLEANING MANAGER — NAVIGATION + CALENDAR FIX
-   ========================================================= */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
 
-/* ---------- FIX ALL NAVIGATION BUTTONS ---------- */
-document.querySelectorAll('.bottom .nav').forEach(button => {
-    button.type = 'button';
+<meta name="viewport"
+      content="width=device-width,
+      initial-scale=1,
+      maximum-scale=1,
+      user-scalable=no,
+      viewport-fit=cover">
 
-    button.addEventListener('click', function (event) {
-        event.preventDefault();
-        event.stopPropagation();
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f8dce8">
 
-        const page = this.dataset.page;
+<title>Pure Shine Cleaning Manager</title>
 
-        if (!page) return;
-
-        /* Close any open modal/sheet before changing page */
-        document.querySelectorAll('.modal.show').forEach(modal => {
-            modal.classList.remove('show');
-        });
-
-        /* Remove old active states */
-        document.querySelectorAll('.page').forEach(p => {
-            p.classList.remove('active');
-        });
-
-        document.querySelectorAll('.bottom .nav').forEach(n => {
-            n.classList.remove('active');
-        });
-
-        /* Open requested page */
-        const target = document.getElementById(page);
-
-        if (target) {
-            target.classList.add('active');
-            this.classList.add('active');
-
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-
-            if (typeof render === 'function') {
-                render();
-            }
-        }
-    });
-});
-
-
-/* ---------- SAFE PAGE NAVIGATION ---------- */
-window.showPage = function(pageId, button) {
-
-    const target = document.getElementById(pageId);
-
-    if (!target) return;
-
-    document.querySelectorAll('.modal.show').forEach(modal => {
-        modal.classList.remove('show');
-    });
-
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-    });
-
-    document.querySelectorAll('.bottom .nav').forEach(nav => {
-        nav.classList.remove('active');
-    });
-
-    target.classList.add('active');
-
-    const navButton =
-        button ||
-        document.querySelector('.bottom .nav[data-page="' + pageId + '"]');
-
-    if (navButton) {
-        navButton.classList.add('active');
-    }
-
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-
-    if (typeof render === 'function') {
-        render();
-    }
-};
-
-
-/* ---------- NORMALISE OLD / BROKEN JOB DATA ---------- */
-function normaliseCleaningJobs() {
-
-    if (!Array.isArray(jobs)) {
-        jobs = [];
-    }
-
-    jobs = jobs.map((job, index) => {
-
-        const client =
-            clients.find(c =>
-                String(c.id) === String(job.clientId)
-            );
-
-        let start =
-            job.start ||
-            job.startTime ||
-            job.from ||
-            '';
-
-        let end =
-            job.end ||
-            job.endTime ||
-            job.to ||
-            '';
-
-        /*
-         * Never allow undefined to reach the screen.
-         */
-        if (start === 'undefined' || start === 'null') {
-            start = '';
-        }
-
-        if (end === 'undefined' || end === 'null') {
-            end = '';
-        }
-
-        let day =
-            job.day ||
-            job.weekday ||
-            '';
-
-        if (!day && job.date) {
-            const d = new Date(job.date + 'T12:00:00');
-
-            if (!isNaN(d.getTime())) {
-                day = days[d.getDay()];
-            }
-        }
-
-        if (!day) {
-            day = 'Monday';
-        }
-
-        let hours = Number(job.hours);
-
-        if (!Number.isFinite(hours) || hours < 0) {
-            hours = 0;
-        }
-
-        if (start && end) {
-            const calculated = duration(start, end);
-
-            if (calculated > 0) {
-                hours = calculated;
-            }
-        }
-
-        return {
-            id: job.id || ('job-' + Date.now() + '-' + index),
-
-            clientId:
-                job.clientId ||
-                client?.id ||
-                '',
-
-            day: day,
-
-            date:
-                job.date ||
-                '',
-
-            start: start,
-
-            end: end,
-
-            hours: hours,
-
-            rate:
-                Number(job.rate) ||
-                Number(client?.rate) ||
-                0,
-
-            done:
-                Boolean(job.done),
-
-            notes:
-                job.notes ||
-                ''
-        };
-    });
-
-    save();
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-normaliseCleaningJobs();
+:root{
+    --pink:#d94f8d;
+    --pink-light:#f5d3e2;
+    --purple:#e7ddfa;
+    --blue:#dceaff;
+    --green:#dff2e8;
+    --yellow:#fff0c7;
+    --text:#20202b;
+    --muted:#817a85;
+    --white:#ffffff;
+}
 
+html,
+body{
+    width:100%;
+    min-height:100%;
+    background:#fff8fc;
+}
 
-/* ---------- CALENDAR — REAL MONTH GRID ---------- */
-window.renderCalendar = function() {
+body{
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "Segoe UI",
+        sans-serif;
+    overflow-x:hidden;
+}
 
-    const calendar = document.getElementById('calendar');
+button,
+input,
+select{
+    font:inherit;
+}
 
-    if (!calendar) return;
+button{
+    border:0;
+    cursor:pointer;
+}
 
-    const now = new Date();
+.app{
+    min-height:100dvh;
+    width:100%;
+    background:linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #fff8fc 100%
+    );
+}
 
-    let currentYear =
-        window.calendarYear ||
-        now.getFullYear();
+/* ================= HEADER ================= */
 
-    let currentMonth =
-        window.calendarMonth !== undefined
-            ? window.calendarMonth
-            : now.getMonth();
+.header{
+    height:112px;
+    width:100%;
 
-    window.calendarYear = currentYear;
-    window.calendarMonth = currentMonth;
+    padding:
+        calc(env(safe-area-inset-top) + 14px)
+        22px
+        14px;
 
-    const monthName =
-        new Date(
-            currentYear,
-            currentMonth,
-            1
-        ).toLocaleDateString(
-            'en-GB',
-            {
-                month: 'long',
-                year: 'numeric'
-            }
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    background:#fff;
+
+    border-bottom:1px solid #f3e5ec;
+
+    position:sticky;
+    top:0;
+    z-index:30;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    min-width:0;
+}
+
+.logo{
+    width:66px;
+    height:66px;
+    border-radius:20px;
+    object-fit:cover;
+    background:#ffeaf3;
+    box-shadow:0 5px 16px rgba(210,90,140,.25);
+}
+
+.brand h1{
+    font-size:24px;
+    font-weight:850;
+    white-space:nowrap;
+}
+
+.brand p{
+    font-size:14px;
+    color:var(--muted);
+    margin-top:5px;
+}
+
+.settings{
+    width:54px;
+    height:54px;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 5px 20px rgba(0,0,0,.09);
+    font-size:25px;
+    flex:none;
+}
+
+/* ================= MAIN ================= */
+
+.main{
+    width:100%;
+    max-width:760px;
+    margin:auto;
+    padding:18px 22px 115px;
+}
+
+.page{
+    display:none;
+    animation:pageIn .18s ease;
+}
+
+.page.active{
+    display:block;
+}
+
+@keyframes pageIn{
+    from{
+        opacity:.4;
+        transform:translateY(5px);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+/* ================= DATE ================= */
+
+.date{
+    width:100%;
+    min-height:112px;
+
+    border-radius:27px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f6d5e4,
+            #f1c9dc
         );
 
-    const firstDay =
-        new Date(
-            currentYear,
-            currentMonth,
-            1
-        ).getDay();
+    padding:22px 24px;
 
-    const mondayOffset =
-        firstDay === 0 ? 6 : firstDay - 1;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
-    const daysInMonth =
-        new Date(
-            currentYear,
-            currentMonth + 1,
-            0
-        ).getDate();
+    box-shadow:0 7px 22px rgba(220,190,204,.4);
+}
 
-    const previousMonthDays =
-        new Date(
-            currentYear,
-            currentMonth,
-            0
-        ).getDate();
+.date h2{
+    font-size:24px;
+    font-weight:850;
+}
 
-    let html = `
-        <div class="calendar-wrapper">
+.date p{
+    margin-top:7px;
+    font-size:15px;
+    color:#786e78;
+}
 
-            <div class="calendar-top">
-                <button
-                    type="button"
-                    class="calendar-arrow"
-                    onclick="previousCalendarMonth(event)">
+.date-sparkles{
+    font-size:23px;
+    color:#c64c80;
+}
+
+/* ================= QUOTE ================= */
+
+.quote{
+    position:relative;
+
+    margin-top:16px;
+
+    width:100%;
+    height:170px;
+
+    border-radius:27px;
+
+    overflow:hidden;
+
+    background:
+        #f8d9e7
+        url("pure-shine-cleaning-background.png")
+        center/cover no-repeat;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    box-shadow:0 8px 22px rgba(220,200,210,.5);
+}
+
+.quote::after{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255,225,239,.78),
+            rgba(255,244,249,.45),
+            rgba(255,225,239,.78)
+        );
+}
+
+.quote-text{
+    position:relative;
+    z-index:2;
+
+    font-family:cursive;
+    font-style:italic;
+
+    font-size:31px;
+    line-height:1.2;
+
+    color:#a83d70;
+}
+
+.sparkle{
+    position:absolute;
+    z-index:3;
+
+    color:#ffffff;
+    font-size:22px;
+}
+
+/* ================= STATS ================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-top:18px;
+}
+
+.stat{
+    min-height:130px;
+
+    border-radius:24px;
+
+    padding:17px 8px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    box-shadow:0 5px 14px rgba(220,205,214,.55);
+}
+
+.stat:nth-child(1){
+    background:var(--pink-light);
+}
+
+.stat:nth-child(2){
+    background:var(--blue);
+}
+
+.stat:nth-child(3){
+    background:var(--green);
+}
+
+.stat:nth-child(4){
+    background:var(--yellow);
+}
+
+.stat .icon{
+    font-size:25px;
+}
+
+.stat strong{
+    font-size:26px;
+    margin-top:6px;
+}
+
+.stat span{
+    font-size:14px;
+    margin-top:3px;
+}
+
+/* ================= HEADINGS ================= */
+
+.section-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin:26px 4px 12px;
+}
+
+.section-head h2{
+    font-size:23px;
+}
+
+.section-head button{
+    background:none;
+    color:#bd3f76;
+    font-weight:800;
+}
+
+/* ================= TODAY ================= */
+
+.schedule-box{
+    background:#fff;
+
+    border-radius:27px;
+
+    padding:42px 24px 32px;
+
+    text-align:center;
+
+    box-shadow:0 7px 24px rgba(220,205,214,.55);
+}
+
+.schedule-icon{
+    font-size:48px;
+    color:#d44f8b;
+}
+
+.schedule-box h3{
+    margin-top:13px;
+    font-size:18px;
+}
+
+.schedule-box p{
+    color:#928b93;
+    margin:7px 0 18px;
+}
+
+.primary{
+    width:100%;
+
+    padding:15px 20px;
+
+    border-radius:24px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #e15b96,
+            #ce4380
+        );
+
+    color:#fff;
+
+    font-weight:800;
+    font-size:17px;
+
+    box-shadow:0 7px 18px rgba(225,91,150,.28);
+}
+
+.today-job{
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:16px;
+
+    margin-bottom:10px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    box-shadow:0 5px 18px rgba(220,205,214,.55);
+}
+
+.today-job b{
+    font-size:17px;
+}
+
+.today-job small{
+    display:block;
+    color:var(--muted);
+    margin-top:5px;
+}
+
+.today-money{
+    font-weight:800;
+    color:#b83e73;
+}
+
+/* ================= BOTTOM NAV ================= */
+
+.bottom-nav{
+    position:fixed;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:86px;
+
+    padding-bottom:env(safe-area-inset-bottom);
+
+    background:rgba(255,255,255,.98);
+
+    border-top:1px solid #f0e5eb;
+
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+
+    z-index:100;
+
+    box-shadow:0 -8px 25px rgba(220,205,214,.45);
+}
+
+.nav-button{
+    background:none;
+
+    color:#89838c;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:4px;
+
+    font-size:12px;
+    font-weight:700;
+}
+
+.nav-icon{
+    font-size:23px;
+    line-height:1;
+}
+
+.nav-button.active{
+    color:#d34d88;
+}
+
+.nav-button.active .nav-icon{
+    background:#f9d9e8;
+    border-radius:50%;
+    padding:8px;
+}
+
+/* ================= PAGE TITLES ================= */
+
+.page-title{
+    font-size:30px;
+    font-weight:850;
+    margin:5px 0 18px;
+}
+
+.topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+
+.add-button{
+    background:#d34d88;
+    color:#fff;
+    border-radius:16px;
+    padding:12px 17px;
+    font-weight:800;
+}
+
+/* ================= CALENDAR ================= */
+
+.calendar{
+    background:#fff;
+
+    border-radius:27px;
+
+    overflow:hidden;
+
+    box-shadow:0 7px 24px rgba(220,205,214,.55);
+}
+
+.calendar-header{
+    padding:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    border-bottom:1px solid #eee5ea;
+}
+
+.calendar-header h2{
+    font-size:22px;
+}
+
+.calendar-buttons{
+    display:flex;
+    gap:6px;
+}
+
+.calendar-buttons button{
+    padding:9px 11px;
+
+    border-radius:12px;
+
+    background:#f8dce8;
+
+    color:#a83d70;
+
+    font-weight:800;
+}
+
+.weekdays,
+.calendar-days{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+}
+
+.weekdays div{
+    text-align:center;
+
+    padding:11px 2px;
+
+    color:#7e7880;
+
+    font-size:11px;
+    font-weight:800;
+
+    border-bottom:1px solid #eee5ea;
+}
+
+.calendar-day{
+    min-height:115px;
+
+    padding:7px 5px;
+
+    background:#fff;
+
+    border-right:1px solid #eee5ea;
+    border-bottom:1px solid #eee5ea;
+
+    cursor:pointer;
+}
+
+.calendar-day:nth-child(7n){
+    border-right:0;
+}
+
+.calendar-day.other-month{
+    background:#fcf8fa;
+    color:#bbb;
+}
+
+.day-number{
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+.calendar-day.today .day-number{
+    display:inline-flex;
+
+    width:27px;
+    height:27px;
+
+    border-radius:50%;
+
+    align-items:center;
+    justify-content:center;
+
+    background:#d34d88;
+    color:#fff;
+}
+
+.calendar-job{
+    display:block;
+
+    width:100%;
+
+    text-align:left;
+
+    border-radius:8px;
+
+    padding:5px;
+
+    margin-top:4px;
+
+    background:#eee4fa;
+
+    border-left:3px solid #8e65bf;
+
+    color:#43384b;
+
+    font-size:10px;
+
+    line-height:1.2;
+
+    overflow:hidden;
+}
+
+.calendar-job b{
+    display:block;
+    font-size:10px;
+}
+
+.calendar-job span{
+    display:block;
+    color:#6f6571;
+    margin-top:2px;
+}
+
+.calendar-job.pink{
+    background:#f8dce8;
+    border-color:#d34d88;
+}
+
+.calendar-job.green{
+    background:#def0e6;
+    border-color:#4b9a70;
+}
+
+.calendar-job.blue{
+    background:#dceaff;
+    border-color:#5883c8;
+}
+
+.calendar-job.yellow{
+    background:#fff0c7;
+    border-color:#c89a2d;
+}
+
+/* ================= CLIENTS ================= */
+
+.clients-list,
+.jobs-list{
+    display:grid;
+    gap:12px;
+}
+
+.client-card,
+.job-card,
+.earn-card,
+.settings-card{
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:17px;
+
+    box-shadow:0 5px 18px rgba(220,205,214,.55);
+}
+
+.client-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.client-card b{
+    font-size:17px;
+}
+
+.muted{
+    color:var(--muted);
+    font-size:14px;
+    margin-top:4px;
+}
+
+.edit-button{
+    background:#f4d8e6;
+    color:#a63d70;
+
+    border-radius:11px;
+
+    padding:8px 11px;
+
+    font-weight:800;
+}
+
+/* ================= EARNINGS ================= */
+
+.earn-grid{
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:12px;
+}
+
+.earn-card{
+    text-align:center;
+    padding:24px 10px;
+}
+
+.earn-card strong{
+    font-size:25px;
+}
+
+.earn-card span{
+    display:block;
+    margin-top:5px;
+    color:var(--muted);
+}
+
+/* ================= MODAL ================= */
+
+.overlay{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(35,29,36,.42);
+
+    backdrop-filter:blur(7px);
+
+    z-index:200;
+
+    display:none;
+
+    align-items:flex-end;
+}
+
+.overlay.show{
+    display:flex;
+}
+
+.sheet{
+    width:100%;
+
+    max-height:88dvh;
+
+    overflow:auto;
+
+    background:#fff9fc;
+
+    border-radius:30px 30px 0 0;
+
+    padding:
+        22px
+        20px
+        calc(28px + env(safe-area-inset-bottom));
+
+    box-shadow:0 -12px 35px rgba(0,0,0,.12);
+}
+
+.sheet-header{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:18px;
+}
+
+.sheet-header h2{
+    font-size:25px;
+}
+
+.close-button{
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    background:#f7dce8;
+
+    color:#d34d88;
+
+    font-size:22px;
+}
+
+.field{
+    margin-bottom:13px;
+}
+
+.field label{
+    display:block;
+
+    font-weight:800;
+
+    font-size:13px;
+
+    margin-bottom:6px;
+}
+
+.field input,
+.field select{
+    width:100%;
+
+    padding:13px 14px;
+
+    border:1px solid #e4d8df;
+
+    border-radius:14px;
+
+    background:#fff;
+
+    outline:none;
+}
+
+.form-row{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:10px;
+}
+
+.delete-button{
+    width:100%;
+
+    margin-top:10px;
+
+    padding:14px;
+
+    border-radius:22px;
+
+    background:#f1e5ea;
+
+    color:#b23d73;
+
+    font-weight:800;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+    position:fixed;
+
+    top:calc(env(safe-area-inset-top) + 14px);
+
+    left:50%;
+
+    transform:
+        translateX(-50%)
+        translateY(-20px);
+
+    opacity:0;
+
+    z-index:300;
+
+    background:#29232b;
+
+    color:#fff;
+
+    border-radius:14px;
+
+    padding:12px 16px;
+
+    font-weight:700;
+
+    transition:.2s;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:520px){
+
+    .header{
+        height:105px;
+    }
+
+    .brand h1{
+        font-size:22px;
+    }
+
+    .brand p{
+        font-size:13px;
+    }
+
+    .logo{
+        width:62px;
+        height:62px;
+    }
+
+    .main{
+        padding-left:16px;
+        padding-right:16px;
+    }
+
+    .stats{
+        gap:8px;
+    }
+
+    .stat{
+        min-height:112px;
+        border-radius:20px;
+    }
+
+    .stat strong{
+        font-size:22px;
+    }
+
+    .stat span{
+        font-size:12px;
+    }
+
+    .quote{
+        height:150px;
+    }
+
+    .quote-text{
+        font-size:26px;
+    }
+
+    .calendar-day{
+        min-height:105px;
+        padding:5px 3px;
+    }
+
+    .calendar-job{
+        font-size:9px;
+        padding:4px 3px;
+    }
+
+    .calendar-job b{
+        font-size:9px;
+    }
+
+    .day-number{
+        font-size:11px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="brand">
+
+        <img
+            class="logo"
+            src="1D0A5974-7253-48B0-8BCA-2272594D29F0.png"
+            alt="Pure Shine"
+            onerror="this.style.display='none'"
+        >
+
+        <div>
+            <h1>Cleaning Manager</h1>
+            <p>Your cleaning business ✨</p>
+        </div>
+
+    </div>
+
+    <button
+        class="settings"
+        onclick="openSettings()"
+        aria-label="Settings"
+    >
+        ⚙️
+    </button>
+
+</header>
+
+
+<main class="main">
+
+<!-- ================= HOME ================= -->
+
+<section id="homePage" class="page active">
+
+    <section class="date">
+
+        <div>
+
+            <h2 id="homeDate"></h2>
+
+            <p>
+                Let's make today productive 🌸
+            </p>
+
+        </div>
+
+        <div class="date-sparkles">
+            ✦ ✧
+        </div>
+
+    </section>
+
+
+    <section class="quote">
+
+        <span
+            class="sparkle"
+            style="left:25px;top:18px"
+        >
+            ✦
+        </span>
+
+        <span
+            class="sparkle"
+            style="right:28px;bottom:20px"
+        >
+            ✧
+        </span>
+
+        <div class="quote-text">
+            ♡ A clean space<br>
+            is a happy place ♡
+        </div>
+
+    </section>
+
+
+    <section class="stats">
+
+        <div class="stat">
+
+            <div class="icon">
+                🧹
+            </div>
+
+            <strong id="statJobs">
+                0
+            </strong>
+
+            <span>
+                Jobs
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="icon">
+                ◷
+            </div>
+
+            <strong id="statHours">
+                0h 0m
+            </strong>
+
+            <span>
+                Hours
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="icon">
+                ◎
+            </div>
+
+            <strong id="statEarned">
+                £0
+            </strong>
+
+            <span>
+                Earned
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="icon">
+                ☼
+            </div>
+
+            <strong>
+                8h 0m
+            </strong>
+
+            <span>
+                Available
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <div class="section-head">
+
+        <h2>
+            Today's schedule
+        </h2>
+
+        <button onclick="go('schedule')">
+            See all
+        </button>
+
+    </div>
+
+
+    <div id="todayList"></div>
+
+</section>
+
+
+<!-- ================= SCHEDULE ================= -->
+
+<section id="schedulePage" class="page">
+
+    <div class="topbar">
+
+        <h1 class="page-title">
+            Schedule
+        </h1>
+
+        <button
+            class="add-button"
+            onclick="openJob()"
+        >
+            ＋ Add job
+        </button>
+
+    </div>
+
+
+    <div class="calendar">
+
+        <div class="calendar-header">
+
+            <h2 id="monthTitle"></h2>
+
+            <div class="calendar-buttons">
+
+                <button onclick="changeMonth(-1)">
                     ‹
                 </button>
 
-                <div class="calendar-month">
-                    ${monthName}
-                </div>
+                <button onclick="goToday()">
+                    Today
+                </button>
 
-                <div class="calendar-controls">
-                    <button
-                        type="button"
-                        class="calendar-today"
-                        onclick="goCalendarToday(event)">
-                        Today
-                    </button>
+                <button onclick="changeMonth(1)">
+                    ›
+                </button>
 
-                    <button
-                        type="button"
-                        class="calendar-arrow"
-                        onclick="nextCalendarMonth(event)">
-                        ›
-                    </button>
-                </div>
             </div>
 
-            <div class="calendar-weekdays">
-                <div>MON</div>
-                <div>TUE</div>
-                <div>WED</div>
-                <div>THU</div>
-                <div>FRI</div>
-                <div>SAT</div>
-                <div>SUN</div>
-            </div>
+        </div>
 
-            <div class="calendar-grid">
-    `;
 
-    /* Previous month filler */
-    for (let i = mondayOffset - 1; i >= 0; i--) {
+        <div class="weekdays">
 
-        const dayNumber =
-            previousMonthDays - i;
+            <div>MON</div>
+            <div>TUE</div>
+            <div>WED</div>
+            <div>THU</div>
+            <div>FRI</div>
+            <div>SAT</div>
+            <div>SUN</div>
 
-        html += `
-            <div class="calendar-cell muted">
-                <div class="calendar-number">
-                    ${dayNumber}
-                </div>
-            </div>
-        `;
+        </div>
+
+
+        <div
+            id="calendarDays"
+            class="calendar-days"
+        ></div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CLIENTS ================= -->
+
+<section id="clientsPage" class="page">
+
+    <div class="topbar">
+
+        <h1 class="page-title">
+            Clients
+        </h1>
+
+        <button
+            class="add-button"
+            onclick="openClient()"
+        >
+            ＋ Add
+        </button>
+
+    </div>
+
+    <div
+        id="clientsList"
+        class="clients-list"
+    ></div>
+
+</section>
+
+
+<!-- ================= FREE TIME ================= -->
+
+<section id="freePage" class="page">
+
+    <h1 class="page-title">
+        Free time
+    </h1>
+
+    <div class="settings-card">
+
+        <b>
+            Available time today
+        </b>
+
+        <p class="muted">
+            8h 0m available.
+        </p>
+
+    </div>
+
+
+    <div class="settings-card">
+
+        <b>
+            Find free time
+        </b>
+
+        <p class="muted">
+            Use the Schedule calendar to see where
+            a new cleaning job can fit.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================= EARNINGS ================= -->
+
+<section id="earningsPage" class="page">
+
+    <h1 class="page-title">
+        Earnings
+    </h1>
+
+
+    <div class="earn-grid">
+
+        <div class="earn-card">
+
+            <strong id="earnTotal">
+                £0.00
+            </strong>
+
+            <span>
+                Total
+            </span>
+
+        </div>
+
+
+        <div class="earn-card">
+
+            <strong id="earnHours">
+                0h 0m
+            </strong>
+
+            <span>
+                Hours
+            </span>
+
+        </div>
+
+
+        <div class="earn-card">
+
+            <strong id="earnJobs">
+                0
+            </strong>
+
+            <span>
+                Jobs
+            </span>
+
+        </div>
+
+
+        <div class="earn-card">
+
+            <strong id="earnClients">
+                0
+            </strong>
+
+            <span>
+                Clients
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="section-head">
+
+        <h2>
+            Job history
+        </h2>
+
+    </div>
+
+
+    <div
+        id="jobsList"
+        class="jobs-list"
+    ></div>
+
+</section>
+
+</main>
+
+
+<!-- ================= NAVIGATION ================= -->
+
+<nav class="bottom-nav">
+
+    <button
+        class="nav-button active"
+        data-page="home"
+        onclick="go('home')"
+    >
+        <span class="nav-icon">⌂</span>
+        Home
+    </button>
+
+
+    <button
+        class="nav-button"
+        data-page="schedule"
+        onclick="go('schedule')"
+    >
+        <span class="nav-icon">▣</span>
+        Schedule
+    </button>
+
+
+    <button
+        class="nav-button"
+        data-page="clients"
+        onclick="go('clients')"
+    >
+        <span class="nav-icon">♣</span>
+        Clients
+    </button>
+
+
+    <button
+        class="nav-button"
+        data-page="free"
+        onclick="go('free')"
+    >
+        <span class="nav-icon">◷</span>
+        Free time
+    </button>
+
+
+    <button
+        class="nav-button"
+        data-page="earnings"
+        onclick="go('earnings')"
+    >
+        <span class="nav-icon">▥</span>
+        Earnings
+    </button>
+
+</nav>
+
+</div>
+
+
+<!-- ================= MODAL ================= -->
+
+<div
+    id="overlay"
+    class="overlay"
+    onclick="if(event.target===this)closeSheet()"
+>
+
+    <div
+        id="sheet"
+        class="sheet"
+    ></div>
+
+</div>
+
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+
+<script>
+
+/* =========================================================
+   CLIENTS
+========================================================= */
+
+const CLIENTS = [
+
+    {
+        name:"Lottie",
+        type:"Agency",
+        rate:16,
+        day:1,
+        start:"13:00",
+        end:"15:00",
+        freq:"Weekly"
+    },
+
+    {
+        name:"Christine",
+        type:"Private",
+        rate:18,
+        day:2,
+        start:"09:30",
+        end:"12:30",
+        freq:"Fortnightly"
+    },
+
+    {
+        name:"Matt",
+        type:"Agency",
+        rate:16,
+        day:2,
+        start:"13:00",
+        end:"17:00",
+        freq:"Weekly"
+    },
+
+    {
+        name:"Sonia",
+        type:"Agency",
+        rate:16,
+        day:3,
+        start:"09:00",
+        end:"14:00",
+        freq:"Weekly"
+    },
+
+    {
+        name:"Laura",
+        type:"Private",
+        rate:18,
+        day:4,
+        start:"09:00",
+        end:"13:00",
+        freq:"Weekly"
+    },
+
+    {
+        name:"Hannah",
+        type:"Agency",
+        rate:16,
+        day:4,
+        start:"13:00",
+        end:"16:00",
+        freq:"Weekly"
+    },
+
+    {
+        name:"Meghan",
+        type:"Private",
+        rate:20,
+        day:4,
+        start:"16:00",
+        end:"18:00",
+        freq:"Occasional"
+    },
+
+    {
+        name:"Johanna",
+        type:"Private",
+        rate:20,
+        day:5,
+        start:"09:00",
+        end:"11:00",
+        freq:"Fortnightly"
+    },
+
+    {
+        name:"Sindu",
+        type:"Private",
+        rate:20,
+        day:5,
+        start:"11:30",
+        end:"13:30",
+        freq:"Fortnightly"
+    },
+
+    {
+        name:"Peter",
+        type:"Private",
+        rate:20,
+        day:5,
+        start:"14:00",
+        end:"16:00",
+        freq:"Occasional"
+    },
+
+    {
+        name:"Mike",
+        type:"Private",
+        rate:20,
+        day:5,
+        start:"16:00",
+        end:"18:00",
+        freq:"Every 3 weeks"
     }
 
-    /* Current month */
-    for (
-        let dayNumber = 1;
-        dayNumber <= daysInMonth;
-        dayNumber++
-    ) {
+];
 
-        const cellDate =
+
+/* =========================================================
+   DATA
+========================================================= */
+
+let monthCursor = new Date(2026,8,1);
+
+let jobs =
+    JSON.parse(
+        localStorage.getItem("psc_jobs_v4") || "[]"
+    );
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function pad(number){
+    return String(number).padStart(2,"0");
+}
+
+
+function iso(date){
+
+    return (
+        date.getFullYear()
+        + "-"
+        + pad(date.getMonth()+1)
+        + "-"
+        + pad(date.getDate())
+    );
+
+}
+
+
+function safeTime(value,fallback="09:00"){
+
+    if(
+        typeof value === "string"
+        &&
+        /^\d{2}:\d{2}$/.test(value)
+    ){
+        return value;
+    }
+
+    return fallback;
+}
+
+
+function minutesBetween(start,end){
+
+    const s =
+        safeTime(start)
+        .split(":")
+        .map(Number);
+
+    const e =
+        safeTime(end,"10:00")
+        .split(":")
+        .map(Number);
+
+    const result =
+        (e[0]*60+e[1])
+        -
+        (s[0]*60+s[1]);
+
+    return result > 0 ? result : 0;
+}
+
+
+function money(job){
+
+    return (
+        minutesBetween(
+            job.start,
+            job.end
+        )
+        / 60
+    )
+    *
+    (Number(job.rate) || 0);
+
+}
+
+
+function displayTime(job){
+
+    return (
+        safeTime(job.start)
+        +
+        " – "
+        +
+        safeTime(job.end,"10:00")
+    );
+
+}
+
+
+function formatHours(totalMinutes){
+
+    return (
+        Math.floor(totalMinutes/60)
+        +
+        "h "
+        +
+        (totalMinutes%60)
+        +
+        "m"
+    );
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replace(
+            /[&<>"]/g,
+            character => ({
+                "&":"&amp;",
+                "<":"&lt;",
+                ">":"&gt;",
+                "\"":"&quot;"
+            }[character])
+        );
+
+}
+
+
+function escapeAttribute(value){
+
+    return escapeHTML(value)
+        .replace(/'/g,"&#39;");
+
+}
+
+
+/* =========================================================
+   JOB DATA
+========================================================= */
+
+function allJobs(){
+
+    const result = [...jobs];
+
+    /*
+      Create the normal September schedule only when
+      the user has no saved jobs yet.
+    */
+
+    if(result.length === 0){
+
+        for(
+            let dayNumber=1;
+            dayNumber<=30;
+            dayNumber++
+        ){
+
+            const date =
+                new Date(
+                    2026,
+                    8,
+                    dayNumber
+                );
+
+            /*
+              Monday = 1
+              Tuesday = 2
+              ...
+              Sunday = 7
+            */
+
+            const weekday =
+                (
+                    date.getDay()+6
+                ) % 7 + 1;
+
+
+            CLIENTS
+                .filter(
+                    client =>
+                        client.day === weekday
+                )
+                .forEach(client => {
+
+                    let include = true;
+
+                    if(
+                        client.freq ===
+                        "Fortnightly"
+                    ){
+
+                        include =
+                            Math.floor(
+                                (dayNumber-1)/7
+                            ) % 2 === 0;
+
+                    }
+
+
+                    if(
+                        client.freq ===
+                        "Every 3 weeks"
+                    ){
+
+                        include =
+                            Math.floor(
+                                (dayNumber-1)/7
+                            ) % 3 === 0;
+
+                    }
+
+
+                    if(include){
+
+                        result.push({
+
+                            id:
+                                "seed-"
+                                +
+                                dayNumber
+                                +
+                                "-"
+                                +
+                                client.name,
+
+                            date:iso(date),
+
+                            client:client.name,
+
+                            type:client.type,
+
+                            rate:client.rate,
+
+                            start:client.start,
+
+                            end:client.end,
+
+                            completed:false
+
+                        });
+
+                    }
+
+                });
+
+        }
+
+    }
+
+
+    /*
+      IMPORTANT:
+      Every job is normalised here.
+      This completely removes the
+      "undefined – undefined" problem.
+    */
+
+    return result.map(job => ({
+
+        ...job,
+
+        start:
+            safeTime(job.start),
+
+        end:
+            safeTime(job.end,"10:00"),
+
+        rate:
+            Number(job.rate) || 0
+
+    }));
+
+}
+
+
+function saveJobs(){
+
+    localStorage.setItem(
+        "psc_jobs_v4",
+        JSON.stringify(jobs)
+    );
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function go(page){
+
+    /*
+      IMPORTANT FIX:
+      This function changes the actual page.
+      It does NOT use alert("Home"), prompt(),
+      or any native iPhone popup.
+    */
+
+    document
+        .querySelectorAll(".page")
+        .forEach(pageElement => {
+
+            pageElement.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    const target =
+        document.getElementById(
+            page + "Page"
+        );
+
+
+    if(!target){
+        return;
+    }
+
+
+    target.classList.add("active");
+
+
+    document
+        .querySelectorAll(".nav-button")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.page === page
+            );
+
+        });
+
+
+    if(page === "home"){
+        renderHome();
+    }
+
+    if(page === "schedule"){
+        renderCalendar();
+    }
+
+    if(page === "clients"){
+        renderClients();
+    }
+
+    if(page === "earnings"){
+        renderEarnings();
+    }
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+function renderHome(){
+
+    const today =
+        new Date();
+
+
+    document
+        .getElementById("homeDate")
+        .textContent =
+            today.toLocaleDateString(
+                "en-GB",
+                {
+                    weekday:"long",
+                    day:"numeric",
+                    month:"long"
+                }
+            );
+
+
+    const data =
+        allJobs();
+
+
+    const todayISO =
+        iso(today);
+
+
+    const todayJobs =
+        data.filter(
+            job =>
+                job.date === todayISO
+        );
+
+
+    const completed =
+        data.filter(
+            job =>
+                job.completed
+        );
+
+
+    const totalMinutes =
+        completed.reduce(
+            (sum,job) =>
+                sum +
+                minutesBetween(
+                    job.start,
+                    job.end
+                ),
+            0
+        );
+
+
+    const totalMoney =
+        completed.reduce(
+            (sum,job) =>
+                sum +
+                money(job),
+            0
+        );
+
+
+    document
+        .getElementById("statJobs")
+        .textContent =
+            completed.length;
+
+
+    document
+        .getElementById("statHours")
+        .textContent =
+            formatHours(
+                totalMinutes
+            );
+
+
+    document
+        .getElementById("statEarned")
+        .textContent =
+            "£"
+            +
+            totalMoney.toFixed(0);
+
+
+    const container =
+        document.getElementById(
+            "todayList"
+        );
+
+
+    if(todayJobs.length === 0){
+
+        container.innerHTML = `
+
+            <div class="schedule-box">
+
+                <div class="schedule-icon">
+                    ☷
+                </div>
+
+                <h3>
+                    No cleaning jobs today 🌸
+                </h3>
+
+                <p>
+                    Add one with the + button.
+                </p>
+
+                <button
+                    class="primary"
+                    onclick="openJob()"
+                >
+                    ＋ Add cleaning job
+                </button>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        todayJobs
+            .map(job => `
+
+                <div class="today-job">
+
+                    <div>
+
+                        <b>
+                            ${escapeHTML(job.client)}
+                        </b>
+
+                        <small>
+                            ${displayTime(job)}
+                            ·
+                            ${escapeHTML(
+                                job.type || "Private"
+                            )}
+                        </small>
+
+                    </div>
+
+                    <div class="today-money">
+                        £${money(job).toFixed(2)}
+                    </div>
+
+                </div>
+
+            `)
+            .join("");
+
+}
+
+
+/* =========================================================
+   CALENDAR
+========================================================= */
+
+function renderCalendar(){
+
+    const year =
+        monthCursor.getFullYear();
+
+    const month =
+        monthCursor.getMonth();
+
+
+    document
+        .getElementById("monthTitle")
+        .textContent =
+            monthCursor.toLocaleDateString(
+                "en-GB",
+                {
+                    month:"long",
+                    year:"numeric"
+                }
+            );
+
+
+    const firstDay =
+        new Date(
+            year,
+            month,
+            1
+        );
+
+
+    const firstMondayIndex =
+        (
+            firstDay.getDay()+6
+        ) % 7;
+
+
+    const daysInMonth =
+        new Date(
+            year,
+            month+1,
+            0
+        ).getDate();
+
+
+    const data =
+        allJobs();
+
+
+    const today =
+        iso(new Date());
+
+
+    let html = "";
+
+
+    /*
+      Always render 42 cells,
+      so the calendar stays stable.
+    */
+
+    for(
+        let index=0;
+        index<42;
+        index++
+    ){
+
+        const dayNumber =
+            index
+            -
+            firstMondayIndex
+            +
+            1;
+
+
+        const date =
             new Date(
-                currentYear,
-                currentMonth,
+                year,
+                month,
                 dayNumber
             );
 
-        const isoDate =
-            currentYear +
-            '-' +
-            String(currentMonth + 1).padStart(2, '0') +
-            '-' +
-            String(dayNumber).padStart(2, '0');
 
-        const weekday =
-            days[cellDate.getDay()];
+        const inCurrentMonth =
+            dayNumber >= 1
+            &&
+            dayNumber <= daysInMonth;
 
-        const isToday =
-            cellDate.toDateString() === now.toDateString();
+
+        const dateISO =
+            iso(date);
+
 
         const dayJobs =
-            jobs.filter(job => {
-
-                if (job.date === isoDate) {
-                    return true;
-                }
-
-                /*
-                 * Legacy weekly jobs without dates
-                 * still appear on the correct weekday.
-                 */
-                if (!job.date && job.day === weekday) {
-                    return true;
-                }
-
-                return false;
-            });
-
-        html += `
-            <div
-                class="calendar-cell ${isToday ? 'today-cell' : ''}"
-                onclick="calendarDayClicked('${isoDate}', '${weekday}')">
-
-                <div class="calendar-number ${isToday ? 'today-number' : ''}">
-                    ${dayNumber}
-                </div>
-
-                <div class="calendar-jobs">
-        `;
-
-        dayJobs.forEach(job => {
-
-            const clientName =
-                name(job.clientId);
-
-            const safeStart =
-                job.start && job.start !== 'undefined'
-                    ? job.start
-                    : '';
-
-            const safeEnd =
-                job.end && job.end !== 'undefined'
-                    ? job.end
-                    : '';
-
-            let time = '';
-
-            if (safeStart && safeEnd) {
-                time =
-                    safeStart +
-                    ' – ' +
-                    safeEnd;
-            } else if (safeStart) {
-                time = safeStart;
-            } else if (job.hours) {
-                time = timeText(job.hours);
-            }
-
-            html += `
-                <button
-                    type="button"
-                    class="calendar-job"
-                    onclick="event.stopPropagation(); openJob('${job.id}')">
-
-                    <strong>${clientName}</strong>
-
-                    ${
-                        time
-                            ? `<span>${time}</span>`
-                            : `<span>${timeText(job.hours)}</span>`
-                    }
-
-                    <small>
-                        ${money(job.hours * job.rate)}
-                    </small>
-
-                </button>
-            `;
-        });
-
-        html += `
-                </div>
-            </div>
-        `;
-    }
-
-    /*
-     * Fill remaining cells so the calendar
-     * always has complete weeks.
-     */
-    const totalCells =
-        mondayOffset + daysInMonth;
-
-    const remaining =
-        totalCells % 7 === 0
-            ? 0
-            : 7 - (totalCells % 7);
-
-    for (let i = 1; i <= remaining; i++) {
-
-        html += `
-            <div class="calendar-cell muted">
-                <div class="calendar-number">
-                    ${i}
-                </div>
-            </div>
-        `;
-    }
-
-    html += `
-            </div>
-
-            <button
-                type="button"
-                class="calendar-add-job"
-                onclick="openJob()">
-                ＋ Add cleaning job
-            </button>
-
-        </div>
-    `;
-
-    calendar.innerHTML = html;
-};
-
-
-/* ---------- CALENDAR NAVIGATION ---------- */
-window.previousCalendarMonth = function(event) {
-
-    if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-    }
-
-    window.calendarMonth--;
-
-    if (window.calendarMonth < 0) {
-        window.calendarMonth = 11;
-        window.calendarYear--;
-    }
-
-    renderCalendar();
-};
-
-
-window.nextCalendarMonth = function(event) {
-
-    if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-    }
-
-    window.calendarMonth++;
-
-    if (window.calendarMonth > 11) {
-        window.calendarMonth = 0;
-        window.calendarYear++;
-    }
-
-    renderCalendar();
-};
-
-
-window.goCalendarToday = function(event) {
-
-    if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-    }
-
-    const today = new Date();
-
-    window.calendarYear =
-        today.getFullYear();
-
-    window.calendarMonth =
-        today.getMonth();
-
-    renderCalendar();
-};
-
-
-window.calendarDayClicked = function(date, day) {
-
-    /*
-     * Tapping an empty calendar day opens
-     * a new job already prepared for that date.
-     */
-    openJob();
-
-    const dateInput =
-        document.getElementById('jDate');
-
-    const dayInput =
-        document.getElementById('jDay');
-
-    if (dateInput) {
-        dateInput.value = date;
-    }
-
-    if (dayInput) {
-        dayInput.value = day;
-    }
-};
-
-
-/* ---------- FIX ADD / EDIT JOB ---------- */
-window.openJob = function(id) {
-
-    const modal =
-        document.getElementById('jobModal');
-
-    const clientSelect =
-        document.getElementById('jClient');
-
-    const jobId =
-        document.getElementById('jId');
-
-    if (!modal || !clientSelect) return;
-
-    const job =
-        jobs.find(
-            item => String(item.id) === String(id)
-        );
-
-    clientSelect.innerHTML =
-        clients.map(client => `
-            <option value="${client.id}">
-                ${client.name} — £${Number(client.rate || 0).toFixed(2)}/hour
-            </option>
-        `).join('');
-
-    if (job) {
-
-        jobId.value = job.id;
-
-        clientSelect.value =
-            job.clientId;
-
-        document.getElementById('jDate').value =
-            job.date || '';
-
-        document.getElementById('jDay').value =
-            job.day || 'Monday';
-
-        document.getElementById('jStart').value =
-            job.start || '';
-
-        document.getElementById('jEnd').value =
-            job.end || '';
-
-        document.getElementById('jRate').value =
-            job.rate || 0;
-
-        document.getElementById('jNotes').value =
-            job.notes || '';
-
-        document
-            .getElementById('deleteJobBtn')
-            ?.classList.remove('hidden');
-
-        document.getElementById('jobTitle').textContent =
-            'Edit Cleaning Job';
-
-    } else {
-
-        jobId.value = '';
-
-        const firstClient =
-            clients[0];
-
-        if (firstClient) {
-            clientSelect.value =
-                firstClient.id;
-
-            document.getElementById('jRate').value =
-                firstClient.rate || 0;
-        }
-
-        const today =
-            new Date();
-
-        const iso =
-            today.getFullYear() +
-            '-' +
-            String(today.getMonth() + 1).padStart(2, '0') +
-            '-' +
-            String(today.getDate()).padStart(2, '0');
-
-        document.getElementById('jDate').value =
-            iso;
-
-        document.getElementById('jDay').value =
-            days[today.getDay()];
-
-        document.getElementById('jStart').value =
-            '';
-
-        document.getElementById('jEnd').value =
-            '';
-
-        document.getElementById('jNotes').value =
-            '';
-
-        document
-            .getElementById('deleteJobBtn')
-            ?.classList.add('hidden');
-
-        document.getElementById('jobTitle').textContent =
-            'Add Cleaning Job';
-    }
-
-    if (typeof calcHours === 'function') {
-        calcHours();
-    }
-
-    modal.classList.add('show');
-};
-
-
-/* ---------- FIX SAVE JOB ---------- */
-window.saveJob = function() {
-
-    const clientId =
-        document.getElementById('jClient').value;
-
-    const client =
-        clients.find(
-            c => String(c.id) === String(clientId)
-        );
-
-    if (!client) return;
-
-    const id =
-        document.getElementById('jId').value;
-
-    const date =
-        document.getElementById('jDate').value;
-
-    const start =
-        document.getElementById('jStart').value;
-
-    const end =
-        document.getElementById('jEnd').value;
-
-    const day =
-        document.getElementById('jDay').value;
-
-    const hours =
-        start && end
-            ? duration(start, end)
-            : Number(client.hours || 0);
-
-    const rate =
-        Number(
-            document.getElementById('jRate').value
-        ) || Number(client.rate || 0);
-
-    const oldJob =
-        jobs.find(
-            j => String(j.id) === String(id)
-        );
-
-    const newJob = {
-        id:
-            id ||
-            'job-' +
-            Date.now(),
-
-        clientId,
-
-        date,
-
-        day,
-
-        start,
-
-        end,
-
-        hours,
-
-        rate,
-
-        done:
-            oldJob?.done || false,
-
-        notes:
-            document
-                .getElementById('jNotes')
-                .value
-                .trim()
-    };
-
-    if (id) {
-
-        jobs =
-            jobs.map(
-                j =>
-                    String(j.id) === String(id)
-                        ? newJob
-                        : j
+            data.filter(
+                job =>
+                    job.date === dateISO
             );
 
-    } else {
 
-        jobs.push(newJob);
+        html += `
+
+            <div
+                class="
+                    calendar-day
+                    ${!inCurrentMonth
+                        ? "other-month"
+                        : ""}
+                    ${dateISO === today
+                        ? "today"
+                        : ""}
+                "
+                onclick="
+                    dayClick('${dateISO}')
+                "
+            >
+
+                <div class="day-number">
+                    ${date.getDate()}
+                </div>
+
+                ${
+                    dayJobs
+                        .map(
+                            (job,index) => `
+
+                                <button
+                                    class="
+                                        calendar-job
+                                        ${
+                                            [
+                                                "",
+                                                "pink",
+                                                "green",
+                                                "blue",
+                                                "yellow"
+                                            ][index%5]
+                                        }
+                                    "
+                                    onclick="
+                                        event.stopPropagation();
+                                        editJob(
+                                            '${escapeAttribute(job.id)}'
+                                        )
+                                    "
+                                >
+
+                                    <b>
+                                        ${escapeHTML(
+                                            job.client
+                                        )}
+                                    </b>
+
+                                    <span>
+                                        ${displayTime(job)}
+                                    </span>
+
+                                </button>
+
+                            `
+                        )
+                        .join("")
+                }
+
+            </div>
+
+        `;
+
     }
 
-    save();
 
     document
-        .getElementById('jobModal')
-        ?.classList.remove('show');
+        .getElementById("calendarDays")
+        .innerHTML =
+            html;
+
+}
+
+
+function changeMonth(amount){
+
+    monthCursor.setMonth(
+        monthCursor.getMonth()
+        +
+        amount
+    );
 
     renderCalendar();
 
-    if (typeof render === 'function') {
-        render();
-    }
-};
+}
 
 
-/* ---------- FIX RENDER SO CALENDAR NEVER SHOWS UNDEFINED ---------- */
-const originalRender =
-    window.render;
+function goToday(){
 
-window.render = function() {
-
-    normaliseCleaningJobs();
-
-    if (typeof originalRender === 'function') {
-        originalRender();
-    }
-
-    renderCalendar();
-};
-
-
-/* ---------- FIX MODAL BUTTONS ---------- */
-document
-    .querySelectorAll('.modal button')
-    .forEach(button => {
-        button.type = 'button';
-    });
-
-
-/* ---------- FIX PAGE BUTTONS ---------- */
-document
-    .querySelectorAll('button')
-    .forEach(button => {
-
-        if (!button.type) {
-            button.type = 'button';
-        }
-    });
-
-
-/* ---------- START ON HOME ---------- */
-document
-    .querySelectorAll('.page')
-    .forEach(page => {
-        page.classList.remove('active');
-    });
-
-document
-    .getElementById('home')
-    ?.classList.add('active');
-
-document
-    .querySelectorAll('.bottom .nav')
-    .forEach(nav => {
-        nav.classList.toggle(
-            'active',
-            nav.dataset.page === 'home'
+    monthCursor =
+        new Date(
+            2026,
+            8,
+            1
         );
-    });
 
-
-/* ---------- REFRESH CALENDAR ---------- */
-setTimeout(() => {
-    normaliseCleaningJobs();
     renderCalendar();
-}, 50);
+
+}
+
+
+function dayClick(date){
+
+    openJob(date);
+
+}
+
+
+/* =========================================================
+   ADD JOB
+========================================================= */
+
+function openJob(date=""){
+
+    const selectedDate =
+        date
+        ||
+        iso(new Date());
+
+
+    document
+        .getElementById("sheet")
+        .innerHTML = `
+
+            <div class="sheet-header">
+
+                <h2>
+                    Add cleaning job
+                </h2>
+
+                <button
+                    class="close-button"
+                    onclick="closeSheet()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            ${jobFormHTML({
+
+                date:selectedDate,
+
+                client:"",
+
+                start:"09:00",
+
+                end:"12:00",
+
+                type:"Private",
+
+                rate:18,
+
+                id:""
+
+            })}
+
+        `;
+
+
+    openSheet();
+
+}
+
+
+/* =========================================================
+   EDIT JOB
+========================================================= */
+
+function editJob(id){
+
+    const job =
+        allJobs().find(
+            item =>
+                String(item.id)
+                ===
+                String(id)
+        );
+
+
+    if(!job){
+        return;
+    }
+
+
+    document
+        .getElementById("sheet")
+        .innerHTML = `
+
+            <div class="sheet-header">
+
+                <h2>
+                    Edit cleaning job
+                </h2>
+
+                <button
+                    class="close-button"
+                    onclick="closeSheet()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            ${jobFormHTML(
+                job,
+                true
+            )}
+
+        `;
+
+
+    openSheet();
+
+}
+
+
+/* =========================================================
+   JOB FORM
+========================================================= */
+
+function jobFormHTML(
+    job,
+    editing=false
+){
+
+    return `
+
+        <div class="field">
+
+            <label>
+                Date
+            </label>
+
+            <input
+                id="fDate"
+                type="date"
+                value="${escapeAttribute(
+                    job.date
+                )}"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Client
+            </label>
+
+            <select id="fClient">
+
+                ${CLIENTS
+                    .map(client => `
+
+                        <option
+                            value="${escapeAttribute(
+                                client.name
+                            )}"
+                            ${
+                                client.name ===
+                                job.client
+                                ? "selected"
+                                : ""
+                            }
+                        >
+                            ${escapeHTML(
+                                client.name
+                            )}
+                        </option>
+
+                    `)
+                    .join("")}
+
+            </select>
+
+        </div>
+
+
+        <div class="form-row">
+
+            <div class="field">
+
+                <label>
+                    Start
+                </label>
+
+                <input
+                    id="fStart"
+                    type="time"
+                    value="${escapeAttribute(
+                        safeTime(job.start)
+                    )}"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    End
+                </label>
+
+                <input
+                    id="fEnd"
+                    type="time"
+                    value="${escapeAttribute(
+                        safeTime(
+                            job.end,
+                            "10:00"
+                        )
+                    )}"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="form-row">
+
+            <div class="field">
+
+                <label>
+                    Type
+                </label>
+
+                <select id="fType">
+
+                    <option
+                        ${
+                            job.type ===
+                            "Agency"
+                            ? "selected"
+                            : ""
+                        }
+                    >
+                        Agency
+                    </option>
+
+                    <option
+                        ${
+                            job.type ===
+                            "Private"
+                            ? "selected"
+                            : ""
+                        }
+                    >
+                        Private
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Rate (£/hour)
+                </label>
+
+                <input
+                    id="fRate"
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    value="${
+                        Number(job.rate)
+                        ||
+                        18
+                    }"
+                >
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="primary"
+            onclick="${
+                editing
+                ? `updateJob('${escapeAttribute(
+                    job.id
+                )}')`
+                : "addJob()"
+            }"
+        >
+            ${
+                editing
+                ? "Save changes"
+                : "Add cleaning job"
+            }
+        </button>
+
+
+        ${
+            editing
+            ? `
+
+                <button
+                    class="delete-button"
+                    onclick="
+                        deleteJob(
+                            '${escapeAttribute(
+                                job.id
+                            )}'
+                        )
+                    "
+                >
+                    Delete job
+                </button>
+
+            `
+            : ""
+        }
+
+    `;
+
+}
+
+
+/* =========================================================
+   READ FORM
+========================================================= */
+
+function readJobForm(){
+
+    return {
+
+        id:"",
+
+        date:
+            document
+                .getElementById("fDate")
+                .value,
+
+        client:
+            document
+                .getElementById("fClient")
+                .value,
+
+        start:
+            safeTime(
+                document
+                    .getElementById("fStart")
+                    .value
+            ),
+
+        end:
+            safeTime(
+                document
+                    .getElementById("fEnd")
+                    .value,
+                "10:00"
+            ),
+
+        type:
+            document
+                .getElementById("fType")
+                .value,
+
+        rate:
+            Number(
+                document
+                    .getElementById("fRate")
+                    .value
+            )
+            ||
+            0,
+
+        completed:true
+
+    };
+
+}
+
+
+/* =========================================================
+   ADD / UPDATE / DELETE
+========================================================= */
+
+function addJob(){
+
+    const job =
+        readJobForm();
+
+
+    job.id =
+        "job-"
+        +
+        Date.now();
+
+
+    jobs.push(job);
+
+    saveJobs();
+
+    closeSheet();
+
+    renderAll();
+
+    toast(
+        "Job added"
+    );
+
+}
+
+
+function updateJob(id){
+
+    const updated =
+        readJobForm();
+
+
+    updated.id =
+        id;
+
+
+    const index =
+        jobs.findIndex(
+            job =>
+                String(job.id)
+                ===
+                String(id)
+        );
+
+
+    if(index >= 0){
+
+        jobs[index] =
+            updated;
+
+    }
+    else{
+
+        jobs.push(
+            updated
+        );
+
+    }
+
+
+    saveJobs();
+
+    closeSheet();
+
+    renderAll();
+
+    toast(
+        "Job updated"
+    );
+
+}
+
+
+function deleteJob(id){
+
+    jobs =
+        jobs.filter(
+            job =>
+                String(job.id)
+                !==
+                String(id)
+        );
+
+
+    saveJobs();
+
+    closeSheet();
+
+    renderAll();
+
+    toast(
+        "Job deleted"
+    );
+
+}
+
+
+/* =========================================================
+   CLIENTS
+========================================================= */
+
+function renderClients(){
+
+    document
+        .getElementById("clientsList")
+        .innerHTML =
+            CLIENTS
+                .map(
+                    client => `
+
+                        <div class="client-card">
+
+                            <div>
+
+                                <b>
+                                    ${escapeHTML(
+                                        client.name
+                                    )}
+                                </b>
+
+                                <div class="muted">
+                                    ${
+                                        escapeHTML(
+                                            client.type
+                                        )
+                                    }
+                                    ·
+                                    £${client.rate}/hour
+                                    ·
+                                    ${
+                                        escapeHTML(
+                                            client.freq
+                                        )
+                                    }
+                                </div>
+
+                                <div class="muted">
+                                    ${client.start}
+                                    –
+                                    ${client.end}
+                                </div>
+
+                            </div>
+
+                            <button
+                                class="edit-button"
+                                onclick="
+                                    openClient(
+                                        '${escapeAttribute(
+                                            client.name
+                                        )}'
+                                    )
+                                "
+                            >
+                                Edit
+                            </button>
+
+                        </div>
+
+                    `
+                )
+                .join("");
+
+}
+
+
+/* =========================================================
+   CLIENT MODAL
+========================================================= */
+
+function openClient(name=""){
+
+    const client =
+        CLIENTS.find(
+            item =>
+                item.name === name
+        )
+        ||
+        {
+            name:"",
+            type:"Private",
+            rate:18
+        };
+
+
+    document
+        .getElementById("sheet")
+        .innerHTML = `
+
+            <div class="sheet-header">
+
+                <h2>
+                    ${
+                        name
+                        ? "Edit client"
+                        : "Add client"
+                    }
+                </h2>
+
+                <button
+                    class="close-button"
+                    onclick="closeSheet()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Client name
+                </label>
+
+                <input
+                    id="clientName"
+                    value="${escapeAttribute(
+                        client.name
+                    )}"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Type
+                </label>
+
+                <select id="clientType">
+
+                    <option
+                        ${
+                            client.type ===
+                            "Agency"
+                            ? "selected"
+                            : ""
+                        }
+                    >
+                        Agency
+                    </option>
+
+                    <option
+                        ${
+                            client.type ===
+                            "Private"
+                            ? "selected"
+                            : ""
+                        }
+                    >
+                        Private
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Hourly rate
+                </label>
+
+                <input
+                    id="clientRate"
+                    type="number"
+                    value="${
+                        client.rate
+                    }"
+                >
+
+            </div>
+
+
+            <button
+                class="primary"
+                onclick="
+                    closeSheet();
+                    toast('Client saved')
+                "
+            >
+                Save client
+            </button>
+
+        `;
+
+
+    openSheet();
+
+}
+
+
+/* =========================================================
+   EARNINGS
+========================================================= */
+
+function renderEarnings(){
+
+    const data =
+        allJobs();
+
+
+    const completed =
+        data.filter(
+            job =>
+                job.completed
+        );
+
+
+    const totalMinutes =
+        completed.reduce(
+            (sum,job) =>
+                sum +
+                minutesBetween(
+                    job.start,
+                    job.end
+                ),
+            0
+        );
+
+
+    const total =
+        completed.reduce(
+            (sum,job) =>
+                sum +
+                money(job),
+            0
+        );
+
+
+    const clients =
+        new Set(
+            completed.map(
+                job =>
+                    job.client
+            )
+        ).size;
+
+
+    document
+        .getElementById("earnTotal")
+        .textContent =
+            "£"
+            +
+            total.toFixed(2);
+
+
+    document
+        .getElementById("earnHours")
+        .textContent =
+            formatHours(
+                totalMinutes
+            );
+
+
+    document
+        .getElementById("earnJobs")
+        .textContent =
+            completed.length;
+
+
+    document
+        .getElementById("earnClients")
+        .textContent =
+            clients;
+
+
+    document
+        .getElementById("jobsList")
+        .innerHTML =
+            completed
+                .slice()
+                .reverse()
+                .slice(0,30)
+                .map(
+                    job => `
+
+                        <div class="job-card">
+
+                            <b>
+                                ${escapeHTML(
+                                    job.client
+                                )}
+                            </b>
+
+                            <div class="muted">
+                                ${job.date}
+                                ·
+                                ${displayTime(job)}
+                                ·
+                                ${escapeHTML(
+                                    job.type ||
+                                    "Private"
+                                )}
+                            </div>
+
+                            <div
+                                style="
+                                    margin-top:8px;
+                                    font-weight:800;
+                                    color:#b83e73
+                                "
+                            >
+                                £${money(job).toFixed(2)}
+                            </div>
+
+                        </div>
+
+                    `
+                )
+                .join("")
+            ||
+            `
+
+                <div class="settings-card">
+
+                    <p class="muted">
+                        No completed jobs yet.
+                    </p>
+
+                </div>
+
+            `;
+
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function openSettings(){
+
+    document
+        .getElementById("sheet")
+        .innerHTML = `
+
+            <div class="sheet-header">
+
+                <h2>
+                    Settings ⚙️
+                </h2>
+
+                <button
+                    class="close-button"
+                    onclick="closeSheet()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="settings-card">
+
+                <b>
+                    Pure Shine Cleaning Manager
+                </b>
+
+                <p class="muted">
+                    Your cleaning business ✨
+                </p>
+
+            </div>
+
+
+            <div class="settings-card">
+
+                <b>
+                    Display
+                </b>
+
+                <p class="muted">
+                    Full-screen mobile layout
+                    with pale pink, purple,
+                    green and yellow colours.
+                </p>
+
+            </div>
+
+
+            <div class="settings-card">
+
+                <b>
+                    Notifications 🔔
+                </b>
+
+                <p class="muted">
+                    Cleaning reminders and
+                    schedule notifications.
+                </p>
+
+            </div>
+
+
+            <div class="settings-card">
+
+                <b>
+                    Calendar 📅
+                </b>
+
+                <p class="muted">
+                    Your cleaning schedule
+                    is shown as a real monthly
+                    calendar. Add or edit jobs
+                    directly from the calendar.
+                </p>
+
+            </div>
+
+        `;
+
+
+    openSheet();
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openSheet(){
+
+    document
+        .getElementById("overlay")
+        .classList.add("show");
+
+}
+
+
+function closeSheet(){
+
+    document
+        .getElementById("overlay")
+        .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function toast(message){
+
+    const element =
+        document.getElementById(
+            "toast"
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () =>
+            element.classList.remove(
+                "show"
+            ),
+        1600
+    );
+
+}
+
+
+/* =========================================================
+   RENDER EVERYTHING
+========================================================= */
+
+function renderAll(){
+
+    renderHome();
+
+    renderCalendar();
+
+    renderClients();
+
+    renderEarnings();
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+renderAll();
+
 </script>
+
+</body>
+</html>
