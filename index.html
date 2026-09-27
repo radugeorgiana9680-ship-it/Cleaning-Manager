@@ -10,10 +10,10 @@
                user-scalable=yes,
                viewport-fit=cover">
 
-<meta name="theme-color" content="#fff7fb">
+<meta name="theme-color" content="#fff8fb">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="light-content">
-<meta name="apple-mobile-web-app-title" content="Cleaning Manager">
+<meta name="apple-mobile-web-app-title" content="Pure Shine">
 
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon.png">
@@ -21,26 +21,27 @@
 <title>Pure Shine Cleaning Manager</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500;1,600&family=DM+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=DM+Sans:wght@400;500;600;700;800&display=swap');
 
 :root{
-    --zoom:1.15;
+    --scale:1.18;
 
-    --pink:#f5d4e1;
-    --pink-dark:#c76b91;
-    --pink-soft:#fff1f7;
+    --pink:#d27a9e;
+    --pink-dark:#a9587e;
+    --pink-light:#f8dce8;
+    --pink-pale:#fff5f9;
 
-    --purple:#e8ddf8;
+    --purple:#eadff8;
     --green:#dcefe6;
     --yellow:#fff1cf;
     --blue:#dceff7;
-    --peach:#ffe7d6;
+    --peach:#ffe6d4;
 
-    --text:#403846;
-    --muted:#8c858d;
-    --white:#ffffff;
+    --text:#4b3c48;
+    --muted:#927f8b;
+    --border:#ead8e1;
 
-    --shadow:0 12px 30px rgba(117,82,105,.10);
+    --shadow:0 10px 28px rgba(113,74,96,.10);
 }
 
 *{
@@ -49,7 +50,7 @@
 }
 
 html{
-    font-size:calc(16px * var(--zoom));
+    font-size:calc(16px * var(--scale));
     scroll-behavior:smooth;
 }
 
@@ -58,11 +59,12 @@ body{
     min-height:100vh;
     font-family:"DM Sans",Arial,sans-serif;
     color:var(--text);
-    background:#fff9fc;
+    background:#fffafd;
     overflow-x:hidden;
 }
 
-/* CLEANING BACKGROUND IMAGE */
+/* CLEANING BACKGROUND */
+
 body::before{
     content:"";
     position:fixed;
@@ -71,8 +73,8 @@ body::before{
 
     background:
         linear-gradient(
-            rgba(255,249,252,.91),
-            rgba(255,249,252,.94)
+            rgba(255,250,253,.91),
+            rgba(255,250,253,.95)
         ),
         url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1800&q=85");
 
@@ -87,61 +89,71 @@ body::after{
     inset:0;
     z-index:-2;
     pointer-events:none;
+
     background:
-        radial-gradient(circle at 10% 20%,rgba(245,212,225,.20),transparent 28%),
-        radial-gradient(circle at 90% 35%,rgba(232,221,248,.18),transparent 28%),
-        radial-gradient(circle at 50% 90%,rgba(220,239,230,.18),transparent 30%);
+        radial-gradient(
+            circle at 10% 15%,
+            rgba(248,210,227,.25),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 35%,
+            rgba(232,220,248,.20),
+            transparent 28%
+        );
 }
 
-button,
-input,
-select{
-    font:inherit;
-}
-
-button{
-    cursor:pointer;
-}
+/* =========================
+   APP
+========================= */
 
 .app{
     width:100%;
-    max-width:760px;
+    max-width:900px;
     margin:0 auto;
+
     padding:
-        calc(22px * var(--zoom))
-        calc(18px * var(--zoom))
-        calc(130px * var(--zoom));
+        calc(20px * var(--scale))
+        calc(16px * var(--scale))
+        calc(125px * var(--scale));
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 .header{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:14px;
-    margin-bottom:20px;
+    gap:16px;
+
+    margin-bottom:22px;
 }
 
 .brand{
     display:flex;
     align-items:center;
-    gap:13px;
+    gap:14px;
 }
 
 .logo{
-    width:64px;
-    height:64px;
-    border-radius:19px;
+    width:72px;
+    height:72px;
+
+    border-radius:20px;
     object-fit:cover;
-    background:#fff;
-    box-shadow:0 7px 20px rgba(198,107,145,.18);
-    border:2px solid rgba(255,255,255,.9);
+
+    background:white;
+    border:2px solid white;
+
+    box-shadow:
+        0 8px 22px rgba(174,91,127,.18);
 }
 
 .brand-title{
-    font-size:1.25rem;
-    line-height:1.1;
+    font-size:1.35rem;
+    line-height:1.05;
     font-weight:800;
     letter-spacing:-.5px;
 }
@@ -149,447 +161,643 @@ button{
 .brand-subtitle{
     color:var(--muted);
     font-size:.72rem;
-    margin-top:5px;
+    margin-top:6px;
 }
 
-.header-buttons{
+/* HEADER SETTINGS + ADD */
+
+.header-actions{
     display:flex;
     align-items:center;
     gap:9px;
 }
 
-.icon-button{
-    width:54px;
-    height:54px;
+.header-button{
+    width:57px;
+    height:57px;
+
     border:0;
-    border-radius:18px;
-    background:rgba(255,255,255,.94);
+    border-radius:19px;
+
+    background:rgba(255,255,255,.97);
     color:var(--pink-dark);
+
     box-shadow:var(--shadow);
+
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:1.35rem;
-    transition:.2s;
-}
 
-.icon-button:active{
-    transform:scale(.94);
-}
-
-.settings-button{
-    font-size:1.45rem;
-}
-
-/* DATE */
-
-.date-card{
-    border-radius:28px;
-    padding:22px 24px;
-    background:
-        linear-gradient(
-            135deg,
-            rgba(249,218,231,.97),
-            rgba(237,225,249,.97)
-        );
-    box-shadow:var(--shadow);
-    margin-bottom:19px;
-}
-
-.date-title{
-    font-size:1.18rem;
-    font-weight:800;
-    margin:0;
-}
-
-.date-subtitle{
-    margin-top:7px;
-    color:#837981;
-    font-size:.75rem;
-}
-
-/* STAT CARDS */
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:9px;
-    margin-bottom:27px;
-}
-
-.stat{
-    min-height:104px;
-    border-radius:25px;
-    padding:13px 7px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-}
-
-.stat.jobs{background:#f5d1df}
-.stat.hours{background:#e5d8f6}
-.stat.earned{background:#d9eee4}
-.stat.available{background:#fff0cb}
-
-.stat-icon{
-    font-size:1.12rem;
-    margin-bottom:3px;
-}
-
-.stat-value{
-    font-size:1.05rem;
-    font-weight:800;
-}
-
-.stat-label{
-    font-size:.60rem;
-    color:#8b8289;
-    margin-top:3px;
-}
-
-/* SECTION TITLES */
-
-.section-heading{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin:0 4px 13px;
-}
-
-.section-heading h2{
-    margin:0;
-    font-size:1.02rem;
-    font-weight:800;
-}
-
-.see-all{
-    border:0;
-    background:none;
-    color:var(--pink-dark);
+    font-size:1.3rem;
     font-weight:700;
+
+    transition:.18s;
+}
+
+.header-button:active{
+    transform:scale(.93);
+}
+
+.header-button.settings{
+    font-size:1.2rem;
+}
+
+/* =========================
+   PAGE NAVIGATION
+========================= */
+
+.top-navigation{
+    display:flex;
+    gap:8px;
+
+    margin-bottom:22px;
+
+    overflow-x:auto;
+    scrollbar-width:none;
+
+    padding:3px;
+}
+
+.top-navigation::-webkit-scrollbar{
+    display:none;
+}
+
+.top-nav-button{
+    flex:0 0 auto;
+
+    border:0;
+    border-radius:22px;
+
+    background:rgba(255,245,249,.96);
+
+    color:#a05d7d;
+
+    padding:
+        11px 16px;
+
+    min-height:48px;
+
+    font-size:.73rem;
+    font-weight:600;
+
+    box-shadow:0 4px 12px rgba(105,69,88,.05);
+
+    white-space:nowrap;
+}
+
+.top-nav-button.active{
+    background:var(--pink);
+    color:white;
+}
+
+/* =========================
+   WELCOME
+========================= */
+
+.welcome-card{
+    background:rgba(255,255,255,.95);
+
+    border:1px solid var(--border);
+    border-radius:29px;
+
+    padding:26px 22px;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:20px;
+}
+
+.welcome-title{
+    margin:0;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:1.55rem;
+    font-weight:600;
+
+    color:#765366;
+}
+
+.date{
+    margin-top:13px;
+
+    color:var(--muted);
     font-size:.70rem;
 }
 
-/* TODAY */
+/* =========================
+   STATS
+========================= */
 
-.schedule-card{
-    min-height:208px;
+.stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:11px;
+
+    margin-top:20px;
+}
+
+.stat{
+    min-height:112px;
+
+    border-radius:22px;
+
+    padding:17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,246,249,.98),
+            rgba(255,251,252,.98)
+        );
+
+    border:1px solid #ecdce4;
+}
+
+.stat-label{
+    color:#998993;
+    font-size:.63rem;
+    margin-bottom:7px;
+}
+
+.stat-value{
+    color:var(--pink-dark);
+
+    font-size:1.25rem;
+    font-weight:800;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.section{
+    background:rgba(255,255,255,.96);
+
+    border:1px solid var(--border);
+
     border-radius:29px;
-    background:rgba(255,255,255,.94);
+
+    padding:24px 21px;
+
     box-shadow:var(--shadow);
+
+    margin-bottom:20px;
+}
+
+.section-title{
+    margin:0;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:1.28rem;
+    font-weight:600;
+
+    color:#765366;
+}
+
+/* =========================
+   TODAY CLEANING
+========================= */
+
+.empty-cleaning{
+    min-height:145px;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     text-align:center;
-    padding:25px;
-    margin-bottom:26px;
+
+    color:#9a8a93;
+
+    font-size:.78rem;
 }
 
-.empty-flower{
-    width:68px;
-    height:68px;
-    object-fit:contain;
-    margin-bottom:8px;
-}
+/* =========================
+   QUICK ACTIONS
+========================= */
 
-.empty-title{
-    font-weight:700;
-    color:#777078;
-    font-size:.88rem;
-}
+.quick-title{
+    margin-bottom:14px;
 
-.empty-text{
-    color:#90878e;
-    font-size:.76rem;
-    margin-top:3px;
-}
+    font-family:"Cormorant Garamond",serif;
 
-/* QUICK ACTIONS */
+    font-size:1.28rem;
+    font-weight:600;
+
+    color:#765366;
+}
 
 .quick-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:10px;
+    gap:11px;
 }
 
-.quick{
+.quick-button{
+    min-height:105px;
+
     border:0;
-    min-height:92px;
-    border-radius:23px;
-    padding:14px;
+    border-radius:22px;
+
+    padding:16px;
+
     text-align:left;
-    color:var(--text);
-    box-shadow:0 5px 14px rgba(120,90,110,.04);
+
+    color:#765366;
+
+    font-size:.76rem;
+    font-weight:800;
+
     transition:.18s;
 }
 
-.quick:active{
+.quick-button:active{
     transform:scale(.97);
 }
 
-.quick.blue{background:var(--blue)}
-.quick.green{background:var(--green)}
-.quick.pink{background:#f6d2df}
-.quick.peach{background:var(--peach)}
-.quick.purple{background:var(--purple)}
-
 .quick-icon{
     display:block;
-    font-size:1.35rem;
-    margin-bottom:7px;
+    font-size:1.55rem;
+    margin-bottom:9px;
 }
 
-.quick-label{
-    font-size:.76rem;
-    font-weight:800;
+.quick-blue{
+    background:var(--blue);
 }
 
-/* QUOTE WITH FLOWER PHOTOS */
+.quick-green{
+    background:var(--green);
+}
+
+.quick-pink{
+    background:#f7d5e2;
+}
+
+.quick-peach{
+    background:var(--peach);
+}
+
+.quick-purple{
+    background:var(--purple);
+}
+
+/* =========================
+   QUOTE
+========================= */
 
 .quote-card{
     position:relative;
     overflow:hidden;
-    margin-top:23px;
-    min-height:135px;
-    border-radius:28px;
+
+    min-height:145px;
+
+    margin-top:20px;
+
+    padding:25px;
+
+    border-radius:27px;
 
     background:
         linear-gradient(
             110deg,
-            rgba(255,247,244,.96),
-            rgba(255,251,247,.90)
+            rgba(255,248,245,.97),
+            rgba(255,252,249,.94)
         );
 
     box-shadow:var(--shadow);
-    padding:23px 28px;
-}
 
-.quote-flower{
-    position:absolute;
-    width:82px;
-    height:82px;
-    object-fit:contain;
-    pointer-events:none;
-}
-
-.quote-flower.left{
-    left:-17px;
-    bottom:-16px;
-    transform:rotate(-14deg);
-}
-
-.quote-flower.right{
-    right:-7px;
-    bottom:-5px;
-    transform:rotate(10deg);
+    border:1px solid rgba(239,220,226,.8);
 }
 
 .quote{
     position:relative;
     z-index:2;
-    width:78%;
+
+    width:75%;
+
     font-family:"Cormorant Garamond",serif;
-    font-size:1.13rem;
-    line-height:1.25;
+
     font-style:italic;
-    font-weight:600;
-    color:#9a7083;
+
+    font-size:1.23rem;
+    line-height:1.2;
+
+    color:#a06d84;
 }
 
-.quote-brand{
+.quote-small{
     position:relative;
     z-index:2;
-    margin-top:9px;
-    color:#92878d;
-    font-size:.62rem;
+
+    margin-top:10px;
+
+    color:#93858c;
+    font-size:.65rem;
 }
 
-/* BOTTOM NAV */
+.flower{
+    position:absolute;
 
-.bottom-nav{
-    position:fixed;
-    z-index:50;
-    left:50%;
-    bottom:17px;
-    transform:translateX(-50%);
+    width:105px;
+    height:105px;
 
-    width:calc(100% - 28px);
-    max-width:730px;
+    object-fit:contain;
 
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-
-    padding:7px;
-    border-radius:31px;
-
-    background:rgba(255,255,255,.96);
-    box-shadow:
-        0 16px 40px rgba(91,62,81,.17),
-        0 0 0 1px rgba(220,200,214,.5);
+    pointer-events:none;
 }
 
-.nav-item{
-    min-height:58px;
-    border:0;
-    border-radius:24px;
-    background:transparent;
-    color:#8b8289;
-
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    gap:3px;
-
-    font-size:.58rem;
+.flower-left{
+    left:-24px;
+    bottom:-25px;
+    transform:rotate(-15deg);
 }
 
-.nav-icon{
-    font-size:1rem;
+.flower-right{
+    right:-7px;
+    bottom:-5px;
+    transform:rotate(10deg);
 }
 
-.nav-item.active{
-    color:var(--pink-dark);
-    background:#f7dbe6;
-}
+/* =========================
+   SETTINGS
+========================= */
 
-/* SETTINGS PANEL */
-
-.overlay{
+.settings-overlay{
     position:fixed;
     inset:0;
-    z-index:100;
-    background:rgba(54,43,52,.30);
-    backdrop-filter:blur(7px);
+
+    z-index:999;
+
     display:none;
     align-items:flex-end;
     justify-content:center;
+
+    background:rgba(55,41,50,.36);
+
+    backdrop-filter:blur(8px);
 }
 
-.overlay.show{
+.settings-overlay.open{
     display:flex;
 }
 
 .settings-panel{
     width:100%;
-    max-width:760px;
-    max-height:88vh;
+    max-width:900px;
+
+    max-height:91vh;
     overflow-y:auto;
 
     background:#fffafd;
-    border-radius:32px 32px 0 0;
 
-    padding:25px 21px
-        calc(35px + env(safe-area-inset-bottom));
+    border-radius:34px 34px 0 0;
 
-    box-shadow:0 -15px 50px rgba(72,47,63,.20);
+    padding:
+        28px
+        21px
+        calc(38px + env(safe-area-inset-bottom));
+
+    box-shadow:
+        0 -18px 55px rgba(66,43,57,.23);
 }
 
-.panel-head{
+.settings-header{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    margin-bottom:22px;
+
+    margin-bottom:23px;
 }
 
-.panel-head h2{
+.settings-heading{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.settings-heading-icon{
+    width:50px;
+    height:50px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:17px;
+
+    background:#f7dce7;
+
+    font-size:1.3rem;
+}
+
+.settings-heading h2{
     margin:0;
-    font-size:1.15rem;
+
+    font-size:1.18rem;
+    font-weight:800;
+
+    color:#55434f;
+}
+
+.settings-heading p{
+    margin:3px 0 0;
+
+    font-size:.62rem;
+    color:#998991;
 }
 
 .close-settings{
-    width:44px;
-    height:44px;
+    width:48px;
+    height:48px;
+
     border:0;
-    border-radius:15px;
-    background:#f6e0e9;
-    color:#b45f82;
-    font-size:1.2rem;
+    border-radius:17px;
+
+    background:#f8e4ec;
+
+    color:#a95c7e;
+
+    font-size:1.35rem;
 }
 
-.setting-section{
+/* SETTING CARDS */
+
+.settings-card{
     background:white;
-    border-radius:22px;
-    padding:17px;
-    margin-bottom:12px;
-    box-shadow:0 5px 20px rgba(100,70,90,.06);
+
+    border:1px solid #eddee5;
+
+    border-radius:23px;
+
+    padding:19px;
+
+    margin-bottom:13px;
+
+    box-shadow:
+        0 6px 20px rgba(102,70,89,.06);
 }
 
-.setting-title{
+.settings-card-title{
+    display:flex;
+    align-items:center;
+    gap:9px;
+
+    margin-bottom:15px;
+
+    color:#795569;
+
+    font-size:.83rem;
     font-weight:800;
-    font-size:.82rem;
-    margin-bottom:12px;
 }
 
-.zoom-row{
+.settings-row{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:12px;
+
+    gap:15px;
+
+    min-height:50px;
+
+    border-top:1px solid #f3e8ed;
 }
 
-.zoom-value{
-    min-width:60px;
-    text-align:center;
-    padding:8px 9px;
-    border-radius:12px;
-    background:#f8e6ee;
-    color:#b35d82;
-    font-weight:800;
+.settings-row:first-of-type{
+    border-top:0;
+}
+
+.settings-label{
+    color:#665963;
     font-size:.72rem;
 }
 
-.zoom-slider{
-    flex:1;
-    accent-color:#c86e93;
+.settings-description{
+    margin-top:3px;
+
+    color:#a0959c;
+    font-size:.59rem;
 }
 
-.setting-option{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    min-height:43px;
+.settings-value{
+    color:#a85e80;
+    font-size:.69rem;
+    font-weight:800;
 }
 
-.setting-option span{
-    font-size:.73rem;
-    color:#665e65;
-}
+/* TOGGLE */
 
 .toggle{
-    position:relative;
-    width:48px;
-    height:27px;
-    border-radius:20px;
-    background:#ddd5da;
+    width:54px;
+    height:31px;
+
     border:0;
-    padding:0;
+    border-radius:20px;
+
+    background:#ddd5da;
+
+    position:relative;
+
+    flex:0 0 auto;
 }
 
 .toggle::after{
     content:"";
+
     position:absolute;
-    width:21px;
-    height:21px;
-    top:3px;
+
+    width:25px;
+    height:25px;
+
     left:3px;
+    top:3px;
+
     border-radius:50%;
+
     background:white;
-    box-shadow:0 2px 5px rgba(0,0,0,.15);
+
+    box-shadow:0 2px 7px rgba(0,0,0,.14);
+
     transition:.2s;
 }
 
 .toggle.on{
-    background:#d47a9d;
+    background:#cf7599;
 }
 
 .toggle.on::after{
-    left:24px;
+    left:26px;
 }
 
-/* MODAL PAGES */
+/* ZOOM */
+
+.zoom-box{
+    margin-top:4px;
+}
+
+.zoom-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:13px;
+}
+
+.zoom-percentage{
+    background:#f7dce7;
+
+    color:#a85d7e;
+
+    border-radius:12px;
+
+    padding:8px 12px;
+
+    font-size:.70rem;
+    font-weight:800;
+}
+
+.zoom-slider{
+    width:100%;
+    height:9px;
+
+    accent-color:#c76d91;
+}
+
+.zoom-limits{
+    display:flex;
+    justify-content:space-between;
+
+    margin-top:6px;
+
+    color:#a2959c;
+    font-size:.56rem;
+}
+
+/* SETTING BUTTONS */
+
+.settings-action{
+    width:100%;
+
+    border:0;
+
+    min-height:54px;
+
+    border-radius:18px;
+
+    background:#f8e0e9;
+
+    color:#965673;
+
+    font-size:.73rem;
+    font-weight:800;
+
+    margin-top:8px;
+}
+
+/* =========================
+   PAGES
+========================= */
 
 .page{
     display:none;
@@ -599,74 +807,233 @@ button{
     display:block;
 }
 
-.inner-page{
-    padding-top:10px;
-}
-
 .back-button{
     border:0;
+
     background:white;
-    border-radius:15px;
-    padding:10px 14px;
-    box-shadow:var(--shadow);
-    color:#9e5c7b;
+
+    color:#9d5c7c;
+
+    border-radius:16px;
+
+    padding:13px 17px;
+
+    font-size:.72rem;
     font-weight:700;
+
+    box-shadow:var(--shadow);
+
     margin-bottom:18px;
 }
 
-.client-list,
-.job-list{
+.list{
     display:flex;
     flex-direction:column;
-    gap:10px;
+    gap:11px;
 }
 
 .list-card{
     background:white;
+
+    border:1px solid #eadde4;
+
     border-radius:21px;
-    padding:16px;
+
+    padding:18px;
+
     box-shadow:var(--shadow);
 }
 
 .list-card strong{
-    font-size:.82rem;
+    font-size:.78rem;
 }
 
 .list-card small{
     display:block;
-    color:#91888e;
-    margin-top:5px;
-    font-size:.65rem;
+
+    margin-top:6px;
+
+    color:#968a91;
+
+    font-size:.63rem;
 }
 
-/* RESPONSIVE */
+/* =========================
+   BOTTOM NAV
+========================= */
+
+.bottom-nav{
+    position:fixed;
+
+    z-index:90;
+
+    left:50%;
+    bottom:15px;
+
+    transform:translateX(-50%);
+
+    width:calc(100% - 24px);
+    max-width:850px;
+
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+
+    gap:4px;
+
+    padding:8px;
+
+    border-radius:32px;
+
+    background:rgba(255,255,255,.97);
+
+    box-shadow:
+        0 17px 45px rgba(83,56,72,.18),
+        0 0 0 1px rgba(225,208,218,.75);
+}
+
+.nav-item{
+    min-height:65px;
+
+    border:0;
+    border-radius:24px;
+
+    background:transparent;
+
+    color:#8c7d86;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:4px;
+
+    font-size:.60rem;
+    font-weight:500;
+}
+
+.nav-icon{
+    font-size:1.15rem;
+}
+
+.nav-item.active{
+    background:#f5d5e2;
+    color:#a9587e;
+    font-weight:700;
+}
+
+/* =========================
+   ADD JOB
+========================= */
+
+.form-card{
+    background:white;
+
+    border:1px solid #eadde4;
+
+    border-radius:24px;
+
+    padding:20px;
+
+    margin-bottom:13px;
+
+    box-shadow:var(--shadow);
+}
+
+.form-label{
+    display:block;
+
+    margin-bottom:9px;
+
+    color:#735668;
+
+    font-size:.72rem;
+    font-weight:800;
+}
+
+.form-input{
+    width:100%;
+
+    border:1px solid #eadde4;
+
+    background:#fff7fa;
+
+    color:#554650;
+
+    border-radius:15px;
+
+    padding:14px;
+
+    outline:none;
+}
+
+.save-button{
+    width:100%;
+
+    border:0;
+
+    min-height:58px;
+
+    border-radius:20px;
+
+    background:#d27a9e;
+
+    color:white;
+
+    font-size:.75rem;
+    font-weight:800;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
 
 @media(max-width:430px){
+
     .app{
-        padding-left:15px;
-        padding-right:15px;
+        padding-left:14px;
+        padding-right:14px;
     }
 
-    .stats{
-        gap:7px;
+    .brand-title{
+        font-size:1.18rem;
+    }
+
+    .logo{
+        width:65px;
+        height:65px;
+    }
+
+    .header-button{
+        width:53px;
+        height:53px;
+    }
+
+    .welcome-title{
+        font-size:1.43rem;
     }
 
     .stat{
-        min-height:98px;
+        min-height:108px;
     }
 
-    .quick{
-        min-height:87px;
+    .bottom-nav{
+        width:calc(100% - 20px);
     }
 }
 
 @media(min-width:700px){
+
     .app{
         padding-top:35px;
     }
 
-    .quick{
-        min-height:105px;
+    .stats{
+        grid-template-columns:repeat(4,1fr);
+    }
+
+    .quick-button{
+        min-height:115px;
     }
 }
 </style>
@@ -676,278 +1043,391 @@ button{
 
 <div class="app">
 
-    <!-- HOME -->
-    <main id="homePage" class="page active">
+<!-- =========================
+     HOME
+========================= -->
 
-        <header class="header">
+<main id="homePage" class="page active">
 
-            <div class="brand">
+<header class="header">
 
-                <img
-                    class="logo"
-                    src="icon.png"
-                    alt="Pure Shine Cleaning">
+    <div class="brand">
 
-                <div>
-                    <div class="brand-title">
-                        Cleaning Manager
-                    </div>
+        <img
+            class="logo"
+            src="icon.png"
+            alt="Pure Shine Cleaning">
 
-                    <div class="brand-subtitle">
-                        Your cleaning business ✨
-                    </div>
-                </div>
+        <div>
 
+            <div class="brand-title">
+                ✨ Pure Shine
             </div>
 
-            <div class="header-buttons">
-
-                <button
-                    class="icon-button settings-button"
-                    onclick="openSettings()"
-                    aria-label="Settings">
-                    ⚙️
-                </button>
-
-                <button
-                    class="icon-button"
-                    onclick="showPage('addPage')"
-                    aria-label="Add">
-                    ＋
-                </button>
-
+            <div class="brand-subtitle">
+                CLEANING MANAGER
             </div>
-
-        </header>
-
-
-        <section class="date-card">
-
-            <h1 class="date-title" id="todayDate">
-                Sunday 27 September
-            </h1>
-
-            <div class="date-subtitle">
-                Let's make today productive 🌸
-            </div>
-
-        </section>
-
-
-        <section class="stats">
-
-            <div class="stat jobs">
-                <div class="stat-icon">💼</div>
-                <div class="stat-value" id="jobsValue">0</div>
-                <div class="stat-label">Jobs</div>
-            </div>
-
-            <div class="stat hours">
-                <div class="stat-icon">⏱️</div>
-                <div class="stat-value" id="hoursValue">0h</div>
-                <div class="stat-label">Hours</div>
-            </div>
-
-            <div class="stat earned">
-                <div class="stat-icon">💷</div>
-                <div class="stat-value" id="earnedValue">£0</div>
-                <div class="stat-label">Earned</div>
-            </div>
-
-            <div class="stat available">
-                <div class="stat-icon">☀️</div>
-                <div class="stat-value">8h</div>
-                <div class="stat-label">Available</div>
-            </div>
-
-        </section>
-
-
-        <div class="section-heading">
-
-            <h2>Today's schedule</h2>
-
-            <button
-                class="see-all"
-                onclick="showPage('schedulePage')">
-                See all →
-            </button>
 
         </div>
 
+    </div>
 
-        <section class="schedule-card">
+    <div class="header-actions">
 
-            <div>
-
-                <img
-                    class="empty-flower"
-                    src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=250&q=85"
-                    alt="Pink flowers">
-
-                <div class="empty-title">
-                    No cleaning jobs today
-                </div>
-
-                <div class="empty-text">
-                    Add one with the + button.
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <div class="section-heading">
-            <h2>Quick actions</h2>
-        </div>
-
-
-        <section class="quick-grid">
-
-            <button
-                class="quick blue"
-                onclick="startCleaning()">
-
-                <span class="quick-icon">⏱️</span>
-                <span class="quick-label">
-                    Start cleaning
-                </span>
-
-            </button>
-
-
-            <button
-                class="quick green"
-                onclick="showPage('clientsPage')">
-
-                <span class="quick-icon">👥</span>
-                <span class="quick-label">
-                    Clients
-                </span>
-
-            </button>
-
-
-            <button
-                class="quick pink"
-                onclick="showPage('schedulePage')">
-
-                <span class="quick-icon">📅</span>
-                <span class="quick-label">
-                    Schedule
-                </span>
-
-            </button>
-
-
-            <button
-                class="quick peach"
-                onclick="showFreeTime()">
-
-                <span class="quick-icon">🔎</span>
-                <span class="quick-label">
-                    Find free time
-                </span>
-
-            </button>
-
-
-            <button
-                class="quick purple"
-                onclick="showPage('earningsPage')">
-
-                <span class="quick-icon">📊</span>
-                <span class="quick-label">
-                    Earnings
-                </span>
-
-            </button>
-
-
-            <button
-                class="quick peach"
-                onclick="showHolidays()">
-
-                <span class="quick-icon">🏖️</span>
-                <span class="quick-label">
-                    Holidays
-                </span>
-
-            </button>
-
-        </section>
-
-
-        <!-- QUOTE WITH FLOWER IMAGES -->
-        <section class="quote-card">
-
-            <img
-                class="quote-flower left"
-                src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=250&q=85"
-                alt="Pink flowers">
-
-            <img
-                class="quote-flower right"
-                src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=250&q=85"
-                alt="Pink flowers">
-
-            <div class="quote">
-                A clean space is<br>
-                a happy place ♡
-            </div>
-
-            <div class="quote-brand">
-                Pure Shine Cleaning
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- SCHEDULE -->
-    <main id="schedulePage" class="page inner-page">
-
-        <button class="back-button" onclick="showPage('homePage')">
-            ← Home
+        <button
+            class="header-button settings"
+            onclick="openSettings()"
+            aria-label="Settings">
+            ⚙️
         </button>
 
-        <div class="section-heading">
-            <h2>Schedule</h2>
+        <button
+            class="header-button"
+            onclick="showPage('addPage')"
+            aria-label="Add">
+            ＋
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- TOP NAVIGATION -->
+
+<nav class="top-navigation">
+
+    <button
+        class="top-nav-button active"
+        onclick="goTo('homePage',this)">
+        🏠 Home
+    </button>
+
+    <button
+        class="top-nav-button"
+        onclick="goTo('schedulePage',this)">
+        📅 Week
+    </button>
+
+    <button
+        class="top-nav-button"
+        onclick="goTo('clientsPage',this)">
+        👥 Clients
+    </button>
+
+    <button
+        class="top-nav-button"
+        onclick="goTo('jobsPage',this)">
+        🧾 Jobs
+    </button>
+
+    <button
+        class="top-nav-button"
+        onclick="goTo('earningsPage',this)">
+        💷 Earnings
+    </button>
+
+</nav>
+
+
+<!-- WELCOME -->
+
+<section class="welcome-card">
+
+    <h1 class="welcome-title">
+        Welcome back ✨
+    </h1>
+
+    <div class="date" id="todayDate">
+        Sunday 27 September
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-label">
+                Today's hours
+            </div>
+
+            <div
+                class="stat-value"
+                id="hoursValue">
+                0.00h
+            </div>
         </div>
 
-        <div class="job-list">
+
+        <div class="stat">
+            <div class="stat-label">
+                Today's earnings
+            </div>
+
+            <div
+                class="stat-value"
+                id="earnedValue">
+                £0.00
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                This week
+            </div>
+
+            <div
+                class="stat-value"
+                id="weekValue">
+                £0.00
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                Clients
+            </div>
+
+            <div
+                class="stat-value"
+                id="clientCount">
+                6
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- TODAY -->
+
+<section class="section">
+
+    <h2 class="section-title">
+        Today's Cleaning
+    </h2>
+
+    <div class="empty-cleaning">
+        No cleaning jobs recorded for today ✨
+    </div>
+
+</section>
+
+
+<!-- QUICK ACTIONS -->
+
+<section class="section">
+
+    <h2 class="quick-title">
+        Quick Actions
+    </h2>
+
+    <div class="quick-grid">
+
+        <button
+            class="quick-button quick-blue"
+            onclick="startCleaning()">
+
+            <span class="quick-icon">
+                ⏱️
+            </span>
+
+            Start cleaning
+
+        </button>
+
+
+        <button
+            class="quick-button quick-green"
+            onclick="goTo('clientsPage')">
+
+            <span class="quick-icon">
+                👥
+            </span>
+
+            Clients
+
+        </button>
+
+
+        <button
+            class="quick-button quick-pink"
+            onclick="goTo('schedulePage')">
+
+            <span class="quick-icon">
+                📅
+            </span>
+
+            Schedule
+
+        </button>
+
+
+        <button
+            class="quick-button quick-peach"
+            onclick="findFreeTime()">
+
+            <span class="quick-icon">
+                🔎
+            </span>
+
+            Find free time
+
+        </button>
+
+
+        <button
+            class="quick-button quick-purple"
+            onclick="goTo('earningsPage')">
+
+            <span class="quick-icon">
+                📊
+            </span>
+
+            Earnings
+
+        </button>
+
+
+        <button
+            class="quick-button quick-peach"
+            onclick="showHolidays()">
+
+            <span class="quick-icon">
+                🏖️
+            </span>
+
+            Holidays
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- QUOTE -->
+
+<section class="quote-card">
+
+    <img
+        class="flower flower-left"
+        src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=300&q=85"
+        alt="Pink flowers">
+
+    <img
+        class="flower flower-right"
+        src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=300&q=85"
+        alt="Pink flowers">
+
+    <div class="quote">
+        A clean space is<br>
+        a happy place ♡
+    </div>
+
+    <div class="quote-small">
+        ✨ Pure Shine Cleaning Manager
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================
+     WEEK
+========================= -->
+
+<main id="schedulePage" class="page">
+
+    <button
+        class="back-button"
+        onclick="goTo('homePage')">
+        ← Home
+    </button>
+
+    <section class="section">
+
+        <h2 class="section-title">
+            📅 Weekly Schedule
+        </h2>
+
+        <div class="list" style="margin-top:18px">
 
             <div class="list-card">
-                <strong>No jobs scheduled today</strong>
-                <small>
-                    Your weekly schedule will appear here.
-                </small>
+                <strong>Monday · Lottie</strong>
+                <small>13:00 – 15:00 · Agency · £16/hour</small>
+            </div>
+
+            <div class="list-card">
+                <strong>Tuesday · Christine</strong>
+                <small>09:30 – 12:30 · Private · £18/hour</small>
+            </div>
+
+            <div class="list-card">
+                <strong>Tuesday · Matt</strong>
+                <small>Normally 4 hours · Agency · £16/hour</small>
+            </div>
+
+            <div class="list-card">
+                <strong>Wednesday · Sonia</strong>
+                <small>09:00 – 14:00 · Agency · £16/hour</small>
+            </div>
+
+            <div class="list-card">
+                <strong>Thursday · Laura</strong>
+                <small>09:00 – 13:00 · Private · £18/hour</small>
+            </div>
+
+            <div class="list-card">
+                <strong>Thursday · Hannah</strong>
+                <small>13:00 – 16:00 · Agency · £16/hour</small>
             </div>
 
         </div>
 
-    </main>
+    </section>
+
+</main>
 
 
-    <!-- CLIENTS -->
-    <main id="clientsPage" class="page inner-page">
+<!-- =========================
+     CLIENTS
+========================= -->
 
-        <button class="back-button" onclick="showPage('homePage')">
-            ← Home
-        </button>
+<main id="clientsPage" class="page">
 
-        <div class="section-heading">
-            <h2>Clients</h2>
+    <button
+        class="back-button"
+        onclick="goTo('homePage')">
+        ← Home
+    </button>
 
-            <button class="see-all"
-                    onclick="showPage('addPage')">
-                + Add client
+    <section class="section">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:10px;
+        ">
+
+            <h2 class="section-title">
+                👥 Clients
+            </h2>
+
+            <button
+                class="back-button"
+                style="margin:0"
+                onclick="goTo('addPage')">
+                + Add
             </button>
+
         </div>
 
-        <div class="client-list">
+
+        <div class="list" style="margin-top:18px">
 
             <div class="list-card">
                 <strong>Lottie</strong>
@@ -956,12 +1436,12 @@ button{
 
             <div class="list-card">
                 <strong>Christine</strong>
-                <small>Private · £18/hour</small>
+                <small>Private · £18/hour · Fortnightly</small>
             </div>
 
             <div class="list-card">
                 <strong>Matt</strong>
-                <small>Agency · £16/hour</small>
+                <small>Agency · £16/hour · Tuesday</small>
             </div>
 
             <div class="list-card">
@@ -981,66 +1461,128 @@ button{
 
         </div>
 
-    </main>
+    </section>
+
+</main>
 
 
-    <!-- EARNINGS -->
-    <main id="earningsPage" class="page inner-page">
+<!-- =========================
+     JOBS
+========================= -->
 
-        <button class="back-button" onclick="showPage('homePage')">
-            ← Home
-        </button>
+<main id="jobsPage" class="page">
 
-        <div class="section-heading">
-            <h2>Earnings</h2>
+    <button
+        class="back-button"
+        onclick="goTo('homePage')">
+        ← Home
+    </button>
+
+    <section class="section">
+
+        <h2 class="section-title">
+            🧾 Jobs History
+        </h2>
+
+        <div
+            id="jobsList"
+            class="list"
+            style="margin-top:18px">
+
+            <div class="list-card">
+                <strong>No completed jobs yet</strong>
+                <small>
+                    Completed cleaning jobs will appear here with exact hours, minutes and earnings.
+                </small>
+            </div>
+
         </div>
 
-        <section class="schedule-card">
+    </section>
 
-            <div>
-                <div class="empty-flower">💷</div>
+</main>
 
-                <div class="empty-title">
-                    £0 earned today
+
+<!-- =========================
+     EARNINGS
+========================= -->
+
+<main id="earningsPage" class="page">
+
+    <button
+        class="back-button"
+        onclick="goTo('homePage')">
+        ← Home
+    </button>
+
+    <section class="section">
+
+        <h2 class="section-title">
+            💷 Earnings
+        </h2>
+
+        <div class="stats">
+
+            <div class="stat">
+                <div class="stat-label">
+                    Today
                 </div>
 
-                <div class="empty-text">
-                    Your completed jobs and earnings will appear here.
+                <div
+                    class="stat-value"
+                    id="earningsToday">
+                    £0.00
                 </div>
             </div>
 
-        </section>
+            <div class="stat">
+                <div class="stat-label">
+                    This week
+                </div>
 
-    </main>
+                <div
+                    class="stat-value"
+                    id="earningsWeek">
+                    £0.00
+                </div>
+            </div>
 
-
-    <!-- ADD -->
-    <main id="addPage" class="page inner-page">
-
-        <button class="back-button" onclick="showPage('homePage')">
-            ← Home
-        </button>
-
-        <div class="section-heading">
-            <h2>Add cleaning job</h2>
         </div>
 
-        <div class="setting-section">
+    </section>
 
-            <div class="setting-title">
+</main>
+
+
+<!-- =========================
+     ADD JOB
+========================= -->
+
+<main id="addPage" class="page">
+
+    <button
+        class="back-button"
+        onclick="goTo('homePage')">
+        ← Home
+    </button>
+
+    <section class="section">
+
+        <h2 class="section-title">
+            ✨ Add Cleaning Job
+        </h2>
+
+        <div
+            class="form-card"
+            style="margin-top:18px">
+
+            <label class="form-label">
                 Client
-            </div>
+            </label>
 
             <select
                 id="clientSelect"
-                style="
-                    width:100%;
-                    border:0;
-                    background:#f8eef3;
-                    padding:14px;
-                    border-radius:15px;
-                    color:#514850;
-                ">
+                class="form-input">
 
                 <option>Lottie</option>
                 <option>Christine</option>
@@ -1054,105 +1596,150 @@ button{
         </div>
 
 
-        <div class="setting-section">
+        <div class="form-card">
 
-            <div class="setting-title">
-                Hours worked
-            </div>
+            <label class="form-label">
+                Exact hours worked
+            </label>
 
             <input
                 id="hoursInput"
+                class="form-input"
                 type="number"
                 step="0.01"
                 min="0"
-                placeholder="e.g. 4.25"
-                style="
-                    width:100%;
-                    border:0;
-                    background:#f8eef3;
-                    padding:14px;
-                    border-radius:15px;
-                    color:#514850;
-                ">
+                placeholder="Example: 4.25">
+
+        </div>
+
+
+        <div class="form-card">
+
+            <label class="form-label">
+                Hourly rate
+            </label>
+
+            <select
+                id="rateInput"
+                class="form-input">
+
+                <option value="16">£16 / hour</option>
+                <option value="18">£18 / hour</option>
+                <option value="20">£20 / hour</option>
+                <option value="25">£25 / hour</option>
+
+            </select>
 
         </div>
 
 
         <button
-            onclick="saveJob()"
-            style="
-                width:100%;
-                border:0;
-                padding:17px;
-                border-radius:20px;
-                background:#f0c8d9;
-                color:#7d4961;
-                font-weight:800;
-            ">
-            Save cleaning job
+            class="save-button"
+            onclick="saveJob()">
+            Save Cleaning Job
         </button>
 
-    </main>
+    </section>
+
+</main>
 
 </div>
 
 
-<!-- BOTTOM NAV -->
+<!-- =========================
+     BOTTOM NAV
+========================= -->
 
 <nav class="bottom-nav">
 
     <button
         class="nav-item active"
-        onclick="showPage('homePage');setActiveNav(this)">
+        onclick="bottomGo('homePage',this)">
+
         <span class="nav-icon">⌂</span>
         Home
+
     </button>
+
 
     <button
         class="nav-item"
-        onclick="showPage('schedulePage');setActiveNav(this)">
+        onclick="bottomGo('schedulePage',this)">
+
         <span class="nav-icon">▣</span>
-        Schedule
+        Week
+
     </button>
+
 
     <button
         class="nav-item"
-        onclick="showPage('clientsPage');setActiveNav(this)">
+        onclick="bottomGo('clientsPage',this)">
+
         <span class="nav-icon">♧</span>
         Clients
+
     </button>
+
 
     <button
         class="nav-item"
-        onclick="showFreeTime();setActiveNav(this)">
-        <span class="nav-icon">⌕</span>
-        Free time
+        onclick="bottomGo('jobsPage',this)">
+
+        <span class="nav-icon">▤</span>
+        Jobs
+
     </button>
+
 
     <button
         class="nav-item"
-        onclick="showPage('earningsPage');setActiveNav(this)">
+        onclick="bottomGo('earningsPage',this)">
+
         <span class="nav-icon">▥</span>
         Earnings
+
     </button>
 
 </nav>
 
 
-<!-- SETTINGS -->
+<!-- =========================
+     COMPLETE SETTINGS
+========================= -->
 
 <div
     id="settingsOverlay"
-    class="overlay"
+    class="settings-overlay"
     onclick="closeSettings(event)">
 
     <section
         class="settings-panel"
         onclick="event.stopPropagation()">
 
-        <div class="panel-head">
 
-            <h2>⚙️ Settings</h2>
+        <div class="settings-header">
+
+            <div class="settings-heading">
+
+                <div class="settings-heading-icon">
+                    ⚙️
+                </div>
+
+                <div>
+
+                    <h2>
+                        Settings
+                    </h2>
+
+                    <p>
+                        Pure Shine Cleaning Manager
+                    </p>
+
+                </div>
+
+            </div>
+
 
             <button
                 class="close-settings"
@@ -1163,14 +1750,36 @@ button{
         </div>
 
 
-        <!-- ZOOM -->
-        <div class="setting-section">
+        <!-- APP SIZE -->
 
-            <div class="setting-title">
-                App size & zoom
+        <div class="settings-card">
+
+            <div class="settings-card-title">
+                🔍 App size & zoom
             </div>
 
-            <div class="zoom-row">
+            <div class="zoom-box">
+
+                <div class="zoom-top">
+
+                    <div>
+                        <div class="settings-label">
+                            Make everything larger
+                        </div>
+
+                        <div class="settings-description">
+                            Text, buttons, icons and cards all increase together.
+                        </div>
+                    </div>
+
+                    <div
+                        id="zoomValue"
+                        class="zoom-percentage">
+                        118%
+                    </div>
+
+                </div>
+
 
                 <input
                     id="zoomSlider"
@@ -1178,44 +1787,45 @@ button{
                     type="range"
                     min="1"
                     max="2"
-                    step=".05"
-                    value="1.15"
+                    step=".01"
+                    value="1.18"
                     oninput="changeZoom(this.value)">
 
-                <div
-                    id="zoomValue"
-                    class="zoom-value">
-                    115%
+                <div class="zoom-limits">
+
+                    <span>100%</span>
+                    <span>150%</span>
+                    <span>200%</span>
+
                 </div>
 
-            </div>
-
-            <div style="
-                margin-top:9px;
-                color:#999099;
-                font-size:.62rem;
-            ">
-                Increase up to 200%. Icons and text grow together.
             </div>
 
         </div>
 
 
         <!-- NOTIFICATIONS -->
-        <div class="setting-section">
 
-            <div class="setting-title">
-                Notifications
+        <div class="settings-card">
+
+            <div class="settings-card-title">
+                🔔 Notifications
             </div>
 
-            <div class="setting-option">
 
-                <span>
-                    Cleaning reminder
-                </span>
+            <div class="settings-row">
+
+                <div>
+                    <div class="settings-label">
+                        Evening cleaning reminder
+                    </div>
+
+                    <div class="settings-description">
+                        Remind me the evening before a job.
+                    </div>
+                </div>
 
                 <button
-                    id="reminderToggle"
                     class="toggle on"
                     onclick="toggleSetting(this)">
                 </button>
@@ -1223,14 +1833,40 @@ button{
             </div>
 
 
-            <div class="setting-option">
+            <div class="settings-row">
 
-                <span>
-                    Evening reminder
-                </span>
+                <div>
+                    <div class="settings-label">
+                        8 PM reminder
+                    </div>
+
+                    <div class="settings-description">
+                        Show tomorrow's client, time and hours.
+                    </div>
+                </div>
 
                 <button
                     class="toggle on"
+                    onclick="toggleSetting(this)">
+                </button>
+
+            </div>
+
+
+            <div class="settings-row">
+
+                <div>
+                    <div class="settings-label">
+                        Client reminders
+                    </div>
+
+                    <div class="settings-description">
+                        Enable reminders for clients.
+                    </div>
+                </div>
+
+                <button
+                    class="toggle"
                     onclick="toggleSetting(this)">
                 </button>
 
@@ -1240,17 +1876,25 @@ button{
 
 
         <!-- APPEARANCE -->
-        <div class="setting-section">
 
-            <div class="setting-title">
-                Appearance
+        <div class="settings-card">
+
+            <div class="settings-card-title">
+                🎨 Appearance
             </div>
 
-            <div class="setting-option">
 
-                <span>
-                    Floral decorations
-                </span>
+            <div class="settings-row">
+
+                <div>
+                    <div class="settings-label">
+                        Pink floral decorations
+                    </div>
+
+                    <div class="settings-description">
+                        Show pink flowers around quotes and cards.
+                    </div>
+                </div>
 
                 <button
                     class="toggle on"
@@ -1260,11 +1904,37 @@ button{
             </div>
 
 
-            <div class="setting-option">
+            <div class="settings-row">
 
-                <span>
-                    Cleaning background
-                </span>
+                <div>
+                    <div class="settings-label">
+                        Cleaning background
+                    </div>
+
+                    <div class="settings-description">
+                        Keep the cleaning-themed background image.
+                    </div>
+                </div>
+
+                <button
+                    class="toggle on"
+                    onclick="toggleSetting(this)">
+                </button>
+
+            </div>
+
+
+            <div class="settings-row">
+
+                <div>
+                    <div class="settings-label">
+                        Pastel colours
+                    </div>
+
+                    <div class="settings-description">
+                        Use pink, purple, green, blue and peach.
+                    </div>
+                </div>
 
                 <button
                     class="toggle on"
@@ -1277,24 +1947,257 @@ button{
 
 
         <!-- BUSINESS -->
-        <div class="setting-section">
 
-            <div class="setting-title">
-                Pure Shine Cleaning
+        <div class="settings-card">
+
+            <div class="settings-card-title">
+                🧹 Business
             </div>
 
-            <div class="setting-option">
-                <span>Business name</span>
-                <strong style="font-size:.70rem">
+
+            <div class="settings-row">
+
+                <div class="settings-label">
+                    Business name
+                </div>
+
+                <div class="settings-value">
                     Pure Shine Cleaning
-                </strong>
+                </div>
+
             </div>
 
-            <div class="setting-option">
-                <span>Currency</span>
-                <strong style="font-size:.70rem">
+
+            <div class="settings-row">
+
+                <div class="settings-label">
+                    Currency
+                </div>
+
+                <div class="settings-value">
                     GBP (£)
+                </div>
+
+            </div>
+
+
+            <div class="settings-row">
+
+                <div class="settings-label">
+                    Default agency rate
+                </div>
+
+                <div class="settings-value">
+                    £16/hour
+                </div>
+
+            </div>
+
+
+            <div class="settings-row">
+
+                <div class="settings-label">
+                    Private rates
+                </div>
+
+                <div class="settings-value">
+                    £18 · £20 · £25
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TIMER -->
+
+        <div class="settings-card">
+
+            <div class="settings-card-title">
+                ⏱️ Cleaning timer
+            </div>
+
+
+            <div class="settings-row">
+
+                <div>
+                    <div class="settings-label">
+                        Exact hours & minutes
+                    </div>
+
+                    <div class="settings-description">
+                        Save the exact time worked, including minutes.
+                    </div>
+                </div>
+
+                <button
+                    class="toggle on"
+                    onclick="toggleSetting(this)">
+                </button>
+
+            </div>
+
+
+            <div class="settings-row">
+
+                <div>
+                    <div class="settings-label">
+                        Continue when app is in background
+                    </div>
+
+                    <div class="settings-description">
+                        Keep calculating elapsed time when you leave the screen.
+                    </div>
+                </div>
+
+                <button
+                    class="toggle on"
+                    onclick="toggleSetting(this)">
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- CALENDAR -->
+
+        <div class="settings-card">
+
+            <div class="settings-card-title">
+                📅 Calendar
+            </div>
+
+
+            <div class="settings-row">
+
+                <div>
+                    <div class="settings-label">
+                        Calendar synchronisation
+                    </div>
+
+                    <div class="settings-description">
+                        Connect cleaning jobs with your phone calendar.
+                    </div>
+                </div>
+
+                <button
+                    class="toggle"
+                    onclick="toggleSetting(this)">
+                </button>
+
+            </div>
+
+
+            <button
+                class="settings-action"
+                onclick="alert('Calendar connection will be available when the app is installed as a full mobile app.')">
+                Connect Phone Calendar
+            </button>
+
+        </div>
+
+
+        <!-- CLIENTS -->
+
+        <div class="settings-card">
+
+            <div class="settings-card-title">
+                👥 Client management
+            </div>
+
+
+            <div class="settings-row">
+
+                <div class="settings-label">
+                    Biweekly clients
+                </div>
+
+                <div class="settings-value">
+                    Enabled
+                </div>
+
+            </div>
+
+
+            <div class="settings-row">
+
+                <div class="settings-label">
+                    Holiday tracking
+                </div>
+
+                <div class="settings-value">
+                    Enabled
+                </div>
+
+            </div>
+
+
+            <button
+                class="settings-action"
+                onclick="goTo('clientsPage');closeSettings()">
+                Manage Clients
+            </button>
+
+        </div>
+
+
+        <!-- DATA -->
+
+        <div class="settings-card">
+
+            <div class="settings-card-title">
+                💾 Data
+            </div>
+
+
+            <button
+                class="settings-action"
+                onclick="exportData()">
+                Export My Cleaning Data
+            </button>
+
+
+            <button
+                class="settings-action"
+                onclick="resetData()"
+                style="
+                    background:#fff0f3;
+                    color:#b65d7e;
+                ">
+                Reset Today's Data
+            </button>
+
+        </div>
+
+
+        <!-- ABOUT -->
+
+        <div class="settings-card">
+
+            <div class="settings-card-title">
+                ✨ About
+            </div>
+
+            <div
+                style="
+                    color:#92838c;
+                    font-size:.64rem;
+                    line-height:1.6;
+                ">
+
+                <strong style="color:#9f5a79">
+                    Pure Shine Cleaning Manager
                 </strong>
+
+                <br>
+
+                Your personal cleaning business manager.
+
+                <br><br>
+
+                Version 1.0
+
             </div>
 
         </div>
@@ -1306,33 +2209,35 @@ button{
 
 <script>
 
-/* ================================
+/* =========================
    DATE
-================================ */
+========================= */
 
 function updateDate(){
 
-    const date = new Date();
+    const now = new Date();
 
-    const options = {
-        weekday:"long",
-        day:"numeric",
-        month:"long"
-    };
-
-    document.getElementById("todayDate").textContent =
-        date.toLocaleDateString("en-GB",options);
+    document.getElementById("todayDate")
+        .textContent =
+        now.toLocaleDateString(
+            "en-GB",
+            {
+                weekday:"long",
+                day:"numeric",
+                month:"long"
+            }
+        );
 
 }
 
 updateDate();
 
 
-/* ================================
+/* =========================
    PAGE NAVIGATION
-================================ */
+========================= */
 
-function showPage(id){
+function goTo(pageId, button){
 
     document
         .querySelectorAll(".page")
@@ -1340,10 +2245,22 @@ function showPage(id){
             page.classList.remove("active");
         });
 
-    const page = document.getElementById(id);
+    const page =
+        document.getElementById(pageId);
 
     if(page){
         page.classList.add("active");
+    }
+
+    if(button){
+
+        document
+            .querySelectorAll(".top-nav-button")
+            .forEach(item=>{
+                item.classList.remove("active");
+            });
+
+        button.classList.add("active");
     }
 
     window.scrollTo({
@@ -1353,11 +2270,7 @@ function showPage(id){
 }
 
 
-/* ================================
-   BOTTOM NAV
-================================ */
-
-function setActiveNav(button){
+function bottomGo(pageId, button){
 
     document
         .querySelectorAll(".nav-item")
@@ -1366,49 +2279,57 @@ function setActiveNav(button){
         });
 
     button.classList.add("active");
+
+    goTo(pageId);
+
 }
 
 
-/* ================================
+/* =========================
    SETTINGS
-================================ */
+========================= */
 
 function openSettings(){
 
     document
         .getElementById("settingsOverlay")
-        .classList.add("show");
+        .classList.add("open");
 
 }
 
+
 function closeSettings(event){
+
+    const overlay =
+        document.getElementById("settingsOverlay");
 
     if(
         !event ||
-        event.target === document.getElementById("settingsOverlay")
+        event.target === overlay
     ){
-
-        document
-            .getElementById("settingsOverlay")
-            .classList.remove("show");
-
+        overlay.classList.remove("open");
     }
 
 }
 
 
-/* ================================
+/* =========================
    ZOOM
-================================ */
+========================= */
 
 function changeZoom(value){
 
     document.documentElement
         .style
-        .setProperty("--zoom",value);
+        .setProperty(
+            "--scale",
+            value
+        );
 
     const percentage =
-        Math.round(value * 100);
+        Math.round(
+            Number(value) * 100
+        );
 
     document.getElementById("zoomValue")
         .textContent =
@@ -1418,33 +2339,44 @@ function changeZoom(value){
         "pureShineZoom",
         value
     );
+
 }
 
 
 /* RESTORE ZOOM */
 
-const savedZoom =
-    localStorage.getItem("pureShineZoom");
+(function(){
 
-if(savedZoom){
+    const saved =
+        localStorage.getItem(
+            "pureShineZoom"
+        );
 
-    document.documentElement
-        .style
-        .setProperty("--zoom",savedZoom);
+    if(saved){
 
-    document.getElementById("zoomSlider")
-        .value = savedZoom;
+        document.documentElement
+            .style
+            .setProperty(
+                "--scale",
+                saved
+            );
 
-    document.getElementById("zoomValue")
-        .textContent =
-        Math.round(savedZoom * 100) + "%";
+        document.getElementById("zoomSlider")
+            .value = saved;
 
-}
+        document.getElementById("zoomValue")
+            .textContent =
+            Math.round(
+                Number(saved) * 100
+            ) + "%";
+    }
+
+})();
 
 
-/* ================================
-   TOGGLES
-================================ */
+/* =========================
+   TOGGLE
+========================= */
 
 function toggleSetting(button){
 
@@ -1453,189 +2385,334 @@ function toggleSetting(button){
 }
 
 
-/* ================================
-   START CLEANING
-================================ */
+/* =========================
+   TIMER
+========================= */
 
+let timerStart = null;
 let timerInterval = null;
-let timerSeconds = 0;
 
 function startCleaning(){
 
     const client =
-        prompt("Client name:");
+        prompt(
+            "Enter client name:"
+        );
 
     if(!client){
         return;
     }
 
-    timerSeconds = 0;
+    timerStart =
+        Date.now();
 
     clearInterval(timerInterval);
 
     timerInterval =
-        setInterval(()=>{
-
-            timerSeconds++;
-
-            document.title =
-                formatTimer(timerSeconds) +
-                " · Cleaning Manager";
-
-        },1000);
+        setInterval(
+            updateTimerTitle,
+            1000
+        );
 
     alert(
-        "Cleaning started for " +
+        "Cleaning timer started for " +
         client +
-        ".\n\nThe timer is now running."
+        "."
     );
 
 }
 
 
-function formatTimer(seconds){
+function updateTimerTitle(){
 
-    const h =
-        Math.floor(seconds / 3600);
+    if(!timerStart){
+        return;
+    }
 
-    const m =
-        Math.floor((seconds % 3600) / 60);
+    const elapsed =
+        Math.floor(
+            (Date.now() - timerStart) / 1000
+        );
 
-    const s =
-        seconds % 60;
+    const hours =
+        Math.floor(
+            elapsed / 3600
+        );
 
-    return (
-        String(h).padStart(2,"0") +
+    const minutes =
+        Math.floor(
+            (elapsed % 3600) / 60
+        );
+
+    const seconds =
+        elapsed % 60;
+
+    document.title =
+        String(hours).padStart(2,"0") +
         ":" +
-        String(m).padStart(2,"0") +
+        String(minutes).padStart(2,"0") +
         ":" +
-        String(s).padStart(2,"0")
-    );
+        String(seconds).padStart(2,"0") +
+        " · Pure Shine";
 
 }
 
 
-/* ================================
+/* =========================
    SAVE JOB
-================================ */
+========================= */
 
 function saveJob(){
 
     const client =
-        document.getElementById("clientSelect").value;
+        document.getElementById(
+            "clientSelect"
+        ).value;
 
     const hours =
-        parseFloat(
-            document.getElementById("hoursInput").value
+        Number(
+            document.getElementById(
+                "hoursInput"
+            ).value
         );
 
-    if(!hours || hours <= 0){
+    const rate =
+        Number(
+            document.getElementById(
+                "rateInput"
+            ).value
+        );
 
-        alert("Please enter the exact hours worked.");
+    if(
+        !hours ||
+        hours <= 0
+    ){
+
+        alert(
+            "Please enter the exact hours worked."
+        );
 
         return;
-
     }
-
-    const rate =
-        client === "Christine" ||
-        client === "Laura"
-            ? 18
-            : 16;
 
     const earnings =
         hours * rate;
 
-    const oldJobs =
-        Number(
-            localStorage.getItem("jobsToday") || 0
+    const jobs =
+        JSON.parse(
+            localStorage.getItem(
+                "pureShineJobs"
+            ) || "[]"
         );
 
-    const oldHours =
-        Number(
-            localStorage.getItem("hoursToday") || 0
-        );
-
-    const oldEarned =
-        Number(
-            localStorage.getItem("earnedToday") || 0
-        );
+    jobs.push({
+        client,
+        hours,
+        rate,
+        earnings,
+        date:new Date().toISOString()
+    });
 
     localStorage.setItem(
-        "jobsToday",
-        oldJobs + 1
+        "pureShineJobs",
+        JSON.stringify(jobs)
     );
 
-    localStorage.setItem(
-        "hoursToday",
-        oldHours + hours
-    );
-
-    localStorage.setItem(
-        "earnedToday",
-        oldEarned + earnings
-    );
+    document.getElementById(
+        "hoursInput"
+    ).value = "";
 
     updateStats();
-
-    document.getElementById("hoursInput").value="";
+    renderJobs();
 
     alert(
-        "Job saved!\n\n" +
+        "Cleaning job saved!\n\n" +
         client +
         "\n" +
-        hours.toFixed(2) +
-        " hours\n" +
-        "£" + earnings.toFixed(2)
+        formatHours(hours) +
+        "\n£" +
+        earnings.toFixed(2)
     );
 
-    showPage("homePage");
+    goTo("homePage");
 
 }
 
 
-/* ================================
-   UPDATE STATS
-================================ */
+/* =========================
+   HOURS FORMAT
+========================= */
+
+function formatHours(decimalHours){
+
+    const totalMinutes =
+        Math.round(
+            decimalHours * 60
+        );
+
+    const hours =
+        Math.floor(
+            totalMinutes / 60
+        );
+
+    const minutes =
+        totalMinutes % 60;
+
+    return (
+        hours +
+        "h " +
+        minutes +
+        "min"
+    );
+
+}
+
+
+/* =========================
+   STATS
+========================= */
 
 function updateStats(){
 
     const jobs =
-        Number(
-            localStorage.getItem("jobsToday") || 0
+        JSON.parse(
+            localStorage.getItem(
+                "pureShineJobs"
+            ) || "[]"
         );
 
-    const hours =
-        Number(
-            localStorage.getItem("hoursToday") || 0
+    const today =
+        new Date().toDateString();
+
+    const todayJobs =
+        jobs.filter(
+            job =>
+                new Date(
+                    job.date
+                ).toDateString() === today
         );
 
-    const earned =
-        Number(
-            localStorage.getItem("earnedToday") || 0
+    const todayHours =
+        todayJobs.reduce(
+            (sum,job)=>
+                sum + Number(job.hours),
+            0
         );
 
-    document.getElementById("jobsValue")
-        .textContent = jobs;
+    const todayEarned =
+        todayJobs.reduce(
+            (sum,job)=>
+                sum + Number(job.earnings),
+            0
+        );
 
-    document.getElementById("hoursValue")
-        .textContent =
-        hours.toFixed(1) + "h";
+    const weekEarned =
+        jobs.reduce(
+            (sum,job)=>
+                sum + Number(job.earnings),
+            0
+        );
 
-    document.getElementById("earnedValue")
-        .textContent =
-        "£" + earned.toFixed(0);
+    document.getElementById(
+        "hoursValue"
+    ).textContent =
+        todayHours.toFixed(2) + "h";
+
+    document.getElementById(
+        "earnedValue"
+    ).textContent =
+        "£" + todayEarned.toFixed(2);
+
+    document.getElementById(
+        "weekValue"
+    ).textContent =
+        "£" + weekEarned.toFixed(2);
+
+    document.getElementById(
+        "earningsToday"
+    ).textContent =
+        "£" + todayEarned.toFixed(2);
+
+    document.getElementById(
+        "earningsWeek"
+    ).textContent =
+        "£" + weekEarned.toFixed(2);
 
 }
 
+
+/* =========================
+   JOB HISTORY
+========================= */
+
+function renderJobs(){
+
+    const jobs =
+        JSON.parse(
+            localStorage.getItem(
+                "pureShineJobs"
+            ) || "[]"
+        );
+
+    const container =
+        document.getElementById(
+            "jobsList"
+        );
+
+    if(!jobs.length){
+
+        container.innerHTML = `
+            <div class="list-card">
+                <strong>No completed jobs yet</strong>
+                <small>
+                    Completed cleaning jobs will appear here.
+                </small>
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML =
+        jobs
+        .slice()
+        .reverse()
+        .map(
+            (job,index)=>`
+
+                <div class="list-card">
+
+                    <strong>
+                        ${job.client}
+                    </strong>
+
+                    <small>
+                        ${formatHours(job.hours)}
+                        · £${Number(job.rate).toFixed(2)}/hour
+                        · £${Number(job.earnings).toFixed(2)}
+                    </small>
+
+                    <small>
+                        ${new Date(job.date).toLocaleDateString("en-GB")}
+                    </small>
+
+                </div>
+
+            `
+        )
+        .join("");
+
+}
+
+renderJobs();
 updateStats();
 
 
-/* ================================
+/* =========================
    FREE TIME
-================================ */
+========================= */
 
-function showFreeTime(){
+function findFreeTime(){
 
     alert(
         "You currently have approximately 8 hours available today."
@@ -1644,31 +2721,122 @@ function showFreeTime(){
 }
 
 
-/* ================================
+/* =========================
    HOLIDAYS
-================================ */
+========================= */
 
 function showHolidays(){
 
     alert(
-        "No clients are currently marked as being on holiday."
+        "Holiday manager is ready for your clients."
     );
 
 }
 
 
-/* ================================
-   IOS BACKGROUND TIMER SUPPORT
-================================ */
+/* =========================
+   EXPORT
+========================= */
+
+function exportData(){
+
+    const jobs =
+        localStorage.getItem(
+            "pureShineJobs"
+        ) || "[]";
+
+    const blob =
+        new Blob(
+            [jobs],
+            {
+                type:"application/json"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+    link.download =
+        "pure-shine-cleaning-data.json";
+
+    link.click();
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* =========================
+   RESET TODAY
+========================= */
+
+function resetData(){
+
+    if(
+        !confirm(
+            "Reset today's cleaning data?"
+        )
+    ){
+        return;
+    }
+
+    const jobs =
+        JSON.parse(
+            localStorage.getItem(
+                "pureShineJobs"
+            ) || "[]"
+        );
+
+    const today =
+        new Date().toDateString();
+
+    const remaining =
+        jobs.filter(
+            job =>
+                new Date(
+                    job.date
+                ).toDateString() !== today
+        );
+
+    localStorage.setItem(
+        "pureShineJobs",
+        JSON.stringify(remaining)
+    );
+
+    updateStats();
+    renderJobs();
+
+}
+
+
+/* =========================
+   BACKGROUND TIMER
+========================= */
 
 document.addEventListener(
     "visibilitychange",
-    ()=>{
+    function(){
 
-        if(document.hidden){
+        if(
+            document.hidden &&
+            timerStart
+        ){
 
             document.title =
-                "Cleaning Manager";
+                "⏱️ Cleaning · Pure Shine";
+
+        }
+
+        if(
+            !document.hidden &&
+            timerStart
+        ){
+
+            updateTimerTitle();
 
         }
 
