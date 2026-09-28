@@ -1,94 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f8e8ef">
+
+<title>Pure Shine Cleaning Manager</title>
+
 <style>
-/* FIX — Get Started must always be clickable */
-#welcomeScreen {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 99999 !important;
-    pointer-events: auto !important;
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+html,body{
+    width:100%;
+    min-height:100%;
+    background:#fffafd;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+    color:#24232a;
 }
 
-#welcomeScreen img,
-#welcomeScreen .welcome-background,
-#welcomeScreen .decorative-image,
-#welcomeScreen .background-image {
-    pointer-events: none !important;
+body{overflow-x:hidden}
+
+button{
+    font:inherit;
+    border:0;
+    cursor:pointer;
+    -webkit-appearance:none;
 }
 
-#welcomeScreen .welcome-content {
-    position: relative !important;
-    z-index: 100000 !important;
-    pointer-events: auto !important;
+img{
+    display:block;
+    max-width:100%;
 }
 
-#welcomeScreen .get-started,
-#welcomeScreen #getStarted,
-#welcomeScreen button {
-    position: relative !important;
-    z-index: 100001 !important;
-    pointer-events: auto !important;
-    cursor: pointer !important;
-    touch-action: manipulation !important;
+/* ================= WELCOME ================= */
+
+#welcomeScreen{
+    position:fixed;
+    inset:0;
+    z-index:999999;
+    background:#fdf0f6;
+    overflow-y:auto;
+    overflow-x:hidden;
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+    transition:opacity .35s ease,visibility .35s ease;
 }
 
-/* Prevent an invisible image/element from covering the button */
-#welcomeScreen::before,
-#welcomeScreen::after {
-    pointer-events: none !important;
+#welcomeScreen.hidden{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+}
+
+.welcome-inner{
+    width:100%;
+    min-height:100dvh;
+    padding:
+        calc(env(safe-area-inset-top) + 16px)
+        22px
+        calc(env(safe-area-inset-bottom) + 25px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+}
+
+.welcome-logo{
+    width:290px;
+    height:290px;
+    object-fit:contain;
+    margin-top:5px;
+    pointer-events:none;
+}
+
+.welcome-title{
+    margin-top:-7px;
+    font-family:"Snell Roundhand","Apple Chancery","Brush Script MT",cursive;
+    font-size:53px;
+    line-height:.94;
+    font-weight:500;
+    color:#98506f;
+    max-width:600px;
+}
+
+.welcome-heart{
+    margin-top:13px;
+    font-family:Georgia,serif;
+    font-size:54px;
+    line-height:1;
+    color:#aa6481;
+    font-weight:300;
+}
+
+.feature-grid{
+    width:100%;
+    max-width:600px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-top:13px;
+}
+
+.feature{
+    min-height:99px;
+    background:rgba(255,255,255,.92);
+    border-radius:20px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:9px 5px;
+    box-shadow:0 5px 18px rgba(160,91,120,.06);
+}
+
+.feature-icon{
+    font-size:25px;
+    line-height:1;
+    color:#a95c7b;
+    margin-bottom:9px;
+}
+
+.feature span{
+    font-size:12px;
+    line-height:1.25;
+    color:#4c4650;
+}
+
+.welcome-spacer{
+    flex:1;
+    min-height:45px;
+}
+
+.get-started{
+    width:min(88%,500px);
+    min-height:57px;
+    border-radius:32px;
+    background:#dd78a0;
+    color:#fff;
+    font-size:17px;
+    font-weight:700;
+    box-shadow:0 9px 24px rgba(190,86,128,.20);
+    position:relative;
+    z-index:1000000;
+    pointer-events:auto;
+    touch-action:manipulation;
+}
+
+.login-text{
+    margin-top:12px;
+    font-size:13px;
+    color:#8e8189;
+}
+
+.login-text span{
+    color:#9b5271;
+    font-weight:700;
+    text-decoration:underline;
+}
+
+/* ================= APP ================= */
+
+#app{
+    display:none;
+    width:100%;
+    min-height:100dvh;
+    background:#fffafd;
+}
+
+.header{
+    width:100%;
+    min-height:119px;
+    padding:
+        calc(env(safe-area-inset-top) + 16px)
+        22px
+        14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#fffafd;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    min-width:0;
+}
+
+.header-logo{
+    width:62px;
+    height:62px;
+    object-fit:contain;
+    flex:none;
+}
+
+.brand-text h1{
+    font-size:24px;
+    line-height:1.05;
+    font-weight:800;
+}
+
+.brand-text p{
+    margin-top:7px;
+    color:#847d85;
+    font-size:14px;
+}
+
+.settings-btn{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 7px 25px rgba(80,40,60,.09);
+    font-size:25px;
+    flex:none;
+}
+
+.main{
+    padding:0 22px 125px;
+    max-width:900px;
+    margin:auto;
+}
+
+.date-card{
+    min-height:101px;
+    border-radius:25px;
+    background:#f3d9e4;
+    padding:19px 22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    overflow:hidden;
+}
+
+.date-title{
+    font-size:20px;
+    font-weight:800;
+}
+
+.date-sub{
+    margin-top:9px;
+    color:#817780;
+    font-size:14px;
+}
+
+.date-heart{
+    font-size:57px;
+    color:#ae6280;
+    font-family:Georgia,serif;
+    font-weight:300;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-top:18px;
+}
+
+.stat{
+    min-height:132px;
+    border-radius:23px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.stat:nth-child(1){background:#f0d8e3}
+.stat:nth-child(2){background:#dce8f8}
+.stat:nth-child(3){background:#dcefe6}
+.stat:nth-child(4){background:#fff0c9}
+
+.stat-icon{
+    font-size:24px;
+    margin-bottom:9px;
+}
+
+.stat-number{
+    font-size:20px;
+    font-weight:800;
+}
+
+.stat-label{
+    margin-top:7px;
+    font-size:13px;
+}
+
+.section-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:27px 2px 13px;
+}
+
+.section-head h2{
+    font-size:21px;
+    font-weight:800;
+}
+
+.see-all{
+    color:#a55373;
+    font-size:14px;
+    font-weight:700;
+}
+
+.schedule-empty{
+    background:#fff;
+    border-radius:25px;
+    min-height:211px;
+    padding:20px 11px 11px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 7px 25px rgba(60,30,50,.06);
+}
+
+.empty-heart{
+    font-family:Georgia,serif;
+    font-size:56px;
+    color:#d77fa0;
+    line-height:1;
+}
+
+.empty-title{
+    margin-top:8px;
+    font-size:16px;
+}
+
+.empty-sub{
+    margin-top:6px;
+    font-size:14px;
+    color:#999099;
+}
+
+.add-job{
+    width:100%;
+    height:59px;
+    margin-top:18px;
+    border-radius:31px;
+    background:#d77fa1;
+    color:#fff;
+    font-size:17px;
+}
+
+.quick-title{
+    margin:27px 2px 13px;
+    font-size:21px;
+    font-weight:800;
+}
+
+.quick-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.quick{
+    height:70px;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    font-size:15px;
+}
+
+.quick:nth-child(1){background:#dce8f8;color:#355c8e}
+.quick:nth-child(2){background:#dcefe6;color:#477968}
+.quick:nth-child(3){background:#f0d8e3;color:#8e526b}
+.quick:nth-child(4){background:#fff0c9;color:#8c6811}
+.quick:nth-child(5){background:#e6dcf5;color:#65418b}
+.quick:nth-child(6){background:#f5ddd7;color:#995348}
+
+.quick-icon{
+    font-size:18px;
+}
+
+.quote-card{
+    margin-top:19px;
+    width:100%;
+    height:142px;
+    border-radius:25px;
+    overflow:hidden;
+    position:relative;
+    background:#f1d4df;
+}
+
+.quote-image{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+}
+
+.quote-fallback{
+    display:none;
+    position:absolute;
+    inset:0;
+    align-items:flex-start;
+    justify-content:center;
+    padding-top:18px;
+    font-family:"Snell Roundhand","Apple Chancery",cursive;
+    font-size:26px;
+    color:#7f4e68;
+}
+
+/* ================= BOTTOM NAV ================= */
+
+.bottom-nav{
+    position:fixed;
+    z-index:1000;
+    left:14px;
+    right:14px;
+    bottom:calc(env(safe-area-inset-bottom) + 10px);
+    height:91px;
+    background:rgba(255,255,255,.97);
+    border-radius:25px;
+    box-shadow:0 8px 30px rgba(50,30,45,.10);
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    align-items:center;
+}
+
+.nav-btn{
+    height:67px;
+    margin:0 4px;
+    border-radius:18px;
+    background:transparent;
+    color:#77757c;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    font-size:11px;
+}
+
+.nav-btn.active{
+    background:#f2d8e4;
+    color:#ae5e7d;
+}
+
+.nav-icon{
+    font-size:23px;
+    line-height:1;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:430px){
+
+    .welcome-logo{
+        width:285px;
+        height:285px;
+    }
+
+    .welcome-title{
+        font-size:50px;
+    }
+
+    .feature{
+        min-height:98px;
+    }
+
+    .feature-icon{
+        font-size:22px;
+    }
+
+    .feature span{
+        font-size:11px;
+    }
+
+    .stats{
+        gap:9px;
+    }
+
+    .stat{
+        min-height:132px;
+    }
+
+    .stat-number{
+        font-size:19px;
+    }
+
+    .stat-label{
+        font-size:12px;
+    }
+}
+
+@media(max-width:370px){
+
+    .welcome-logo{
+        width:255px;
+        height:255px;
+    }
+
+    .welcome-title{
+        font-size:45px;
+    }
+
+    .feature-grid{
+        gap:5px;
+    }
+
+    .feature{
+        border-radius:16px;
+    }
+
+    .stats{
+        gap:6px;
+    }
+
+    .stat{
+        border-radius:18px;
+    }
+
+    .quick{
+        font-size:13px;
+    }
 }
 </style>
+</head>
+
+<body>
+
+<!-- ================= WELCOME SCREEN ================= -->
+
+<div id="welcomeScreen">
+
+    <div class="welcome-inner">
+
+        <img
+            class="welcome-logo"
+            src="./icon(4).png"
+            alt="Pure Shine Cleaning Manager"
+            onerror="this.src='https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/1D0A5974-7253-48B0-8BCA-2272594D29F0.png'"
+        >
+
+        <div class="welcome-title">
+            Your Cleaning<br>
+            Business, Simplified
+        </div>
+
+        <div class="welcome-heart">♡</div>
+
+        <div class="feature-grid">
+
+            <div class="feature">
+                <div class="feature-icon">▣</div>
+                <span>Manage<br>Jobs</span>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">♧</div>
+                <span>Keep Track<br>of Clients</span>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">▥</div>
+                <span>Track<br>Earnings</span>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">◷</div>
+                <span>More Time<br>for You</span>
+            </div>
+
+        </div>
+
+        <div class="welcome-spacer"></div>
+
+        <button
+            type="button"
+            id="getStarted"
+            class="get-started"
+        >
+            Get Started&nbsp; ›
+        </button>
+
+        <div class="login-text">
+            Already have an account? <span>Log in</span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MAIN APP ================= -->
+
+<div id="app">
+
+    <header class="header">
+
+        <div class="brand">
+
+            <img
+                class="header-logo"
+                src="./icon(4).png"
+                alt="Pure Shine"
+                onerror="this.src='https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/1D0A5974-7253-48B0-8BCA-2272594D29F0.png'"
+            >
+
+            <div class="brand-text">
+                <h1>Cleaning Manager</h1>
+                <p>Your cleaning business ✨</p>
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="settings-btn"
+            onclick="openSettings()"
+        >
+            ⚙️
+        </button>
+
+    </header>
+
+
+    <main class="main">
+
+        <section class="date-card">
+
+            <div>
+                <div id="dateTitle" class="date-title"></div>
+                <div class="date-sub">Let's make today productive ✨</div>
+            </div>
+
+            <div class="date-heart">♡</div>
+
+        </section>
+
+
+        <section class="stats">
+
+            <div class="stat">
+                <div class="stat-icon">🛍️</div>
+                <div class="stat-number" id="jobsNumber">0</div>
+                <div class="stat-label">Jobs</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-icon">◷</div>
+                <div class="stat-number" id="hoursNumber">0h 0m</div>
+                <div class="stat-label">Hours</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-icon">🌍</div>
+                <div class="stat-number" id="earnedNumber">£0.00</div>
+                <div class="stat-label">Earned</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-icon">☼</div>
+                <div class="stat-number">8h 0m</div>
+                <div class="stat-label">Available</div>
+            </div>
+
+        </section>
+
+
+        <div class="section-head">
+            <h2>Today's schedule</h2>
+            <span class="see-all">See all</span>
+        </div>
+
+
+        <section class="schedule-empty">
+
+            <div class="empty-heart">♡</div>
+
+            <div class="empty-title">
+                No cleaning jobs today 🌸
+            </div>
+
+            <div class="empty-sub">
+                Add one with the + button.
+            </div>
+
+            <button
+                type="button"
+                class="add-job"
+                onclick="addCleaningJob()"
+            >
+                + Add cleaning job
+            </button>
+
+        </section>
+
+
+        <h2 class="quick-title">Quick actions</h2>
+
+
+        <section class="quick-grid">
+
+            <button class="quick" onclick="startCleaning()">
+                <span class="quick-icon">◷</span>
+                <span>Start cleaning</span>
+            </button>
+
+            <button class="quick" onclick="openClients()">
+                <span class="quick-icon">♧</span>
+                <span>Clients</span>
+            </button>
+
+            <button class="quick" onclick="openSchedule()">
+                <span class="quick-icon">▣</span>
+                <span>Schedule</span>
+            </button>
+
+            <button class="quick" onclick="findFreeTime()">
+                <span class="quick-icon">⌕</span>
+                <span>Find free time</span>
+            </button>
+
+            <button class="quick" onclick="openEarnings()">
+                <span class="quick-icon">▥</span>
+                <span>Earnings</span>
+            </button>
+
+            <button class="quick" onclick="openHolidays()">
+                <span class="quick-icon">♧</span>
+                <span>Holidays</span>
+            </button>
+
+        </section>
+
+
+        <section class="quote-card">
+
+            <img
+                class="quote-image"
+                src="./pure-shine-pink-flowers-quote.png"
+                alt="A clean space is a happy place"
+                onerror="
+                    this.style.display='none';
+                    document.getElementById('quoteFallback').style.display='flex';
+                "
+            >
+
+            <div id="quoteFallback" class="quote-fallback">
+                A clean space is a happy place
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <nav class="bottom-nav">
+
+        <button class="nav-btn active" onclick="goHome(this)">
+            <span class="nav-icon">⌂</span>
+            <span>Home</span>
+        </button>
+
+        <button class="nav-btn" onclick="openSchedule(this)">
+            <span class="nav-icon">▣</span>
+            <span>Schedule</span>
+        </button>
+
+        <button class="nav-btn" onclick="openClients(this)">
+            <span class="nav-icon">♧</span>
+            <span>Clients</span>
+        </button>
+
+        <button class="nav-btn" onclick="findFreeTime(this)">
+            <span class="nav-icon">◷</span>
+            <span>Free time</span>
+        </button>
+
+        <button class="nav-btn" onclick="openEarnings(this)">
+            <span class="nav-icon">▥</span>
+            <span>Earnings</span>
+        </button>
+
+    </nav>
+
+</div>
+
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+"use strict";
 
-    const getStarted =
-        document.getElementById("getStarted") ||
-        document.querySelector("#welcomeScreen .get-started") ||
-        document.querySelector("#welcomeScreen button");
+/* =========================================================
+   GET STARTED — FIXED FOR IPHONE / SAFARI
+   ========================================================= */
 
-    if (getStarted) {
-        getStarted.style.pointerEvents = "auto";
-        getStarted.style.position = "relative";
-        getStarted.style.zIndex = "100001";
+function startPureShineApp(){
 
-        getStarted.addEventListener("touchend", function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            startPureShineApp();
-        }, { passive: false });
-
-        getStarted.addEventListener("click", function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            startPureShineApp();
-        });
-    }
-});
-
-function startPureShineApp() {
-    localStorage.setItem("pureShineStarted", "true");
+    localStorage.setItem("pureShineStarted","true");
 
     const welcome = document.getElementById("welcomeScreen");
-
-    if (welcome) {
-        welcome.style.pointerEvents = "none";
-        welcome.style.opacity = "0";
-        welcome.style.transition = "opacity .35s ease";
-
-        setTimeout(function () {
-            welcome.style.display = "none";
-            welcome.style.visibility = "hidden";
-        }, 350);
-    }
-
     const app = document.getElementById("app");
 
-    if (app) {
-        app.style.display = "block";
-        app.style.visibility = "visible";
-        app.style.opacity = "1";
-        app.style.pointerEvents = "auto";
+    if(welcome){
+        welcome.classList.add("hidden");
+
+        setTimeout(function(){
+            welcome.style.display="none";
+        },360);
     }
 
-    window.scrollTo(0, 0);
+    if(app){
+        app.style.display="block";
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:"instant"
+    });
+}
+
+
+document.addEventListener("DOMContentLoaded",function(){
+
+    const button=document.getElementById("getStarted");
+
+    if(button){
+
+        button.addEventListener("click",function(event){
+            event.preventDefault();
+            event.stopPropagation();
+            startPureShineApp();
+        });
+
+        button.addEventListener("touchend",function(event){
+            event.preventDefault();
+            event.stopPropagation();
+            startPureShineApp();
+        },{passive:false});
+    }
+
+    updateDate();
+    updateStats();
+
+    /* Force images to load after Safari has painted the page */
+    document.querySelectorAll("img").forEach(function(img){
+        const src=img.getAttribute("src");
+
+        if(src){
+            const preload=new Image();
+            preload.src=src;
+        }
+    });
+});
+
+
+/* =========================================================
+   DATE
+   ========================================================= */
+
+function updateDate(){
+
+    const now=new Date();
+
+    const days=[
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+    ];
+
+    const months=[
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ];
+
+    const el=document.getElementById("dateTitle");
+
+    if(el){
+        el.textContent=
+            days[now.getDay()]+" "+
+            now.getDate()+" "+
+            months[now.getMonth()];
+    }
+}
+
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+function updateStats(){
+
+    let jobs=[];
+
+    try{
+        jobs=JSON.parse(
+            localStorage.getItem("pureShineJobs") || "[]"
+        );
+    }catch(e){
+        jobs=[];
+    }
+
+    let totalMinutes=0;
+    let totalEarned=0;
+
+    jobs.forEach(function(job){
+
+        if(job.minutes){
+            totalMinutes+=Number(job.minutes);
+        }
+
+        if(job.amount){
+            totalEarned+=Number(job.amount);
+        }
+    });
+
+    const h=Math.floor(totalMinutes/60);
+    const m=totalMinutes%60;
+
+    document.getElementById("jobsNumber").textContent=jobs.length;
+    document.getElementById("hoursNumber").textContent=h+"h "+m+"m";
+    document.getElementById("earnedNumber").textContent=
+        "£"+totalEarned.toFixed(2);
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+function addCleaningJob(){
+    alert("Add cleaning job");
+}
+
+function startCleaning(){
+    alert("Start cleaning");
+}
+
+function openClients(){
+    alert("Clients");
+}
+
+function openSchedule(){
+    alert("Schedule");
+}
+
+function findFreeTime(){
+    alert("Find free time");
+}
+
+function openEarnings(){
+    alert("Earnings");
+}
+
+function openHolidays(){
+    alert("Holidays");
+}
+
+function openSettings(){
+    alert("Settings");
+}
+
+function goHome(){
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 }
 </script>
+
+</body>
+</html>
