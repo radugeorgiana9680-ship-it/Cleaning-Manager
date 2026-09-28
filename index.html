@@ -1,3452 +1,2803 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#e58aaa">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pure Shine">
 <title>Pure Shine Cleaning Manager</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;1,400;1,500&family=Parisienne&display=swap" rel="stylesheet">
 
 <style>
 :root{
-    --pink:#e985a5;
-    --pink-dark:#bd5474;
-    --pink-light:#f9dbe7;
-    --pink-bg:#fff3f7;
-    --text:#171717;
-    --muted:#77737a;
-    --white:#fff;
+--pink:#e88aaa;
+--rose:#bd3d69;
+--ink:#211d22;
+--muted:#77717a;
 }
 
 *{
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent
 }
 
-html,
-body{
-    margin:0;
-    padding:0;
-    width:100%;
-    min-height:100%;
-    background:#f8dce8;
-    color:var(--text);
-    font-family:"DM Sans",Arial,sans-serif;
+html,body{
+margin:0;
+min-height:100%;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+background:#fff7fa;
+color:var(--ink)
 }
 
-body{
-    overflow-x:hidden;
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+#welcome{
+position:fixed;
+inset:0;
+z-index:1000;
+background:#fff1f6;
+overflow:hidden
 }
 
-button,
-input,
-select{
-    font-family:inherit;
+#welcomeArt{
+position:absolute;
+inset:0;
+width:100%;
+height:100%;
+object-fit:cover;
+object-position:center;
+display:block
 }
 
-button{
-    border:0;
-    cursor:pointer;
+#welcomeClick{
+position:absolute;
+z-index:3;
+left:7%;
+right:7%;
+bottom:7%;
+height:10%;
+border:0;
+background:transparent;
+border-radius:50px
 }
 
-/* =========================================================
-   APP
-========================================================= */
-
-.app{
-    width:100%;
-    max-width:430px;
-    min-height:100vh;
-    margin:auto;
-    position:relative;
-    overflow:hidden;
-    background:#fff5f8;
+#app{
+display:none;
+min-height:100vh;
+padding-bottom:105px;
+background:linear-gradient(180deg,#fffafd,#fff6fa 75%,#fff9fb)
 }
 
-/* =========================================================
-   WELCOME SCREEN
-========================================================= */
-
-#welcomeScreen{
-    position:fixed;
-    inset:0;
-    z-index:500;
-    width:100%;
-    max-width:430px;
-    margin:auto;
-    overflow:hidden;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,248,250,.18) 0%,
-            rgba(255,239,245,.35) 58%,
-            rgba(255,226,236,.92) 100%
-        ),
-        url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1200&q=90");
-    background-size:cover;
-    background-position:center;
+.inner{
+max-width:540px;
+margin:auto;
+padding:18px 16px 28px
 }
 
-#welcomeScreen:before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,.05) 0%,
-            rgba(255,244,248,.08) 40%,
-            rgba(255,222,234,.76) 100%
-        );
-    pointer-events:none;
+.header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:4px 2px 15px
 }
 
-.welcome-content{
-    position:relative;
-    z-index:2;
-    width:100%;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:
-        max(70px,env(safe-area-inset-top))
-        26px
-        max(22px,env(safe-area-inset-bottom));
+.brand{
+display:flex;
+align-items:center;
+gap:12px
 }
 
-/* EXACT LARGE LOGO AREA */
-
-.welcome-logo{
-    width:292px;
-    height:292px;
-    border-radius:50%;
-    margin-top:25px;
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:
-        radial-gradient(
-            circle at 38% 27%,
-            rgba(255,255,255,.98) 0 3%,
-            transparent 3.5%
-        ),
-        radial-gradient(
-            circle at 68% 25%,
-            rgba(255,255,255,.72) 0 2%,
-            transparent 2.7%
-        ),
-        linear-gradient(
-            145deg,
-            #fff4d6 0%,
-            #f9c9d9 36%,
-            #efadc5 72%,
-            #e69ab8 100%
-        );
-    border:3px solid #d9a85f;
-    box-shadow:
-        0 4px 0 rgba(255,255,255,.8) inset,
-        0 0 0 5px rgba(255,255,255,.28),
-        0 8px 28px rgba(167,88,113,.17);
+.logo{
+width:56px;
+height:56px;
+border-radius:18px;
+object-fit:cover;
+display:block;
+box-shadow:0 4px 12px rgba(182,91,120,.12)
 }
 
-.welcome-logo:before{
-    content:"";
-    position:absolute;
-    width:245px;
-    height:245px;
-    border-radius:50%;
-    border:2px solid rgba(207,151,73,.75);
+.brand h1{
+margin:0;
+font-size:22px;
+letter-spacing:-.6px
 }
 
-.welcome-logo:after{
-    content:"";
-    position:absolute;
-    width:207px;
-    height:207px;
-    border-radius:50%;
-    border:1px solid rgba(255,255,255,.7);
+.sub{
+margin-top:4px;
+color:#77717a;
+font-size:14px
 }
 
-.logo-house{
-    position:absolute;
-    top:48px;
-    left:91px;
-    width:110px;
-    height:84px;
-    z-index:2;
+.settingsBtn{
+width:48px;
+height:48px;
+border:0;
+border-radius:50%;
+background:#fff;
+color:#9f4565;
+display:flex;
+align-items:center;
+justify-content:center;
+box-shadow:0 6px 20px rgba(155,97,112,.08)
 }
 
-.logo-house .roof{
-    position:absolute;
-    width:74px;
-    height:74px;
-    left:18px;
-    top:9px;
-    border-left:8px solid #c78b57;
-    border-top:8px solid #c78b57;
-    transform:rotate(45deg);
+.settingsBtn svg{
+width:25px;
+height:25px
 }
 
-.logo-house .wall{
-    position:absolute;
-    left:28px;
-    top:42px;
-    width:59px;
-    height:48px;
-    background:rgba(255,244,221,.9);
-    border:5px solid #c78b57;
+.date{
+position:relative;
+overflow:hidden;
+border-radius:22px;
+padding:16px 18px;
+background:
+linear-gradient(
+100deg,
+rgba(255,219,232,.94),
+rgba(249,226,243,.80)
+),
+url("pure-shine-cleaning-background(3).png") center/cover;
+margin-bottom:16px
 }
 
-.logo-house .window{
-    position:absolute;
-    left:48px;
-    top:51px;
-    width:14px;
-    height:14px;
-    background:#d99c55;
-    box-shadow:
-        20px 0 #d99c55,
-        0 20px #d99c55,
-        20px 20px #d99c55;
+.date b{
+font-size:18px
 }
 
-.logo-spray{
-    position:absolute;
-    right:47px;
-    top:75px;
-    width:43px;
-    height:65px;
-    border:4px solid #c98967;
-    border-radius:6px 6px 13px 13px;
-    transform:rotate(4deg);
-    background:linear-gradient(180deg,#f7d6dc,#efaec1);
-    z-index:3;
+.date div{
+margin-top:4px;
+color:#776b74;
+font-size:14px
 }
 
-.logo-spray:before{
-    content:"";
-    position:absolute;
-    width:27px;
-    height:13px;
-    top:-17px;
-    left:6px;
-    border:4px solid #c98967;
-    border-bottom:0;
-    border-radius:7px 7px 0 0;
+.heart{
+position:absolute;
+right:16px;
+top:13px;
+color:#d46b91;
+font-size:30px
 }
-
-.logo-spray:after{
-    content:"";
-    position:absolute;
-    width:22px;
-    height:5px;
-    top:-20px;
-    right:17px;
-    background:#c98967;
-    transform:rotate(-18deg);
-    border-radius:5px;
-}
-
-.logo-bottle{
-    position:absolute;
-    right:85px;
-    top:88px;
-    width:30px;
-    height:47px;
-    background:#e9a4ba;
-    border:3px solid #bf8069;
-    border-radius:4px 4px 8px 8px;
-    z-index:2;
-}
-
-.logo-bottle:before{
-    content:"";
-    position:absolute;
-    width:20px;
-    height:9px;
-    top:-11px;
-    left:2px;
-    background:#c6866d;
-    border-radius:3px;
-}
-
-.logo-sparkle{
-    position:absolute;
-    color:#c79650;
-    font-size:28px;
-    z-index:4;
-}
-
-.sparkle-one{
-    left:65px;
-    top:40px;
-}
-
-.sparkle-two{
-    right:63px;
-    top:38px;
-    font-size:21px;
-}
-
-.sparkle-three{
-    left:78px;
-    top:93px;
-    font-size:13px;
-}
-
-.logo-name{
-    position:absolute;
-    z-index:10;
-    top:116px;
-    left:0;
-    width:100%;
-    text-align:center;
-    color:#ad7047;
-}
-
-.logo-name .pure{
-    display:block;
-    font-family:"Playfair Display",serif;
-    font-size:31px;
-    letter-spacing:1px;
-    font-weight:400;
-}
-
-.logo-name .shine{
-    display:block;
-    font-family:"Parisienne",cursive;
-    font-size:52px;
-    line-height:.8;
-    margin-top:-2px;
-}
-
-.logo-name .heart{
-    font-family:Arial,sans-serif;
-    font-size:24px;
-    vertical-align:middle;
-    margin-left:4px;
-}
-
-.logo-bottom{
-    position:absolute;
-    z-index:10;
-    bottom:40px;
-    width:100%;
-    text-align:center;
-    color:#986c54;
-    font-size:8px;
-    letter-spacing:2.2px;
-}
-
-/* WELCOME SCRIPT */
-
-.welcome-title{
-    position:relative;
-    z-index:3;
-    margin-top:17px;
-    color:#9c5266;
-    font-family:"Parisienne",cursive;
-    font-size:51px;
-    line-height:.94;
-    text-align:center;
-    text-shadow:0 1px 0 rgba(255,255,255,.55);
-}
-
-.welcome-heart{
-    color:#c66e83;
-    font-family:Arial,sans-serif;
-    font-size:45px;
-    line-height:1;
-    margin-top:3px;
-}
-
-/* FEATURE TILES */
-
-.welcome-features{
-    width:100%;
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:8px;
-    margin-top:17px;
-}
-
-.welcome-feature{
-    min-height:105px;
-    border-radius:17px;
-    background:rgba(255,255,255,.37);
-    border:1px solid rgba(255,255,255,.38);
-    backdrop-filter:blur(3px);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    color:#252126;
-}
-
-.welcome-feature svg{
-    width:32px;
-    height:32px;
-    margin-bottom:8px;
-    color:#ae5871;
-    stroke-width:1.7;
-}
-
-.welcome-feature span{
-    font-size:13px;
-    line-height:1.18;
-}
-
-/* WELCOME BUTTON */
-
-.get-started{
-    width:calc(100% - 30px);
-    height:64px;
-    margin-top:auto;
-    margin-bottom:13px;
-    border-radius:35px;
-    background:linear-gradient(90deg,#df7c9b,#e77f9f);
-    color:white;
-    font-size:20px;
-    box-shadow:0 8px 20px rgba(193,77,111,.19);
-}
-
-.get-started span{
-    font-size:28px;
-    vertical-align:-2px;
-    margin-left:7px;
-}
-
-.login-text{
-    margin-bottom:5px;
-    color:#685c63;
-    font-size:16px;
-}
-
-.login-text a{
-    color:#b44f6e;
-    font-weight:600;
-    text-decoration:underline;
-}
-
-/* =========================================================
-   MAIN APP
-========================================================= */
-
-#mainApp{
-    display:none;
-    min-height:100vh;
-    background:
-        radial-gradient(
-            circle at 100% 0%,
-            rgba(255,255,255,.9),
-            transparent 30%
-        ),
-        linear-gradient(
-            180deg,
-            #fff7fa 0%,
-            #fdf0f5 100%
-        );
-}
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.app-header{
-    padding:29px 20px 16px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
-
-.header-brand{
-    display:flex;
-    align-items:center;
-    gap:11px;
-}
-
-.small-logo{
-    width:66px;
-    height:66px;
-    min-width:66px;
-    border-radius:50%;
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:
-        linear-gradient(
-            145deg,
-            #fff6dc,
-            #f5c5d6 45%,
-            #ecaac2
-        );
-    border:2px solid #d5a25f;
-    box-shadow:
-        inset 0 0 0 3px rgba(255,255,255,.5),
-        0 3px 10px rgba(170,89,116,.12);
-}
-
-.small-logo:before{
-    content:"✦";
-    position:absolute;
-    left:13px;
-    top:9px;
-    color:#c89551;
-    font-size:9px;
-}
-
-.small-logo:after{
-    content:"✦";
-    position:absolute;
-    right:11px;
-    top:13px;
-    color:#c89551;
-    font-size:7px;
-}
-
-.small-logo-text{
-    text-align:center;
-    color:#aa6077;
-    line-height:.9;
-}
-
-.small-logo-text strong{
-    display:block;
-    font-family:"Playfair Display",serif;
-    font-size:7px;
-    letter-spacing:.4px;
-}
-
-.small-logo-text span{
-    display:block;
-    font-family:"Parisienne",cursive;
-    font-size:20px;
-}
-
-.header-copy h1{
-    margin:0 0 4px;
-    font-size:23px;
-    line-height:1;
-    letter-spacing:-.6px;
-}
-
-.header-copy p{
-    margin:0;
-    color:#6d6870;
-    font-size:14px;
-}
-
-.notification{
-    width:43px;
-    height:43px;
-    border-radius:50%;
-    background:rgba(255,255,255,.65);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#171717;
-}
-
-/* =========================================================
-   DATE PHOTO BANNER
-========================================================= */
-
-.date-card{
-    height:84px;
-    margin:0 20px 17px;
-    border-radius:18px;
-    overflow:hidden;
-    position:relative;
-    display:flex;
-    align-items:center;
-    padding:12px 16px;
-    gap:13px;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(249,213,226,.97) 0%,
-            rgba(250,215,227,.91) 57%,
-            rgba(250,215,227,.66) 100%
-        ),
-        url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=85");
-    background-size:cover;
-    background-position:center;
-}
-
-.date-card:after{
-    content:"🌸";
-    position:absolute;
-    right:9px;
-    bottom:-8px;
-    font-size:38px;
-    opacity:.8;
-}
-
-.date-calendar{
-    width:39px;
-    height:39px;
-    color:#923c59;
-    z-index:2;
-}
-
-.date-copy{
-    flex:1;
-    z-index:2;
-}
-
-.date-copy strong{
-    display:block;
-    font-size:16px;
-    margin-bottom:3px;
-}
-
-.date-copy span{
-    display:block;
-    color:#676169;
-    font-size:14px;
-}
-
-.date-heart{
-    z-index:3;
-    color:#c75b7b;
-    font-size:31px;
-}
-
-/* =========================================================
-   FOUR STATS
-========================================================= */
 
 .stats{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:8px;
-    padding:0 20px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:9px;
+margin-bottom:18px
 }
 
 .stat{
-    height:119px;
-    border-radius:17px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
+min-height:116px;
+border-radius:20px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center
 }
 
-.stat.jobs{
-    background:#fbdce7;
+.stat .ico{
+font-size:25px;
+margin-bottom:4px
 }
 
-.stat.hours{
-    background:#e0e7fa;
-}
-
-.stat.earned{
-    background:#dcf1e4;
-}
-
-.stat.available{
-    background:#fff0c9;
-}
-
-.stat svg{
-    width:28px;
-    height:28px;
-    margin-bottom:7px;
-}
-
-.stat.jobs svg{color:#8c2748;}
-.stat.hours svg{color:#162e59;}
-.stat.earned svg{color:#256746;}
-.stat.available svg{color:#a17012;}
-
-.stat strong{
-    font-size:20px;
-    line-height:1;
+.stat b{
+font-size:19px
 }
 
 .stat span{
-    font-size:14px;
-    margin-top:4px;
+font-size:12px;
+color:#655c63;
+margin-top:3px
 }
 
-/* =========================================================
-   SECTION
-========================================================= */
+.s1{background:#ffdce8}
+.s2{background:#e5e5ff}
+.s3{background:#dcf4e6}
+.s4{background:#fff0c9}
 
-.section-head{
-    padding:0 20px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-top:21px;
-    margin-bottom:11px;
+.section{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin:18px 3px 11px
 }
 
-.section-head h2{
-    margin:0;
-    font-size:20px;
-    letter-spacing:-.4px;
+.section h2{
+margin:0;
+font-size:21px;
+letter-spacing:-.5px
 }
 
-.section-head button{
-    background:none;
-    color:#a84e6e;
-    font-size:14px;
-    font-weight:600;
-}
-
-/* =========================================================
-   TODAY CARD
-========================================================= */
-
-.today-box{
-    margin:0 20px;
-    min-height:215px;
-    border-radius:20px;
-    background:rgba(255,255,255,.89);
-    box-shadow:0 6px 18px rgba(183,105,132,.07);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:17px;
-}
-
-.today-empty{
-    width:100%;
-}
-
-.today-icon{
-    width:62px;
-    height:62px;
-    color:#df748f;
-    margin-bottom:6px;
-}
-
-.today-empty h3{
-    margin:0;
-    font-size:17px;
-    font-weight:500;
-}
-
-.today-empty p{
-    margin:4px 0 16px;
-    color:#77727a;
-    font-size:14px;
-}
-
-.add-cleaning{
-    width:100%;
-    height:50px;
-    border-radius:28px;
-    background:#e77d9d;
-    color:white;
-    font-size:16px;
-}
-
-/* =========================================================
-   QUICK ACTIONS
-========================================================= */
-
-.quick-head{
-    padding:0 20px;
-    margin:19px 0 11px;
-    font-size:20px;
-}
-
-.quick-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-    padding:0 20px;
-}
-
-.quick{
-    height:64px;
-    border-radius:15px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:9px;
-    font-size:14px;
-    color:#222;
-}
-
-.quick svg{
-    width:27px;
-    height:27px;
-}
-
-.quick.blue{
-    background:#dce9fc;
-    color:#174779;
-}
-
-.quick.green{
-    background:#dcf1e5;
-    color:#246a4b;
-}
-
-.quick.pink{
-    background:#f9d9e6;
-    color:#79203e;
-}
-
-.quick.yellow{
-    background:#fff0c7;
-    color:#7d5b0c;
-}
-
-.quick.purple{
-    background:#e9daf9;
-    color:#63328b;
-}
-
-.quick.peach{
-    background:#ffe0da;
-    color:#a64836;
-}
-
-/* =========================================================
-   QUOTE / CLEANING PHOTO
-========================================================= */
-
-.quote-card{
-    height:118px;
-    margin:17px 20px 20px;
-    border-radius:17px;
-    overflow:hidden;
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(250,215,225,.93) 0%,
-            rgba(250,218,227,.77) 65%,
-            rgba(250,218,227,.4) 100%
-        ),
-        url("https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=1100&q=90");
-    background-size:cover;
-    background-position:center;
-}
-
-.quote-card:after{
-    content:"🌸";
-    position:absolute;
-    right:3px;
-    bottom:-15px;
-    font-size:80px;
-    opacity:.6;
-}
-
-.quote{
-    position:relative;
-    z-index:2;
-    text-align:center;
-    color:#9d5268;
-    font-family:"Parisienne",cursive;
-    font-size:32px;
-    line-height:.9;
-}
-
-.quote-left,
-.quote-right{
-    position:absolute;
-    z-index:3;
-    color:#d47790;
-    font-family:Arial,sans-serif;
-    font-size:28px;
-}
-
-.quote-left{
-    left:25px;
-    top:37px;
-}
-
-.quote-right{
-    right:151px;
-    bottom:21px;
-}
-
-/* =========================================================
-   BOTTOM NAV
-========================================================= */
-
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:50%;
-    transform:translateX(-50%);
-    width:min(430px,100%);
-    height:83px;
-    background:rgba(255,255,255,.96);
-    border-top:1px solid #eee5e9;
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    z-index:100;
-    backdrop-filter:blur(15px);
-}
-
-.nav{
-    position:relative;
-    background:transparent;
-    color:#777b84;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:3px;
-    font-size:11px;
-}
-
-.nav svg{
-    width:27px;
-    height:27px;
-}
-
-.nav.active{
-    color:#c34f73;
-}
-
-.nav.active:before{
-    content:"";
-    position:absolute;
-    width:61px;
-    height:50px;
-    border-radius:15px;
-    background:#f9dce8;
-    z-index:-1;
-}
-
-/* =========================================================
-   OTHER PAGES
-========================================================= */
-
-.page{
-    display:none;
-    min-height:calc(100vh - 83px);
-    padding-bottom:95px;
-}
-
-.page.active{
-    display:block;
-}
-
-.page-inner{
-    padding:25px 20px;
-}
-
-.page-title{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-}
-
-.page-title h2{
-    margin:0;
-    font-size:28px;
-}
-
-.home-button{
-    width:43px;
-    height:43px;
-    border-radius:50%;
-    background:white;
-    font-size:21px;
-}
-
-.calendar{
-    background:white;
-    border-radius:20px;
-    padding:18px;
-    box-shadow:0 6px 18px rgba(183,105,132,.07);
-}
-
-.calendar-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:17px;
-}
-
-.calendar-head strong{
-    font-size:18px;
-}
-
-.calendar-buttons{
-    display:flex;
-    gap:5px;
-}
-
-.calendar-buttons button{
-    width:34px;
-    height:34px;
-    border-radius:50%;
-    background:#f9dce7;
-    color:#a34b6a;
-}
-
-.weekdays,
-.calendar-grid{
-    display:grid;
-    grid-template-columns:repeat(7,1fr);
-    gap:4px;
-}
-
-.weekdays div{
-    text-align:center;
-    color:#999;
-    font-size:10px;
-    font-weight:600;
-}
-
-.day{
-    height:43px;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    font-size:13px;
-}
-
-.day.muted{
-    color:#ccc;
-}
-
-.day.today{
-    background:#ed95af;
-    color:white;
-    font-weight:700;
-}
-
-.day.has-job:after{
-    content:"";
-    position:absolute;
-    bottom:4px;
-    width:5px;
-    height:5px;
-    border-radius:50%;
-    background:#d05c7e;
-}
-
-.list{
-    margin-top:14px;
-    display:flex;
-    flex-direction:column;
-    gap:9px;
+.see{
+color:#b83b68;
+font-size:14px;
+font-weight:700
 }
 
 .card{
-    background:white;
-    border-radius:17px;
-    padding:15px;
-    box-shadow:0 6px 18px rgba(183,105,132,.07);
+background:#fff;
+border-radius:23px;
+padding:13px;
+box-shadow:0 7px 24px rgba(124,80,99,.06)
 }
 
-/* CLIENTS */
-
-.client{
-    display:flex;
-    align-items:center;
-    gap:12px;
+.job{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px;
+border-radius:19px;
+margin-bottom:8px
 }
 
-.avatar{
-    width:48px;
-    height:48px;
-    border-radius:50%;
-    background:#f9dce7;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#a84e6d;
-    font-weight:700;
+.job:last-child{
+margin-bottom:0
 }
 
-.client-info{
-    flex:1;
+.jp{background:#fff0f6}
+.jb{background:#e9f7fb}
+
+.job strong{
+font-size:16px
 }
 
-.client-info strong{
-    display:block;
+.job small{
+display:block;
+color:#7d747c;
+margin-top:4px
 }
 
-.client-info span{
-    color:#888;
-    font-size:12px;
+.price{
+font-size:18px;
+font-weight:700
 }
 
-.rate{
-    color:#b55575;
-    font-weight:700;
+.empty{
+text-align:center;
+padding:25px 10px;
+background:
+linear-gradient(
+105deg,
+rgba(255,255,255,.90),
+rgba(255,241,247,.78)
+),
+url("pure-shine-cleaning-background(3).png") center/cover;
+border-radius:18px
 }
 
-/* EARNINGS */
-
-.total{
-    background:linear-gradient(135deg,#e7ddf7,#f6ebfb);
-    border-radius:20px;
-    text-align:center;
-    padding:25px;
+.empty .big{
+font-size:38px;
+color:#eb8dac
 }
 
-.total span{
-    color:#716878;
+.empty small{
+display:block;
+color:#8a8188;
+margin-top:5px
 }
 
-.total strong{
-    display:block;
-    font-size:38px;
-    margin-top:4px;
+.pinkBtn{
+width:100%;
+border:0;
+border-radius:23px;
+padding:15px;
+background:linear-gradient(135deg,#ed91b1,#d979a0);
+color:#fff;
+font-weight:700;
+margin-top:13px
 }
 
-.earning{
-    margin-top:9px;
-    background:white;
-    border-radius:16px;
-    padding:16px;
-    display:flex;
-    justify-content:space-between;
+.quick{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:9px
 }
 
-/* SETTINGS */
-
-.settings{
-    display:flex;
-    flex-direction:column;
-    gap:9px;
+.quick button{
+border:0;
+min-height:64px;
+border-radius:18px;
+font-weight:700;
+font-size:14px
 }
 
-.setting{
-    background:white;
-    border-radius:17px;
-    padding:16px;
-    display:flex;
-    align-items:center;
-    gap:13px;
+.qb{background:#dceffd;color:#165b96}
+.qg{background:#dcf3e6;color:#257151}
+.qp{background:#ffdce8;color:#8b2850}
+.qy{background:#fff0c9;color:#705719}
+.ql{background:#eadcf9;color:#65318e}
+.qo{background:#ffe2d8;color:#a54c2b}
+
+.quote{
+margin-top:15px;
+border-radius:20px;
+padding:17px;
+background:
+linear-gradient(
+105deg,
+rgba(255,240,243,.90),
+rgba(255,224,232,.64)
+),
+url("pure-shine-cleaning-background(3).png") center/cover;
+display:flex;
+align-items:center;
+justify-content:space-between;
+overflow:hidden
 }
 
-.setting-icon{
-    width:43px;
-    height:43px;
-    border-radius:13px;
-    background:#f9dce7;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:19px;
+.quoteText{
+flex:1;
+text-align:center;
+font-family:"Brush Script MT","Segoe Script",cursive;
+font-size:22px;
+line-height:1.1;
+color:#895469
 }
 
-.setting-text{
-    flex:1;
+.quoteFlower{
+font-size:34px
 }
 
-.setting-text strong{
-    display:block;
+.bottom{
+position:fixed;
+z-index:30;
+display:none;
+bottom:max(10px,env(safe-area-inset-bottom));
+left:50%;
+transform:translateX(-50%);
+width:min(500px,calc(100% - 28px));
+padding:8px;
+border-radius:28px;
+background:rgba(255,255,255,.97);
+border:1px solid #f1dfe6;
+box-shadow:0 10px 28px rgba(141,82,101,.09)
 }
 
-.setting-text span{
-    display:block;
-    color:#888;
-    font-size:12px;
-    margin-top:3px;
+.bottom.show{
+display:flex
 }
 
-/* =========================================================
-   MODAL
-========================================================= */
+.nav{
+flex:1;
+border:0;
+background:transparent;
+border-radius:18px;
+padding:8px 2px;
+color:#77717a;
+font-size:10px
+}
+
+.nav span{
+display:block;
+font-size:21px;
+margin-bottom:4px
+}
+
+.nav.active{
+background:#ffe1ec;
+color:#bd3d69
+}
+
+.overlay{
+position:fixed;
+inset:0;
+z-index:2000;
+display:none;
+align-items:flex-end;
+background:rgba(30,20,25,.43);
+backdrop-filter:blur(3px)
+}
+
+.overlay.show{
+display:flex
+}
 
 .modal{
-    position:fixed;
-    inset:0;
-    z-index:300;
-    background:rgba(40,20,30,.35);
-    display:none;
-    align-items:flex-end;
-    justify-content:center;
-    backdrop-filter:blur(4px);
+width:100%;
+max-width:540px;
+max-height:92vh;
+overflow:auto;
+margin:auto;
+background:#fff;
+border-radius:30px 30px 0 0;
+padding:20px 18px 34px
 }
 
-.modal.show{
-    display:flex;
+.modalHead{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:15px
 }
 
-.modal-box{
-    width:min(430px,100%);
-    background:#fff8fa;
-    border-radius:28px 28px 0 0;
-    padding:23px 20px 28px;
-    max-height:90vh;
-    overflow:auto;
-}
-
-.modal-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:18px;
-}
-
-.modal-head h3{
-    margin:0;
-    font-size:21px;
+.modalHead h2{
+margin:0;
+font-size:24px
 }
 
 .close{
-    width:38px;
-    height:38px;
-    border-radius:50%;
-    background:#f7dfe7;
-    font-size:23px;
+width:46px;
+height:46px;
+border:0;
+border-radius:50%;
+background:#f4f0f7;
+color:#b83467;
+font-size:28px
 }
 
-.form-group{
-    margin-bottom:14px;
+label{
+display:block;
+font-weight:700;
+margin:13px 0 7px
 }
 
-.form-group label{
-    display:block;
-    margin-bottom:6px;
-    font-size:13px;
-    font-weight:600;
+input,select{
+width:100%;
+padding:14px;
+border:2px solid #e4deeb;
+border-radius:17px;
+background:#fff;
+font-size:16px;
+outline:0
 }
 
-.form-group input,
-.form-group select{
-    width:100%;
-    height:49px;
-    border:1px solid #ecd9e1;
-    border-radius:13px;
-    background:white;
-    padding:0 13px;
-    outline:none;
+.row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px
 }
 
-.save{
-    width:100%;
-    height:51px;
-    border-radius:27px;
-    background:#e57d9d;
-    color:white;
+.secondary{
+border:0;
+border-radius:16px;
+padding:10px 12px;
+background:#f0ebf6;
+color:#6c5968;
+font-weight:700
 }
 
-/* =========================================================
-   MOBILE
-========================================================= */
+.danger{
+background:#fff0f4;
+color:#c12f59
+}
 
-@media(max-width:380px){
+.list{
+padding:14px;
+border-radius:19px;
+background:#faf9fc;
+border:1px solid #eee8f1;
+margin-bottom:9px
+}
 
-    .welcome-logo{
-        width:255px;
-        height:255px;
-    }
+.listTitle{
+font-size:17px;
+font-weight:700
+}
 
-    .welcome-logo:before{
-        width:215px;
-        height:215px;
-    }
+.muted{
+color:#7e757d;
+font-size:13px;
+margin-top:4px
+}
 
-    .welcome-logo:after{
-        width:182px;
-        height:182px;
-    }
+.actions{
+display:flex;
+gap:7px;
+flex-wrap:wrap;
+margin-top:10px
+}
 
-    .logo-house{
-        transform:scale(.88);
-        transform-origin:center;
-    }
+.badge{
+display:inline-block;
+padding:4px 8px;
+border-radius:10px;
+font-size:11px;
+margin-left:4px;
+font-weight:700
+}
 
-    .logo-name .pure{
-        font-size:27px;
-    }
+.private{
+background:#ffe1ec;
+color:#8d3155
+}
 
-    .logo-name .shine{
-        font-size:47px;
-    }
+.agency{
+background:#dff2fa;
+color:#28617d
+}
 
-    .welcome-title{
-        font-size:44px;
-    }
+.tabs{
+display:flex;
+gap:8px;
+margin-bottom:12px
+}
 
-    .welcome-feature{
-        min-height:96px;
-    }
+.tab{
+flex:1;
+border:0;
+border-radius:15px;
+padding:11px;
+background:#eee9f4;
+font-weight:700
+}
 
-    .welcome-feature span{
-        font-size:11px;
-    }
+.tab.active{
+background:#ed91b1;
+color:#fff
+}
 
-    .header-copy h1{
-        font-size:21px;
-    }
+.timer{
+text-align:center;
+font-size:46px;
+font-weight:800;
+padding:28px 0
+}
 
-    .header-copy p{
-        font-size:12px;
-    }
+.note{
+padding:12px 14px;
+border-radius:16px;
+background:#fff8df;
+color:#6e5a22;
+font-size:13px;
+margin:10px 0
+}
 
-    .small-logo{
-        width:60px;
-        height:60px;
-        min-width:60px;
-    }
+.slot{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:13px;
+background:#fff1f6;
+border-radius:16px;
+margin:8px 0
+}
 
-    .stat{
-        height:108px;
-    }
+.small{
+border:0;
+border-radius:15px;
+padding:8px 10px;
+background:#ffe0eb;
+color:#bd3d69;
+font-weight:700
+}
 
-    .stat strong{
-        font-size:18px;
-    }
+.earn{
+padding:18px;
+border-radius:20px;
+background:#fff1f6;
+text-align:center;
+margin-bottom:10px
+}
 
-    .stat span{
-        font-size:12px;
-    }
+.bigMoney{
+font-size:38px;
+font-weight:800;
+margin:5px 0
+}
+
+.settingsList{
+display:flex;
+flex-direction:column;
+gap:10px
+}
+
+.settingRow{
+display:flex;
+align-items:center;
+gap:13px;
+padding:15px;
+border-radius:18px;
+background:#fff5f8;
+border:1px solid #f0dce5
+}
+
+.settingIcon{
+width:44px;
+height:44px;
+border-radius:14px;
+background:#ffe1ec;
+color:#b83d68;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:21px
+}
+
+.settingText{
+flex:1
+}
+
+.settingText strong{
+display:block
+}
+
+.settingText small{
+display:block;
+margin-top:3px;
+color:#77717a
+}
+
+@media(max-width:390px){
+.stats{gap:7px}
+.stat{min-height:103px}
+.stat b{font-size:17px}
+.stat span{font-size:11px}
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<section id="welcome">
 
-<!-- =====================================================
-     WELCOME SCREEN
-===================================================== -->
+<img
+id="welcomeArt"
+src="pure-shine-cleaning-background(3).png"
+alt=""
+>
 
-<section id="welcomeScreen">
-
-    <div class="welcome-content">
-
-        <div class="welcome-logo">
-
-            <div class="logo-sparkle sparkle-one">✦</div>
-            <div class="logo-sparkle sparkle-two">✦</div>
-            <div class="logo-sparkle sparkle-three">✦</div>
-
-            <div class="logo-house">
-                <div class="roof"></div>
-                <div class="wall"></div>
-                <div class="window"></div>
-            </div>
-
-            <div class="logo-spray"></div>
-            <div class="logo-bottle"></div>
-
-            <div class="logo-name">
-                <span class="pure">PURE SHINE</span>
-                <span class="shine">
-                    Cleaning<span class="heart">♡</span>
-                </span>
-            </div>
-
-            <div class="logo-bottom">
-                CLEAN HOME, PURE SHINE
-            </div>
-
-        </div>
-
-
-        <div class="welcome-title">
-            Your Cleaning<br>
-            Business, Simplified
-        </div>
-
-        <div class="welcome-heart">
-            ♡
-        </div>
-
-
-        <div class="welcome-features">
-
-            <div class="welcome-feature">
-
-                <svg viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-linecap="round"
-                     stroke-linejoin="round">
-
-                    <rect x="3" y="5" width="18" height="16" rx="2"></rect>
-                    <path d="M16 3v4M8 3v4M3 10h18"></path>
-                    <path d="M8 14h2M14 14h2M8 18h2"></path>
-
-                </svg>
-
-                <span>
-                    Manage<br>Jobs
-                </span>
-
-            </div>
-
-
-            <div class="welcome-feature">
-
-                <svg viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-linecap="round"
-                     stroke-linejoin="round">
-
-                    <circle cx="9" cy="8" r="3"></circle>
-                    <path d="M3 20c0-3 2.5-5 6-5s6 2 6 5"></path>
-                    <circle cx="17" cy="9" r="2.5"></circle>
-                    <path d="M15 15c3 0 5 1.8 5 5"></path>
-
-                </svg>
-
-                <span>
-                    Keep Track<br>of Clients
-                </span>
-
-            </div>
-
-
-            <div class="welcome-feature">
-
-                <svg viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-linecap="round"
-                     stroke-linejoin="round">
-
-                    <path d="M4 20V10M10 20V5M16 20v-8M22 20H2"></path>
-
-                </svg>
-
-                <span>
-                    Track<br>Earnings
-                </span>
-
-            </div>
-
-
-            <div class="welcome-feature">
-
-                <svg viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-linecap="round"
-                     stroke-linejoin="round">
-
-                    <circle cx="12" cy="12" r="9"></circle>
-                    <path d="M12 7v5l3 2"></path>
-
-                </svg>
-
-                <span>
-                    More Time<br>for You
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <button class="get-started"
-                onclick="startApp()">
-
-            Get Started
-            <span>›</span>
-
-        </button>
-
-
-        <div class="login-text">
-            Already have an account?
-            <a href="#" onclick="startApp();return false;">
-                Log in
-            </a>
-        </div>
-
-    </div>
+<button
+id="welcomeClick"
+onclick="enterApp()"
+aria-label="Get Started">
+</button>
 
 </section>
 
 
-<!-- =====================================================
-     MAIN APP
-===================================================== -->
+<main id="app">
 
-<div id="mainApp">
+<div class="inner">
 
+<header class="header">
 
-<!-- =====================================================
-     HEADER
-===================================================== -->
+<div class="brand">
 
-<header class="app-header">
+<img
+class="logo"
+src="icon(3).png"
+alt="Pure Shine"
+>
 
-    <div class="header-brand">
+<div>
 
-        <div class="small-logo">
+<h1>
+Cleaning Manager
+</h1>
 
-            <div class="small-logo-text">
-                <strong>PURE SHINE</strong>
-                <span>Cleaning♡</span>
-            </div>
+<div class="sub">
+Your cleaning business ✨
+</div>
 
-        </div>
+</div>
 
-        <div class="header-copy">
-
-            <h1>
-                Cleaning Manager
-            </h1>
-
-            <p>
-                Your cleaning business ✨
-            </p>
-
-        </div>
-
-    </div>
+</div>
 
 
-    <!-- THE SCREENSHOT HAS THE BELL HERE -->
+<button
+class="settingsBtn"
+onclick="openSettings()"
+aria-label="Settings">
 
-    <button class="notification"
-            aria-label="Notifications">
+<svg
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
 
-        <svg viewBox="0 0 24 24"
-             width="25"
-             height="25"
-             fill="none"
-             stroke="currentColor"
-             stroke-width="1.8"
-             stroke-linecap="round"
-             stroke-linejoin="round">
+<path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/>
 
-            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
-            <path d="M10 21h4"></path>
+<path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.5 1.5-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2.12v-.08a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.5-1.5.06-.06A1.7 1.7 0 0 0 9.16 15a1.7 1.7 0 0 0-1.56-1.03H7.5v-2.12h.1A1.7 1.7 0 0 0 9.16 10a1.7 1.7 0 0 0-.34-1.88l-.06-.06 1.5-1.5.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.03-1.56V5h2.12v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.5 1.5-.06.06A1.7 1.7 0 0 0 19.4 10a1.7 1.7 0 0 0 1.56 1.03H21v2.12h-.04A1.7 1.7 0 0 0 19.4 15Z"/>
 
-        </svg>
+</svg>
 
-    </button>
+</button>
 
 </header>
 
 
-<!-- =====================================================
-     HOME
-===================================================== -->
+<div class="date">
 
-<main id="home"
-      class="page active">
+<b id="date"></b>
 
-    <!-- DATE -->
+<div>
+Let's make today productive 🌸
+</div>
 
-    <div class="date-card">
+<div class="heart">
+♡
+</div>
 
-        <svg class="date-calendar"
-             viewBox="0 0 24 24"
-             fill="none"
-             stroke="currentColor"
-             stroke-width="1.8"
-             stroke-linecap="round"
-             stroke-linejoin="round">
+</div>
 
-            <rect x="3" y="4" width="18" height="17" rx="2"></rect>
-            <path d="M16 2v4M8 2v4M3 9h18"></path>
-            <path d="M8 13h2M14 13h2M8 17h2"></path>
 
-        </svg>
+<div class="stats">
 
-        <div class="date-copy">
+<div class="stat s1">
+<div class="ico">💼</div>
+<b id="jobsCount">0</b>
+<span>Jobs</span>
+</div>
 
-            <strong id="todayDate">
-                Thursday 17 September
-            </strong>
+<div class="stat s2">
+<div class="ico">◷</div>
+<b id="hours">0h 0m</b>
+<span>Hours</span>
+</div>
 
-            <span>
-                Let's make today productive 🌸
-            </span>
+<div class="stat s3">
+<div class="ico">🪙</div>
+<b id="earned">£0</b>
+<span>Earned</span>
+</div>
 
-        </div>
+<div class="stat s4">
+<div class="ico">☀️</div>
+<b id="available">0h</b>
+<span>Available</span>
+</div>
 
-        <div class="date-heart">
-            ♡
-        </div>
+</div>
 
-    </div>
 
+<div class="section">
 
-    <!-- FOUR STAT CARDS -->
+<h2>
+Today's schedule
+</h2>
 
-    <div class="stats">
+<span
+class="see"
+onclick="openSchedule()">
+See all →
+</span>
 
-        <div class="stat jobs">
+</div>
 
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.8"
-                 stroke-linecap="round"
-                 stroke-linejoin="round">
 
-                <rect x="3" y="7" width="18" height="13" rx="2"></rect>
-                <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                <path d="M3 12h18M10 12v2h4v-2"></path>
+<div
+class="card"
+id="todaySchedule">
+</div>
 
-            </svg>
 
-            <strong id="statJobs">0</strong>
-            <span>Jobs</span>
+<div class="section">
 
-        </div>
+<h2>
+Quick actions
+</h2>
 
+</div>
 
-        <div class="stat hours">
 
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.8"
-                 stroke-linecap="round">
+<div class="quick">
 
-                <circle cx="12" cy="12" r="9"></circle>
-                <path d="M12 7v5l3 2"></path>
+<button
+class="qb"
+onclick="openTimer()">
+◷&nbsp; Start cleaning
+</button>
 
-            </svg>
+<button
+class="qg"
+onclick="openClients()">
+👥&nbsp; Clients
+</button>
 
-            <strong id="statHours">0h 0m</strong>
-            <span>Hours</span>
+<button
+class="qp"
+onclick="openSchedule()">
+📅&nbsp; Schedule
+</button>
 
-        </div>
+<button
+class="qy"
+onclick="openFreeTime()">
+🔎&nbsp; Find free time
+</button>
 
+<button
+class="ql"
+onclick="openEarnings()">
+📊&nbsp; Earnings
+</button>
 
-        <div class="stat earned">
+<button
+class="qo"
+onclick="openHolidays()">
+🏖️&nbsp; Holidays
+</button>
 
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.7"
-                 stroke-linecap="round"
-                 stroke-linejoin="round">
+</div>
 
-                <ellipse cx="8" cy="6" rx="5" ry="2.5"></ellipse>
-                <path d="M3 6v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V6"></path>
-                <path d="M3 10v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5"></path>
-                <path d="M13 9c2.8 0 5-1.1 5-2.5S15.8 4 13 4"></path>
-                <path d="M13 9v4c0 1.4 2.2 2.5 5 2.5s3-.8 3-2"></path>
 
-            </svg>
+<div class="quote">
 
-            <strong id="statEarned">£0</strong>
-            <span>Earned</span>
+<div style="font-size:30px;color:#e681a3">
+♡
+</div>
 
-        </div>
+<div class="quoteText">
+A clean space<br>
+is a happy place ♡
+</div>
 
+<div class="quoteFlower">
+🌸
+</div>
 
-        <div class="stat available">
+</div>
 
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.7"
-                 stroke-linecap="round">
-
-                <circle cx="12" cy="12" r="4"></circle>
-
-                <path d="
-                M12 2v2
-                M12 20v2
-                M4.9 4.9l1.4 1.4
-                M17.7 17.7l1.4 1.4
-                M2 12h2
-                M20 12h2
-                M4.9 19.1l1.4-1.4
-                M17.7 6.3l1.4-1.4">
-                </path>
-
-            </svg>
-
-            <strong id="statAvailable">1h</strong>
-            <span>Available</span>
-
-        </div>
-
-    </div>
-
-
-    <!-- TODAY'S SCHEDULE -->
-
-    <div class="section-head">
-
-        <h2>
-            Today's schedule
-        </h2>
-
-        <button onclick="go('schedule')">
-            See all
-        </button>
-
-    </div>
-
-
-    <div class="today-box">
-
-        <div class="today-empty">
-
-            <svg class="today-icon"
-                 viewBox="0 0 64 64"
-                 fill="none">
-
-                <path d="M19 13h26v38H19z"
-                      stroke="currentColor"
-                      stroke-width="2.5"/>
-
-                <path d="M24 9h16v8H24z"
-                      fill="white"
-                      stroke="currentColor"
-                      stroke-width="2.5"/>
-
-                <path d="M32 24c-3-5-9 0-5 4l5 5 5-5c4-4-2-9-5-4Z"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      stroke-linejoin="round"/>
-
-                <path d="M43 42c2-5 7-5 8-1 1 5-5 8-8 9"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      stroke-linecap="round"/>
-
-            </svg>
-
-            <h3>
-                No cleaning jobs today 🌸
-            </h3>
-
-            <p>
-                Add one with the + button.
-            </p>
-
-            <button class="add-cleaning"
-                    onclick="openJobModal()">
-
-                ＋&nbsp; Add cleaning job
-
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- QUICK ACTIONS -->
-
-    <h2 class="quick-head">
-        Quick actions
-    </h2>
-
-    <div class="quick-grid">
-
-        <button class="quick blue"
-                onclick="startCleaning()">
-
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.8"
-                 stroke-linecap="round">
-
-                <circle cx="12" cy="12" r="9"></circle>
-                <path d="M12 7v5l3 2"></path>
-
-            </svg>
-
-            Start cleaning
-
-        </button>
-
-
-        <button class="quick green"
-                onclick="go('clients')">
-
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.8"
-                 stroke-linecap="round"
-                 stroke-linejoin="round">
-
-                <circle cx="9" cy="8" r="3"></circle>
-                <path d="M3 20c0-3 2.5-5 6-5s6 2 6 5"></path>
-                <circle cx="17" cy="9" r="2.5"></circle>
-                <path d="M15 15c3 0 5 1.8 5 5"></path>
-
-            </svg>
-
-            Clients
-
-        </button>
-
-
-        <button class="quick pink"
-                onclick="go('schedule')">
-
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.8"
-                 stroke-linecap="round">
-
-                <rect x="3" y="4" width="18" height="17" rx="2"></rect>
-                <path d="M16 2v4M8 2v4M3 9h18"></path>
-
-            </svg>
-
-            Schedule
-
-        </button>
-
-
-        <button class="quick yellow"
-                onclick="go('free')">
-
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.8"
-                 stroke-linecap="round">
-
-                <circle cx="11" cy="11" r="7"></circle>
-                <path d="m20 20-4-4"></path>
-
-            </svg>
-
-            Find free time
-
-        </button>
-
-
-        <button class="quick purple"
-                onclick="go('earnings')">
-
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.8"
-                 stroke-linecap="round">
-
-                <path d="M4 20V10M10 20V5M16 20v-8M22 20H2"></path>
-
-            </svg>
-
-            Earnings
-
-        </button>
-
-
-        <button class="quick peach"
-                onclick="showHoliday()">
-
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.7"
-                 stroke-linecap="round">
-
-                <path d="M12 21v-8"></path>
-                <path d="M5 13c2-5 5-7 7-7s5 2 7 7H5Z"></path>
-                <path d="M12 6V3"></path>
-                <path d="M9 21h6"></path>
-
-            </svg>
-
-            Holidays
-
-        </button>
-
-    </div>
-
-
-    <!-- QUOTE PHOTO -->
-
-    <div class="quote-card">
-
-        <div class="quote-left">♡</div>
-
-        <div class="quote">
-            A clean space<br>
-            is a happy place
-        </div>
-
-        <div class="quote-right">♡</div>
-
-    </div>
+</div>
 
 </main>
 
 
-<!-- =====================================================
-     SCHEDULE PAGE
-===================================================== -->
+<nav
+class="bottom"
+id="bottom">
 
-<main id="schedule"
-      class="page">
+<button
+class="nav active"
+onclick="home(this)">
 
-    <div class="page-inner">
+<span>⌂</span>
+Home
 
-        <div class="page-title">
+</button>
 
-            <h2>
-                Schedule
-            </h2>
+<button
+class="nav"
+onclick="openSchedule(this)">
 
-            <button class="home-button"
-                    onclick="go('home')">
-                ⌂
-            </button>
+<span>▣</span>
+Schedule
 
-        </div>
+</button>
 
-        <div class="calendar">
+<button
+class="nav"
+onclick="openClients(this)">
 
-            <div class="calendar-head">
+<span>♧</span>
+Clients
 
-                <strong id="calendarMonth">
-                    September 2026
-                </strong>
+</button>
 
-                <div class="calendar-buttons">
+<button
+class="nav"
+onclick="openFreeTime(this)">
 
-                    <button onclick="changeMonth(-1)">
-                        ‹
-                    </button>
+<span>◷</span>
+Free time
 
-                    <button onclick="changeMonth(1)">
-                        ›
-                    </button>
+</button>
 
-                </div>
+<button
+class="nav"
+onclick="openEarnings(this)">
 
-            </div>
+<span>▥</span>
+Earnings
 
-            <div class="weekdays">
-                <div>MON</div>
-                <div>TUE</div>
-                <div>WED</div>
-                <div>THU</div>
-                <div>FRI</div>
-                <div>SAT</div>
-                <div>SUN</div>
-            </div>
-
-            <div class="calendar-grid"
-                 id="calendarGrid">
-            </div>
-
-        </div>
-
-        <div class="list"
-             id="scheduleJobs">
-        </div>
-
-    </div>
-
-</main>
-
-
-<!-- =====================================================
-     CLIENTS PAGE
-===================================================== -->
-
-<main id="clients"
-      class="page">
-
-    <div class="page-inner">
-
-        <div class="page-title">
-
-            <h2>
-                Clients
-            </h2>
-
-            <button class="add-cleaning"
-                    style="width:auto;padding:0 18px;"
-                    onclick="openClientModal()">
-                ＋ Add
-            </button>
-
-        </div>
-
-        <div class="list"
-             id="clientList">
-        </div>
-
-    </div>
-
-</main>
-
-
-<!-- =====================================================
-     FREE TIME
-===================================================== -->
-
-<main id="free"
-      class="page">
-
-    <div class="page-inner">
-
-        <div class="page-title">
-
-            <h2>
-                Free time
-            </h2>
-
-            <button class="home-button"
-                    onclick="go('home')">
-                ⌂
-            </button>
-
-        </div>
-
-        <div class="card"
-             style="text-align:center;padding:28px;">
-
-            <div style="
-                font-size:45px;
-                font-weight:700;
-                color:#c85e80;
-            ">
-                1h
-            </div>
-
-            <h3>
-                Available today
-            </h3>
-
-            <p style="color:#777;">
-                Your next available cleaning slot.
-            </p>
-
-            <div style="
-                margin-top:15px;
-                background:#fff0c9;
-                border-radius:15px;
-                padding:15px;
-            ">
-                <strong>
-                    18:00 – 19:00
-                </strong>
-            </div>
-
-        </div>
-
-    </div>
-
-</main>
-
-
-<!-- =====================================================
-     EARNINGS
-===================================================== -->
-
-<main id="earnings"
-      class="page">
-
-    <div class="page-inner">
-
-        <div class="page-title">
-
-            <h2>
-                Earnings
-            </h2>
-
-            <button class="home-button"
-                    onclick="go('home')">
-                ⌂
-            </button>
-
-        </div>
-
-        <div class="total">
-
-            <span>
-                Total earnings
-            </span>
-
-            <strong id="earningsTotal">
-                £0.00
-            </strong>
-
-        </div>
-
-        <div class="card"
-             style="
-             margin-top:9px;
-             display:flex;
-             justify-content:space-between;
-             ">
-
-            <span>
-                Total hours
-            </span>
-
-            <strong id="earningsHours">
-                0h 0m
-            </strong>
-
-        </div>
-
-        <div class="list"
-             id="earningHistory">
-        </div>
-
-    </div>
-
-</main>
-
-
-<!-- =====================================================
-     SETTINGS
-===================================================== -->
-
-<main id="settings"
-      class="page">
-
-    <div class="page-inner">
-
-        <div class="page-title">
-
-            <h2>
-                Settings
-            </h2>
-
-            <button class="home-button"
-                    onclick="go('home')">
-                ⌂
-            </button>
-
-        </div>
-
-        <div class="settings">
-
-            <div class="setting">
-
-                <div class="setting-icon">
-                    🔔
-                </div>
-
-                <div class="setting-text">
-
-                    <strong>
-                        Cleaning reminders
-                    </strong>
-
-                    <span>
-                        Remind me before cleaning
-                    </span>
-
-                </div>
-
-                <input type="checkbox"
-                       checked>
-
-            </div>
-
-
-            <div class="setting">
-
-                <div class="setting-icon">
-                    📅
-                </div>
-
-                <div class="setting-text">
-
-                    <strong>
-                        Calendar sync
-                    </strong>
-
-                    <span>
-                        Sync your cleaning schedule
-                    </span>
-
-                </div>
-
-                <input type="checkbox">
-
-            </div>
-
-
-            <div class="setting">
-
-                <div class="setting-icon">
-                    🔎
-                </div>
-
-                <div class="setting-text">
-
-                    <strong>
-                        App size
-                    </strong>
-
-                    <span>
-                        Increase interface size
-                    </span>
-
-                </div>
-
-                <select onchange="changeZoom(this.value)"
-                        style="
-                        width:75px;
-                        height:38px;
-                        border:1px solid #ead8e0;
-                        border-radius:9px;
-                        background:white;
-                        ">
-
-                    <option value="100">
-                        100%
-                    </option>
-
-                    <option value="110">
-                        110%
-                    </option>
-
-                    <option value="120">
-                        120%
-                    </option>
-
-                    <option value="130">
-                        130%
-                    </option>
-
-                    <option value="150">
-                        150%
-                    </option>
-
-                    <option value="175">
-                        175%
-                    </option>
-
-                    <option value="200">
-                        200%
-                    </option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</main>
-
-
-<!-- =====================================================
-     BOTTOM NAV
-===================================================== -->
-
-<nav class="bottom-nav">
-
-    <button class="nav active"
-            data-page="home"
-            onclick="go('home')">
-
-        <svg viewBox="0 0 24 24"
-             fill="none"
-             stroke="currentColor"
-             stroke-width="2"
-             stroke-linecap="round"
-             stroke-linejoin="round">
-
-            <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V10Z">
-            </path>
-
-        </svg>
-
-        <span>
-            Home
-        </span>
-
-    </button>
-
-
-    <button class="nav"
-            data-page="schedule"
-            onclick="go('schedule')">
-
-        <svg viewBox="0 0 24 24"
-             fill="none"
-             stroke="currentColor"
-             stroke-width="1.8"
-             stroke-linecap="round"
-             stroke-linejoin="round">
-
-            <rect x="3" y="4" width="18" height="17" rx="2"></rect>
-            <path d="M16 2v4M8 2v4M3 9h18"></path>
-            <path d="M8 13h2M14 13h2M8 17h2"></path>
-
-        </svg>
-
-        <span>
-            Schedule
-        </span>
-
-    </button>
-
-
-    <button class="nav"
-            data-page="clients"
-            onclick="go('clients')">
-
-        <svg viewBox="0 0 24 24"
-             fill="none"
-             stroke="currentColor"
-             stroke-width="1.8"
-             stroke-linecap="round"
-             stroke-linejoin="round">
-
-            <circle cx="9" cy="8" r="3"></circle>
-            <path d="M3 20c0-3 2.5-5 6-5s6 2 6 5"></path>
-            <circle cx="17" cy="9" r="2.5"></circle>
-            <path d="M15 15c3 0 5 1.8 5 5"></path>
-
-        </svg>
-
-        <span>
-            Clients
-        </span>
-
-    </button>
-
-
-    <button class="nav"
-            data-page="free"
-            onclick="go('free')">
-
-        <svg viewBox="0 0 24 24"
-             fill="none"
-             stroke="currentColor"
-             stroke-width="1.8"
-             stroke-linecap="round">
-
-            <circle cx="12" cy="12" r="9"></circle>
-            <path d="M12 7v5l3 2"></path>
-
-        </svg>
-
-        <span>
-            Free time
-        </span>
-
-    </button>
-
-
-    <button class="nav"
-            data-page="earnings"
-            onclick="go('earnings')">
-
-        <svg viewBox="0 0 24 24"
-             fill="none"
-             stroke="currentColor"
-             stroke-width="1.8"
-             stroke-linecap="round">
-
-            <path d="M4 20V10M10 20V5M16 20v-8M22 20H2"></path>
-
-        </svg>
-
-        <span>
-            Earnings
-        </span>
-
-    </button>
+</button>
 
 </nav>
 
+
+<div
+class="overlay"
+id="overlay">
+
+<div
+class="modal"
+id="modal">
 </div>
-
-
-<!-- =====================================================
-     ADD JOB MODAL
-===================================================== -->
-
-<div class="modal"
-     id="jobModal">
-
-    <div class="modal-box">
-
-        <div class="modal-head">
-
-            <h3>
-                Add cleaning job
-            </h3>
-
-            <button class="close"
-                    onclick="closeModal('jobModal')">
-                ×
-            </button>
-
-        </div>
-
-        <div class="form-group">
-
-            <label>
-                Client
-            </label>
-
-            <select id="jobClient">
-
-                <option>Lottie</option>
-                <option>Christine</option>
-                <option>Matt</option>
-                <option>Sonia</option>
-                <option>Laura</option>
-                <option>Hannah</option>
-                <option>Meghan</option>
-                <option>Johanna</option>
-                <option>Sindu</option>
-                <option>Peter</option>
-                <option>Mike</option>
-
-            </select>
-
-        </div>
-
-        <div class="form-group">
-
-            <label>
-                Date
-            </label>
-
-            <input id="jobDate"
-                   type="date">
-
-        </div>
-
-        <div class="form-group">
-
-            <label>
-                Start time
-            </label>
-
-            <input id="jobStart"
-                   type="time"
-                   value="09:00">
-
-        </div>
-
-        <div class="form-group">
-
-            <label>
-                End time
-            </label>
-
-            <input id="jobEnd"
-                   type="time"
-                   value="13:00">
-
-        </div>
-
-        <div class="form-group">
-
-            <label>
-                Hourly rate
-            </label>
-
-            <input id="jobRate"
-                   type="number"
-                   value="16">
-
-        </div>
-
-        <button class="save"
-                onclick="saveJob()">
-
-            Save cleaning job
-
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     ADD CLIENT MODAL
-===================================================== -->
-
-<div class="modal"
-     id="clientModal">
-
-    <div class="modal-box">
-
-        <div class="modal-head">
-
-            <h3>
-                Add client
-            </h3>
-
-            <button class="close"
-                    onclick="closeModal('clientModal')">
-                ×
-            </button>
-
-        </div>
-
-        <div class="form-group">
-
-            <label>
-                Client name
-            </label>
-
-            <input id="newClientName"
-                   type="text"
-                   placeholder="Client name">
-
-        </div>
-
-        <div class="form-group">
-
-            <label>
-                Hourly rate
-            </label>
-
-            <input id="newClientRate"
-                   type="number"
-                   value="18">
-
-        </div>
-
-        <button class="save"
-                onclick="saveClient()">
-
-            Add client
-
-        </button>
-
-    </div>
 
 </div>
 
 
 <script>
 
-/* =========================================================
-   DATA
-========================================================= */
+const KEY="pureShineFinalOneFile";
 
-const defaultClients = [
-    {name:"Lottie",rate:16,type:"Agency",frequency:"Weekly"},
-    {name:"Christine",rate:18,type:"Private",frequency:"Fortnightly"},
-    {name:"Matt",rate:16,type:"Agency",frequency:"Weekly"},
-    {name:"Sonia",rate:16,type:"Agency",frequency:"Weekly"},
-    {name:"Laura",rate:18,type:"Private",frequency:"Weekly"},
-    {name:"Hannah",rate:16,type:"Agency",frequency:"Weekly"},
-    {name:"Meghan",rate:20,type:"Private",frequency:"Occasional"},
-    {name:"Johanna",rate:20,type:"Private",frequency:"Fortnightly"},
-    {name:"Sindu",rate:20,type:"Private",frequency:"Fortnightly"},
-    {name:"Peter",rate:20,type:"Private",frequency:"Occasional"},
-    {name:"Mike",rate:20,type:"Private",frequency:"Every 3 weeks"}
-];
+const seed={
+clients:[
+{
+id:1,
+name:"Tosca",
+type:"agency",
+rate:16,
+day:"Monday",
+start:"09:00",
+end:"12:00",
+frequency:"weekly",
+week:"A"
+},
+{
+id:2,
+name:"Lottie",
+type:"agency",
+rate:16,
+day:"Monday",
+start:"13:00",
+end:"15:00",
+frequency:"weekly",
+week:"A"
+},
+{
+id:3,
+name:"Christine",
+type:"private",
+rate:18,
+day:"Tuesday",
+start:"09:30",
+end:"12:30",
+frequency:"weekly",
+week:"A"
+},
+{
+id:4,
+name:"Matt",
+type:"agency",
+rate:16,
+day:"Tuesday",
+start:"13:00",
+end:"17:00",
+frequency:"weekly",
+week:"A",
+variable:true
+},
+{
+id:5,
+name:"Sonia",
+type:"agency",
+rate:16,
+day:"Wednesday",
+start:"09:00",
+end:"14:00",
+frequency:"weekly",
+week:"A",
+variable:true
+},
+{
+id:6,
+name:"Gill",
+type:"agency",
+rate:16,
+day:"Wednesday",
+start:"15:00",
+end:"18:00",
+frequency:"weekly",
+week:"A"
+},
+{
+id:7,
+name:"Laura",
+type:"private",
+rate:18,
+day:"Thursday",
+start:"09:00",
+end:"13:00",
+frequency:"weekly",
+week:"A",
+variable:true
+},
+{
+id:8,
+name:"Hannah",
+type:"agency",
+rate:16,
+day:"Thursday",
+start:"13:00",
+end:"16:00",
+frequency:"weekly",
+week:"A"
+}
+],
+jobs:[],
+holidays:[],
+week:"A"
+};
 
-let clients =
-    JSON.parse(
-        localStorage.getItem("pureShineClients")
-    ) || defaultClients;
+let data=
+JSON.parse(
+localStorage.getItem(KEY)||"null"
+)||seed;
 
-let jobs =
-    JSON.parse(
-        localStorage.getItem("pureShineJobs")
-    ) || [];
-
-let currentMonth = 8;
-let currentYear = 2026;
+let timerId=null;
+let timerStart=0;
 
 
-/* =========================================================
-   START APP
-========================================================= */
+function save(){
+localStorage.setItem(
+KEY,
+JSON.stringify(data)
+);
+}
 
-function startApp(){
 
-    document.getElementById("welcomeScreen").style.display =
-        "none";
+function mins(t){
+let[a,b]=t.split(":").map(Number);
+return a*60+b;
+}
 
-    document.getElementById("mainApp").style.display =
-        "block";
 
-    window.scrollTo(0,0);
+function dur(a,b){
+return Math.max(
+0,
+(mins(b)-mins(a))/60
+);
+}
 
-    updateStats();
-    renderClients();
-    renderCalendar();
-    renderScheduleJobs();
-    renderEarnings();
+
+function money(n){
+return "£"+(
+Math.round(n*100)/100
+);
+}
+
+
+function esc(s){
+return String(s).replace(
+/[&<>"']/g,
+c=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[c])
+);
+}
+
+
+function dateKey(d){
+return d.toISOString().slice(0,10);
+}
+
+
+function day(d){
+return d.toLocaleDateString(
+"en-GB",
+{weekday:"long"}
+);
+}
+
+
+function fmt(m){
+return String(
+Math.floor(m/60)
+).padStart(2,"0")
++
+":"+
+String(m%60).padStart(2,"0");
+}
+
+
+function closeModal(){
+
+if(timerId){
+clearInterval(timerId);
+timerId=null;
+}
+
+document
+.getElementById("overlay")
+.classList.remove("show");
+}
+
+
+function show(html){
+
+document.getElementById("modal")
+.innerHTML=html;
+
+document
+.getElementById("overlay")
+.classList.add("show");
+}
+
+
+document
+.getElementById("overlay")
+.addEventListener(
+"click",
+e=>{
+if(e.target.id==="overlay")
+closeModal();
+}
+);
+
+
+function enterApp(){
+
+document
+.getElementById("welcome")
+.style.display="none";
+
+document
+.getElementById("app")
+.style.display="block";
+
+document
+.getElementById("bottom")
+.classList.add("show");
+
+localStorage.setItem(
+"pureShineEntered",
+"1"
+);
+
+render();
+}
+
+
+if(
+localStorage.getItem(
+"pureShineEntered"
+)==="1"
+){
+enterApp();
+}
+
+
+function holiday(id,d){
+
+return data.holidays.some(
+h=>
+h.clientId===id &&
+d>=h.from &&
+d<=h.to
+);
 
 }
 
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
+function todays(){
 
-function go(page){
+let d=new Date();
 
-    document.querySelectorAll(".page")
-        .forEach(p=>{
-            p.classList.remove("active");
-        });
+let dn=day(d);
 
-    const target =
-        document.getElementById(page);
+let dk=dateKey(d);
 
-    if(target){
-        target.classList.add("active");
-    }
+return data.clients
+.filter(
+c=>
+c.day===dn &&
+(
+c.frequency!=="fortnightly" ||
+c.week===data.week
+) &&
+!holiday(c.id,dk)
+)
+.sort(
+(a,b)=>
+mins(a.start)-mins(b.start)
+);
 
-    document.querySelectorAll(".nav")
-        .forEach(n=>{
-            n.classList.toggle(
-                "active",
-                n.dataset.page === page
-            );
-        });
-
-    if(page === "schedule"){
-        renderCalendar();
-        renderScheduleJobs();
-    }
-
-    if(page === "clients"){
-        renderClients();
-    }
-
-    if(page === "earnings"){
-        renderEarnings();
-    }
-
-    window.scrollTo({
-        top:0,
-        behavior:"instant"
-    });
 }
 
 
-/* =========================================================
-   DATE
-========================================================= */
+function render(){
 
-function updateDate(){
+let d=new Date();
 
-    const date =
-        new Date();
+let jobs=todays();
 
-    document.getElementById("todayDate")
-        .textContent =
-        date.toLocaleDateString(
-            "en-GB",
-            {
-                weekday:"long",
-                day:"numeric",
-                month:"long"
-            }
-        );
+let h=
+jobs.reduce(
+(s,c)=>
+s+dur(c.start,c.end),
+0
+);
+
+let e=
+jobs.reduce(
+(s,c)=>
+s+
+dur(c.start,c.end)*c.rate,
+0
+);
+
+document
+.getElementById("date")
+.textContent=
+d.toLocaleDateString(
+"en-GB",
+{
+weekday:"long",
+day:"numeric",
+month:"long"
+}
+);
+
+document
+.getElementById("jobsCount")
+.textContent=
+jobs.length;
+
+document
+.getElementById("hours")
+.textContent=
+Math.floor(h)+
+"h "+
+Math.round((h%1)*60)+
+"m";
+
+document
+.getElementById("earned")
+.textContent=
+money(e);
+
+document
+.getElementById("available")
+.textContent=
+Math.max(0,8-h)
+.toFixed(1)
+.replace(".0","")
++"h";
+
+
+document
+.getElementById("todaySchedule")
+.innerHTML=
+jobs.length
+?
+jobs.map(
+(c,i)=>
+`
+<div class="job ${i%2?"jb":"jp"}">
+
+<div>
+
+<strong>
+${esc(c.name)}
+</strong>
+
+<small>
+${c.start} – ${c.end}
+· ${dur(c.start,c.end)}h
+· ${c.type==="private"?"Private":"Agency"}
+</small>
+
+</div>
+
+<div class="price">
+${money(
+dur(c.start,c.end)*c.rate
+)}
+</div>
+
+</div>
+`
+).join("")
+:
+`
+<div class="empty">
+
+<div class="big">
+♡
+</div>
+
+<b>
+No cleaning jobs today 🌸
+</b>
+
+<small>
+Add one with the + button.
+</small>
+
+<button
+class="pinkBtn"
+onclick="openJob()">
+＋ Add cleaning job
+</button>
+
+</div>
+`;
+
+save();
+
 }
 
 
-/* =========================================================
-   TIME
-========================================================= */
+function setNav(btn){
 
-function parseTime(value){
+document
+.querySelectorAll(".nav")
+.forEach(
+x=>x.classList.remove("active")
+);
 
-    if(
-        !value ||
-        !value.includes(":")
-    ){
-        return 0;
-    }
+if(btn)
+btn.classList.add("active");
 
-    const parts =
-        value.split(":").map(Number);
-
-    return parts[0] * 60 + parts[1];
-}
-
-function durationText(minutes){
-
-    const hours =
-        Math.floor(minutes / 60);
-
-    const mins =
-        minutes % 60;
-
-    return `${hours}h ${mins}m`;
 }
 
 
-/* =========================================================
-   STATISTICS
-========================================================= */
+function home(btn){
 
-function calculateStats(){
+setNav(btn);
 
-    let totalMinutes = 0;
-    let totalMoney = 0;
+closeModal();
 
-    jobs.forEach(job=>{
+render();
 
-        if(!job.completed){
-            return;
-        }
-
-        const start =
-            parseTime(job.start);
-
-        const end =
-            parseTime(job.end);
-
-        if(end > start){
-
-            const minutes =
-                end - start;
-
-            totalMinutes += minutes;
-
-            totalMoney +=
-                minutes / 60 *
-                Number(job.rate || 0);
-
-        }
-
-    });
-
-    return {
-        jobs:jobs.filter(j=>j.completed).length,
-        minutes:totalMinutes,
-        money:totalMoney
-    };
-}
-
-function updateStats(){
-
-    const stats =
-        calculateStats();
-
-    document.getElementById("statJobs")
-        .textContent =
-        stats.jobs;
-
-    document.getElementById("statHours")
-        .textContent =
-        durationText(stats.minutes);
-
-    document.getElementById("statEarned")
-        .textContent =
-        "£" +
-        stats.money.toFixed(0);
 }
 
 
-/* =========================================================
-   JOB MODAL
-========================================================= */
+function openJob(pref={}){
 
-function openJobModal(){
+show(
 
-    const today =
-        new Date();
+`
+<div class="modalHead">
 
-    document.getElementById("jobDate")
-        .value =
-        today.toISOString().slice(0,10);
+<h2>
+Add cleaning job 🧹
+</h2>
 
-    document.getElementById("jobModal")
-        .classList.add("show");
+<button
+class="close"
+onclick="closeModal()">
+×
+</button>
+
+</div>
+
+<label>
+Client
+</label>
+
+<select id="jc">
+
+${data.clients.map(
+c=>
+`
+<option value="${c.id}">
+${esc(c.name)} — £${c.rate}/h
+</option>
+`
+).join("")}
+
+</select>
+
+<label>
+Date
+</label>
+
+<input
+id="jd"
+type="date"
+value="${pref.date||dateKey(new Date())}"
+>
+
+<div class="row">
+
+<div>
+
+<label>
+Start
+</label>
+
+<input
+id="js"
+type="time"
+value="${pref.start||""}"
+>
+
+</div>
+
+<div>
+
+<label>
+End
+</label>
+
+<input
+id="je"
+type="time"
+value="${pref.end||""}"
+>
+
+</div>
+
+</div>
+
+<label>
+Price (£)
+<span class="muted">
+optional
+</span>
+</label>
+
+<input
+id="jp"
+type="number"
+min="0"
+step=".5"
+>
+
+<label>
+Status
+</label>
+
+<select id="jst">
+
+<option>
+Scheduled
+</option>
+
+<option>
+Completed
+</option>
+
+<option>
+Cancelled
+</option>
+
+</select>
+
+<button
+class="pinkBtn"
+onclick="saveJob()">
+
+Save cleaning
+
+</button>
+
+`
+);
+
 }
 
-function closeModal(id){
-
-    document.getElementById(id)
-        .classList.remove("show");
-}
 
 function saveJob(){
 
-    const client =
-        document.getElementById("jobClient").value;
+let c=
+data.clients.find(
+x=>x.id==
+document.getElementById("jc").value
+);
 
-    const date =
-        document.getElementById("jobDate").value;
+let s=
+document.getElementById("js").value;
 
-    const start =
-        document.getElementById("jobStart").value;
+let e=
+document.getElementById("je").value;
 
-    const end =
-        document.getElementById("jobEnd").value;
+if(
+!c ||
+!s ||
+!e ||
+mins(e)<=mins(s)
+)
+return alert(
+"Please enter valid times."
+);
 
-    const rate =
-        Number(
-            document.getElementById("jobRate").value
-        );
+data.jobs.push({
 
-    if(
-        !client ||
-        !date ||
-        !start ||
-        !end
-    ){
-        alert("Please complete all fields.");
-        return;
-    }
+id:Date.now(),
 
-    jobs.push({
-        id:Date.now(),
-        client,
-        date,
-        start,
-        end,
-        rate,
-        completed:true
-    });
+clientId:c.id,
 
-    localStorage.setItem(
-        "pureShineJobs",
-        JSON.stringify(jobs)
-    );
+date:
+document.getElementById("jd").value,
 
-    closeModal("jobModal");
+start:s,
 
-    updateStats();
-    renderCalendar();
-    renderScheduleJobs();
-    renderEarnings();
+end:e,
+
+price:
+Number(
+document.getElementById("jp").value
+)
+||
+dur(s,e)*c.rate,
+
+status:
+document.getElementById("jst").value
+
+});
+
+save();
+
+closeModal();
+
+render();
+
 }
 
 
-/* =========================================================
-   CLIENTS
-========================================================= */
+function openClients(){
 
-function openClientModal(){
+show(
 
-    document.getElementById("newClientName")
-        .value = "";
+`
+<div class="modalHead">
 
-    document.getElementById("newClientRate")
-        .value = 18;
+<h2>
+Clients 👥
+</h2>
 
-    document.getElementById("clientModal")
-        .classList.add("show");
+<button
+class="close"
+onclick="closeModal()">
+×
+</button>
+
+</div>
+
+<button
+class="pinkBtn"
+onclick="clientForm()">
+＋ Add new client
+</button>
+
+<div style="margin-top:14px">
+
+${data.clients.map(
+c=>
+`
+<div class="list">
+
+<div class="listTitle">
+
+${esc(c.name)}
+
+<span
+class="badge ${
+c.type==="private"
+?"private"
+:"agency"
+}">
+
+${c.type==="private"
+?"Private"
+:"Agency"}
+
+· £${c.rate}/h
+
+</span>
+
+</div>
+
+<div class="muted">
+
+${c.day}
+· ${c.start}–${c.end}
+· ${
+c.frequency==="fortnightly"
+?
+"Every 2 weeks · Week "+c.week
+:
+"Weekly"
 }
 
-function saveClient(){
+</div>
 
-    const name =
-        document.getElementById("newClientName")
-        .value
-        .trim();
-
-    const rate =
-        Number(
-            document.getElementById("newClientRate")
-            .value
-        );
-
-    if(!name){
-        alert("Please enter a client name.");
-        return;
-    }
-
-    clients.push({
-        name,
-        rate,
-        type:"Private",
-        frequency:"Occasional"
-    });
-
-    localStorage.setItem(
-        "pureShineClients",
-        JSON.stringify(clients)
-    );
-
-    closeModal("clientModal");
-
-    renderClients();
+${
+c.variable
+?
+'<div class="muted">Variable duration</div>'
+:""
 }
 
-function renderClients(){
+<div class="actions">
 
-    const list =
-        document.getElementById("clientList");
+<button
+class="secondary"
+onclick="clientForm(${c.id})">
+✏️ Edit
+</button>
 
-    list.innerHTML = "";
+<button
+class="secondary"
+onclick="holidayForm(${c.id})">
+🏖️ Holiday
+</button>
 
-    clients.forEach(client=>{
+<button
+class="secondary danger"
+onclick="deleteClient(${c.id})">
+🗑️ Delete
+</button>
 
-        const card =
-            document.createElement("div");
+</div>
 
-        card.className =
-            "card client";
+</div>
+`
+).join("")}
 
-        card.innerHTML = `
+</div>
+`
+);
 
-            <div class="avatar">
-                ${escapeHTML(
-                    client.name
-                        .charAt(0)
-                        .toUpperCase()
-                )}
-            </div>
-
-            <div class="client-info">
-
-                <strong>
-                    ${escapeHTML(client.name)}
-                </strong>
-
-                <span>
-                    ${escapeHTML(client.type)}
-                    ·
-                    ${escapeHTML(client.frequency)}
-                </span>
-
-            </div>
-
-            <div class="rate">
-                £${client.rate}/h
-            </div>
-
-        `;
-
-        list.appendChild(card);
-    });
-}
-
-
-/* =========================================================
-   CALENDAR
-========================================================= */
-
-function renderCalendar(){
-
-    const grid =
-        document.getElementById("calendarGrid");
-
-    if(!grid){
-        return;
-    }
-
-    grid.innerHTML = "";
-
-    const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-    ];
-
-    document.getElementById("calendarMonth")
-        .textContent =
-        `${months[currentMonth]} ${currentYear}`;
-
-    const firstDay =
-        new Date(
-            currentYear,
-            currentMonth,
-            1
-        );
-
-    let offset =
-        firstDay.getDay();
-
-    offset =
-        offset === 0
-            ? 6
-            : offset - 1;
-
-    const days =
-        new Date(
-            currentYear,
-            currentMonth + 1,
-            0
-        ).getDate();
-
-    const previousDays =
-        new Date(
-            currentYear,
-            currentMonth,
-            0
-        ).getDate();
-
-    for(let i=0;i<offset;i++){
-
-        const cell =
-            document.createElement("div");
-
-        cell.className =
-            "day muted";
-
-        cell.textContent =
-            previousDays - offset + i + 1;
-
-        grid.appendChild(cell);
-    }
-
-    for(let d=1;d<=days;d++){
-
-        const cell =
-            document.createElement("div");
-
-        cell.className =
-            "day";
-
-        cell.textContent =
-            d;
-
-        if(
-            d === 17 &&
-            currentMonth === 8 &&
-            currentYear === 2026
-        ){
-            cell.classList.add("today");
-        }
-
-        const date =
-            `${currentYear}-${String(currentMonth+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-
-        if(
-            jobs.some(
-                j=>j.date === date
-            )
-        ){
-            cell.classList.add("has-job");
-        }
-
-        grid.appendChild(cell);
-    }
-}
-
-function changeMonth(direction){
-
-    currentMonth += direction;
-
-    if(currentMonth < 0){
-        currentMonth = 11;
-        currentYear--;
-    }
-
-    if(currentMonth > 11){
-        currentMonth = 0;
-        currentYear++;
-    }
-
-    renderCalendar();
-    renderScheduleJobs();
 }
 
 
-/* =========================================================
-   SCHEDULE JOBS
-========================================================= */
+function clientForm(id=0){
 
-function renderScheduleJobs(){
+let c=
+data.clients.find(
+x=>x.id===id
+)||{};
 
-    const list =
-        document.getElementById("scheduleJobs");
+show(
 
-    if(!list){
-        return;
-    }
+`
+<div class="modalHead">
 
-    list.innerHTML = "";
+<h2>
+${id?"Edit":"Add"} client
+</h2>
 
-    jobs
-        .slice()
-        .sort(
-            (a,b)=>
-            a.date.localeCompare(b.date)
-        )
-        .forEach(job=>{
+<button
+class="close"
+onclick="openClients()">
+×
+</button>
 
-            const start =
-                job.start || "--:--";
+</div>
 
-            const end =
-                job.end || "--:--";
+<label>
+Name
+</label>
 
-            const minutes =
-                parseTime(end) -
-                parseTime(start);
+<input
+id="cn"
+value="${esc(c.name||"")}"
+>
 
-            const amount =
-                minutes > 0
-                    ? minutes / 60 *
-                      Number(job.rate || 0)
-                    : 0;
+<label>
+Type
+</label>
 
-            const card =
-                document.createElement("div");
+<select id="ct">
 
-            card.className =
-                "card";
+<option
+value="private"
+${c.type==="private"?"selected":""}>
+Private
+</option>
 
-            card.innerHTML = `
+<option
+value="agency"
+${c.type==="agency"?"selected":""}>
+Agency
+</option>
 
-                <div style="
-                    display:flex;
-                    align-items:center;
-                    gap:12px;
-                ">
+</select>
 
-                    <div style="
-                        width:10px;
-                        height:43px;
-                        border-radius:10px;
-                        background:#e889a7;
-                    "></div>
+<label>
+Hourly rate (£)
+</label>
 
-                    <div style="flex:1;">
+<input
+id="cr"
+type="number"
+value="${c.rate||16}"
+>
 
-                        <strong>
-                            ${escapeHTML(job.client)}
-                        </strong>
+<div class="row">
 
-                        <div style="
-                            color:#777;
-                            font-size:12px;
-                            margin-top:3px;
-                        ">
+<div>
 
-                            ${formatDate(job.date)}
-                            ·
-                            ${start} – ${end}
-                            ·
-                            ${durationText(
-                                Math.max(minutes,0)
-                            )}
+<label>
+Day
+</label>
 
-                        </div>
+<select id="cd">
 
-                    </div>
+${
+[
+"Monday",
+"Tuesday",
+"Wednesday",
+"Thursday",
+"Friday",
+"Saturday",
+"Sunday"
+]
+.map(
+x=>
+`
+<option
+${c.day===x?"selected":""}>
+${x}
+</option>
+`
+).join("")
+}
 
-                    <strong style="color:#b55575;">
-                        £${amount.toFixed(2)}
-                    </strong>
+</select>
 
-                </div>
-            `;
+</div>
 
-            list.appendChild(card);
-        });
+<div>
 
-    if(!jobs.length){
+<label>
+Frequency
+</label>
 
-        list.innerHTML = `
+<select id="cf">
 
-            <div class="card"
-                 style="text-align:center;padding:25px;">
+<option
+value="weekly"
+${c.frequency!=="fortnightly"?"selected":""}>
+Weekly
+</option>
 
-                <strong>
-                    No jobs added yet 🌸
-                </strong>
+<option
+value="fortnightly"
+${c.frequency==="fortnightly"?"selected":""}>
+Fortnightly
+</option>
 
-                <p style="color:#777;">
-                    Add your first cleaning job.
-                </p>
+</select>
 
-                <button class="add-cleaning"
-                        onclick="openJobModal()">
-                    ＋ Add cleaning job
-                </button>
+</div>
 
-            </div>
-        `;
-    }
+</div>
+
+<div class="row">
+
+<div>
+
+<label>
+Start
+</label>
+
+<input
+id="cs"
+type="time"
+value="${c.start||""}"
+>
+
+</div>
+
+<div>
+
+<label>
+End
+</label>
+
+<input
+id="ce"
+type="time"
+value="${c.end||""}"
+>
+
+</div>
+
+</div>
+
+<label>
+Fortnight week
+</label>
+
+<select id="cw">
+
+<option
+${c.week!=="B"?"selected":""}>
+A
+</option>
+
+<option
+${c.week==="B"?"selected":""}>
+B
+</option>
+
+</select>
+
+<button
+class="pinkBtn"
+onclick="saveClient(${id})">
+
+Save changes
+
+</button>
+
+`
+);
+
 }
 
 
-/* =========================================================
-   EARNINGS
-========================================================= */
+function saveClient(id){
 
-function renderEarnings(){
+let n=
+document.getElementById("cn")
+.value.trim();
 
-    const stats =
-        calculateStats();
+let s=
+document.getElementById("cs")
+.value;
 
-    const total =
-        document.getElementById("earningsTotal");
+let e=
+document.getElementById("ce")
+.value;
 
-    const hours =
-        document.getElementById("earningsHours");
+if(
+!n ||
+!s ||
+!e ||
+mins(e)<=mins(s)
+)
+return alert(
+"Please complete the client details."
+);
 
-    if(total){
-        total.textContent =
-            "£" +
-            stats.money.toFixed(2);
-    }
+let obj={
 
-    if(hours){
-        hours.textContent =
-            durationText(stats.minutes);
-    }
+id:id||Date.now(),
 
-    const history =
-        document.getElementById("earningHistory");
+name:n,
 
-    if(!history){
-        return;
-    }
+type:
+document.getElementById("ct").value,
 
-    history.innerHTML = "";
+rate:
+Number(
+document.getElementById("cr").value
+)||0,
 
-    jobs
-        .slice()
-        .reverse()
-        .forEach(job=>{
+day:
+document.getElementById("cd").value,
 
-            const minutes =
-                parseTime(job.end) -
-                parseTime(job.start);
+start:s,
 
-            const money =
-                minutes > 0
-                    ? minutes / 60 *
-                      Number(job.rate || 0)
-                    : 0;
+end:e,
 
-            const row =
-                document.createElement("div");
+frequency:
+document.getElementById("cf").value,
 
-            row.className =
-                "earning";
+week:
+document.getElementById("cw").value
 
-            row.innerHTML = `
+};
 
-                <div>
+let old=
+data.clients.find(
+x=>x.id===id
+);
 
-                    <strong>
-                        ${escapeHTML(job.client)}
-                    </strong>
+if(old)
+Object.assign(old,obj);
+else
+data.clients.push(obj);
 
-                    <small style="
-                        display:block;
-                        color:#888;
-                        margin-top:3px;
-                    ">
+save();
 
-                        ${formatDate(job.date)}
-                        ·
-                        ${job.start}–${job.end}
+openClients();
 
-                    </small>
+render();
 
-                </div>
-
-                <strong>
-                    £${money.toFixed(2)}
-                </strong>
-
-            `;
-
-            history.appendChild(row);
-        });
 }
 
 
-/* =========================================================
-   CLEANING TIMER
-========================================================= */
+function deleteClient(id){
 
-let timerStart = null;
-let timerInterval = null;
+let c=
+data.clients.find(
+x=>x.id===id
+);
 
-function startCleaning(){
+if(
+c &&
+confirm(
+"Delete "+c.name+
+"? This also removes saved jobs and holidays."
+)
+){
 
-    if(timerStart){
-        stopCleaning();
-        return;
-    }
+data.clients=
+data.clients.filter(
+x=>x.id!==id
+);
 
-    timerStart =
-        Date.now();
+data.jobs=
+data.jobs.filter(
+j=>j.clientId!==id
+);
 
-    timerInterval =
-        setInterval(
-            updateTimer,
-            1000
-        );
+data.holidays=
+data.holidays.filter(
+h=>h.clientId!==id
+);
 
-    alert(
-        "Cleaning timer started."
-    );
+save();
+
+openClients();
+
+render();
+
 }
 
-function stopCleaning(){
-
-    if(!timerStart){
-        return;
-    }
-
-    clearInterval(
-        timerInterval
-    );
-
-    const seconds =
-        Math.floor(
-            (Date.now() -
-            timerStart) / 1000
-        );
-
-    const minutes =
-        Math.floor(
-            seconds / 60
-        );
-
-    timerStart = null;
-
-    alert(
-        "Cleaning timer stopped.\n\n" +
-        `Time worked: ${Math.floor(minutes/60)}h ${minutes%60}m`
-    );
-}
-
-function updateTimer(){
-
-    if(!timerStart){
-        return;
-    }
-
-    const elapsed =
-        Math.floor(
-            (Date.now() -
-            timerStart) / 1000
-        );
-
-    document.title =
-        `${Math.floor(elapsed/60)}m – Pure Shine`;
 }
 
 
-/* =========================================================
-   HOLIDAYS
-========================================================= */
+function openSchedule(btn){
 
-function showHoliday(){
+setNav(btn);
 
-    alert(
-        "Holidays\n\n" +
-        "Use this section to mark clients as being on holiday."
-    );
+let days=[
+"Monday",
+"Tuesday",
+"Wednesday",
+"Thursday",
+"Friday",
+"Saturday",
+"Sunday"
+];
+
+show(
+
+`
+<div class="modalHead">
+
+<h2>
+Schedule 📅
+</h2>
+
+<button
+class="close"
+onclick="closeModal()">
+×
+</button>
+
+</div>
+
+<div class="tabs">
+
+<button
+class="tab ${data.week==="A"?"active":""}"
+onclick="data.week='A';save();openSchedule()">
+Week A
+</button>
+
+<button
+class="tab ${data.week==="B"?"active":""}"
+onclick="data.week='B';save();openSchedule()">
+Week B
+</button>
+
+</div>
+
+<div class="note">
+
+Use <b>Edit</b> to change a client's
+day, hours, rate or frequency.
+
+</div>
+
+${days.map(
+d=>
+`
+<div class="list">
+
+<div class="listTitle">
+${d}
+</div>
+
+${
+data.clients
+.filter(
+c=>
+c.day===d &&
+(
+c.frequency!=="fortnightly" ||
+c.week===data.week
+)
+)
+.sort(
+(a,b)=>
+mins(a.start)-mins(b.start)
+)
+.map(
+c=>
+`
+<div
+style="
+margin-top:10px;
+padding-top:10px;
+border-top:1px solid #eee
+">
+
+<b>
+${esc(c.name)}
+</b>
+
+<span
+class="badge ${
+c.type==="private"
+?"private"
+:"agency"
+}">
+
+${c.type==="private"
+?"Private"
+:"Agency"}
+
+</span>
+
+<div class="muted">
+${c.start}–${c.end}
+· £${c.rate}/h
+</div>
+
+<button
+class="small"
+style="margin-top:7px"
+onclick="clientForm(${c.id})">
+✏️ Edit
+</button>
+
+</div>
+`
+).join("")
+||
+'<div class="muted" style="margin-top:7px">No clients scheduled.</div>'
+}
+
+</div>
+`
+).join("")}
+
+`
+);
+
 }
 
 
-/* =========================================================
-   ZOOM
-========================================================= */
+function openTimer(btn){
 
-function changeZoom(value){
+setNav(btn);
 
-    document.querySelector(".app")
-        .style.zoom =
-        Number(value) / 100;
+show(
+
+`
+<div class="modalHead">
+
+<h2>
+Cleaning timer ⏱️
+</h2>
+
+<button
+class="close"
+onclick="closeModal()">
+×
+</button>
+
+</div>
+
+<label>
+Client
+</label>
+
+<select id="tc">
+
+${data.clients.map(
+c=>
+`
+<option value="${c.id}">
+${esc(c.name)}
+</option>
+`
+).join("")}
+
+</select>
+
+<div
+class="timer"
+id="clock">
+00:00:00
+</div>
+
+<button
+class="pinkBtn"
+id="timerBtn"
+onclick="toggleTimer()">
+
+Start timer
+
+</button>
+
+<div class="note">
+
+Timer is separate from
+<b>Free time</b>.
+
+</div>
+
+`
+);
+
 }
 
 
-/* =========================================================
-   HELPERS
-========================================================= */
+function toggleTimer(){
 
-function formatDate(value){
+let b=
+document.getElementById(
+"timerBtn"
+);
 
-    if(!value){
-        return "";
-    }
+if(timerId){
 
-    const date =
-        new Date(
-            value + "T12:00:00"
-        );
+clearInterval(timerId);
 
-    return date.toLocaleDateString(
-        "en-GB",
-        {
-            day:"numeric",
-            month:"short",
-            year:"numeric"
-        }
-    );
+timerId=null;
+
+b.textContent=
+"Start timer";
+
+return;
+
 }
 
-function escapeHTML(value){
+timerStart=Date.now();
 
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+b.textContent=
+"Stop timer";
+
+const tick=()=>{
+
+let s=
+Math.floor(
+(Date.now()-timerStart)/1000
+);
+
+let h=
+Math.floor(s/3600);
+
+let m=
+Math.floor(
+(s%3600)/60
+);
+
+let x=
+s%60;
+
+document.getElementById(
+"clock"
+).textContent=
+[
+h,m,x
+]
+.map(
+n=>
+String(n).padStart(2,"0")
+)
+.join(":");
+
+};
+
+tick();
+
+timerId=
+setInterval(
+tick,
+500
+);
+
 }
 
 
-/* =========================================================
-   MODAL OUTSIDE CLICK
-========================================================= */
+function openFreeTime(btn){
 
-document
-    .querySelectorAll(".modal")
-    .forEach(modal=>{
+setNav(btn);
 
-        modal.addEventListener(
-            "click",
-            event=>{
+let d=new Date();
 
-                if(
-                    event.target === modal
-                ){
-                    modal.classList.remove("show");
-                }
+show(
 
-            }
-        );
+`
+<div class="modalHead">
 
-    });
+<h2>
+Find free time 🔎
+</h2>
+
+<button
+class="close"
+onclick="closeModal()">
+×
+</button>
+
+</div>
+
+<label>
+Date
+</label>
+
+<input
+id="fd"
+type="date"
+value="${dateKey(d)}"
+onchange="refreshFree()"
+>
+
+<div id="freeResults">
+</div>
+
+`
+);
+
+refreshFree();
+
+}
 
 
-/* =========================================================
-   INITIALISE
-========================================================= */
+function refreshFree(){
 
-updateDate();
+let v=
+document.getElementById("fd")
+.value;
 
-updateStats();
+if(!v)
+return;
 
-renderClients();
+let d=
+new Date(v+"T12:00:00");
 
-renderCalendar();
+let dn=day(d);
 
-renderScheduleJobs();
+let jobs=
+data.clients
+.filter(
+c=>
+c.day===dn &&
+(
+c.frequency!=="fortnightly" ||
+c.week===data.week
+) &&
+!holiday(c.id,v)
+)
+.sort(
+(a,b)=>
+mins(a.start)-mins(b.start)
+);
 
-renderEarnings();
+let cursor=8*60;
+
+let end=18*60;
+
+let slots=[];
+
+jobs.forEach(
+j=>{
+
+let a=mins(j.start);
+
+let b=mins(j.end);
+
+if(a>cursor)
+slots.push([cursor,a]);
+
+cursor=
+Math.max(
+cursor,
+b
+);
+
+}
+);
+
+if(cursor<end)
+slots.push(
+[cursor,end]
+);
+
+document.getElementById(
+"freeResults"
+).innerHTML=
+
+`
+<div class="note">
+
+${dn}
+· Available gaps between
+08:00 and 18:00.
+
+</div>
+
+${
+slots.length
+
+?
+
+slots.map(
+s=>
+`
+<div class="slot">
+
+<div>
+
+<b>
+${fmt(s[0])}
+–
+${fmt(s[1])}
+</b>
+
+<div class="muted">
+
+${Math.floor(
+(s[1]-s[0])/60
+)}h
+${(s[1]-s[0])%60}m
+available
+
+</div>
+
+</div>
+
+<button
+class="small"
+onclick="openJob({
+date:'${v}',
+start:'${fmt(s[0])}',
+end:'${fmt(s[1])}'
+})">
+
+＋ Add job
+
+</button>
+
+</div>
+`
+).join("")
+
+:
+
+'<div class="empty">No free gaps found 🌸</div>'
+
+}
+
+`;
+
+}
+
+
+function openEarnings(btn){
+
+setNav(btn);
+
+let jobs=
+data.jobs.filter(
+j=>j.status!=="Cancelled"
+);
+
+let h=
+jobs.reduce(
+(s,j)=>
+s+dur(j.start,j.end),
+0
+);
+
+let e=
+jobs.reduce(
+(s,j)=>
+s+Number(j.price||0),
+0
+);
+
+show(
+
+`
+<div class="modalHead">
+
+<h2>
+Earnings 📊
+</h2>
+
+<button
+class="close"
+onclick="closeModal()">
+×
+</button>
+
+</div>
+
+<div class="earn">
+
+<div class="muted">
+Total earned
+</div>
+
+<div class="bigMoney">
+${money(e)}
+</div>
+
+<div class="muted">
+${h.toFixed(1)}
+hours ·
+${jobs.length}
+jobs
+</div>
+
+</div>
+
+<h3>
+Saved jobs
+</h3>
+
+${
+jobs.length
+
+?
+
+jobs
+.slice()
+.reverse()
+.map(
+j=>{
+
+let c=
+data.clients.find(
+x=>x.id===j.clientId
+);
+
+return `
+
+<div class="list">
+
+<b>
+${esc(c?.name||"Client")}
+</b>
+
+<div class="muted">
+
+${j.date}
+· ${j.start}–${j.end}
+· ${dur(j.start,j.end)}h
+
+</div>
+
+<b>
+${money(j.price)}
+</b>
+
+</div>
+
+`;
+
+}
+)
+.join("")
+
+:
+
+'<div class="empty">No saved jobs yet.</div>'
+
+}
+
+`
+);
+
+}
+
+
+function holidayForm(id){
+
+let c=
+data.clients.find(
+x=>x.id===id
+);
+
+show(
+
+`
+<div class="modalHead">
+
+<h2>
+Holiday — ${esc(c.name)} 🏖️
+</h2>
+
+<button
+class="close"
+onclick="openClients()">
+×
+</button>
+
+</div>
+
+<label>
+From
+</label>
+
+<input
+id="hf"
+type="date"
+>
+
+<label>
+To
+</label>
+
+<input
+id="ht"
+type="date"
+>
+
+<button
+class="pinkBtn"
+onclick="saveHoliday(${id})">
+
+Save holiday
+
+</button>
+
+<h3>
+Existing holidays
+</h3>
+
+${
+data.holidays
+.filter(
+h=>h.clientId===id
+)
+.map(
+h=>
+`
+<div class="list">
+
+${h.from}
+→
+${h.to}
+
+<button
+class="small"
+onclick="delHoliday(${h.id},${id})">
+Delete
+</button>
+
+</div>
+`
+).join("")
+||
+'<div class="muted">None</div>'
+}
+
+`
+);
+
+}
+
+
+function saveHoliday(id){
+
+let f=
+document.getElementById("hf")
+.value;
+
+let t=
+document.getElementById("ht")
+.value;
+
+if(
+!f ||
+!t ||
+t<f
+)
+return alert(
+"Choose a valid period."
+);
+
+data.holidays.push({
+
+id:Date.now(),
+
+clientId:id,
+
+from:f,
+
+to:t
+
+});
+
+save();
+
+openClients();
+
+render();
+
+}
+
+
+function delHoliday(id,cid){
+
+data.holidays=
+data.holidays.filter(
+h=>h.id!==id
+);
+
+save();
+
+holidayForm(cid);
+
+render();
+
+}
+
+
+function openHolidays(){
+
+show(
+
+`
+<div class="modalHead">
+
+<h2>
+Holidays 🏖️
+</h2>
+
+<button
+class="close"
+onclick="closeModal()">
+×
+</button>
+
+</div>
+
+${
+data.holidays.length
+
+?
+
+data.holidays.map(
+h=>{
+
+let c=
+data.clients.find(
+x=>x.id===h.clientId
+);
+
+return `
+
+<div class="list">
+
+<b>
+${esc(c?.name||"Client")}
+</b>
+
+<div class="muted">
+
+${h.from}
+→
+${h.to}
+
+</div>
+
+</div>
+
+`;
+
+}
+).join("")
+
+:
+
+'<div class="empty">No holidays added yet 🌸</div>'
+
+}
+
+`
+);
+
+}
+
+
+function openSettings(){
+
+show(
+
+`
+<div class="modalHead">
+
+<h2>
+Settings ⚙️
+</h2>
+
+<button
+class="close"
+onclick="closeModal()">
+×
+</button>
+
+</div>
+
+<div class="settingsList">
+
+<div class="settingRow">
+
+<div class="settingIcon">
+🔔
+</div>
+
+<div class="settingText">
+
+<strong>
+Cleaning reminders
+</strong>
+
+<small>
+Reminders before scheduled cleaning jobs
+</small>
+
+</div>
+
+<input
+type="checkbox"
+checked
+style="width:22px;height:22px"
+>
+
+</div>
+
+
+<div class="settingRow">
+
+<div class="settingIcon">
+📅
+</div>
+
+<div class="settingText">
+
+<strong>
+Calendar
+</strong>
+
+<small>
+Keep your cleaning schedule organised
+</small>
+
+</div>
+
+<input
+type="checkbox"
+style="width:22px;height:22px"
+>
+
+</div>
+
+
+<div class="settingRow">
+
+<div class="settingIcon">
+🌸
+</div>
+
+<div class="settingText">
+
+<strong>
+Pure Shine theme
+</strong>
+
+<small>
+Pink, soft and feminine design
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+`
+);
+
+}
+
+
+render();
 
 </script>
 
