@@ -6,9 +6,8 @@
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#f3d9e4">
-
-<title>Pure Shine Cleaning Manager</title>
+<meta name="apple-mobile-web-app-title" content="Pure Shine">
+<meta name="theme-color" content="#f7e8ef">
 
 <link rel="icon" type="image/png"
 href="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/1D0A5974-7253-48B0-8BCA-2272594D29F0.png">
@@ -16,7 +15,20 @@ href="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cle
 <link rel="apple-touch-icon"
 href="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/1D0A5974-7253-48B0-8BCA-2272594D29F0.png">
 
+<title>Pure Shine Cleaning Manager</title>
+
 <style>
+:root{
+    --pink:#d77fa1;
+    --pink-light:#f3d9e4;
+    --pink-soft:#faedf3;
+    --green:#5e7b68;
+    --text:#29262b;
+    --muted:#918991;
+    --background:#fffafd;
+    --border:#eadde4;
+}
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -27,17 +39,17 @@ href="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cle
 html,body{
     width:100%;
     min-height:100%;
-    background:#fffafd;
-    color:#29252a;
-    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+    background:var(--background);
 }
 
 body{
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",sans-serif;
     overflow-x:hidden;
     padding-bottom:120px;
 }
 
-button,input,select{
+button,input,select,textarea{
     font:inherit;
 }
 
@@ -46,18 +58,24 @@ button{
     cursor:pointer;
 }
 
-img{
-    display:block;
+input,select,textarea{
+    outline:none;
 }
 
+img{
+    display:block;
+    max-width:100%;
+}
+
+
 /* =========================================================
-   GLOBAL CLEANING BACKGROUND
+   BACKGROUND
 ========================================================= */
 
 #cleaningBackground{
     position:fixed;
     inset:0;
-    z-index:-2;
+    z-index:-10;
     pointer-events:none;
     background:
         linear-gradient(
@@ -70,6 +88,7 @@ img{
     background-repeat:no-repeat;
 }
 
+
 /* =========================================================
    WELCOME
 ========================================================= */
@@ -78,8 +97,8 @@ img{
     position:fixed;
     inset:0;
     z-index:99999;
-    overflow-y:auto;
-    background:#fdf0f6;
+    background:#fdf1f7;
+    overflow:auto;
     transition:.3s ease;
 }
 
@@ -92,9 +111,9 @@ img{
 .welcome-inner{
     min-height:100dvh;
     padding:
-        calc(env(safe-area-inset-top) + 14px)
+        calc(env(safe-area-inset-top) + 18px)
         22px
-        calc(env(safe-area-inset-bottom) + 25px);
+        calc(env(safe-area-inset-bottom) + 28px);
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -102,55 +121,54 @@ img{
 }
 
 .welcome-logo{
-    width:285px;
-    height:285px;
+    width:280px;
+    height:280px;
     object-fit:contain;
 }
 
 .welcome-title{
-    margin-top:-5px;
+    margin-top:-8px;
     font-family:"Snell Roundhand","Apple Chancery","Brush Script MT",cursive;
-    font-size:51px;
-    line-height:.95;
     color:#98506f;
+    font-size:50px;
+    line-height:.95;
 }
 
 .welcome-heart{
     margin-top:12px;
+    color:#ad6381;
     font-family:Georgia,serif;
-    font-size:54px;
-    color:#aa6481;
+    font-size:52px;
 }
 
 .feature-grid{
     width:100%;
     max-width:600px;
+    margin-top:17px;
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:8px;
-    margin-top:14px;
 }
 
 .feature{
-    min-height:98px;
+    min-height:96px;
     background:#fff;
     border-radius:20px;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    text-align:center;
 }
 
 .feature-icon{
-    font-size:24px;
     color:#a95c7b;
-    margin-bottom:8px;
+    font-size:23px;
+    margin-bottom:7px;
 }
 
 .feature span{
     font-size:11px;
-    line-height:1.25;
+    line-height:1.3;
 }
 
 .welcome-spacer{
@@ -159,10 +177,10 @@ img{
 }
 
 .get-started{
-    width:min(88%,500px);
-    min-height:58px;
+    width:min(90%,500px);
+    height:58px;
     border-radius:32px;
-    background:#dd78a0;
+    background:var(--pink);
     color:#fff;
     font-size:17px;
     font-weight:800;
@@ -174,18 +192,29 @@ img{
     font-size:13px;
 }
 
+
 /* =========================================================
    APP
 ========================================================= */
 
 #app{
     display:none;
-    width:100%;
     min-height:100dvh;
+    width:100%;
 }
 
+.app-content{
+    width:100%;
+    transform-origin:top center;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
 .header{
-    min-height:119px;
+    min-height:120px;
     padding:
         calc(env(safe-area-inset-top) + 15px)
         22px
@@ -221,13 +250,15 @@ img{
 }
 
 .settings-btn{
-    width:56px;
-    height:56px;
+    width:58px;
+    height:58px;
+    flex:none;
     border-radius:50%;
     background:#fff;
-    box-shadow:0 7px 25px rgba(80,40,60,.09);
+    box-shadow:0 8px 25px rgba(80,40,60,.10);
     font-size:25px;
 }
+
 
 /* =========================================================
    PAGES
@@ -245,8 +276,21 @@ img{
     width:100%;
     max-width:900px;
     margin:auto;
-    padding:0 22px 125px;
+    padding:0 22px 135px;
 }
+
+.page-title{
+    font-size:29px;
+    font-weight:800;
+    margin:5px 0 6px;
+}
+
+.page-subtitle{
+    color:var(--muted);
+    font-size:14px;
+    margin-bottom:20px;
+}
+
 
 /* =========================================================
    HOME
@@ -255,11 +299,11 @@ img{
 .date-card{
     min-height:101px;
     border-radius:25px;
-    background:#f3d9e4;
+    background:var(--pink-light);
     padding:19px 22px;
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
 }
 
 .date-title{
@@ -275,15 +319,15 @@ img{
 
 .date-heart{
     font-family:Georgia,serif;
-    font-size:57px;
     color:#ae6280;
+    font-size:57px;
 }
 
 .stats{
+    margin-top:18px;
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:10px;
-    margin-top:18px;
 }
 
 .stat{
@@ -318,8 +362,8 @@ img{
 
 .section-head{
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
     margin:27px 2px 13px;
 }
 
@@ -333,18 +377,17 @@ img{
     color:#a55373;
     font-size:14px;
     font-weight:800;
-    cursor:pointer;
 }
 
 .schedule-empty{
-    background:rgba(255,255,255,.95);
-    border-radius:25px;
     min-height:211px;
-    padding:20px 11px 11px;
+    background:rgba(255,255,255,.96);
+    border-radius:25px;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
+    padding:20px 11px 11px;
     box-shadow:0 7px 25px rgba(60,30,50,.06);
 }
 
@@ -370,7 +413,7 @@ img{
     height:59px;
     margin-top:18px;
     border-radius:31px;
-    background:#d77fa1;
+    background:var(--pink);
     color:#fff;
     font-size:17px;
     font-weight:800;
@@ -390,8 +433,8 @@ img{
     height:70px;
     border-radius:20px;
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     gap:11px;
     font-size:15px;
 }
@@ -402,6 +445,7 @@ img{
 .quick:nth-child(4){background:#fff0c9;color:#8c6811}
 .quick:nth-child(5){background:#e6dcf5;color:#65418b}
 .quick:nth-child(6){background:#f5ddd7;color:#995348}
+
 
 /* =========================================================
    TIMER
@@ -445,10 +489,10 @@ img{
 
 .timer-display{
     margin:13px 0;
+    color:#8f506c;
     font-size:35px;
     font-weight:800;
     font-variant-numeric:tabular-nums;
-    color:#8f506c;
 }
 
 .timer-actions{
@@ -464,7 +508,7 @@ img{
 }
 
 .timer-stop{
-    background:#d77fa1;
+    background:var(--pink);
     color:#fff;
 }
 
@@ -473,65 +517,13 @@ img{
     color:#8c5c70;
 }
 
-/* =========================================================
-   MESSAGE IMAGE
-========================================================= */
-
-.quote-card{
-    position:relative;
-    width:100%;
-    height:142px;
-    margin-top:19px;
-    border-radius:25px;
-    overflow:hidden;
-    background:#f1d4df;
-}
-
-.quote-image{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-.quote-overlay{
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
-    padding:18px;
-    text-align:center;
-    background:rgba(255,224,237,.20);
-}
-
-.quote-text{
-    font-family:"Snell Roundhand","Apple Chancery","Brush Script MT",cursive;
-    font-size:28px;
-    color:#75495f;
-}
-
-/* =========================================================
-   COMMON PAGES
-========================================================= */
-
-.page-title{
-    font-size:28px;
-    font-weight:800;
-    margin:5px 0 6px;
-}
-
-.page-subtitle{
-    color:#8b8289;
-    font-size:14px;
-    margin-bottom:20px;
-}
 
 /* =========================================================
    SCHEDULE
 ========================================================= */
 
 .day-card{
-    background:rgba(255,255,255,.96);
+    background:rgba(255,255,255,.97);
     border-radius:23px;
     padding:17px;
     margin-bottom:12px;
@@ -555,34 +547,36 @@ img{
     font-weight:800;
 }
 
-.job-row{
-    min-height:72px;
-    border-radius:17px;
-    padding:10px 12px;
+.schedule-job{
+    min-height:78px;
+    border-radius:18px;
+    padding:10px 11px;
     margin-top:8px;
     display:flex;
-    justify-content:space-between;
     align-items:center;
+    justify-content:space-between;
+    gap:10px;
 }
 
-.job-row:nth-child(2n){
-    background:#f8eaf0;
+.schedule-job:nth-child(2n){
+    background:#faeaf1;
 }
 
-.job-row:nth-child(2n+1){
-    background:#eef4fb;
+.schedule-job:nth-child(2n+1){
+    background:#edf4fb;
 }
 
-.job-info{
+.job-left{
+    min-width:0;
     display:flex;
     align-items:center;
     gap:11px;
 }
 
-.client-initial,
-.client-avatar{
+.client-initial{
     width:50px;
     height:50px;
+    flex:none;
     border-radius:50%;
     background:#f3d9e4;
     color:#a55373;
@@ -590,10 +584,15 @@ img{
     justify-content:center;
     align-items:center;
     font-weight:800;
-    flex:none;
+    font-size:17px;
+}
+
+.job-details{
+    min-width:0;
 }
 
 .job-name{
+    font-size:16px;
     font-weight:800;
 }
 
@@ -601,12 +600,30 @@ img{
     margin-top:4px;
     color:#827981;
     font-size:12px;
+    line-height:1.35;
+}
+
+.job-right{
+    display:flex;
+    align-items:center;
+    gap:7px;
 }
 
 .job-pay{
-    color:#5c7965;
+    color:var(--green);
     font-weight:800;
+    white-space:nowrap;
 }
+
+.edit-schedule-btn{
+    width:38px;
+    height:38px;
+    flex:none;
+    border-radius:12px;
+    background:#fff;
+    box-shadow:0 3px 10px rgba(60,30,50,.07);
+}
+
 
 /* =========================================================
    CLIENTS
@@ -624,11 +641,11 @@ img{
 .date-input{
     width:100%;
     height:50px;
-    border:1px solid #eadce3;
+    border:1px solid var(--border);
     border-radius:16px;
     padding:0 14px;
     background:#fff;
-    outline:none;
+    color:var(--text);
 }
 
 .search-box{
@@ -638,8 +655,9 @@ img{
 .add-client-btn{
     width:50px;
     height:50px;
+    flex:none;
     border-radius:16px;
-    background:#d77fa1;
+    background:var(--pink);
     color:#fff;
     font-size:25px;
 }
@@ -647,8 +665,8 @@ img{
 .past-jobs-button{
     width:100%;
     min-height:52px;
-    border-radius:18px;
     margin-bottom:14px;
+    border-radius:18px;
     background:#e6dcf5;
     color:#65418b;
     font-weight:800;
@@ -663,20 +681,29 @@ img{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    gap:10px;
     box-shadow:0 6px 20px rgba(60,30,50,.05);
 }
 
 .client-left{
+    min-width:0;
     display:flex;
     align-items:center;
     gap:12px;
-    min-width:0;
 }
 
 .client-avatar{
     width:54px;
     height:54px;
+    flex:none;
+    border-radius:50%;
+    background:#f3d9e4;
+    color:#a55373;
+    display:flex;
+    justify-content:center;
+    align-items:center;
     font-size:18px;
+    font-weight:800;
 }
 
 .client-name{
@@ -687,6 +714,13 @@ img{
     margin-top:4px;
     color:#8c848b;
     font-size:12px;
+    line-height:1.35;
+}
+
+.client-right{
+    display:flex;
+    align-items:center;
+    gap:7px;
 }
 
 .client-rate{
@@ -698,8 +732,7 @@ img{
 
 .client-actions{
     display:flex;
-    gap:6px;
-    margin-left:8px;
+    gap:5px;
 }
 
 .client-action{
@@ -716,6 +749,7 @@ img{
     background:#f5ddd7;
 }
 
+
 /* =========================================================
    FREE TIME
 ========================================================= */
@@ -729,9 +763,9 @@ img{
 }
 
 .free-big{
+    color:#9b5a75;
     font-size:39px;
     font-weight:800;
-    color:#9b5a75;
 }
 
 .free-label{
@@ -755,6 +789,7 @@ img{
 .free-slot strong{
     color:#4f755f;
 }
+
 
 /* =========================================================
    EARNINGS
@@ -817,19 +852,58 @@ img{
     font-size:12px;
 }
 
+
+/* =========================================================
+   QUOTE
+========================================================= */
+
+.quote-card{
+    width:100%;
+    height:150px;
+    margin-top:20px;
+    position:relative;
+    overflow:hidden;
+    border-radius:25px;
+    background:#f3d9e4;
+}
+
+.quote-image{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.quote-overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:17px;
+    background:rgba(255,220,235,.10);
+    text-align:center;
+}
+
+.quote-text{
+    color:#70465d;
+    font-family:"Snell Roundhand","Apple Chancery","Brush Script MT",cursive;
+    font-size:27px;
+}
+
+
 /* =========================================================
    BOTTOM NAV
 ========================================================= */
 
 .bottom-nav{
     position:fixed;
-    z-index:3000;
+    z-index:4000;
     left:14px;
     right:14px;
     bottom:calc(env(safe-area-inset-bottom) + 10px);
     height:91px;
-    background:rgba(255,255,255,.98);
     border-radius:25px;
+    background:rgba(255,255,255,.98);
     box-shadow:0 8px 30px rgba(50,30,45,.12);
     display:grid;
     grid-template-columns:repeat(5,1fr);
@@ -858,22 +932,25 @@ img{
     font-size:23px;
 }
 
+
 /* =========================================================
    MODALS
 ========================================================= */
 
 .modal-backdrop{
-    position:fixed;
-    inset:0;
-    z-index:9000;
+    position:fixed !important;
+    inset:0 !important;
+    z-index:999999 !important;
     display:none;
     align-items:flex-end;
     justify-content:center;
-    background:rgba(35,28,33,.42);
+    background:rgba(35,28,33,.45);
+    -webkit-backdrop-filter:blur(3px);
+    backdrop-filter:blur(3px);
 }
 
 .modal-backdrop.show{
-    display:flex;
+    display:flex !important;
 }
 
 .modal{
@@ -883,7 +960,9 @@ img{
     overflow-y:auto;
     background:#fffafd;
     border-radius:30px 30px 0 0;
-    padding:10px 20px calc(env(safe-area-inset-bottom) + 28px);
+    padding:
+        10px 20px
+        calc(env(safe-area-inset-bottom) + 28px);
 }
 
 .modal-handle{
@@ -936,6 +1015,7 @@ img{
 .timer-choice-avatar{
     width:48px;
     height:48px;
+    flex:none;
     border-radius:50%;
     background:#f3d9e4;
     color:#a55373;
@@ -976,7 +1056,7 @@ img{
     width:100%;
     height:52px;
     border-radius:18px;
-    background:#d77fa1;
+    background:var(--pink);
     color:#fff;
     font-weight:800;
 }
@@ -990,8 +1070,17 @@ img{
     font-weight:800;
 }
 
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+.settings-modal{
+    z-index:1000000 !important;
+}
+
 .setting-row{
-    min-height:67px;
+    min-height:74px;
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -1009,34 +1098,53 @@ img{
     font-size:12px;
 }
 
-.toggle{
-    width:52px;
-    height:31px;
-    flex:none;
-    border-radius:20px;
-    background:#d9d2d7;
-    position:relative;
+.setting-toggle{
+    min-width:78px;
+    height:40px;
+    padding:0 13px;
+    border-radius:14px;
+    background:#e6e0e4;
+    color:#777078;
+    font-size:12px;
+    font-weight:800;
 }
 
-.toggle.on{
-    background:#d77fa1;
+.setting-toggle.on{
+    background:var(--pink);
+    color:#fff;
 }
 
-.toggle:after{
-    content:"";
-    position:absolute;
-    width:25px;
-    height:25px;
-    top:3px;
-    left:3px;
-    background:#fff;
-    border-radius:50%;
-    transition:.2s;
+.size-buttons{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-top:12px;
 }
 
-.toggle.on:after{
-    transform:translateX(21px);
+.size-btn{
+    min-height:46px;
+    border-radius:14px;
+    background:#f4e8ee;
+    color:#85526a;
+    font-size:13px;
+    font-weight:800;
 }
+
+.size-btn.active{
+    background:var(--pink);
+    color:#fff;
+}
+
+.settings-info{
+    margin-top:18px;
+    padding:14px;
+    border-radius:17px;
+    background:#fff1c9;
+    color:#775d1c;
+    font-size:12px;
+    line-height:1.4;
+}
+
 
 /* =========================================================
    RESPONSIVE
@@ -1051,22 +1159,6 @@ img{
 
     .welcome-title{
         font-size:49px;
-    }
-
-    .stats{
-        gap:8px;
-    }
-
-    .stat{
-        min-height:130px;
-    }
-
-    .stat-number{
-        font-size:18px;
-    }
-
-    .stat-label{
-        font-size:12px;
     }
 
 }
@@ -1084,6 +1176,14 @@ img{
 
     .stats{
         gap:5px;
+    }
+
+    .stat{
+        min-height:125px;
+    }
+
+    .stat-number{
+        font-size:17px;
     }
 
     .quick{
@@ -1104,60 +1204,61 @@ img{
 
 <div id="welcomeScreen">
 
-<div class="welcome-inner">
+    <div class="welcome-inner">
 
-<img
-    class="welcome-logo"
-    src="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/1D0A5974-7253-48B0-8BCA-2272594D29F0.png"
-    alt="Pure Shine Cleaning Manager"
->
+        <img
+            class="welcome-logo"
+            src="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/1D0A5974-7253-48B0-8BCA-2272594D29F0.png"
+            alt="Pure Shine Cleaning Manager"
+        >
 
-<div class="welcome-title">
-Your Cleaning<br>
-Business, Simplified
-</div>
+        <div class="welcome-title">
+            Your Cleaning<br>
+            Business, Simplified
+        </div>
 
-<div class="welcome-heart">♡</div>
+        <div class="welcome-heart">♡</div>
 
-<div class="feature-grid">
+        <div class="feature-grid">
 
-<div class="feature">
-<div class="feature-icon">▣</div>
-<span>Manage<br>Jobs</span>
-</div>
+            <div class="feature">
+                <div class="feature-icon">▣</div>
+                <span>Manage<br>Jobs</span>
+            </div>
 
-<div class="feature">
-<div class="feature-icon">♧</div>
-<span>Keep Track<br>of Clients</span>
-</div>
+            <div class="feature">
+                <div class="feature-icon">♧</div>
+                <span>Keep Track<br>of Clients</span>
+            </div>
 
-<div class="feature">
-<div class="feature-icon">▥</div>
-<span>Track<br>Earnings</span>
-</div>
+            <div class="feature">
+                <div class="feature-icon">▥</div>
+                <span>Track<br>Earnings</span>
+            </div>
 
-<div class="feature">
-<div class="feature-icon">◷</div>
-<span>More Time<br>for You</span>
-</div>
+            <div class="feature">
+                <div class="feature-icon">◷</div>
+                <span>More Time<br>for You</span>
+            </div>
 
-</div>
+        </div>
 
-<div class="welcome-spacer"></div>
+        <div class="welcome-spacer"></div>
 
-<button
-    id="getStarted"
-    class="get-started"
-    type="button"
->
-Get Started&nbsp; ›
-</button>
+        <button
+            id="getStarted"
+            class="get-started"
+            type="button"
+        >
+            Get Started&nbsp; ›
+        </button>
 
-<div class="login-text">
-Already have an account? <span>Log in</span>
-</div>
+        <div class="login-text">
+            Already have an account? <span>Log in</span>
+        </div>
 
-</div>
+    </div>
+
 </div>
 
 
@@ -1167,30 +1268,32 @@ Already have an account? <span>Log in</span>
 
 <div id="app">
 
+<div class="app-content">
+
 <header class="header">
 
-<div class="brand">
+    <div class="brand">
 
-<img
-    class="header-logo"
-    src="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/1D0A5974-7253-48B0-8BCA-2272594D29F0.png"
-    alt="Pure Shine"
->
+        <img
+            class="header-logo"
+            src="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/1D0A5974-7253-48B0-8BCA-2272594D29F0.png"
+            alt="Pure Shine"
+        >
 
-<div class="brand-text">
-<h1>Cleaning Manager</h1>
-<p>Your cleaning business ✨</p>
-</div>
+        <div class="brand-text">
+            <h1>Cleaning Manager</h1>
+            <p>Your cleaning business ✨</p>
+        </div>
 
-</div>
+    </div>
 
-<button
-    class="settings-btn"
-    type="button"
-    onclick="openSettings()"
->
-⚙️
-</button>
+    <button
+        id="settingsButton"
+        class="settings-btn"
+        type="button"
+    >
+        ⚙️
+    </button>
 
 </header>
 
@@ -1203,225 +1306,223 @@ Already have an account? <span>Log in</span>
 
 <main class="main">
 
-<section class="date-card">
+    <section class="date-card">
 
-<div>
-<div id="dateTitle" class="date-title"></div>
-<div class="date-sub">
-Let's make today productive ✨
-</div>
-</div>
+        <div>
+            <div id="dateTitle" class="date-title"></div>
 
-<div class="date-heart">♡</div>
+            <div class="date-sub">
+                Let's make today productive ✨
+            </div>
+        </div>
 
-</section>
+        <div class="date-heart">♡</div>
 
-
-<section class="stats">
-
-<div class="stat">
-<div class="stat-icon">🛍️</div>
-<div id="jobsNumber" class="stat-number">0</div>
-<div class="stat-label">Jobs</div>
-</div>
-
-<div class="stat">
-<div class="stat-icon">◷</div>
-<div id="hoursNumber" class="stat-number">0h 0m</div>
-<div class="stat-label">Hours</div>
-</div>
-
-<div class="stat">
-<div class="stat-icon">🌍</div>
-<div id="earnedNumber" class="stat-number">£0.00</div>
-<div class="stat-label">Earned</div>
-</div>
-
-<div class="stat">
-<div class="stat-icon">☼</div>
-<div class="stat-number">8h 0m</div>
-<div class="stat-label">Available</div>
-</div>
-
-</section>
+    </section>
 
 
-<section id="activeTimer" class="active-timer">
+    <section class="stats">
 
-<div class="timer-top">
+        <div class="stat">
+            <div class="stat-icon">🛍️</div>
+            <div id="jobsNumber" class="stat-number">0</div>
+            <div class="stat-label">Jobs</div>
+        </div>
 
-<div>
+        <div class="stat">
+            <div class="stat-icon">◷</div>
+            <div id="hoursNumber" class="stat-number">0h 0m</div>
+            <div class="stat-label">Hours</div>
+        </div>
 
-<div class="timer-label">
-Cleaning in progress
-</div>
+        <div class="stat">
+            <div class="stat-icon">£</div>
+            <div id="earnedNumber" class="stat-number">£0.00</div>
+            <div class="stat-label">Earned</div>
+        </div>
 
-<div
-    id="timerClient"
-    class="timer-client"
->
-Client
-</div>
+        <div class="stat">
+            <div class="stat-icon">☼</div>
+            <div id="availableNumber" class="stat-number">8h 0m</div>
+            <div class="stat-label">Available</div>
+        </div>
 
-</div>
-
-<div
-    id="timerRate"
-    class="timer-rate"
->
-£0.00/h
-</div>
-
-</div>
-
-<div
-    id="timerDisplay"
-    class="timer-display"
->
-00:00:00
-</div>
-
-<div class="timer-actions">
-
-<button
-    class="timer-button timer-stop"
-    type="button"
-    onclick="stopCleaning()"
->
-Stop & Save Job
-</button>
-
-<button
-    class="timer-button timer-cancel"
-    type="button"
-    onclick="cancelTimer()"
->
-Cancel
-</button>
-
-</div>
-
-</section>
+    </section>
 
 
-<div class="section-head">
+    <section id="activeTimer" class="active-timer">
 
-<h2>
-Today's schedule
-</h2>
+        <div class="timer-top">
 
-<span
-    class="see-all"
-    onclick="openSchedule()"
->
-See all
-</span>
+            <div>
 
-</div>
+                <div class="timer-label">
+                    Cleaning in progress
+                </div>
 
+                <div
+                    id="timerClient"
+                    class="timer-client"
+                >
+                    Client
+                </div>
 
-<section class="schedule-empty">
+            </div>
 
-<div class="empty-heart">♡</div>
+            <div
+                id="timerRate"
+                class="timer-rate"
+            >
+                £0.00/h
+            </div>
 
-<div class="empty-title">
-No cleaning jobs today 🌸
-</div>
+        </div>
 
-<div class="empty-sub">
-Add one with the + button.
-</div>
+        <div
+            id="timerDisplay"
+            class="timer-display"
+        >
+            00:00:00
+        </div>
 
-<button
-    class="add-job"
-    type="button"
-    onclick="addCleaningJob()"
->
-+ Add cleaning job
-</button>
+        <div class="timer-actions">
 
-</section>
+            <button
+                class="timer-button timer-stop"
+                type="button"
+                onclick="stopCleaning()"
+            >
+                Stop & Save Job
+            </button>
 
+            <button
+                class="timer-button timer-cancel"
+                type="button"
+                onclick="cancelTimer()"
+            >
+                Cancel
+            </button>
 
-<h2 class="quick-title">
-Quick actions
-</h2>
+        </div>
 
-
-<section class="quick-grid">
-
-<button
-    class="quick"
-    type="button"
-    onclick="startCleaning()"
->
-<span>◷</span>
-<span>Start cleaning</span>
-</button>
-
-<button
-    class="quick"
-    type="button"
-    onclick="openClients()"
->
-<span>♧</span>
-<span>Clients</span>
-</button>
-
-<button
-    class="quick"
-    type="button"
-    onclick="openSchedule()"
->
-<span>▣</span>
-<span>Schedule</span>
-</button>
-
-<button
-    class="quick"
-    type="button"
-    onclick="findFreeTime()"
->
-<span>⌕</span>
-<span>Find free time</span>
-</button>
-
-<button
-    class="quick"
-    type="button"
-    onclick="openEarnings()"
->
-<span>▥</span>
-<span>Earnings</span>
-</button>
-
-<button
-    class="quick"
-    type="button"
-    onclick="openHolidays()"
->
-<span>♧</span>
-<span>Holidays</span>
-</button>
-
-</section>
+    </section>
 
 
-<section class="quote-card">
+    <div class="section-head">
 
-<img
-    class="quote-image"
-    src="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/pure-shine-cleaning-background.png"
-    alt="Pure Shine Cleaning"
->
+        <h2>Today's schedule</h2>
 
-<div class="quote-overlay">
-<div class="quote-text">
-A clean space is a happy place
-</div>
-</div>
+        <span
+            class="see-all"
+            onclick="openSchedule()"
+        >
+            See all
+        </span>
 
-</section>
+    </div>
+
+
+    <section class="schedule-empty">
+
+        <div class="empty-heart">♡</div>
+
+        <div class="empty-title">
+            No cleaning jobs today 🌸
+        </div>
+
+        <div class="empty-sub">
+            Add one with the button below.
+        </div>
+
+        <button
+            class="add-job"
+            type="button"
+            onclick="addCleaningJob()"
+        >
+            + Add cleaning job
+        </button>
+
+    </section>
+
+
+    <h2 class="quick-title">
+        Quick actions
+    </h2>
+
+    <section class="quick-grid">
+
+        <button
+            class="quick"
+            type="button"
+            onclick="startCleaning()"
+        >
+            <span>◷</span>
+            <span>Start cleaning</span>
+        </button>
+
+        <button
+            class="quick"
+            type="button"
+            onclick="openClients()"
+        >
+            <span>♧</span>
+            <span>Clients</span>
+        </button>
+
+        <button
+            class="quick"
+            type="button"
+            onclick="openSchedule()"
+        >
+            <span>▣</span>
+            <span>Schedule</span>
+        </button>
+
+        <button
+            class="quick"
+            type="button"
+            onclick="findFreeTime()"
+        >
+            <span>⌕</span>
+            <span>Find free time</span>
+        </button>
+
+        <button
+            class="quick"
+            type="button"
+            onclick="openEarnings()"
+        >
+            <span>▥</span>
+            <span>Earnings</span>
+        </button>
+
+        <button
+            class="quick"
+            type="button"
+            onclick="openPastJobs()"
+        >
+            <span>＋</span>
+            <span>Past jobs</span>
+        </button>
+
+    </section>
+
+
+    <section class="quote-card">
+
+        <img
+            class="quote-image"
+            src="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/pure-shine-cleaning-background.png"
+            alt="Pure Shine Cleaning"
+        >
+
+        <div class="quote-overlay">
+            <div class="quote-text">
+                A clean space is a happy place
+            </div>
+        </div>
+
+    </section>
 
 </main>
 
@@ -1436,213 +1537,31 @@ A clean space is a happy place
 
 <main class="main">
 
-<h2 class="page-title">
-Schedule
-</h2>
-
-<p class="page-subtitle">
-Your weekly cleaning schedule 🌸
-</p>
-
-<div class="day-card">
-
-<div class="day-header">
-<strong>Monday</strong>
-<span class="day-total">2h · £32</span>
-</div>
-
-<div class="job-row">
-
-<div class="job-info">
-<div class="client-initial">L</div>
-
-<div>
-<div class="job-name">Lottie</div>
-<div class="job-time">13:00–15:00 · Agency</div>
-</div>
-</div>
-
-<div class="job-pay">£32</div>
-
-</div>
-
-</div>
-
-
-<div class="day-card">
-
-<div class="day-header">
-<strong>Tuesday</strong>
-<span class="day-total">Variable</span>
-</div>
-
-<div class="job-row">
-
-<div class="job-info">
-<div class="client-initial">C</div>
-
-<div>
-<div class="job-name">Christine</div>
-<div class="job-time">09:30–12:30 · Private</div>
-</div>
-</div>
-
-<div class="job-pay">£54</div>
-
-</div>
-
-<div class="job-row">
-
-<div class="job-info">
-<div class="client-initial">M</div>
-
-<div>
-<div class="job-name">Matt</div>
-<div class="job-time">Flexible · Agency</div>
-</div>
-</div>
-
-<div class="job-pay">£16/h</div>
-
-</div>
-
-</div>
-
-
-<div class="day-card">
-
-<div class="day-header">
-<strong>Wednesday</strong>
-<span class="day-total">Variable</span>
-</div>
-
-<div class="job-row">
-
-<div class="job-info">
-<div class="client-initial">S</div>
-
-<div>
-<div class="job-name">Sonia</div>
-<div class="job-time">09:00–variable · Agency</div>
-</div>
-</div>
-
-<div class="job-pay">£16/h</div>
-
-</div>
-
-<div class="job-row">
-
-<div class="job-info">
-<div class="client-initial">G</div>
-
-<div>
-<div class="job-name">Gill</div>
-<div class="job-time">15:00–18:00 · Agency</div>
-</div>
-</div>
-
-<div class="job-pay">£48</div>
-
-</div>
-
-</div>
-
-
-<div class="day-card">
-
-<div class="day-header">
-<strong>Thursday</strong>
-<span class="day-total">Variable</span>
-</div>
-
-<div class="job-row">
-
-<div class="job-info">
-<div class="client-initial">L</div>
-
-<div>
-<div class="job-name">Laura</div>
-<div class="job-time">09:00–variable · Private</div>
-</div>
-</div>
-
-<div class="job-pay">£18/h</div>
-
-</div>
-
-<div class="job-row">
-
-<div class="job-info">
-<div class="client-initial">H</div>
-
-<div>
-<div class="job-name">Hannah</div>
-<div class="job-time">13:00–16:00 · Agency</div>
-</div>
-</div>
-
-<div class="job-pay">£48</div>
-
-</div>
-
-</div>
-
-
-<div class="day-card">
-
-<div class="day-header">
-<strong>Friday</strong>
-<span class="day-total">Fortnightly</span>
-</div>
-
-<div class="job-row">
-
-<div class="job-info">
-<div class="client-initial">J</div>
-
-<div>
-<div class="job-name">Johanna</div>
-<div class="job-time">Fortnightly · Private</div>
-</div>
-</div>
-
-<div class="job-pay">£20/h</div>
-
-</div>
-
-<div class="job-row">
-
-<div class="job-info">
-<div class="client-initial">S</div>
-
-<div>
-<div class="job-name">Sindu</div>
-<div class="job-time">Fortnightly · Private</div>
-</div>
-</div>
-
-<div class="job-pay">£20/h</div>
-
-</div>
-
-</div>
-
-<section class="quote-card">
-
-<img
-    class="quote-image"
-    src="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/pure-shine-cleaning-background.png"
-    alt="Pure Shine Cleaning"
->
-
-<div class="quote-overlay">
-<div class="quote-text">
-A clean space is a happy place
-</div>
-</div>
-
-</section>
+    <h2 class="page-title">
+        Schedule
+    </h2>
+
+    <p class="page-subtitle">
+        Your weekly cleaning schedule 🌸
+    </p>
+
+    <div id="scheduleContainer"></div>
+
+    <section class="quote-card">
+
+        <img
+            class="quote-image"
+            src="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/pure-shine-cleaning-background.png"
+            alt="Pure Shine Cleaning"
+        >
+
+        <div class="quote-overlay">
+            <div class="quote-text">
+                A clean space is a happy place
+            </div>
+        </div>
+
+    </section>
 
 </main>
 
@@ -1657,43 +1576,42 @@ A clean space is a happy place
 
 <main class="main">
 
-<h2 class="page-title">
-Clients
-</h2>
+    <h2 class="page-title">
+        Clients
+    </h2>
 
-<p class="page-subtitle">
-Manage clients and hourly payment rates ✨
-</p>
+    <p class="page-subtitle">
+        Manage clients and hourly payment rates ✨
+    </p>
 
-<div class="clients-toolbar">
+    <div class="clients-toolbar">
 
-<input
-    id="clientSearch"
-    class="search-box"
-    type="search"
-    placeholder="Search clients..."
-    oninput="filterClients()"
->
+        <input
+            id="clientSearch"
+            class="search-box"
+            type="search"
+            placeholder="Search clients..."
+        >
 
-<button
-    class="add-client-btn"
-    type="button"
-    onclick="addClient()"
->
-+
-</button>
+        <button
+            class="add-client-btn"
+            type="button"
+            onclick="addClient()"
+        >
+            +
+        </button>
 
-</div>
+    </div>
 
-<button
-    class="past-jobs-button"
-    type="button"
-    onclick="openPastJobs()"
->
-📋 Add / View Past Jobs
-</button>
+    <button
+        class="past-jobs-button"
+        type="button"
+        onclick="openPastJobs()"
+    >
+        📋 Add / View Past Jobs
+    </button>
 
-<div id="clientsList"></div>
+    <div id="clientsList"></div>
 
 </main>
 
@@ -1708,42 +1626,42 @@ Manage clients and hourly payment rates ✨
 
 <main class="main">
 
-<h2 class="page-title">
-Find free time
-</h2>
+    <h2 class="page-title">
+        Find free time
+    </h2>
 
-<p class="page-subtitle">
-See when you have time available for another client.
-</p>
+    <p class="page-subtitle">
+        See when you have time available for another client.
+    </p>
 
-<div class="free-card">
+    <div class="free-card">
 
-<div class="free-big">
-8h 0m
-</div>
+        <div class="free-big">
+            8h 0m
+        </div>
 
-<div class="free-label">
-Available today
-</div>
+        <div class="free-label">
+            Available today
+        </div>
 
-<div class="free-line"></div>
+        <div class="free-line"></div>
 
-<div class="free-slot">
-<span>09:00–13:00</span>
-<strong>Free</strong>
-</div>
+        <div class="free-slot">
+            <span>09:00–13:00</span>
+            <strong>Free</strong>
+        </div>
 
-<div class="free-slot">
-<span>13:00–15:00</span>
-<strong>Booked</strong>
-</div>
+        <div class="free-slot">
+            <span>13:00–15:00</span>
+            <strong>Booked</strong>
+        </div>
 
-<div class="free-slot">
-<span>15:00–17:00</span>
-<strong>Free</strong>
-</div>
+        <div class="free-slot">
+            <span>15:00–17:00</span>
+            <strong>Free</strong>
+        </div>
 
-</div>
+    </div>
 
 </main>
 
@@ -1758,87 +1676,95 @@ Available today
 
 <main class="main">
 
-<h2 class="page-title">
-Earnings
-</h2>
+    <h2 class="page-title">
+        Earnings
+    </h2>
 
-<p class="page-subtitle">
-Exact completed hours and payments.
-</p>
+    <p class="page-subtitle">
+        Exact completed hours and payments.
+    </p>
 
-<div class="earnings-summary">
+    <div class="earnings-summary">
 
-<div class="earnings-label">
-Total earned
-</div>
+        <div class="earnings-label">
+            Total earned
+        </div>
 
-<div id="earningsTotal" class="earnings-total">
-£0.00
-</div>
+        <div
+            id="earningsTotal"
+            class="earnings-total"
+        >
+            £0.00
+        </div>
 
-<div id="earningsHours" class="earnings-hours">
-0h 0m worked
-</div>
+        <div
+            id="earningsHours"
+            class="earnings-hours"
+        >
+            0h 0m worked
+        </div>
 
-</div>
+    </div>
 
-<div id="historyList"></div>
+    <div id="historyList"></div>
 
 </main>
 
 </section>
 
+</div>
+
 
 <!-- =========================================================
-     BOTTOM NAV
+     NAV
 ========================================================= -->
 
 <nav class="bottom-nav">
 
-<button
-    class="nav-btn active"
-    data-page="homePage"
-    onclick="showPage('homePage',this)"
->
-<span class="nav-icon">⌂</span>
-<span>Home</span>
-</button>
+    <button
+        class="nav-btn active"
+        data-page="homePage"
+        type="button"
+    >
+        <span class="nav-icon">⌂</span>
+        <span>Home</span>
+    </button>
 
-<button
-    class="nav-btn"
-    data-page="schedulePage"
-    onclick="showPage('schedulePage',this)"
->
-<span class="nav-icon">▣</span>
-<span>Schedule</span>
-</button>
+    <button
+        class="nav-btn"
+        data-page="schedulePage"
+        type="button"
+    >
+        <span class="nav-icon">▣</span>
+        <span>Schedule</span>
+    </button>
 
-<button
-    class="nav-btn"
-    data-page="clientsPage"
-    onclick="showPage('clientsPage',this)"
->
-<span class="nav-icon">♧</span>
-<span>Clients</span>
-</button>
+    <button
+        class="nav-btn"
+        data-page="clientsPage"
+        type="button"
+    >
+        <span class="nav-icon">♧</span>
+        <span>Clients</span>
+    </button>
 
-<button
-    class="nav-btn"
-    data-page="freePage"
-    onclick="showPage('freePage',this)"
->
-<span class="nav-icon">◷</span>
-<span>Free time</span>
-</button>
+    <button
+        class="nav-btn"
+        data-page="freePage"
+        type="button"
+    >
+        <span class="nav-icon">◷</span>
+        <span>Free time</span>
+    </button>
 
-<button
-    class="nav-btn"
-    data-page="earningsPage"
-    onclick="showPage('earningsPage',this)"
->
-<span class="nav-icon">▥</span>
-<span>Earnings</span>
-</button>
+    <button
+        class="nav-btn"
+        data-page="earningsPage"
+        type="button"
+    >
+        <span class="nav-icon">▥</span>
+        <span>Earnings</span>
+    </button>
 
 </nav>
 
@@ -1846,45 +1772,43 @@ Total earned
 
 
 <!-- =========================================================
-     START CLEANING MODAL
+     TIMER CLIENT MODAL
 ========================================================= -->
 
 <div
     id="timerClientModal"
     class="modal-backdrop"
-    onclick="closeTimerClientModal(event)"
 >
 
-<div class="modal" onclick="event.stopPropagation()">
+<div class="modal">
 
-<div class="modal-handle"></div>
+    <div class="modal-handle"></div>
 
-<div class="modal-head">
+    <div class="modal-head">
 
-<h2>
-Start cleaning
-</h2>
+        <h2>Start cleaning</h2>
 
-<button
-    class="close-modal"
-    onclick="closeTimerClientModal()"
->
-×
-</button>
+        <button
+            class="close-modal"
+            type="button"
+            onclick="closeModal('timerClientModal')"
+        >
+            ×
+        </button>
 
-</div>
+    </div>
 
-<p
-    style="
-        color:#8b8289;
-        font-size:14px;
-        margin-bottom:15px;
-    "
->
-Choose a client. The correct hourly rate is used automatically.
-</p>
+    <p
+        style="
+            color:#8b8289;
+            font-size:14px;
+            margin-bottom:15px;
+        "
+    >
+        Choose a client. The correct hourly rate will be used automatically.
+    </p>
 
-<div id="timerClientList"></div>
+    <div id="timerClientList"></div>
 
 </div>
 
@@ -1892,102 +1816,86 @@ Choose a client. The correct hourly rate is used automatically.
 
 
 <!-- =========================================================
-     ADD CLIENT MODAL
+     ADD CLIENT
 ========================================================= -->
 
 <div
     id="addClientModal"
     class="modal-backdrop"
-    onclick="closeAddClientModal(event)"
 >
 
-<div class="modal" onclick="event.stopPropagation()">
+<div class="modal">
 
-<div class="modal-handle"></div>
+    <div class="modal-handle"></div>
 
-<div class="modal-head">
+    <div class="modal-head">
 
-<h2>
-Add client
-</h2>
+        <h2>Add client</h2>
 
-<button
-    class="close-modal"
-    onclick="closeAddClientModal()"
->
-×
-</button>
+        <button
+            class="close-modal"
+            type="button"
+            onclick="closeModal('addClientModal')"
+        >
+            ×
+        </button>
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
+        <label class="form-label">Client name</label>
 
-<label class="form-label">
-Client name
-</label>
+        <input
+            id="newClientName"
+            class="form-input"
+            type="text"
+            placeholder="Client name"
+        >
+    </div>
 
-<input
-    id="newClientName"
-    class="form-input"
-    type="text"
-    placeholder="Client name"
->
+    <div class="form-group">
+        <label class="form-label">Client type</label>
 
-</div>
+        <select
+            id="newClientType"
+            class="form-select"
+        >
+            <option value="Private">Private</option>
+            <option value="Agency">Agency</option>
+        </select>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
+        <label class="form-label">Hourly rate</label>
 
-<label class="form-label">
-Client type
-</label>
+        <input
+            id="newClientRate"
+            class="form-input"
+            type="number"
+            inputmode="decimal"
+            step="0.01"
+            value="18"
+        >
+    </div>
 
-<select
-    id="newClientType"
-    class="form-select"
->
-<option value="Private">Private</option>
-<option value="Agency">Agency</option>
-</select>
+    <div class="form-group">
+        <label class="form-label">Schedule</label>
 
-</div>
+        <input
+            id="newClientSchedule"
+            class="form-input"
+            type="text"
+            placeholder="e.g. Tuesday · 09:30–12:30"
+        >
+    </div>
 
-<div class="form-group">
-
-<label class="form-label">
-Hourly rate
-</label>
-
-<input
-    id="newClientRate"
-    class="form-input"
-    type="number"
-    step="0.01"
-    value="18"
->
-
-</div>
-
-<div class="form-group">
-
-<label class="form-label">
-Schedule
-</label>
-
-<input
-    id="newClientSchedule"
-    class="form-input"
-    type="text"
-    placeholder="e.g. Tuesday 09:30–12:30"
->
-
-</div>
-
-<button
-    class="form-button"
-    onclick="saveNewClient()"
->
-Save client
-</button>
+    <button
+        class="form-button"
+        type="button"
+        onclick="saveNewClient()"
+    >
+        Save client
+    </button>
 
 </div>
 
@@ -1995,104 +1903,104 @@ Save client
 
 
 <!-- =========================================================
-     EDIT CLIENT MODAL
+     EDIT CLIENT
 ========================================================= -->
 
 <div
     id="editClientModal"
     class="modal-backdrop"
-    onclick="closeEditClientModal(event)"
 >
 
-<div class="modal" onclick="event.stopPropagation()">
+<div class="modal">
 
-<div class="modal-handle"></div>
+    <div class="modal-handle"></div>
 
-<div class="modal-head">
+    <div class="modal-head">
 
-<h2>
-Edit client
-</h2>
+        <h2>Edit client</h2>
 
-<button
-    class="close-modal"
-    onclick="closeEditClientModal()"
->
-×
-</button>
+        <button
+            class="close-modal"
+            type="button"
+            onclick="closeModal('editClientModal')"
+        >
+            ×
+        </button>
 
-</div>
+    </div>
 
-<input
-    id="editClientIndex"
-    type="hidden"
->
+    <input
+        id="editClientIndex"
+        type="hidden"
+    >
 
-<div class="form-group">
+    <div class="form-group">
 
-<label class="form-label">
-Client name
-</label>
+        <label class="form-label">
+            Client name
+        </label>
 
-<input
-    id="editClientName"
-    class="form-input"
-    type="text"
->
+        <input
+            id="editClientName"
+            class="form-input"
+            type="text"
+        >
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label class="form-label">
-Client type
-</label>
+        <label class="form-label">
+            Client type
+        </label>
 
-<select
-    id="editClientType"
-    class="form-select"
->
-<option value="Private">Private</option>
-<option value="Agency">Agency</option>
-</select>
+        <select
+            id="editClientType"
+            class="form-select"
+        >
+            <option value="Private">Private</option>
+            <option value="Agency">Agency</option>
+        </select>
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label class="form-label">
-Hourly rate
-</label>
+        <label class="form-label">
+            Hourly rate
+        </label>
 
-<input
-    id="editClientRate"
-    class="form-input"
-    type="number"
-    step="0.01"
->
+        <input
+            id="editClientRate"
+            class="form-input"
+            type="number"
+            inputmode="decimal"
+            step="0.01"
+        >
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label class="form-label">
-Schedule
-</label>
+        <label class="form-label">
+            Schedule
+        </label>
 
-<input
-    id="editClientSchedule"
-    class="form-input"
-    type="text"
->
+        <input
+            id="editClientSchedule"
+            class="form-input"
+            type="text"
+        >
 
-</div>
+    </div>
 
-<button
-    class="form-button"
-    onclick="saveEditedClient()"
->
-Save changes
-</button>
+    <button
+        class="form-button"
+        type="button"
+        onclick="saveEditedClient()"
+    >
+        Save changes
+    </button>
 
 </div>
 
@@ -2100,94 +2008,262 @@ Save changes
 
 
 <!-- =========================================================
-     ADD MANUAL JOB
+     EDIT SCHEDULE
+========================================================= -->
+
+<div
+    id="editScheduleModal"
+    class="modal-backdrop"
+>
+
+<div class="modal">
+
+    <div class="modal-handle"></div>
+
+    <div class="modal-head">
+
+        <h2>Edit schedule</h2>
+
+        <button
+            class="close-modal"
+            type="button"
+            onclick="closeModal('editScheduleModal')"
+        >
+            ×
+        </button>
+
+    </div>
+
+    <div
+        style="
+            padding:13px;
+            margin-bottom:16px;
+            border-radius:17px;
+            background:#f7e8ef;
+            color:#80536a;
+            font-size:13px;
+            line-height:1.4;
+        "
+    >
+        Everything on this schedule card can be edited here.
+    </div>
+
+    <input
+        id="editScheduleId"
+        type="hidden"
+    >
+
+    <div class="form-group">
+
+        <label class="form-label">Day</label>
+
+        <select
+            id="editScheduleDay"
+            class="form-select"
+        >
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
+            <option>Saturday</option>
+            <option>Sunday</option>
+        </select>
+
+    </div>
+
+    <div class="form-group">
+
+        <label class="form-label">Client</label>
+
+        <input
+            id="editScheduleClient"
+            class="form-input"
+            type="text"
+        >
+
+    </div>
+
+    <div class="form-group">
+
+        <label class="form-label">Start time</label>
+
+        <input
+            id="editScheduleStart"
+            class="form-input"
+            type="time"
+        >
+
+    </div>
+
+    <div class="form-group">
+
+        <label class="form-label">End time</label>
+
+        <input
+            id="editScheduleEnd"
+            class="form-input"
+            type="time"
+        >
+
+    </div>
+
+    <div class="form-group">
+
+        <label class="form-label">Duration</label>
+
+        <input
+            id="editScheduleDuration"
+            class="form-input"
+            type="text"
+            placeholder="Example: 4 hours / Variable"
+        >
+
+    </div>
+
+    <div class="form-group">
+
+        <label class="form-label">Client type</label>
+
+        <select
+            id="editScheduleType"
+            class="form-select"
+        >
+            <option value="Private">Private</option>
+            <option value="Agency">Agency</option>
+        </select>
+
+    </div>
+
+    <div class="form-group">
+
+        <label class="form-label">Hourly rate</label>
+
+        <input
+            id="editScheduleRate"
+            class="form-input"
+            type="number"
+            inputmode="decimal"
+            step="0.01"
+        >
+
+    </div>
+
+    <div class="form-group">
+
+        <label class="form-label">Frequency</label>
+
+        <select
+            id="editScheduleFrequency"
+            class="form-select"
+        >
+            <option value="Weekly">Weekly</option>
+            <option value="Fortnightly">Fortnightly</option>
+            <option value="Every 3 weeks">Every 3 weeks</option>
+            <option value="Occasional">Occasional</option>
+        </select>
+
+    </div>
+
+    <button
+        class="form-button"
+        type="button"
+        onclick="saveScheduleEdit()"
+    >
+        Save schedule
+    </button>
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     ADD JOB
 ========================================================= -->
 
 <div
     id="addJobModal"
     class="modal-backdrop"
-    onclick="closeAddJobModal(event)"
 >
 
-<div class="modal" onclick="event.stopPropagation()">
+<div class="modal">
 
-<div class="modal-handle"></div>
+    <div class="modal-handle"></div>
 
-<div class="modal-head">
+    <div class="modal-head">
 
-<h2>
-Add completed job
-</h2>
+        <h2>Add completed job</h2>
 
-<button
-    class="close-modal"
-    onclick="closeAddJobModal()"
->
-×
-</button>
+        <button
+            class="close-modal"
+            type="button"
+            onclick="closeModal('addJobModal')"
+        >
+            ×
+        </button>
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label class="form-label">
-Client
-</label>
+        <label class="form-label">
+            Client
+        </label>
 
-<select
-    id="jobClientSelect"
-    class="form-select"
-    onchange="updatePaymentPreview()"
-></select>
+        <select
+            id="jobClientSelect"
+            class="form-select"
+        ></select>
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label class="form-label">
-Date
-</label>
+        <label class="form-label">
+            Date
+        </label>
 
-<input
-    id="jobDate"
-    class="date-input"
-    type="date"
->
+        <input
+            id="jobDate"
+            class="date-input"
+            type="date"
+        >
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label class="form-label">
-Exact hours worked
-</label>
+        <label class="form-label">
+            Exact hours worked
+        </label>
 
-<input
-    id="jobHours"
-    class="form-input"
-    type="number"
-    inputmode="decimal"
-    min="0"
-    step="0.01"
-    placeholder="Example: 4.25"
-    oninput="updatePaymentPreview()"
->
+        <input
+            id="jobHours"
+            class="form-input"
+            type="number"
+            inputmode="decimal"
+            min="0"
+            step="0.01"
+            placeholder="Example: 4.25"
+        >
 
-</div>
+    </div>
 
-<div
-    id="jobPaymentPreview"
-    class="payment-preview"
->
-Payment: £0.00
-</div>
+    <div
+        id="jobPaymentPreview"
+        class="payment-preview"
+    >
+        Payment: £0.00
+    </div>
 
-<button
-    class="form-button"
-    onclick="saveManualJob()"
->
-Save job
-</button>
+    <button
+        class="form-button"
+        type="button"
+        onclick="saveManualJob()"
+    >
+        Save job
+    </button>
 
 </div>
 
@@ -2201,102 +2277,99 @@ Save job
 <div
     id="pastJobsModal"
     class="modal-backdrop"
-    onclick="closePastJobs(event)"
 >
 
-<div class="modal" onclick="event.stopPropagation()">
+<div class="modal">
 
-<div class="modal-handle"></div>
+    <div class="modal-handle"></div>
 
-<div class="modal-head">
+    <div class="modal-head">
 
-<h2>
-Past jobs
-</h2>
+        <h2>Past jobs</h2>
 
-<button
-    class="close-modal"
-    onclick="closePastJobs()"
->
-×
-</button>
+        <button
+            class="close-modal"
+            type="button"
+            onclick="closeModal('pastJobsModal')"
+        >
+            ×
+        </button>
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label class="form-label">
-Client
-</label>
+        <label class="form-label">
+            Client
+        </label>
 
-<select
-    id="pastJobClient"
-    class="form-select"
-    onchange="updatePastJobPayment()"
-></select>
+        <select
+            id="pastJobClient"
+            class="form-select"
+        ></select>
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label class="form-label">
-Cleaning date
-</label>
+        <label class="form-label">
+            Cleaning date
+        </label>
 
-<input
-    id="pastJobDate"
-    class="date-input"
-    type="date"
->
+        <input
+            id="pastJobDate"
+            class="date-input"
+            type="date"
+        >
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label class="form-label">
-Hours worked
-</label>
+        <label class="form-label">
+            Hours worked
+        </label>
 
-<input
-    id="pastJobHours"
-    class="form-input"
-    type="number"
-    inputmode="decimal"
-    min="0"
-    step="0.01"
-    placeholder="Example: 4.25"
-    oninput="updatePastJobPayment()"
->
+        <input
+            id="pastJobHours"
+            class="form-input"
+            type="number"
+            inputmode="decimal"
+            min="0"
+            step="0.01"
+            placeholder="Example: 4.25"
+        >
 
-</div>
+    </div>
 
-<div
-    id="pastJobPayment"
-    class="payment-preview"
->
-Payment: £0.00
-</div>
+    <div
+        id="pastJobPayment"
+        class="payment-preview"
+    >
+        Payment: £0.00
+    </div>
 
-<button
-    class="form-button"
-    onclick="savePastJob()"
->
-Save past job
-</button>
+    <button
+        class="form-button"
+        type="button"
+        onclick="savePastJob()"
+    >
+        Save past job
+    </button>
 
-<hr
-    style="
-        border:0;
-        border-top:1px solid #eee4e9;
-        margin:25px 0 18px;
-    "
->
+    <hr
+        style="
+            border:0;
+            border-top:1px solid #eee4e9;
+            margin:25px 0 18px;
+        "
+    >
 
-<h3 style="margin-bottom:12px">
-Saved past jobs
-</h3>
+    <h3 style="margin-bottom:12px">
+        Saved past jobs
+    </h3>
 
-<div id="pastJobsList"></div>
+    <div id="pastJobsList"></div>
 
 </div>
 
@@ -2305,122 +2378,196 @@ Saved past jobs
 
 <!-- =========================================================
      SETTINGS
+     IMPORTANT:
+     This modal is OUTSIDE .app-content, so interface
+     scaling never makes the settings controls inaccessible.
 ========================================================= -->
 
 <div
     id="settingsModal"
-    class="modal-backdrop"
-    onclick="closeSettings(event)"
+    class="modal-backdrop settings-modal"
 >
 
-<div class="modal" onclick="event.stopPropagation()">
+<div class="modal">
 
-<div class="modal-handle"></div>
+    <div class="modal-handle"></div>
 
-<div class="modal-head">
+    <div class="modal-head">
 
-<h2>
-Settings
-</h2>
+        <h2>Settings</h2>
 
-<button
-    class="close-modal"
-    onclick="closeSettings()"
->
-×
-</button>
+        <button
+            class="close-modal"
+            type="button"
+            onclick="closeModal('settingsModal')"
+        >
+            ×
+        </button>
 
-</div>
+    </div>
 
-<div class="setting-row">
 
-<div>
-<div class="setting-title">
-Cleaning reminders
-</div>
-<div class="setting-sub">
-Reminder before scheduled cleaning
-</div>
-</div>
+    <div class="setting-row">
 
-<button
-    class="toggle on"
-    onclick="this.classList.toggle('on')"
->
-</button>
+        <div>
 
-</div>
+            <div class="setting-title">
+                Cleaning reminders
+            </div>
 
-<div class="setting-row">
+            <div class="setting-sub">
+                Reminder before scheduled cleaning
+            </div>
 
-<div>
-<div class="setting-title">
-Client reminders
-</div>
-<div class="setting-sub">
-Client reminder option
-</div>
-</div>
+        </div>
 
-<button
-    class="toggle on"
-    onclick="this.classList.toggle('on')"
->
-</button>
+        <button
+            id="cleaningReminderToggle"
+            class="setting-toggle on"
+            type="button"
+            onclick="toggleSetting(this)"
+        >
+            ON
+        </button>
 
-</div>
+    </div>
 
-<div class="setting-row">
 
-<div>
-<div class="setting-title">
-Calendar sync
-</div>
-<div class="setting-sub">
-Keep your schedule organised
-</div>
-</div>
+    <div class="setting-row">
 
-<button
-    class="toggle"
-    onclick="this.classList.toggle('on')"
->
-</button>
+        <div>
 
-</div>
+            <div class="setting-title">
+                Client reminders
+            </div>
 
-<div class="setting-row">
+            <div class="setting-sub">
+                Send a reminder to the client
+            </div>
 
-<div>
-<div class="setting-title">
-Interface size
-</div>
-<div class="setting-sub">
-Up to 200%
-</div>
-</div>
+        </div>
 
-<select
-    id="zoomSelect"
-    onchange="changeZoom(this.value)"
-    style="
-        height:38px;
-        border:1px solid #eadce3;
-        border-radius:12px;
-        padding:0 8px;
-        background:#fff;
-    "
->
-<option value="100">100%</option>
-<option value="110">110%</option>
-<option value="125">125%</option>
-<option value="130">130%</option>
-<option value="150">150%</option>
-<option value="175">175%</option>
-<option value="200">200%</option>
-</select>
+        <button
+            id="clientReminderToggle"
+            class="setting-toggle on"
+            type="button"
+            onclick="toggleSetting(this)"
+        >
+            ON
+        </button>
 
-</div>
+    </div>
+
+
+    <div class="setting-row">
+
+        <div>
+
+            <div class="setting-title">
+                Calendar sync
+            </div>
+
+            <div class="setting-sub">
+                Keep your cleaning schedule organised
+            </div>
+
+        </div>
+
+        <button
+            id="calendarToggle"
+            class="setting-toggle"
+            type="button"
+            onclick="toggleSetting(this)"
+        >
+            OFF
+        </button>
+
+    </div>
+
+
+    <div style="padding-top:20px">
+
+        <div class="setting-title">
+            Interface size
+        </div>
+
+        <div class="setting-sub">
+            Make the entire app easier to see
+        </div>
+
+        <div class="size-buttons">
+
+            <button
+                class="size-btn"
+                data-size="100"
+                type="button"
+                onclick="setInterfaceSize(100)"
+            >
+                100%
+            </button>
+
+            <button
+                class="size-btn"
+                data-size="110"
+                type="button"
+                onclick="setInterfaceSize(110)"
+            >
+                110%
+            </button>
+
+            <button
+                class="size-btn"
+                data-size="125"
+                type="button"
+                onclick="setInterfaceSize(125)"
+            >
+                125%
+            </button>
+
+            <button
+                class="size-btn"
+                data-size="130"
+                type="button"
+                onclick="setInterfaceSize(130)"
+            >
+                130%
+            </button>
+
+            <button
+                class="size-btn"
+                data-size="150"
+                type="button"
+                onclick="setInterfaceSize(150)"
+            >
+                150%
+            </button>
+
+            <button
+                class="size-btn"
+                data-size="175"
+                type="button"
+                onclick="setInterfaceSize(175)"
+            >
+                175%
+            </button>
+
+            <button
+                class="size-btn"
+                data-size="200"
+                type="button"
+                onclick="setInterfaceSize(200)"
+            >
+                200%
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="settings-info">
+        The interface size is saved automatically. The settings window remains fully accessible even when the app is enlarged.
+    </div>
 
 </div>
 
@@ -2430,106 +2577,316 @@ Up to 200%
 <script>
 "use strict";
 
+
 /* =========================================================
-   CLIENT DATA
+   CLIENTS
+   GILL IS NOT INCLUDED
 ========================================================= */
 
-const clients = [
-
+const defaultClients=[
     {
         name:"Lottie",
         type:"Agency",
         rate:16,
         schedule:"Monday · 13:00–15:00"
     },
-
     {
         name:"Christine",
         type:"Private",
         rate:18,
         schedule:"Tuesday · 09:30–12:30 · Fortnightly"
     },
-
     {
         name:"Matt",
         type:"Agency",
         rate:16,
-        schedule:"Tuesday · Flexible hours"
+        schedule:"Tuesday · Flexible duration"
     },
-
     {
         name:"Sonia",
         type:"Agency",
         rate:16,
         schedule:"Wednesday · 09:00–variable"
     },
-
     {
         name:"Laura",
         type:"Private",
         rate:18,
         schedule:"Thursday · 09:00–variable"
     },
-
     {
         name:"Hannah",
         type:"Agency",
         rate:16,
         schedule:"Thursday · 13:00–16:00"
     },
-
     {
         name:"Meghan",
         type:"Private",
         rate:20,
         schedule:"Flexible"
     },
-
     {
         name:"Johanna",
         type:"Private",
         rate:20,
         schedule:"Friday · Fortnightly"
     },
-
     {
         name:"Sindu",
         type:"Private",
         rate:20,
         schedule:"Friday · Fortnightly"
     },
-
     {
         name:"Peter",
         type:"Private",
         rate:20,
         schedule:"Occasional"
     },
-
     {
         name:"Mike",
         type:"Private",
         rate:20,
         schedule:"Every 3 weeks · Usually 2h"
     }
-
 ];
 
 
 /* =========================================================
-   STORAGE
+   WEEKLY SCHEDULE
+   GILL IS NOT INCLUDED
+========================================================= */
+
+const defaultSchedule=[
+    {
+        id:"mon-lottie",
+        day:"Monday",
+        client:"Lottie",
+        start:"13:00",
+        end:"15:00",
+        duration:"2 hours",
+        type:"Agency",
+        rate:16,
+        frequency:"Weekly"
+    },
+    {
+        id:"tue-christine",
+        day:"Tuesday",
+        client:"Christine",
+        start:"09:30",
+        end:"12:30",
+        duration:"3 hours",
+        type:"Private",
+        rate:18,
+        frequency:"Fortnightly"
+    },
+    {
+        id:"tue-matt",
+        day:"Tuesday",
+        client:"Matt",
+        start:"",
+        end:"",
+        duration:"Flexible duration",
+        type:"Agency",
+        rate:16,
+        frequency:"Weekly"
+    },
+    {
+        id:"wed-sonia",
+        day:"Wednesday",
+        client:"Sonia",
+        start:"09:00",
+        end:"14:00",
+        duration:"Variable",
+        type:"Agency",
+        rate:16,
+        frequency:"Weekly"
+    },
+    {
+        id:"thu-laura",
+        day:"Thursday",
+        client:"Laura",
+        start:"09:00",
+        end:"13:00",
+        duration:"Variable",
+        type:"Private",
+        rate:18,
+        frequency:"Weekly"
+    },
+    {
+        id:"thu-hannah",
+        day:"Thursday",
+        client:"Hannah",
+        start:"13:00",
+        end:"16:00",
+        duration:"3 hours",
+        type:"Agency",
+        rate:16,
+        frequency:"Weekly"
+    },
+    {
+        id:"fri-johanna",
+        day:"Friday",
+        client:"Johanna",
+        start:"",
+        end:"",
+        duration:"Fortnightly",
+        type:"Private",
+        rate:20,
+        frequency:"Fortnightly"
+    },
+    {
+        id:"fri-sindu",
+        day:"Friday",
+        client:"Sindu",
+        start:"",
+        end:"",
+        duration:"Fortnightly",
+        type:"Private",
+        rate:20,
+        frequency:"Fortnightly"
+    }
+];
+
+
+let clients=loadClients();
+let weeklySchedule=loadSchedule();
+let timerInterval=null;
+
+
+/* =========================================================
+   REMOVE GILL FROM ANY OLD SAVED DATA
+========================================================= */
+
+function isGill(name){
+    return String(name || "")
+        .trim()
+        .toLowerCase()==="gill";
+}
+
+
+function cleanOldGillData(){
+
+    clients=
+        clients.filter(function(client){
+            return !isGill(client.name);
+        });
+
+
+    weeklySchedule=
+        weeklySchedule.filter(function(job){
+            return !isGill(job.client);
+        });
+
+
+    saveClients();
+    saveSchedule();
+
+}
+
+
+function loadClients(){
+
+    try{
+
+        const saved=
+            JSON.parse(
+                localStorage.getItem(
+                    "pureShineClients"
+                ) || "null"
+            );
+
+        if(
+            Array.isArray(saved) &&
+            saved.length
+        ){
+
+            return saved.filter(function(client){
+
+                return !isGill(client.name);
+
+            });
+
+        }
+
+    }catch(error){}
+
+    return JSON.parse(
+        JSON.stringify(defaultClients)
+    );
+
+}
+
+
+function loadSchedule(){
+
+    try{
+
+        const saved=
+            JSON.parse(
+                localStorage.getItem(
+                    "pureShineSchedule"
+                ) || "null"
+            );
+
+        if(Array.isArray(saved)){
+
+            return saved.filter(function(job){
+
+                return !isGill(job.client);
+
+            });
+
+        }
+
+    }catch(error){}
+
+    return JSON.parse(
+        JSON.stringify(defaultSchedule)
+    );
+
+}
+
+
+function saveClients(){
+
+    localStorage.setItem(
+        "pureShineClients",
+        JSON.stringify(clients)
+    );
+
+}
+
+
+function saveSchedule(){
+
+    localStorage.setItem(
+        "pureShineSchedule",
+        JSON.stringify(weeklySchedule)
+    );
+
+}
+
+
+/* =========================================================
+   JOB STORAGE
 ========================================================= */
 
 function getJobs(){
 
     try{
 
-        const data =
+        const jobs=
             JSON.parse(
-                localStorage.getItem("pureShineJobs") || "[]"
+                localStorage.getItem(
+                    "pureShineJobs"
+                ) || "[]"
             );
 
-        return Array.isArray(data) ? data : [];
+        return Array.isArray(jobs)
+            ? jobs
+            : [];
 
     }catch(error){
 
@@ -2538,6 +2895,7 @@ function getJobs(){
     }
 
 }
+
 
 function saveJobs(jobs){
 
@@ -2550,7 +2908,120 @@ function saveJobs(jobs){
 
 
 /* =========================================================
-   APP START
+   INIT
+========================================================= */
+
+document.addEventListener(
+"DOMContentLoaded",
+function(){
+
+    cleanOldGillData();
+
+
+    const started=
+        localStorage.getItem(
+            "pureShineStarted"
+        );
+
+
+    if(started==="true"){
+
+        document
+            .getElementById("welcomeScreen")
+            .style.display="none";
+
+        document
+            .getElementById("app")
+            .style.display="block";
+
+    }
+
+
+    document
+        .getElementById("getStarted")
+        .addEventListener(
+            "click",
+            startPureShineApp
+        );
+
+
+    document
+        .getElementById("settingsButton")
+        .addEventListener(
+            "click",
+            openSettings
+        );
+
+
+    document
+        .getElementById("clientSearch")
+        .addEventListener(
+            "input",
+            filterClients
+        );
+
+
+    document
+        .getElementById("jobClientSelect")
+        .addEventListener(
+            "change",
+            updatePaymentPreview
+        );
+
+
+    document
+        .getElementById("jobHours")
+        .addEventListener(
+            "input",
+            updatePaymentPreview
+        );
+
+
+    document
+        .getElementById("pastJobClient")
+        .addEventListener(
+            "change",
+            updatePastJobPayment
+        );
+
+
+    document
+        .getElementById("pastJobHours")
+        .addEventListener(
+            "input",
+            updatePastJobPayment
+        );
+
+
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(function(button){
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    showPage(
+                        button.dataset.page,
+                        button
+                    );
+
+                }
+            );
+
+        });
+
+
+    updateDate();
+    refreshEverything();
+    restoreTimer();
+    loadInterfaceSize();
+
+});
+
+
+/* =========================================================
+   START APP
 ========================================================= */
 
 function startPureShineApp(){
@@ -2572,59 +3043,22 @@ function startPureShineApp(){
 
     },350);
 
+
     document
         .getElementById("app")
         .style.display="block";
 
-    showPage("homePage");
-
 }
-
-
-document.addEventListener(
-"DOMContentLoaded",
-function(){
-
-    const started =
-        localStorage.getItem(
-            "pureShineStarted"
-        );
-
-    if(started==="true"){
-
-        document
-            .getElementById("welcomeScreen")
-            .style.display="none";
-
-        document
-            .getElementById("app")
-            .style.display="block";
-
-    }
-
-    document
-        .getElementById("getStarted")
-        .addEventListener(
-            "click",
-            startPureShineApp
-        );
-
-    updateDate();
-    updateStats();
-    renderClients();
-    renderHistory();
-    populateAllClientSelects();
-    restoreTimer();
-    loadZoom();
-
-});
 
 
 /* =========================================================
    NAVIGATION
 ========================================================= */
 
-function showPage(pageId,button){
+function showPage(
+    pageId,
+    button
+){
 
     document
         .querySelectorAll(".page")
@@ -2634,14 +3068,18 @@ function showPage(pageId,button){
 
         });
 
-    const page =
+
+    const page=
         document.getElementById(pageId);
+
 
     if(!page){
         return;
     }
 
+
     page.classList.add("active");
+
 
     document
         .querySelectorAll(".nav-btn")
@@ -2651,15 +3089,33 @@ function showPage(pageId,button){
 
         });
 
-    const activeButton =
+
+    const activeButton=
         button ||
         document.querySelector(
             '.nav-btn[data-page="'+pageId+'"]'
         );
 
+
     if(activeButton){
+
         activeButton.classList.add("active");
+
     }
+
+
+    if(pageId==="schedulePage"){
+        renderSchedule();
+    }
+
+    if(pageId==="clientsPage"){
+        renderClients();
+    }
+
+    if(pageId==="earningsPage"){
+        renderHistory();
+    }
+
 
     window.scrollTo({
         top:0,
@@ -2669,14 +3125,33 @@ function showPage(pageId,button){
 }
 
 
+function openClients(){
+    showPage("clientsPage");
+}
+
+
+function openSchedule(){
+    showPage("schedulePage");
+}
+
+
+function openEarnings(){
+    showPage("earningsPage");
+}
+
+
+function findFreeTime(){
+    showPage("freePage");
+}
+
+
 /* =========================================================
    DATE
 ========================================================= */
 
 function updateDate(){
 
-    const now =
-        new Date();
+    const now=new Date();
 
     const days=[
         "Sunday",
@@ -2705,85 +3180,29 @@ function updateDate(){
 
     document
         .getElementById("dateTitle")
-        .textContent =
-            days[now.getDay()] +
-            " " +
-            now.getDate() +
-            " " +
+        .textContent=
+            days[now.getDay()]+" "+
+            now.getDate()+" "+
             months[now.getMonth()];
 
 }
 
 
 /* =========================================================
-   STATS
+   HELPERS
 ========================================================= */
 
-function updateStats(){
+function escapeHTML(value){
 
-    const jobs =
-        getJobs();
-
-    let minutes=0;
-    let earned=0;
-
-    jobs.forEach(function(job){
-
-        minutes +=
-            Number(job.minutes || 0);
-
-        earned +=
-            Number(job.amount || 0);
-
-    });
-
-    const hours =
-        Math.floor(minutes/60);
-
-    const mins =
-        minutes%60;
-
-    document
-        .getElementById("jobsNumber")
-        .textContent=jobs.length;
-
-    document
-        .getElementById("hoursNumber")
-        .textContent=
-            hours+"h "+mins+"m";
-
-    document
-        .getElementById("earnedNumber")
-        .textContent=
-            "£"+earned.toFixed(2);
-
-    document
-        .getElementById("earningsTotal")
-        .textContent=
-            "£"+earned.toFixed(2);
-
-    document
-        .getElementById("earningsHours")
-        .textContent=
-            hours+"h "+mins+"m worked";
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
 
 }
 
-
-/* =========================================================
-   CLIENT HELPERS
-========================================================= */
-
-function findClient(name){
-
-    return clients.find(function(client){
-
-        return client.name.toLowerCase() ===
-            String(name).toLowerCase();
-
-    });
-
-}
 
 function initial(name){
 
@@ -2793,14 +3212,48 @@ function initial(name){
 
 }
 
-function escapeHTML(value){
 
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+function formatMinutes(minutes){
+
+    minutes=
+        Math.max(
+            0,
+            Math.round(
+                Number(minutes || 0)
+            )
+        );
+
+    const hours=
+        Math.floor(minutes/60);
+
+    const mins=
+        minutes%60;
+
+    return hours+"h "+mins+"m";
+
+}
+
+
+function findClient(name){
+
+    return clients.find(function(client){
+
+        return client.name.toLowerCase()===
+            String(name).toLowerCase();
+
+    });
+
+}
+
+
+function closeModal(id){
+
+    const modal=
+        document.getElementById(id);
+
+    if(modal){
+        modal.classList.remove("show");
+    }
 
 }
 
@@ -2811,7 +3264,7 @@ function escapeHTML(value){
 
 function renderClients(list){
 
-    const container =
+    const container=
         document.getElementById(
             "clientsList"
         );
@@ -2820,20 +3273,44 @@ function renderClients(list){
         return;
     }
 
-    const data =
+
+    const data=
         list || clients;
+
 
     container.innerHTML="";
 
+
+    if(!data.length){
+
+        container.innerHTML=`
+            <div class="free-card" style="text-align:center">
+                No clients found.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
     data.forEach(function(client){
 
-        const index =
+        if(isGill(client.name)){
+            return;
+        }
+
+
+        const index=
             clients.indexOf(client);
 
-        const card =
+
+        const card=
             document.createElement("div");
 
+
         card.className="client-card";
+
 
         card.innerHTML=`
 
@@ -2859,12 +3336,7 @@ function renderClients(list){
 
             </div>
 
-            <div
-                style="
-                    display:flex;
-                    align-items:center;
-                "
-            >
+            <div class="client-right">
 
                 <div class="client-rate">
                     £${Number(client.rate).toFixed(2)}/h
@@ -2874,6 +3346,7 @@ function renderClients(list){
 
                     <button
                         class="client-action client-edit"
+                        type="button"
                         onclick="editClient(${index})"
                     >
                         ✏️
@@ -2881,6 +3354,7 @@ function renderClients(list){
 
                     <button
                         class="client-action client-delete"
+                        type="button"
                         onclick="deleteClient(${index})"
                     >
                         🗑️
@@ -2892,27 +3366,42 @@ function renderClients(list){
 
         `;
 
+
         container.appendChild(card);
 
     });
 
 }
 
+
 function filterClients(){
 
-    const value =
+    const search=
         document
             .getElementById("clientSearch")
             .value
+            .trim()
             .toLowerCase();
+
+
+    if(!search){
+
+        renderClients();
+        return;
+
+    }
+
 
     renderClients(
         clients.filter(function(client){
 
             return (
-                client.name.toLowerCase().includes(value) ||
-                client.type.toLowerCase().includes(value) ||
-                client.schedule.toLowerCase().includes(value)
+                !isGill(client.name) &&
+                (
+                    client.name.toLowerCase().includes(search) ||
+                    client.type.toLowerCase().includes(search) ||
+                    client.schedule.toLowerCase().includes(search)
+                )
             );
 
         })
@@ -2920,11 +3409,6 @@ function filterClients(){
 
 }
 
-function openClients(){
-
-    showPage("clientsPage");
-
-}
 
 function addClient(){
 
@@ -2944,52 +3428,40 @@ function addClient(){
         .getElementById("newClientSchedule")
         .value="";
 
+
     document
         .getElementById("addClientModal")
         .classList.add("show");
 
 }
 
-function closeAddClientModal(event){
-
-    if(
-        event &&
-        event.target!==event.currentTarget
-    ){
-        return;
-    }
-
-    document
-        .getElementById("addClientModal")
-        .classList.remove("show");
-
-}
 
 function saveNewClient(){
 
-    const name =
+    const name=
         document
             .getElementById("newClientName")
             .value
             .trim();
 
-    const type =
+    const type=
         document
             .getElementById("newClientType")
             .value;
 
-    let rate =
+    const rate=
         Number(
             document
                 .getElementById("newClientRate")
                 .value
         );
 
-    const schedule =
+    const schedule=
         document
             .getElementById("newClientSchedule")
             .value
             .trim();
+
 
     if(!name){
 
@@ -2998,17 +3470,40 @@ function saveNewClient(){
 
     }
 
+
+    if(isGill(name)){
+
+        alert("Gill has been removed and cannot be added back.");
+        return;
+
+    }
+
+
     if(
         !Number.isFinite(rate) ||
         rate<=0
     ){
 
-        rate =
-            type==="Agency"
-            ?16
-            :18;
+        alert("Please enter a valid hourly rate.");
+        return;
 
     }
+
+
+    if(
+        clients.some(function(client){
+
+            return client.name.toLowerCase()===
+                name.toLowerCase();
+
+        })
+    ){
+
+        alert("This client already exists.");
+        return;
+
+    }
+
 
     clients.push({
         name:name,
@@ -3017,25 +3512,26 @@ function saveNewClient(){
         schedule:schedule || "Flexible"
     });
 
-    closeAddClientModal();
 
-    refreshClientLists();
+    saveClients();
+
+    closeModal("addClientModal");
+
+    refreshEverything();
 
 }
 
 
-/* =========================================================
-   EDIT CLIENT
-========================================================= */
-
 function editClient(index){
 
-    const client =
+    const client=
         clients[index];
 
-    if(!client){
+
+    if(!client || isGill(client.name)){
         return;
     }
+
 
     document
         .getElementById("editClientIndex")
@@ -3057,66 +3553,64 @@ function editClient(index){
         .getElementById("editClientSchedule")
         .value=client.schedule;
 
+
     document
         .getElementById("editClientModal")
         .classList.add("show");
 
 }
 
-function closeEditClientModal(event){
-
-    if(
-        event &&
-        event.target!==event.currentTarget
-    ){
-        return;
-    }
-
-    document
-        .getElementById("editClientModal")
-        .classList.remove("show");
-
-}
 
 function saveEditedClient(){
 
-    const index =
+    const index=
         Number(
             document
                 .getElementById("editClientIndex")
                 .value
         );
 
-    const client =
+
+    const client=
         clients[index];
+
 
     if(!client){
         return;
     }
 
-    const name =
+
+    const oldName=
+        client.name;
+
+
+    const name=
         document
             .getElementById("editClientName")
             .value
             .trim();
 
-    const type =
+
+    const type=
         document
             .getElementById("editClientType")
             .value;
 
-    const rate =
+
+    const rate=
         Number(
             document
                 .getElementById("editClientRate")
                 .value
         );
 
-    const schedule =
+
+    const schedule=
         document
             .getElementById("editClientSchedule")
             .value
             .trim();
+
 
     if(!name){
 
@@ -3124,6 +3618,15 @@ function saveEditedClient(){
         return;
 
     }
+
+
+    if(isGill(name)){
+
+        alert("Gill has been removed and cannot be restored.");
+        return;
+
+    }
+
 
     if(
         !Number.isFinite(rate) ||
@@ -3135,73 +3638,672 @@ function saveEditedClient(){
 
     }
 
+
     client.name=name;
     client.type=type;
     client.rate=rate;
     client.schedule=schedule || "Flexible";
 
-    closeEditClientModal();
 
-    refreshClientLists();
+    weeklySchedule.forEach(function(job){
+
+        if(
+            job.client.toLowerCase()===
+            oldName.toLowerCase()
+        ){
+
+            job.client=name;
+            job.type=type;
+            job.rate=rate;
+
+        }
+
+    });
+
+
+    saveClients();
+    saveSchedule();
+
+    closeModal("editClientModal");
+
+    refreshEverything();
 
 }
+
 
 function deleteClient(index){
 
-    const client =
+    const client=
         clients[index];
 
-    if(!client){
+
+    if(!client || isGill(client.name)){
         return;
     }
+
 
     if(
         !confirm(
-            "Delete "+client.name+"?"
+            "Delete "+client.name+" from your clients?"
         )
     ){
+
         return;
+
     }
+
+
+    const name=
+        client.name.toLowerCase();
+
 
     clients.splice(index,1);
 
-    refreshClientLists();
 
-}
+    weeklySchedule=
+        weeklySchedule.filter(function(job){
 
-function refreshClientLists(){
+            return job.client.toLowerCase()!==name;
 
-    renderClients();
-    renderTimerClients();
-    populateAllClientSelects();
+        });
+
+
+    saveClients();
+    saveSchedule();
+
+    refreshEverything();
 
 }
 
 
 /* =========================================================
-   TIMER CLIENTS
+   SCHEDULE
 ========================================================= */
 
-function renderTimerClients(){
+const dayOrder=[
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+];
 
-    const container =
+
+function renderSchedule(){
+
+    const container=
         document.getElementById(
-            "timerClientList"
+            "scheduleContainer"
         );
+
 
     if(!container){
         return;
     }
 
+
     container.innerHTML="";
+
+
+    dayOrder.forEach(function(day){
+
+        const jobs=
+            weeklySchedule.filter(function(job){
+
+                return (
+                    job.day===day &&
+                    !isGill(job.client)
+                );
+
+            });
+
+
+        if(!jobs.length){
+            return;
+        }
+
+
+        const card=
+            document.createElement("div");
+
+
+        card.className="day-card";
+
+
+        const hasVariable=
+            jobs.some(function(job){
+
+                return (
+                    !job.start ||
+                    !job.end ||
+                    job.duration==="Variable" ||
+                    job.duration==="Flexible duration"
+                );
+
+            });
+
+
+        let totalText="Variable";
+
+
+        if(!hasVariable){
+
+            let hours=0;
+            let money=0;
+
+
+            jobs.forEach(function(job){
+
+                const duration=
+                    parseDuration(
+                        job.duration,
+                        job.start,
+                        job.end
+                    );
+
+                hours+=duration;
+                money+=duration*Number(job.rate);
+
+            });
+
+
+            totalText=
+                formatDecimalHours(hours)+
+                "h · £"+
+                money.toFixed(0);
+
+        }
+
+
+        card.innerHTML=`
+
+            <div class="day-header">
+
+                <strong>
+                    ${day}
+                </strong>
+
+                <span class="day-total">
+                    ${totalText}
+                </span>
+
+            </div>
+
+        `;
+
+
+        jobs.forEach(function(job){
+
+            const row=
+                document.createElement("div");
+
+
+            row.className="schedule-job";
+
+
+            const timeText=
+                job.start && job.end
+                ? job.start+" – "+job.end
+                : job.duration;
+
+
+            const frequency=
+                job.frequency &&
+                job.frequency!=="Weekly"
+                ? " · "+job.frequency
+                : "";
+
+
+            const paymentText=
+                job.start &&
+                job.end &&
+                job.duration!=="Variable" &&
+                job.duration!=="Flexible duration"
+                ?
+                    "£"+
+                    (
+                        parseDuration(
+                            job.duration,
+                            job.start,
+                            job.end
+                        )*
+                        Number(job.rate)
+                    ).toFixed(0)
+                :
+                    "£"+
+                    Number(job.rate).toFixed(2)+
+                    "/h";
+
+
+            row.innerHTML=`
+
+                <div class="job-left">
+
+                    <div class="client-initial">
+                        ${initial(job.client)}
+                    </div>
+
+                    <div class="job-details">
+
+                        <div class="job-name">
+                            ${escapeHTML(job.client)}
+                        </div>
+
+                        <div class="job-time">
+                            ${escapeHTML(timeText)}
+                            ·
+                            ${escapeHTML(job.type)}
+                            ${escapeHTML(frequency)}
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="job-right">
+
+                    <div class="job-pay">
+                        ${paymentText}
+                    </div>
+
+                    <button
+                        class="edit-schedule-btn"
+                        type="button"
+                        title="Edit this cleaning"
+                    >
+                        ✏️
+                    </button>
+
+                </div>
+
+            `;
+
+
+            row
+                .querySelector(".edit-schedule-btn")
+                .addEventListener(
+                    "click",
+                    function(){
+
+                        editSchedule(job.id);
+
+                    }
+                );
+
+
+            card.appendChild(row);
+
+        });
+
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+function parseDuration(
+    duration,
+    start,
+    end
+){
+
+    if(
+        typeof duration==="string" &&
+        duration.match(/^\d+(\.\d+)?\s*h/)
+    ){
+
+        const match=
+            duration.match(/(\d+(\.\d+)?)/);
+
+        if(match){
+
+            return Number(match[1]);
+
+        }
+
+    }
+
+
+    if(start && end){
+
+        const a=
+            start.split(":").map(Number);
+
+        const b=
+            end.split(":").map(Number);
+
+
+        const startMinutes=
+            a[0]*60+a[1];
+
+        const endMinutes=
+            b[0]*60+b[1];
+
+
+        if(endMinutes>startMinutes){
+
+            return (
+                endMinutes-startMinutes
+            )/60;
+
+        }
+
+    }
+
+
+    return 0;
+
+}
+
+
+function formatDecimalHours(hours){
+
+    return Number(hours)
+        .toFixed(1)
+        .replace(".0","");
+
+}
+
+
+/* =========================================================
+   EDIT SCHEDULE FROM LIST
+========================================================= */
+
+function editSchedule(id){
+
+    const job=
+        weeklySchedule.find(function(item){
+
+            return item.id===id;
+
+        });
+
+
+    if(!job || isGill(job.client)){
+        return;
+    }
+
+
+    document
+        .getElementById("editScheduleId")
+        .value=job.id;
+
+    document
+        .getElementById("editScheduleDay")
+        .value=job.day;
+
+    document
+        .getElementById("editScheduleClient")
+        .value=job.client;
+
+    document
+        .getElementById("editScheduleStart")
+        .value=job.start;
+
+    document
+        .getElementById("editScheduleEnd")
+        .value=job.end;
+
+    document
+        .getElementById("editScheduleDuration")
+        .value=job.duration;
+
+    document
+        .getElementById("editScheduleType")
+        .value=job.type;
+
+    document
+        .getElementById("editScheduleRate")
+        .value=job.rate;
+
+    document
+        .getElementById("editScheduleFrequency")
+        .value=job.frequency;
+
+
+    document
+        .getElementById("editScheduleModal")
+        .classList.add("show");
+
+}
+
+
+function saveScheduleEdit(){
+
+    const id=
+        document
+            .getElementById("editScheduleId")
+            .value;
+
+
+    const job=
+        weeklySchedule.find(function(item){
+
+            return item.id===id;
+
+        });
+
+
+    if(!job){
+        return;
+    }
+
+
+    const clientName=
+        document
+            .getElementById("editScheduleClient")
+            .value
+            .trim();
+
+
+    if(!clientName){
+
+        alert("Please enter the client name.");
+        return;
+
+    }
+
+
+    if(isGill(clientName)){
+
+        alert("Gill has been removed and cannot be added back.");
+        return;
+
+    }
+
+
+    const rate=
+        Number(
+            document
+                .getElementById("editScheduleRate")
+                .value
+        );
+
+
+    if(
+        !Number.isFinite(rate) ||
+        rate<=0
+    ){
+
+        alert("Please enter a valid hourly rate.");
+        return;
+
+    }
+
+
+    job.day=
+        document
+            .getElementById("editScheduleDay")
+            .value;
+
+    job.client=clientName;
+
+    job.start=
+        document
+            .getElementById("editScheduleStart")
+            .value;
+
+    job.end=
+        document
+            .getElementById("editScheduleEnd")
+            .value;
+
+    job.duration=
+        document
+            .getElementById("editScheduleDuration")
+            .value
+            .trim() ||
+        "Variable";
+
+    job.type=
+        document
+            .getElementById("editScheduleType")
+            .value;
+
+    job.rate=rate;
+
+    job.frequency=
+        document
+            .getElementById("editScheduleFrequency")
+            .value;
+
+
+    const existingClient=
+        findClient(clientName);
+
+
+    if(existingClient){
+
+        existingClient.type=job.type;
+        existingClient.rate=job.rate;
+
+        existingClient.schedule=
+            job.day+
+            (
+                job.start && job.end
+                ? " · "+job.start+"–"+job.end
+                : " · "+job.duration
+            )+
+            (
+                job.frequency!=="Weekly"
+                ? " · "+job.frequency
+                : ""
+            );
+
+    }else{
+
+        clients.push({
+            name:clientName,
+            type:job.type,
+            rate:job.rate,
+            schedule:
+                job.day+
+                (
+                    job.start && job.end
+                    ? " · "+job.start+"–"+job.end
+                    : " · "+job.duration
+                )
+        });
+
+    }
+
+
+    saveSchedule();
+    saveClients();
+
+    closeModal("editScheduleModal");
+
+    refreshEverything();
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function getActiveTimer(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(
+                "pureShineActiveTimer"
+            ) || "null"
+        );
+
+    }catch(error){
+
+        return null;
+
+    }
+
+}
+
+
+function startCleaning(){
+
+    const active=
+        getActiveTimer();
+
+
+    if(active){
+
+        showPage("homePage");
+
+        alert(
+            "A cleaning timer is already running for "+
+            active.client+"."
+        );
+
+        return;
+
+    }
+
+
+    renderTimerClients();
+
+    document
+        .getElementById("timerClientModal")
+        .classList.add("show");
+
+}
+
+
+function renderTimerClients(){
+
+    const container=
+        document.getElementById(
+            "timerClientList"
+        );
+
+
+    if(!container){
+        return;
+    }
+
+
+    container.innerHTML="";
+
 
     clients.forEach(function(client){
 
-        const button =
+        if(isGill(client.name)){
+            return;
+        }
+
+
+        const button=
             document.createElement("button");
+
 
         button.className="timer-choice";
         button.type="button";
+
 
         button.innerHTML=`
 
@@ -3233,11 +4335,16 @@ function renderTimerClients(){
 
         `;
 
-        button.onclick=function(){
 
-            beginTimer(client);
+        button.addEventListener(
+            "click",
+            function(){
 
-        };
+                beginTimer(client);
+
+            }
+        );
+
 
         container.appendChild(button);
 
@@ -3245,72 +4352,6 @@ function renderTimerClients(){
 
 }
 
-
-/* =========================================================
-   TIMER
-========================================================= */
-
-let timerInterval=null;
-
-function getTimer(){
-
-    try{
-
-        return JSON.parse(
-            localStorage.getItem(
-                "pureShineActiveTimer"
-            ) || "null"
-        );
-
-    }catch(error){
-
-        return null;
-
-    }
-
-}
-
-function startCleaning(){
-
-    const active =
-        getTimer();
-
-    if(active){
-
-        showPage("homePage");
-
-        updateTimer();
-
-        alert(
-            "A cleaning timer is already running."
-        );
-
-        return;
-
-    }
-
-    renderTimerClients();
-
-    document
-        .getElementById("timerClientModal")
-        .classList.add("show");
-
-}
-
-function closeTimerClientModal(event){
-
-    if(
-        event &&
-        event.target!==event.currentTarget
-    ){
-        return;
-    }
-
-    document
-        .getElementById("timerClientModal")
-        .classList.remove("show");
-
-}
 
 function beginTimer(client){
 
@@ -3320,12 +4361,14 @@ function beginTimer(client){
         start:Date.now()
     };
 
+
     localStorage.setItem(
         "pureShineActiveTimer",
         JSON.stringify(timer)
     );
 
-    closeTimerClientModal();
+
+    closeModal("timerClientModal");
 
     showPage("homePage");
 
@@ -3333,9 +4376,10 @@ function beginTimer(client){
 
 }
 
+
 function restoreTimer(){
 
-    if(getTimer()){
+    if(getActiveTimer()){
 
         startTimerLoop();
 
@@ -3343,15 +4387,20 @@ function restoreTimer(){
 
 }
 
+
 function startTimerLoop(){
 
     if(timerInterval){
+
         clearInterval(timerInterval);
+
     }
+
 
     updateTimer();
 
-    timerInterval =
+
+    timerInterval=
         setInterval(
             updateTimer,
             1000
@@ -3359,15 +4408,18 @@ function startTimerLoop(){
 
 }
 
+
 function updateTimer(){
 
-    const timer =
-        getTimer();
+    const timer=
+        getActiveTimer();
 
-    const box =
+
+    const box=
         document.getElementById(
             "activeTimer"
         );
+
 
     if(!timer){
 
@@ -3377,36 +4429,42 @@ function updateTimer(){
 
     }
 
+
     box.classList.add("show");
 
-    const elapsed =
+
+    const elapsed=
         Math.max(
             0,
-            Date.now() -
+            Date.now()-
             Number(timer.start)
         );
 
-    const totalSeconds =
+
+    const totalSeconds=
         Math.floor(
             elapsed/1000
         );
 
-    const hours =
+
+    const hours=
         Math.floor(
             totalSeconds/3600
         );
 
-    const minutes =
+    const minutes=
         Math.floor(
             (totalSeconds%3600)/60
         );
 
-    const seconds =
+    const seconds=
         totalSeconds%60;
+
 
     document
         .getElementById("timerClient")
         .textContent=timer.client;
+
 
     document
         .getElementById("timerRate")
@@ -3414,6 +4472,7 @@ function updateTimer(){
             "£"+
             Number(timer.rate).toFixed(2)+
             "/h";
+
 
     document
         .getElementById("timerDisplay")
@@ -3426,26 +4485,31 @@ function updateTimer(){
 
 }
 
+
 function stopCleaning(){
 
-    const timer =
-        getTimer();
+    const timer=
+        getActiveTimer();
+
 
     if(!timer){
         return;
     }
 
-    const end =
+
+    const end=
         Date.now();
 
-    const elapsedMs =
+
+    const elapsedMs=
         Math.max(
             0,
-            end -
+            end-
             Number(timer.start)
         );
 
-    const minutes =
+
+    const minutes=
         Math.max(
             1,
             Math.round(
@@ -3453,12 +4517,17 @@ function stopCleaning(){
             )
         );
 
-    const amount =
-        (minutes/60)*
+
+    const amount=
+        (
+            minutes/60
+        )*
         Number(timer.rate);
 
-    const jobs =
+
+    const jobs=
         getJobs();
+
 
     jobs.push({
 
@@ -3511,11 +4580,14 @@ function stopCleaning(){
 
     });
 
+
     saveJobs(jobs);
+
 
     localStorage.removeItem(
         "pureShineActiveTimer"
     );
+
 
     if(timerInterval){
 
@@ -3524,9 +4596,11 @@ function stopCleaning(){
 
     }
 
+
     updateTimer();
     updateStats();
     renderHistory();
+
 
     alert(
         "Job saved!\n\n"+
@@ -3539,11 +4613,13 @@ function stopCleaning(){
 
 }
 
+
 function cancelTimer(){
 
-    if(!getTimer()){
+    if(!getActiveTimer()){
         return;
     }
+
 
     if(
         !confirm(
@@ -3553,9 +4629,11 @@ function cancelTimer(){
         return;
     }
 
+
     localStorage.removeItem(
         "pureShineActiveTimer"
     );
+
 
     if(timerInterval){
 
@@ -3564,74 +4642,52 @@ function cancelTimer(){
 
     }
 
+
     updateTimer();
 
 }
 
 
 /* =========================================================
-   MANUAL JOB / TODAY / PAST JOB
+   MANUAL JOBS
 ========================================================= */
 
-function addCleaningJob(){
+function populateClientSelects(){
 
-    populateAllClientSelects();
-
-    setToday(
-        "jobDate"
-    );
-
-    document
-        .getElementById("jobHours")
-        .value="";
-
-    updatePaymentPreview();
-
-    document
-        .getElementById("addJobModal")
-        .classList.add("show");
-
-}
-
-function closeAddJobModal(event){
-
-    if(
-        event &&
-        event.target!==event.currentTarget
-    ){
-        return;
-    }
-
-    document
-        .getElementById("addJobModal")
-        .classList.remove("show");
-
-}
-
-function populateAllClientSelects(){
-
-    const selects=[
+    [
         "jobClientSelect",
         "pastJobClient"
-    ];
+    ].forEach(function(id){
 
-    selects.forEach(function(id){
-
-        const select =
+        const select=
             document.getElementById(id);
+
 
         if(!select){
             return;
         }
 
+
+        const current=
+            select.value;
+
+
         select.innerHTML="";
+
 
         clients.forEach(function(client){
 
-            const option =
+            if(isGill(client.name)){
+                return;
+            }
+
+
+            const option=
                 document.createElement("option");
 
+
             option.value=client.name;
+
 
             option.textContent=
                 client.name+
@@ -3639,65 +4695,100 @@ function populateAllClientSelects(){
                 Number(client.rate).toFixed(2)+
                 "/h";
 
+
             select.appendChild(option);
 
         });
+
+
+        if(
+            current &&
+            findClient(current)
+        ){
+
+            select.value=current;
+
+        }
 
     });
 
 }
 
-function setToday(id){
 
-    const input =
-        document.getElementById(id);
+function todayString(){
 
-    if(!input){
-        return;
-    }
-
-    const now =
+    const now=
         new Date();
 
-    const yyyy =
-        now.getFullYear();
 
-    const mm =
+    return (
+        now.getFullYear()+
+        "-"+
         String(
             now.getMonth()+1
-        ).padStart(2,"0");
-
-    const dd =
+        ).padStart(2,"0")+
+        "-"+
         String(
             now.getDate()
-        ).padStart(2,"0");
-
-    input.value=
-        yyyy+"-"+mm+"-"+dd;
+        ).padStart(2,"0")
+    );
 
 }
 
+
+function addCleaningJob(){
+
+    populateClientSelects();
+
+
+    document
+        .getElementById("jobDate")
+        .value=todayString();
+
+
+    document
+        .getElementById("jobHours")
+        .value="";
+
+
+    updatePaymentPreview();
+
+
+    document
+        .getElementById("addJobModal")
+        .classList.add("show");
+
+}
+
+
 function updatePaymentPreview(){
 
-    const name =
-        document
-            .getElementById("jobClientSelect")
-            .value;
+    const client=
+        findClient(
+            document
+                .getElementById("jobClientSelect")
+                .value
+        );
 
-    const client =
-        findClient(name);
 
-    const hours =
+    if(!client){
+        return;
+    }
+
+
+    const hours=
         Number(
             document
                 .getElementById("jobHours")
                 .value
         );
 
-    const amount =
+
+    const amount=
         Number.isFinite(hours)
         ? hours*Number(client.rate)
         : 0;
+
 
     document
         .getElementById("jobPaymentPreview")
@@ -3710,43 +4801,43 @@ function updatePaymentPreview(){
 
 }
 
+
 function saveManualJob(){
 
-    const client =
+    const client=
         findClient(
             document
                 .getElementById("jobClientSelect")
                 .value
         );
 
-    const date =
+
+    const date=
         document
             .getElementById("jobDate")
             .value;
 
-    const hours =
+
+    const hours=
         Number(
             document
                 .getElementById("jobHours")
                 .value
         );
 
-    if(!client || !date){
-
-        alert("Please complete all fields.");
-        return;
-
-    }
 
     if(
+        !client ||
+        !date ||
         !Number.isFinite(hours) ||
         hours<=0
     ){
 
-        alert("Please enter the hours worked.");
+        alert("Please complete the client, date and hours.");
         return;
 
     }
+
 
     saveJobRecord(
         client,
@@ -3755,9 +4846,11 @@ function saveManualJob(){
         false
     );
 
-    closeAddJobModal();
+
+    closeModal("addJobModal");
 
 }
+
 
 function saveJobRecord(
     client,
@@ -3766,22 +4859,22 @@ function saveJobRecord(
     pastJob
 ){
 
-    const minutes =
+    const minutes=
         Math.round(
             hours*60
         );
 
-    const amount =
-        (minutes/60)*
+
+    const amount=
+        (
+            minutes/60
+        )*
         Number(client.rate);
 
-    const dateObject =
-        new Date(
-            date+"T12:00:00"
-        );
 
-    const jobs =
+    const jobs=
         getJobs();
+
 
     jobs.push({
 
@@ -3798,30 +4891,30 @@ function saveJobRecord(
         ),
 
         date:
-            dateObject.toLocaleDateString(
+            new Date(
+                date+"T12:00:00"
+            ).toLocaleDateString(
                 "en-GB"
             ),
 
         start:null,
         end:null,
-
         startTime:null,
         endTime:null,
-
         pastJob:Boolean(pastJob)
 
     });
+
 
     saveJobs(jobs);
 
     updateStats();
     renderHistory();
 
+
     alert(
         "Job saved!\n\n"+
         client.name+
-        "\n"+
-        dateObject.toLocaleDateString("en-GB")+
         "\n"+
         formatMinutes(minutes)+
         "\n£"+
@@ -3837,17 +4930,22 @@ function saveJobRecord(
 
 function openPastJobs(){
 
-    populateAllClientSelects();
+    populateClientSelects();
 
-    setToday("pastJobDate");
+
+    document
+        .getElementById("pastJobDate")
+        .value=todayString();
+
 
     document
         .getElementById("pastJobHours")
         .value="";
 
-    updatePastJobPayment();
 
+    updatePastJobPayment();
     renderPastJobs();
+
 
     document
         .getElementById("pastJobsModal")
@@ -3855,41 +4953,35 @@ function openPastJobs(){
 
 }
 
-function closePastJobs(event){
-
-    if(
-        event &&
-        event.target!==event.currentTarget
-    ){
-        return;
-    }
-
-    document
-        .getElementById("pastJobsModal")
-        .classList.remove("show");
-
-}
 
 function updatePastJobPayment(){
 
-    const client =
+    const client=
         findClient(
             document
                 .getElementById("pastJobClient")
                 .value
         );
 
-    const hours =
+
+    if(!client){
+        return;
+    }
+
+
+    const hours=
         Number(
             document
                 .getElementById("pastJobHours")
                 .value
         );
 
-    const amount =
+
+    const amount=
         Number.isFinite(hours)
         ? hours*Number(client.rate)
         : 0;
+
 
     document
         .getElementById("pastJobPayment")
@@ -3902,26 +4994,30 @@ function updatePastJobPayment(){
 
 }
 
+
 function savePastJob(){
 
-    const client =
+    const client=
         findClient(
             document
                 .getElementById("pastJobClient")
                 .value
         );
 
-    const date =
+
+    const date=
         document
             .getElementById("pastJobDate")
             .value;
 
-    const hours =
+
+    const hours=
         Number(
             document
                 .getElementById("pastJobHours")
                 .value
         );
+
 
     if(
         !client ||
@@ -3938,6 +5034,7 @@ function savePastJob(){
 
     }
 
+
     saveJobRecord(
         client,
         date,
@@ -3945,28 +5042,34 @@ function savePastJob(){
         true
     );
 
+
     renderPastJobs();
+
 
     document
         .getElementById("pastJobHours")
         .value="";
 
+
     updatePastJobPayment();
 
 }
 
+
 function renderPastJobs(){
 
-    const container =
+    const container=
         document.getElementById(
             "pastJobsList"
         );
+
 
     if(!container){
         return;
     }
 
-    const jobs =
+
+    const jobs=
         getJobs()
             .filter(function(job){
 
@@ -3975,9 +5078,11 @@ function renderPastJobs(){
             })
             .reverse();
 
+
     container.innerHTML="";
 
-    if(jobs.length===0){
+
+    if(!jobs.length){
 
         container.innerHTML=`
             <div
@@ -3997,12 +5102,15 @@ function renderPastJobs(){
 
     }
 
+
     jobs.forEach(function(job){
 
-        const card =
+        const card=
             document.createElement("div");
 
+
         card.className="past-job-card";
+
 
         card.innerHTML=`
 
@@ -4028,6 +5136,7 @@ function renderPastJobs(){
 
         `;
 
+
         container.appendChild(card);
 
     });
@@ -4036,32 +5145,98 @@ function renderPastJobs(){
 
 
 /* =========================================================
-   HISTORY / EARNINGS
+   EARNINGS
 ========================================================= */
+
+function updateStats(){
+
+    const jobs=
+        getJobs();
+
+
+    let minutes=0;
+    let earned=0;
+
+
+    jobs.forEach(function(job){
+
+        minutes+=
+            Number(job.minutes || 0);
+
+        earned+=
+            Number(job.amount || 0);
+
+    });
+
+
+    const hours=
+        Math.floor(minutes/60);
+
+    const mins=
+        minutes%60;
+
+
+    document
+        .getElementById("jobsNumber")
+        .textContent=jobs.length;
+
+
+    document
+        .getElementById("hoursNumber")
+        .textContent=
+            hours+"h "+mins+"m";
+
+
+    document
+        .getElementById("earnedNumber")
+        .textContent=
+            "£"+earned.toFixed(2);
+
+
+    document
+        .getElementById("earningsTotal")
+        .textContent=
+            "£"+earned.toFixed(2);
+
+
+    document
+        .getElementById("earningsHours")
+        .textContent=
+            hours+"h "+mins+"m worked";
+
+}
+
 
 function renderHistory(){
 
-    const container =
+    const container=
         document.getElementById(
             "historyList"
         );
+
 
     if(!container){
         return;
     }
 
-    const jobs =
-        getJobs().slice().reverse();
+
+    const jobs=
+        getJobs()
+            .slice()
+            .reverse();
+
 
     container.innerHTML="";
 
-    if(jobs.length===0){
+
+    if(!jobs.length){
 
         container.innerHTML=`
             <div
                 class="free-card"
                 style="text-align:center"
             >
+
                 <div
                     style="
                         font-size:48px;
@@ -4075,15 +5250,6 @@ function renderHistory(){
                     No completed jobs yet 🌸
                 </div>
 
-                <div
-                    style="
-                        margin-top:5px;
-                        color:#999099;
-                        font-size:13px;
-                    "
-                >
-                    Completed jobs will appear here.
-                </div>
             </div>
         `;
 
@@ -4091,18 +5257,25 @@ function renderHistory(){
 
     }
 
+
     jobs.forEach(function(job){
 
-        const card =
+        const card=
             document.createElement("div");
+
 
         card.className="history-card";
 
-        const timing =
+
+        const timing=
             job.startTime &&
             job.endTime
-            ? " · "+job.startTime+"–"+job.endTime
+            ? " · "+
+                job.startTime+
+                "–"+
+                job.endTime
             : "";
+
 
         card.innerHTML=`
 
@@ -4119,46 +5292,20 @@ function renderHistory(){
             </div>
 
             <div class="history-bottom">
-
                 ${escapeHTML(job.date)}
                 ·
                 ${formatMinutes(job.minutes)}
                 ${timing}
                 ·
                 £${Number(job.rate).toFixed(2)}/h
-
             </div>
 
         `;
 
+
         container.appendChild(card);
 
     });
-
-}
-
-
-/* =========================================================
-   OTHER PAGES
-========================================================= */
-
-function openSchedule(){
-    showPage("schedulePage");
-}
-
-function findFreeTime(){
-    showPage("freePage");
-}
-
-function openEarnings(){
-    showPage("earningsPage");
-}
-
-function openHolidays(){
-
-    alert(
-        "Holiday section\n\nMarking clients as holiday will be added to the client schedule."
-    );
 
 }
 
@@ -4175,73 +5322,125 @@ function openSettings(){
 
 }
 
-function closeSettings(event){
 
-    if(
-        event &&
-        event.target!==event.currentTarget
-    ){
-        return;
-    }
+function toggleSetting(button){
 
-    document
-        .getElementById("settingsModal")
-        .classList.remove("show");
+    const on=
+        button.classList.contains("on");
 
-}
 
-function changeZoom(value){
-
-    /*
-       Use transform only for visual scaling.
-       Timer calculations continue using real timestamps.
-    */
-
-    const app =
-        document.getElementById("app");
-
-    const scale =
-        Number(value)/100;
-
-    app.style.zoom=scale;
-
-    localStorage.setItem(
-        "pureShineZoom",
-        value
+    button.classList.toggle(
+        "on",
+        !on
     );
 
+
+    button.textContent=
+        on
+        ? "OFF"
+        : "ON";
+
 }
 
-function loadZoom(){
 
-    const saved =
-        localStorage.getItem(
-            "pureShineZoom"
+function setInterfaceSize(percent){
+
+    const appContent=
+        document.querySelector(
+            ".app-content"
         );
 
-    if(!saved){
+
+    if(!appContent){
         return;
     }
 
-    const select =
-        document.getElementById(
-            "zoomSelect"
-        );
 
-    if(select){
-        select.value=saved;
-    }
+    /*
+       The settings modal is outside .app-content.
+       Therefore it remains fully clickable at every size.
+    */
+
+    appContent.style.zoom=
+        Number(percent)/100;
+
+
+    localStorage.setItem(
+        "pureShineInterfaceSize",
+        String(percent)
+    );
+
 
     document
-        .getElementById("app")
-        .style.zoom=
-            Number(saved)/100;
+        .querySelectorAll(
+            ".size-btn[data-size]"
+        )
+        .forEach(function(button){
+
+            button.classList.toggle(
+                "active",
+                Number(button.dataset.size)===Number(percent)
+            );
+
+        });
+
+}
+
+
+function loadInterfaceSize(){
+
+    const saved=
+        Number(
+            localStorage.getItem(
+                "pureShineInterfaceSize"
+            ) || "100"
+        );
+
+
+    setInterfaceSize(saved);
 
 }
 
 
 /* =========================================================
-   TIMER REMAINS CORRECT AFTER IPHONE BACKGROUNDING
+   REFRESH
+========================================================= */
+
+function refreshEverything(){
+
+    /*
+       Gill is removed here too, so even an old saved
+       version can never put her back on screen.
+    */
+
+    clients=
+        clients.filter(function(client){
+            return !isGill(client.name);
+        });
+
+
+    weeklySchedule=
+        weeklySchedule.filter(function(job){
+            return !isGill(job.client);
+        });
+
+
+    saveClients();
+    saveSchedule();
+
+
+    renderClients();
+    renderSchedule();
+    renderTimerClients();
+    populateClientSelects();
+    updateStats();
+    renderHistory();
+
+}
+
+
+/* =========================================================
+   BACKGROUND TIMER
 ========================================================= */
 
 document.addEventListener(
@@ -4253,6 +5452,7 @@ function(){
     ){
 
         updateTimer();
+        updateDate();
 
     }
 
@@ -4260,7 +5460,7 @@ function(){
 
 
 /* =========================================================
-   ESC CLOSES MODALS
+   ESC
 ========================================================= */
 
 document.addEventListener(
@@ -4270,6 +5470,7 @@ function(event){
     if(event.key!=="Escape"){
         return;
     }
+
 
     document
         .querySelectorAll(".modal-backdrop")
@@ -4281,30 +5482,6 @@ function(event){
 
 });
 
-
-/* =========================================================
-   FORMAT
-========================================================= */
-
-function formatMinutes(minutes){
-
-    minutes =
-        Math.max(
-            0,
-            Math.round(
-                Number(minutes||0)
-            )
-        );
-
-    const hours =
-        Math.floor(minutes/60);
-
-    const mins =
-        minutes%60;
-
-    return hours+"h "+mins+"m";
-
-}
 </script>
 
 </body>
