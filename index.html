@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#fffafd">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
 <title>Pure Shine Cleaning Manager</title>
 
 <style>
@@ -24,7 +25,6 @@
   --line:#eee4e9;
   --shadow:0 8px 25px rgba(87,58,72,.08);
   --card-radius:24px;
-  --page-pad:16px;
   --bg-opacity:1;
 }
 
@@ -38,10 +38,10 @@ html,body{
   min-height:100%;
   background:var(--bg);
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
 }
 
 body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
   overflow-x:hidden;
 }
 
@@ -55,12 +55,13 @@ button{
 }
 
 .app{
+  width:100%;
   max-width:760px;
   margin:auto;
   min-height:100vh;
   padding:
     max(18px,env(safe-area-inset-top))
-    var(--page-pad)
+    16px
     calc(112px + env(safe-area-inset-bottom));
 }
 
@@ -92,7 +93,6 @@ button{
   font-size:22px;
   font-weight:800;
   line-height:1.1;
-  letter-spacing:-.5px;
 }
 
 .brand-subtitle{
@@ -315,8 +315,6 @@ button{
 .quick:nth-child(5){background:#e8ddf5}
 .quick:nth-child(6){background:#f3ddd8}
 
-/* BACKGROUND */
-
 .banner{
   width:100%;
   height:142px;
@@ -328,7 +326,7 @@ button{
   opacity:var(--bg-opacity);
 }
 
-/* BOTTOM NAV */
+/* NAV */
 
 .bottom-nav{
   position:fixed;
@@ -412,7 +410,7 @@ button{
   color:#92546f;
 }
 
-/* LISTS */
+/* CARDS */
 
 .list{
   display:flex;
@@ -550,10 +548,37 @@ button{
   margin-top:5px;
 }
 
+.history-title{
+  font-size:18px;
+  font-weight:800;
+  margin:22px 3px 12px;
+}
+
+.history-filter{
+  display:flex;
+  gap:7px;
+  margin-bottom:13px;
+}
+
+.history-filter button{
+  flex:1;
+  min-height:43px;
+  border-radius:14px;
+  background:#f4edf1;
+  color:#817780;
+  font-size:12px;
+  font-weight:700;
+}
+
+.history-filter button.active{
+  background:#efd5e2;
+  color:#9d5b78;
+}
+
 /* SETTINGS */
 
 .setting{
-  min-height:66px;
+  min-height:70px;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -578,7 +603,38 @@ button{
 
 .setting-control{
   min-width:135px;
-  max-width:170px;
+  max-width:175px;
+}
+
+/* ZOOM */
+
+.zoom-control{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.zoom-control button{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:#f4edf1;
+  color:#9c5d78;
+  font-size:20px;
+  font-weight:700;
+}
+
+.zoom-value{
+  min-width:48px;
+  text-align:center;
+  font-size:13px;
+  font-weight:800;
+}
+
+.zoom-slider{
+  width:100%;
+  margin-top:10px;
+  accent-color:#a45e7d;
 }
 
 /* FORMS */
@@ -738,7 +794,7 @@ button{
   transform:translate(-50%,0);
 }
 
-/* APPEARANCE OPTIONS */
+/* APPEARANCE */
 
 body.compact .job-card{
   min-height:58px;
@@ -765,6 +821,7 @@ body.rounded{
 }
 
 @media(max-width:430px){
+
   .stats{
     gap:8px;
   }
@@ -786,9 +843,11 @@ body.rounded{
   .banner{
     height:139px;
   }
+
 }
 
 @media(max-width:360px){
+
   .stats{
     grid-template-columns:repeat(2,1fr);
   }
@@ -796,6 +855,7 @@ body.rounded{
   .stat{
     min-height:105px;
   }
+
 }
 </style>
 </head>
@@ -812,24 +872,37 @@ body.rounded{
 
 <div class="brand">
 
-<img id="appLogo"
-     class="logo"
-     src="icon.png"
-     alt="Pure Shine">
+<img
+id="appLogo"
+class="logo"
+src="icon.png"
+alt="Pure Shine"
+>
 
 <div>
-<div class="brand-title">Cleaning Manager</div>
-<div class="brand-subtitle">Your cleaning business ✨</div>
+
+<div class="brand-title">
+Cleaning Manager
+</div>
+
+<div class="brand-subtitle">
+Your cleaning business ✨
 </div>
 
 </div>
 
-<img id="profilePhoto"
-     class="profile"
-     alt="Profile">
+</div>
 
-<button class="settings-btn"
-        onclick="openSettings()">
+<img
+id="profilePhoto"
+class="profile"
+alt="Profile"
+>
+
+<button
+class="settings-btn"
+onclick="openSettings()"
+>
 ⚙️
 </button>
 
@@ -839,10 +912,16 @@ body.rounded{
 <div class="date-card">
 
 <div>
-<div class="date-title" id="dateTitle"></div>
+
+<div
+class="date-title"
+id="dateTitle"
+></div>
+
 <div class="date-subtitle">
 Let's make today productive ✨
 </div>
+
 </div>
 
 <div class="heart">♡</div>
@@ -853,27 +932,74 @@ Let's make today productive ✨
 <div class="stats">
 
 <div class="stat">
+
 <div class="stat-icon">🛍️</div>
-<div class="stat-value" id="todayJobs">0</div>
-<div class="stat-label">Jobs</div>
+
+<div
+class="stat-value"
+id="todayJobs"
+>
+0
 </div>
 
+<div class="stat-label">
+Jobs
+</div>
+
+</div>
+
+
 <div class="stat">
+
 <div class="stat-icon">◷</div>
-<div class="stat-value" id="todayHours">0h 0m</div>
-<div class="stat-label">Hours</div>
+
+<div
+class="stat-value"
+id="todayHours"
+>
+0h 0m
 </div>
 
+<div class="stat-label">
+Hours
+</div>
+
+</div>
+
+
 <div class="stat">
+
 <div class="stat-icon">£</div>
-<div class="stat-value" id="todayEarned">£0.00</div>
-<div class="stat-label">Earned</div>
+
+<div
+class="stat-value"
+id="todayEarned"
+>
+£0.00
 </div>
 
+<div class="stat-label">
+Earned
+</div>
+
+</div>
+
+
 <div class="stat">
+
 <div class="stat-icon">☼</div>
-<div class="stat-value" id="availableHours">8h 0m</div>
-<div class="stat-label">Available</div>
+
+<div
+class="stat-value"
+id="availableHours"
+>
+8h 0m
+</div>
+
+<div class="stat-label">
+Available
+</div>
+
 </div>
 
 </div>
@@ -885,16 +1011,20 @@ Let's make today productive ✨
 Today's schedule
 </div>
 
-<button class="see-all"
-        onclick="showPage('schedule')">
+<button
+class="see-all"
+onclick="showPage('schedule')"
+>
 See all
 </button>
 
 </div>
 
 
-<div class="schedule-box"
-     id="todaySchedule">
+<div
+class="schedule-box"
+id="todaySchedule"
+>
 </div>
 
 
@@ -905,64 +1035,87 @@ Quick actions
 
 <div class="quick-grid">
 
-<button class="quick"
-        onclick="openTimerFromHome()">
+<button
+class="quick"
+onclick="openTimerFromHome()"
+>
 ◷ Start cleaning
 </button>
 
-<button class="quick"
-        onclick="showPage('clients')">
+<button
+class="quick"
+onclick="showPage('clients')"
+>
 ♧ Clients
 </button>
 
-<button class="quick"
-        onclick="showPage('schedule')">
+<button
+class="quick"
+onclick="showPage('schedule')"
+>
 ▣ Schedule
 </button>
 
-<button class="quick"
-        onclick="showPage('free')">
+<button
+class="quick"
+onclick="showPage('free')"
+>
 ⌕ Find free time
 </button>
 
-<button class="quick"
-        onclick="showPage('earnings')">
+<button
+class="quick"
+onclick="showPage('earnings')"
+>
 ▣ Earnings
 </button>
 
-<button class="quick"
-        onclick="openPastJob()">
+<button
+class="quick"
+onclick="openPastJob()"
+>
 ＋ Past jobs
 </button>
 
 </div>
 
 
-<img id="backgroundImage"
-     class="banner"
-     src="pure-shine-cleaning-background.png"
-     alt="Pure Shine Cleaning">
+<img
+id="backgroundImage"
+class="banner"
+src="pure-shine-cleaning-background.png"
+alt="Pure Shine Cleaning"
+>
 
 </section>
 
 
 <!-- SCHEDULE -->
 
-<section id="schedulePage" class="page">
+<section
+id="schedulePage"
+class="page"
+>
 
 <div class="page-header">
 
-<h1>Schedule</h1>
+<h1>
+Schedule
+</h1>
 
 <div class="view-toggle">
 
-<button id="listViewBtn"
-        onclick="setScheduleView('list')">
+<button
+id="listViewBtn"
+onclick="setScheduleView('list')"
+>
 List
 </button>
 
-<button id="calendarViewBtn"
-        onclick="setScheduleView('calendar')">
+<button
+id="calendarViewBtn"
+onclick="setScheduleView('calendar')"
+>
 Calendar
 </button>
 
@@ -979,8 +1132,10 @@ Calendar
 ‹
 </button>
 
-<div class="month-title"
-     id="monthTitle">
+<div
+class="month-title"
+id="monthTitle"
+>
 </div>
 
 <button onclick="changeMonth(1)">
@@ -1003,8 +1158,10 @@ Calendar
 </div>
 
 
-<div class="calendar-grid"
-     id="calendarGrid">
+<div
+class="calendar-grid"
+id="calendarGrid"
+>
 </div>
 
 </div>
@@ -1012,8 +1169,10 @@ Calendar
 
 <div style="height:15px"></div>
 
-<div class="list"
-     id="scheduleList">
+<div
+class="list"
+id="scheduleList"
+>
 </div>
 
 </section>
@@ -1021,58 +1180,101 @@ Calendar
 
 <!-- CLIENTS -->
 
-<section id="clientsPage" class="page">
+<section
+id="clientsPage"
+class="page"
+>
 
 <div class="page-header">
 
-<h1>Clients</h1>
+<h1>
+Clients
+</h1>
 
-<button class="secondary"
-        onclick="openAddClient()">
+<button
+class="secondary"
+onclick="openAddClient()"
+>
 ＋ Client
 </button>
 
 </div>
 
-<div class="list"
-     id="clientsList">
+<div
+class="list"
+id="clientsList"
+>
 </div>
 
 </section>
 
 
-<!-- FREE TIME -->
+<!-- FREE -->
 
-<section id="freePage" class="page">
+<section
+id="freePage"
+class="page"
+>
 
 <div class="page-header">
-<h1>Free time</h1>
+
+<h1>
+Free time
+</h1>
+
 </div>
+
 
 <div class="list-card">
 
-<div style="font-size:17px;font-weight:800">
+<div
+style="
+font-size:17px;
+font-weight:800;
+"
+>
 Your available time
 </div>
 
-<div style="color:#8f888f;font-size:13px;line-height:1.5;margin-top:8px">
+<div
+style="
+color:#8f888f;
+font-size:13px;
+line-height:1.5;
+margin-top:8px;
+"
+>
 Completed cleaning time is automatically counted.
 </div>
 
-<div style="
+
+<div
+style="
 margin-top:20px;
 background:#fff0c9;
 border-radius:18px;
 padding:18px;
 text-align:center;
-">
+"
+>
 
-<div style="font-size:13px;color:#7d756b">
+<div
+style="
+font-size:13px;
+color:#7d756b;
+"
+>
 Available today
 </div>
 
-<div id="freeHours"
-     style="font-size:30px;font-weight:800;margin-top:5px">
+<div
+id="freeHours"
+style="
+font-size:30px;
+font-weight:800;
+margin-top:5px;
+"
+>
 8h 0m
 </div>
 
@@ -1085,15 +1287,25 @@ Available today
 
 <!-- EARNINGS -->
 
-<section id="earningsPage" class="page">
+<section
+id="earningsPage"
+class="page"
+>
 
 <div class="page-header">
-<h1>Earnings</h1>
+
+<h1>
+Earnings
+</h1>
+
 </div>
+
 
 <div class="earning-total">
 
-<small>This month</small>
+<small>
+This month
+</small>
 
 <strong id="monthlyTotal">
 £0.00
@@ -1101,8 +1313,35 @@ Available today
 
 </div>
 
-<div class="list"
-     id="earningsList">
+
+<div class="history-filter">
+
+<button
+id="monthHistoryBtn"
+onclick="setHistoryFilter('month')"
+>
+This month
+</button>
+
+<button
+id="allHistoryBtn"
+onclick="setHistoryFilter('all')"
+>
+All history
+</button>
+
+</div>
+
+
+<div class="history-title">
+Earnings history
+</div>
+
+
+<div
+class="list"
+id="earningsList"
+>
 </div>
 
 </section>
@@ -1110,56 +1349,91 @@ Available today
 </div>
 
 
-<!-- NAVIGATION -->
+<!-- BOTTOM NAV -->
 
 <nav class="bottom-nav">
 
-<button class="nav-item active"
-        data-page="home"
-        onclick="showPage('home')">
+<button
+class="nav-item active"
+data-page="home"
+onclick="showPage('home')"
+>
 
-<span class="nav-icon">⌂</span>
-<span>Home</span>
+<span class="nav-icon">
+⌂
+</span>
 
-</button>
-
-
-<button class="nav-item"
-        data-page="schedule"
-        onclick="showPage('schedule')">
-
-<span class="nav-icon">▣</span>
-<span>Schedule</span>
+<span>
+Home
+</span>
 
 </button>
 
 
-<button class="nav-item"
-        data-page="clients"
-        onclick="showPage('clients')">
+<button
+class="nav-item"
+data-page="schedule"
+onclick="showPage('schedule')"
+>
 
-<span class="nav-icon">♧</span>
-<span>Clients</span>
+<span class="nav-icon">
+▣
+</span>
 
-</button>
-
-
-<button class="nav-item"
-        data-page="free"
-        onclick="showPage('free')">
-
-<span class="nav-icon">◷</span>
-<span>Free time</span>
+<span>
+Schedule
+</span>
 
 </button>
 
 
-<button class="nav-item"
-        data-page="earnings"
-        onclick="showPage('earnings')">
+<button
+class="nav-item"
+data-page="clients"
+onclick="showPage('clients')"
+>
 
-<span class="nav-icon">▥</span>
-<span>Earnings</span>
+<span class="nav-icon">
+♧
+</span>
+
+<span>
+Clients
+</span>
+
+</button>
+
+
+<button
+class="nav-item"
+data-page="free"
+onclick="showPage('free')"
+>
+
+<span class="nav-icon">
+◷
+</span>
+
+<span>
+Free time
+</span>
+
+</button>
+
+
+<button
+class="nav-item"
+data-page="earnings"
+onclick="showPage('earnings')"
+>
+
+<span class="nav-icon">
+▥
+</span>
+
+<span>
+Earnings
+</span>
 
 </button>
 
@@ -1168,51 +1442,51 @@ Available today
 
 <!-- MODAL -->
 
-<div class="modal"
-     id="modal">
+<div
+class="modal"
+id="modal"
+>
 
-<div class="modal-content"
-     id="modalContent">
+<div
+class="modal-content"
+id="modalContent"
+>
 </div>
 
 </div>
 
 
-<div class="toast"
-     id="toast">
+<div
+class="toast"
+id="toast"
+>
 </div>
 
 
 <script>
 
-const STORAGE_KEY =
-"pureShineCleaningManager_v5";
+const STORAGE_KEY=
+"pureShineCleaningManager_v6";
 
 
 /*
-  IMPORTANT:
-
   28 September 2026 = Joanna week
   5 October 2026 = Sindu week
 
-  Friday 2 October 2026:
-  ONLY JOANNA
+  IMPORTANT:
+  Friday 2 October 2026 = Joanna ONLY.
+  Friday 9 October 2026 = Sindu ONLY.
 
-  Friday 9 October 2026:
-  ONLY SINDU
-
-  Mike is NOT automatically inserted.
-  Peter is NOT automatically inserted.
-  Every-3-weeks clients only appear when an
-  anchor date has actually been set.
+  Mike is deliberately NOT included.
+  He will not be automatically inserted.
 */
 
 
-const REFERENCE_JOANNA_WEEK =
+const REFERENCE_JOANNA_WEEK=
 new Date(2026,8,28);
 
 
-const defaultClients = [
+const defaultClients=[
 
 {
 id:"lottie",
@@ -1289,7 +1563,7 @@ phone:""
 {
 id:"meghan",
 name:"Meghan",
-rate:16,
+rate:20,
 type:"Agency",
 frequency:"Weekly",
 days:[4],
@@ -1325,24 +1599,12 @@ phone:""
 {
 id:"peter",
 name:"Peter",
-rate:25,
+rate:20,
 type:"Private",
 frequency:"Occasional",
 days:[5],
 start:"09:00",
 end:"12:00",
-phone:""
-},
-
-{
-id:"mike",
-name:"Mike",
-rate:18,
-type:"Private",
-frequency:"Every 3 weeks",
-days:[5],
-start:"09:00",
-end:"11:00",
 phone:""
 }
 
@@ -1356,7 +1618,16 @@ clients:defaultClients,
 jobs:[],
 
 settings:{
+
+/*
+  REAL UI ZOOM.
+  Unlike the previous version, this does
+  not only change text size.
+  It scales the whole interface.
+*/
+
 zoom:100,
+
 workingHours:8,
 
 scheduleView:"list",
@@ -1380,14 +1651,17 @@ alarmTime:"08:00",
 alarmSound:"chime",
 
 customSound:""
-}
+
+},
+
+historyFilter:"month"
 
 };
 
 
 try{
 
-const saved =
+const saved=
 JSON.parse(
 localStorage.getItem(STORAGE_KEY)
 );
@@ -1395,7 +1669,9 @@ localStorage.getItem(STORAGE_KEY)
 if(saved){
 
 state={
+
 ...state,
+
 ...saved,
 
 settings:{
@@ -1403,9 +1679,11 @@ settings:{
 ...(saved.settings||{})
 },
 
-clients:saved.clients||defaultClients,
+clients:
+saved.clients||defaultClients,
 
-jobs:saved.jobs||[]
+jobs:
+saved.jobs||[]
 
 };
 
@@ -1415,7 +1693,20 @@ jobs:saved.jobs||[]
 
 
 /*
-  Keep the known rates correct.
+  Never automatically add Mike.
+  Also removes him from an older version
+  where the previous code inserted him.
+*/
+
+state.clients=
+state.clients.filter(
+c=>
+c.name?.toLowerCase()!=="mike"
+);
+
+
+/*
+  Make sure Sindu stays at £16/h.
 */
 
 state.clients.forEach(c=>{
@@ -1424,13 +1715,22 @@ if(c.phone===undefined){
 c.phone="";
 }
 
-if(c.name.toLowerCase()==="sindu"){
+if(
+c.name?.toLowerCase()==="sindu"
+){
+
 c.rate=16;
+
 c.frequency="Fortnightly";
+
 }
 
-if(c.name.toLowerCase()==="joanna"){
+if(
+c.name?.toLowerCase()==="joanna"
+){
+
 c.frequency="Fortnightly";
+
 }
 
 });
@@ -1438,7 +1738,8 @@ c.frequency="Fortnightly";
 
 let currentPage="home";
 
-let calendarDate=new Date();
+let calendarDate=
+new Date();
 
 let activeTimer=null;
 
@@ -1456,15 +1757,18 @@ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.
 
 function mondayOf(d){
 
-let x=new Date(d);
+const x=new Date(d);
 
-let n=x.getDay();
+const n=x.getDay();
 
 x.setDate(
-x.getDate()+(n===0?-6:1-n)
+x.getDate()+
+(n===0?-6:1-n)
 );
 
-x.setHours(0,0,0,0);
+x.setHours(
+0,0,0,0
+);
 
 return x;
 
@@ -1495,11 +1799,12 @@ REFERENCE_JOANNA_WEEK
 
 
 /*
-  THIS is what prevents Sindu AND Joanna
-  from appearing together.
+  This is the important fortnightly rule.
 
-  It also prevents Mike from appearing
-  automatically.
+  Joanna = one Friday
+  Sindu = the following Friday
+
+  They can NEVER appear together.
 */
 
 function shouldClientAppearOnDate(c,d){
@@ -1508,8 +1813,9 @@ if(!c.days?.includes(d.getDay())){
 return false;
 }
 
-const name =
-c.name.toLowerCase();
+
+const name=
+c.name?.toLowerCase();
 
 
 if(name==="joanna"){
@@ -1577,7 +1883,8 @@ d=new Date()
 ){
 
 return state.clients.filter(
-c=>shouldClientAppearOnDate(c,d)
+c=>
+shouldClientAppearOnDate(c,d)
 );
 
 }
@@ -1622,25 +1929,32 @@ min=Math.max(
 Math.round(min||0)
 );
 
-const h=Math.floor(min/60);
+const h=
+Math.floor(min/60);
 
-const m=min%60;
+const m=
+min%60;
 
-const a=[];
+const parts=[];
 
 if(h){
-a.push(
+
+parts.push(
 `${h} ${h===1?"hour":"hours"}`
 );
+
 }
 
 if(m){
-a.push(
+
+parts.push(
 `${m} ${m===1?"minute":"minutes"}`
 );
+
 }
 
-return a.join(" ")||"0 minutes";
+return parts.join(" ")||
+"0 minutes";
 
 }
 
@@ -1688,10 +2002,13 @@ return String(v??"")
 
 function renderHome(){
 
-const today=new Date();
+const today=
+new Date();
 
-document.getElementById("dateTitle")
-.textContent=prettyDate(today);
+document.getElementById(
+"dateTitle"
+).textContent=
+prettyDate(today);
 
 
 const clients=
@@ -1708,28 +2025,36 @@ j.completed
 
 const minutes=
 jobs.reduce(
-(a,j)=>a+Number(j.minutes||0),
+(a,j)=>
+a+Number(j.minutes||0),
 0
 );
 
 
 const earned=
 jobs.reduce(
-(a,j)=>a+Number(j.amount||0),
+(a,j)=>
+a+Number(j.amount||0),
 0
 );
 
 
-document.getElementById("todayJobs")
-.textContent=jobs.length;
+document.getElementById(
+"todayJobs"
+).textContent=
+jobs.length;
 
 
-document.getElementById("todayHours")
-.textContent=durationText(minutes);
+document.getElementById(
+"todayHours"
+).textContent=
+durationText(minutes);
 
 
-document.getElementById("todayEarned")
-.textContent=money(earned);
+document.getElementById(
+"todayEarned"
+).textContent=
+money(earned);
 
 
 const available=
@@ -1739,30 +2064,36 @@ state.settings.workingHours*60-minutes
 );
 
 
-document.getElementById("availableHours")
-.textContent=
+document.getElementById(
+"availableHours"
+).textContent=
 durationText(available);
 
 
-document.getElementById("freeHours")
-.textContent=
+document.getElementById(
+"freeHours"
+).textContent=
 durationText(available);
 
 
 const box=
-document.getElementById("todaySchedule");
+document.getElementById(
+"todaySchedule"
+);
 
 
 if(!clients.length){
 
 box.innerHTML=`
 
-<div style="
+<div
+style="
 padding:25px;
 text-align:center;
 color:#938c93;
 font-size:13px;
-">
+"
+>
 No cleaning jobs scheduled for today.
 </div>
 
@@ -1826,7 +2157,9 @@ currentPage=page;
 
 document
 .querySelectorAll(".page")
-.forEach(x=>x.classList.remove("active"));
+.forEach(
+x=>x.classList.remove("active")
+);
 
 
 document
@@ -1836,7 +2169,8 @@ document
 
 document
 .querySelectorAll(".nav-item")
-.forEach(x=>{
+.forEach(
+x=>{
 x.classList.toggle(
 "active",
 x.dataset.page===page
@@ -1875,43 +2209,56 @@ state.settings.scheduleView==="calendar"
 );
 
 
-document.getElementById("listViewBtn")
-.classList.toggle(
+document.getElementById(
+"listViewBtn"
+).classList.toggle(
 "active",
 state.settings.scheduleView==="list"
 );
 
 
-document.getElementById("calendarViewBtn")
-.classList.toggle(
+document.getElementById(
+"calendarViewBtn"
+).classList.toggle(
 "active",
 state.settings.scheduleView==="calendar"
 );
 
 
-document.getElementById("monthTitle")
-.textContent=
+document.getElementById(
+"monthTitle"
+).textContent=
 prettyMonth(calendarDate);
 
 
-const y=calendarDate.getFullYear();
+const y=
+calendarDate.getFullYear();
 
-const m=calendarDate.getMonth();
+const m=
+calendarDate.getMonth();
 
-const first=new Date(y,m,1);
+const first=
+new Date(y,m,1);
 
-const last=new Date(y,m+1,0);
+const last=
+new Date(y,m+1,0);
 
 let start=
 first.getDay()===0
-?6
-:first.getDay()-1;
+?
+6
+:
+first.getDay()-1;
 
 
 let html="";
 
 
-for(let i=0;i<start;i++){
+for(
+let i=0;
+i<start;
+i++
+){
 
 html+="<div></div>";
 
@@ -1924,9 +2271,11 @@ day<=last.getDate();
 day++
 ){
 
-const d=new Date(y,m,day);
+const d=
+new Date(y,m,day);
 
-const key=dateKey(d);
+const key=
+dateKey(d);
 
 const has=
 getTodayClients(d).length||
@@ -1941,18 +2290,20 @@ html+=`
 class="day ${
 key===dateKey(new Date())
 ?"today":""
-}
-${has?"has-job":""}"
+} ${has?"has-job":""}"
 onclick="showDay('${key}')"
 >
 
-<span>${day}</span>
+<span>
+${day}
+</span>
 
 ${
 has
 ?
 '<span class="day-dot"></span>'
-:""
+:
+""
 }
 
 </div>
@@ -1964,7 +2315,8 @@ has
 
 document.getElementById(
 "calendarGrid"
-).innerHTML=html;
+).innerHTML=
+html;
 
 
 renderScheduleList();
@@ -1974,7 +2326,8 @@ renderScheduleList();
 
 function setScheduleView(view){
 
-state.settings.scheduleView=view;
+state.settings.scheduleView=
+view;
 
 save();
 
@@ -1997,7 +2350,9 @@ renderSchedule();
 function showDay(key){
 
 const d=
-new Date(key+"T12:00:00");
+new Date(
+key+"T12:00:00"
+);
 
 
 const clients=
@@ -2016,17 +2371,19 @@ document.getElementById(
 
 <div class="list-card">
 
-<b>${prettyDate(d)}</b>
+<b>
+${prettyDate(d)}
+</b>
 
-<div style="
+<div
+style="
 color:#999199;
 font-size:12px;
 margin-top:5px;
-">
-
+"
+>
 ${clients.length}
 scheduled client${clients.length===1?"":"s"}
-
 </div>
 
 </div>
@@ -2057,9 +2414,9 @@ ${esc(c.name)}
 </div>
 
 <div class="client-info">
-${c.start}
+${c.start||"09:00"}
 –
-${c.end}
+${c.end||"11:00"}
 ·
 ${money(c.rate)}/h
 </div>
@@ -2068,7 +2425,12 @@ ${money(c.rate)}/h
 
 </div>
 
-<span style="color:#a45e7d">
+<span
+style="
+color:#a45e7d;
+font-size:24px;
+"
+>
 ›
 </span>
 
@@ -2098,11 +2460,13 @@ ${durationLong(j.minutes)}
 
 </div>
 
-<div style="
+<div
+style="
 display:flex;
 gap:8px;
 align-items:center;
-">
+"
+>
 
 <strong>
 ${money(j.amount)}
@@ -2113,10 +2477,9 @@ class="secondary"
 onclick="
 event.stopPropagation();
 openInvoice('${j.id}')
-">
-
+"
+>
 Invoice
-
 </button>
 
 </div>
@@ -2173,10 +2536,13 @@ ${esc(c.frequency)}
 ·
 ${money(c.rate)}/h
 
-${c.phone
+${
+c.phone
 ?
 " · "+esc(c.phone)
-:""}
+:
+""
+}
 
 </div>
 
@@ -2184,10 +2550,12 @@ ${c.phone
 
 </div>
 
-<div style="
+<div
+style="
 display:flex;
 gap:6px;
-">
+"
+>
 
 <button
 class="secondary"
@@ -2195,20 +2563,6 @@ onclick="openClientModal('${c.id}')"
 >
 Edit
 </button>
-
-${
-c.phone
-?
-`
-<button
-class="secondary"
-onclick="sendReminder('${c.id}')"
->
-Remind
-</button>
-`
-:""
-}
 
 </div>
 
@@ -2233,8 +2587,11 @@ function openClientModal(id){
 const c=
 id
 ?
-state.clients.find(x=>x.id===id)
-:null;
+state.clients.find(
+x=>x.id===id
+)
+:
+null;
 
 
 document.getElementById(
@@ -2366,18 +2723,41 @@ Day
 <option value="2">Tuesday</option>
 <option value="3">Wednesday</option>
 <option value="4">Thursday</option>
-
-<option
-value="5"
-selected
->
-Friday
-</option>
-
+<option value="5">Friday</option>
 <option value="6">Saturday</option>
 <option value="0">Sunday</option>
 
 </select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Start time
+</label>
+
+<input
+id="fStart"
+type="time"
+value="${c?.start||"09:00"}"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+End time
+</label>
+
+<input
+id="fEnd"
+type="time"
+value="${c?.end||"11:00"}"
+>
 
 </div>
 
@@ -2422,7 +2802,8 @@ onclick="deleteClient('${c.id}')"
 Delete client
 </button>
 `
-:""
+:
+""
 }
 
 `;
@@ -2434,9 +2815,12 @@ document.getElementById(
 
 if(c){
 
-document.getElementById("fDay")
-.value=
-String(c.days?.[0]??5);
+document.getElementById(
+"fDay"
+).value=
+String(
+c.days?.[0]??5
+);
 
 }
 
@@ -2446,57 +2830,99 @@ String(c.days?.[0]??5);
 function saveClient(id){
 
 const name=
-document.getElementById("fName")
-.value.trim();
+document.getElementById(
+"fName"
+).value.trim();
+
 
 const phone=
-document.getElementById("fPhone")
-.value.trim();
+document.getElementById(
+"fPhone"
+).value.trim();
+
 
 const rate=
 Number(
-document.getElementById("fRate")
-.value
+document.getElementById(
+"fRate"
+).value
 );
 
+
 const type=
-document.getElementById("fType")
-.value;
+document.getElementById(
+"fType"
+).value;
+
 
 const frequency=
-document.getElementById("fFreq")
-.value;
+document.getElementById(
+"fFreq"
+).value;
+
 
 const day=
 Number(
-document.getElementById("fDay")
-.value
+document.getElementById(
+"fDay"
+).value
 );
 
 
-if(!name)
-return showToast(
+const start=
+document.getElementById(
+"fStart"
+).value;
+
+
+const end=
+document.getElementById(
+"fEnd"
+).value;
+
+
+if(!name){
+
+showToast(
 "Please enter a client name"
 );
 
+return;
+
+}
+
+
+/*
+  Mike is not inserted automatically.
+  If the user manually adds a client named Mike,
+  the app allows the manually created record.
+*/
 
 if(id){
 
 const c=
-state.clients.find(x=>x.id===id);
+state.clients.find(
+x=>x.id===id
+);
 
 
 Object.assign(c,{
+
 name,
 phone,
 rate,
 type,
 frequency,
-days:[day]
+days:[day],
+start,
+end
+
 });
 
 
-if(name.toLowerCase()==="sindu"){
+if(
+name.toLowerCase()==="sindu"
+){
 
 c.rate=16;
 c.frequency="Fortnightly";
@@ -2504,7 +2930,9 @@ c.frequency="Fortnightly";
 }
 
 
-if(name.toLowerCase()==="joanna"){
+if(
+name.toLowerCase()==="joanna"
+){
 
 c.frequency="Fortnightly";
 
@@ -2514,19 +2942,17 @@ c.frequency="Fortnightly";
 
 state.clients.push({
 
-id:"client_"+Date.now(),
+id:
+"client_"+Date.now(),
 
 name,
 phone,
 rate,
 type,
 frequency,
-
 days:[day],
-
-start:"09:00",
-
-end:"11:00"
+start,
+end
 
 });
 
@@ -2541,14 +2967,18 @@ renderClients();
 
 renderHome();
 
-showToast("Client saved");
+showToast(
+"Client saved"
+);
 
 }
 
 
 function deleteClient(id){
 
-if(!confirm("Delete this client?"))
+if(!confirm(
+"Delete this client?"
+))
 return;
 
 
@@ -2566,7 +2996,9 @@ renderClients();
 
 renderHome();
 
-showToast("Client deleted");
+showToast(
+"Client deleted"
+);
 
 }
 
@@ -2581,7 +3013,9 @@ getTodayClients()[0];
 
 if(c){
 
-openTimerForClient(c.id);
+openTimerForClient(
+c.id
+);
 
 }else{
 
@@ -2597,19 +3031,27 @@ showToast(
 function openTimerForClient(id){
 
 const c=
-state.clients.find(x=>x.id===id);
+state.clients.find(
+x=>x.id===id
+);
 
 
-if(!c)return;
+if(!c)
+return;
 
 
 if(!activeTimer){
 
 activeTimer={
+
 clientId:c.id,
+
 clientName:c.name,
+
 rate:Number(c.rate),
+
 startedAt:Date.now()
+
 };
 
 
@@ -2623,7 +3065,9 @@ JSON.stringify(activeTimer)
 
 renderTimerModal();
 
-clearInterval(timerInterval);
+clearInterval(
+timerInterval
+);
 
 timerInterval=
 setInterval(
@@ -2636,7 +3080,8 @@ renderTimerModal,
 
 function renderTimerModal(){
 
-if(!activeTimer)return;
+if(!activeTimer)
+return;
 
 
 const mins=
@@ -2710,7 +3155,8 @@ document.getElementById(
 
 function finishTimer(){
 
-if(!activeTimer)return;
+if(!activeTimer)
+return;
 
 
 const mins=
@@ -2731,17 +3177,23 @@ activeTimer.rate;
 
 const job={
 
-id:"job_"+Date.now(),
+id:
+"job_"+Date.now(),
 
-date:dateKey(new Date()),
+date:
+dateKey(new Date()),
 
-clientId:activeTimer.clientId,
+clientId:
+activeTimer.clientId,
 
-clientName:activeTimer.clientName,
+clientName:
+activeTimer.clientName,
 
-minutes:mins,
+minutes:
+mins,
 
-rate:activeTimer.rate,
+rate:
+activeTimer.rate,
 
 amount,
 
@@ -2762,7 +3214,9 @@ localStorage.removeItem(
 );
 
 
-clearInterval(timerInterval);
+clearInterval(
+timerInterval
+);
 
 closeModal();
 
@@ -2770,8 +3224,9 @@ renderHome();
 
 renderEarnings();
 
-
-openInvoice(job.id);
+openInvoice(
+job.id
+);
 
 }
 
@@ -2894,30 +3349,41 @@ document.getElementById(
 "pClient"
 ).value;
 
+
 const c=
-state.clients.find(x=>x.id===id);
+state.clients.find(
+x=>x.id===id
+);
+
 
 const date=
 document.getElementById(
 "pDate"
 ).value;
 
+
 const mins=
 Number(
-document.getElementById("pHours").value||0
+document.getElementById(
+"pHours"
+).value||0
 )*60
 +
 Number(
-document.getElementById("pMins").value||0
+document.getElementById(
+"pMins"
+).value||0
 );
 
 
-if(!c||!date)return;
+if(!c||!date)
+return;
 
 
 const job={
 
-id:"job_"+Date.now(),
+id:
+"job_"+Date.now(),
 
 date,
 
@@ -2948,16 +3414,44 @@ renderHome();
 
 renderEarnings();
 
-openInvoice(job.id);
+openInvoice(
+job.id
+);
 
 }
 
 
-/* EARNINGS */
+/* EARNINGS HISTORY */
+
+function setHistoryFilter(filter){
+
+state.historyFilter=
+filter;
+
+document.getElementById(
+"monthHistoryBtn"
+).classList.toggle(
+"active",
+filter==="month"
+);
+
+document.getElementById(
+"allHistoryBtn"
+).classList.toggle(
+"active",
+filter==="all"
+);
+
+renderEarnings();
+
+}
+
 
 function renderEarnings(){
 
-const now=new Date();
+const now=
+new Date();
+
 
 const prefix=
 `${now.getFullYear()}-${String(
@@ -2965,7 +3459,7 @@ now.getMonth()+1
 ).padStart(2,"0")}`;
 
 
-const jobs=
+const monthJobs=
 state.jobs.filter(
 j=>
 j.completed&&
@@ -2974,8 +3468,9 @@ j.date.startsWith(prefix)
 
 
 const total=
-jobs.reduce(
-(a,j)=>a+Number(j.amount||0),
+monthJobs.reduce(
+(a,j)=>
+a+Number(j.amount||0),
 0
 );
 
@@ -2986,6 +3481,43 @@ document.getElementById(
 money(total);
 
 
+const filter=
+state.historyFilter||"month";
+
+
+let jobs;
+
+
+if(filter==="all"){
+
+/*
+  SHOW EVERYTHING EVER SAVED.
+  This fixes the missing earnings history.
+*/
+
+jobs=
+state.jobs.filter(
+j=>j.completed
+);
+
+}else{
+
+jobs=
+monthJobs;
+
+}
+
+
+jobs=
+jobs.sort(
+(a,b)=>
+b.date.localeCompare(a.date)||
+String(b.id).localeCompare(
+String(a.id)
+)
+);
+
+
 document.getElementById(
 "earningsList"
 ).innerHTML=
@@ -2994,36 +3526,35 @@ jobs.length
 
 ?
 
-jobs
-.sort(
-(a,b)=>
-b.date.localeCompare(a.date)
-)
-.map(j=>`
+jobs.map(j=>`
 
 <div class="list-card">
 
 <div class="list-row">
 
-<div>
+<div style="min-width:0">
 
 <div class="client-name">
 ${esc(j.clientName)}
 </div>
 
 <div class="client-info">
-${j.date}
+${formatHistoryDate(j.date)}
 ·
 ${durationLong(j.minutes)}
+·
+${money(j.rate)}/h
 </div>
 
 </div>
 
-<div style="
+<div
+style="
 display:flex;
 gap:7px;
 align-items:center;
-">
+"
+>
 
 <strong>
 ${money(j.amount)}
@@ -3052,13 +3583,36 @@ Invoice
 class="list-card"
 style="
 text-align:center;
-color:#999199
+color:#999199;
+padding:30px 15px;
 "
 >
-No completed jobs this month.
+No completed jobs in this history yet.
 </div>
 
 `;
+
+}
+
+
+function formatHistoryDate(date){
+
+if(!date)
+return "";
+
+const d=
+new Date(
+date+"T12:00:00"
+);
+
+return d.toLocaleDateString(
+"en-GB",
+{
+day:"numeric",
+month:"short",
+year:"numeric"
+}
+);
 
 }
 
@@ -3073,7 +3627,8 @@ x=>x.id===jobId
 );
 
 
-if(!job)return;
+if(!job)
+return;
 
 
 const client=
@@ -3086,7 +3641,9 @@ const date=
 new Date(
 job.date+"T12:00:00"
 )
-.toLocaleDateString("en-GB");
+.toLocaleDateString(
+"en-GB"
+);
 
 
 document.getElementById(
@@ -3115,18 +3672,22 @@ Pure Shine Cleaning
 </h2>
 
 
-<div style="
+<div
+style="
 color:#8d858d;
 font-size:13px;
-">
+"
+>
 Invoice · ${date}
 </div>
 
 
-<div style="
+<div
+style="
 margin-top:20px;
 font-weight:800;
-">
+"
+>
 Bill to
 </div>
 
@@ -3140,14 +3701,17 @@ ${
 client?.phone
 ?
 `
-<div style="
+<div
+style="
 color:#8d858d;
 font-size:12px;
-">
+"
+>
 ${esc(client.phone)}
 </div>
 `
-:""
+:
+""
 }
 
 
@@ -3218,7 +3782,7 @@ Send invoice
 class="secondary"
 style="
 width:100%;
-margin-top:10px
+margin-top:10px;
 "
 onclick="printInvoice('${job.id}')"
 >
@@ -3268,6 +3832,10 @@ x=>x.id===id
 );
 
 
+if(!job)
+return;
+
+
 const text=
 invoiceText(job);
 
@@ -3291,11 +3859,15 @@ text
 
 if(navigator.clipboard){
 
-await navigator.clipboard.writeText(text);
+await navigator.clipboard.writeText(
+text
+);
 
 }
 
-showToast("Invoice copied");
+showToast(
+"Invoice copied"
+);
 
 }
 
@@ -3308,6 +3880,10 @@ const job=
 state.jobs.find(
 x=>x.id===id
 );
+
+
+if(!job)
+return;
 
 
 const client=
@@ -3333,18 +3909,18 @@ Pure Shine Cleaning Invoice
 body{
 font-family:Arial;
 padding:40px;
-color:#29272b
+color:#29272b;
 }
 
 h1{
-color:#a65f80
+color:#a65f80;
 }
 
 .line{
 display:flex;
 justify-content:space-between;
 padding:12px 0;
-border-bottom:1px solid #ddd
+border-bottom:1px solid #ddd;
 }
 
 .total{
@@ -3352,7 +3928,7 @@ font-size:22px;
 font-weight:bold;
 padding-top:20px;
 display:flex;
-justify-content:space-between
+justify-content:space-between;
 }
 
 </style>
@@ -3374,16 +3950,19 @@ Bill to
 </h3>
 
 <p>
+
 ${esc(client?.name||job.clientName)}
 
 ${
 client?.phone
 ?
 "<br>"+esc(client.phone)
-:""
+:
+""
 }
 
 </p>
+
 
 <div class="line">
 
@@ -3397,6 +3976,7 @@ ${durationLong(job.minutes)}
 
 </div>
 
+
 <div class="line">
 
 <span>
@@ -3408,6 +3988,7 @@ ${money(job.rate)}
 </b>
 
 </div>
+
 
 <div class="total">
 
@@ -3458,7 +4039,8 @@ x=>x.id===id
 );
 
 
-if(!client)return;
+if(!client)
+return;
 
 
 const message=
@@ -3473,7 +4055,9 @@ text:message
 
 }else{
 
-navigator.clipboard?.writeText(message);
+navigator.clipboard?.writeText(
+message
+);
 
 showToast(
 "Reminder copied"
@@ -3511,7 +4095,7 @@ Schedule view
 </div>
 
 <div class="setting-desc">
-List or calendar
+Choose list or calendar
 </div>
 
 </div>
@@ -3523,7 +4107,8 @@ changeSetting(
 'scheduleView',
 this.value
 )
-">
+"
+>
 
 <option
 value="list"
@@ -3544,6 +4129,78 @@ Calendar
 </div>
 
 
+<!-- INTERFACE ZOOM -->
+
+<div
+class="setting"
+style="
+display:block;
+padding:15px 0;
+"
+>
+
+<div
+style="
+display:flex;
+align-items:center;
+justify-content:space-between;
+"
+>
+
+<div>
+
+<div class="setting-label">
+Interface size
+</div>
+
+<div class="setting-desc">
+Normal app-style zoom — makes the whole interface larger
+</div>
+
+</div>
+
+<div
+class="zoom-control"
+>
+
+<button
+onclick="adjustZoom(-10)"
+>
+−
+</button>
+
+<div
+class="zoom-value"
+id="zoomValue"
+>
+${state.settings.zoom}%
+</div>
+
+<button
+onclick="adjustZoom(10)"
+>
++
+</button>
+
+</div>
+
+</div>
+
+
+<input
+class="zoom-slider"
+id="zoomSlider"
+type="range"
+min="80"
+max="180"
+step="5"
+value="${state.settings.zoom}"
+oninput="setZoom(this.value)"
+>
+
+</div>
+
+
 <!-- APP ICON -->
 
 <div class="setting">
@@ -3555,7 +4212,7 @@ App icon
 </div>
 
 <div class="setting-desc">
-Choose your own icon
+Choose your own app icon
 </div>
 
 </div>
@@ -3617,7 +4274,7 @@ Background photo
 </div>
 
 <div class="setting-desc">
-Choose your own photo
+Choose your own background photo
 </div>
 
 </div>
@@ -3648,7 +4305,7 @@ Background opacity
 </div>
 
 <div class="setting-desc">
-Make it clear or transparent
+Adjust from clear to transparent
 </div>
 
 </div>
@@ -3680,7 +4337,7 @@ Writing style
 </div>
 
 <div class="setting-desc">
-Change the app font
+Change the font style
 </div>
 
 </div>
@@ -3773,36 +4430,6 @@ Soft / rounded
 </div>
 
 
-<!-- SIZE -->
-
-<div class="setting">
-
-<div>
-
-<div class="setting-label">
-Interface size
-</div>
-
-<div class="setting-desc">
-Make everything larger
-</div>
-
-</div>
-
-<input
-class="setting-control"
-type="range"
-min="90"
-max="130"
-value="${state.settings.zoom}"
-oninput="
-changeZoom(this.value)
-"
->
-
-</div>
-
-
 <!-- ALARM -->
 
 <div class="setting">
@@ -3875,7 +4502,7 @@ Alarm sound
 </div>
 
 <div class="setting-desc">
-Choose your alert
+Choose your alert sound
 </div>
 
 </div>
@@ -3935,7 +4562,7 @@ Custom alarm sound
 </div>
 
 <div class="setting-desc">
-Use your own audio
+Use your own audio file
 </div>
 
 </div>
@@ -3977,15 +4604,19 @@ document.getElementById(
 }
 
 
-/* SETTINGS FUNCTIONS */
+/* SETTINGS */
 
-function changeSetting(key,value){
+function changeSetting(
+key,
+value
+){
 
 state.settings[key]=value;
 
 save();
 
 applySettings();
+
 
 if(
 key==="scheduleView" &&
@@ -3999,26 +4630,91 @@ renderSchedule();
 }
 
 
-function changeZoom(value){
+function setZoom(value){
+
+value=
+Math.max(
+80,
+Math.min(
+180,
+Number(value)
+)
+);
+
 
 state.settings.zoom=
-Number(value);
+value;
 
-document.documentElement.style.fontSize=
-value+"%";
+
+applyZoom();
+
 
 save();
 
+
+const slider=
+document.getElementById(
+"zoomSlider"
+);
+
+const label=
+document.getElementById(
+"zoomValue"
+);
+
+
+if(slider)
+slider.value=value;
+
+if(label)
+label.textContent=
+value+"%";
+
 }
 
+
+function adjustZoom(amount){
+
+setZoom(
+Number(state.settings.zoom||100)+
+amount
+);
+
+}
+
+
+function applyZoom(){
+
+/*
+  IMPORTANT:
+  This uses REAL interface zoom.
+
+  The previous version only changed
+  rem/font sizing, which left many
+  buttons/icons almost the same size.
+
+  CSS zoom scales the entire app:
+  text + cards + icons + buttons + spacing.
+*/
+
+const value=
+Number(state.settings.zoom||100)/100;
+
+
+document.body.style.zoom=
+value;
+
+}
+
+
+/* APPEARANCE */
 
 function changeOpacity(value){
 
 state.settings.bgOpacity=
 Number(value)/100;
 
-document.documentElement.style
-.setProperty(
+document.documentElement.style.setProperty(
 "--bg-opacity",
 state.settings.bgOpacity
 );
@@ -4030,32 +4726,62 @@ save();
 
 function applySettings(){
 
-document.documentElement.style.fontSize=
-state.settings.zoom+"%";
+applyZoom();
 
 
-document.body.className="";
+document.body.classList.remove(
+"classic",
+"rounded",
+"compact",
+"soft"
+);
 
 
-if(state.settings.font==="classic"){
-document.body.classList.add("classic");
+if(
+state.settings.font==="classic"
+){
+
+document.body.classList.add(
+"classic"
+);
+
 }
 
-if(state.settings.font==="rounded"){
-document.body.classList.add("rounded");
+
+if(
+state.settings.font==="rounded"
+){
+
+document.body.classList.add(
+"rounded"
+);
+
 }
 
-if(state.settings.appearance==="compact"){
-document.body.classList.add("compact");
+
+if(
+state.settings.appearance==="compact"
+){
+
+document.body.classList.add(
+"compact"
+);
+
 }
 
-if(state.settings.appearance==="soft"){
-document.body.classList.add("soft");
+
+if(
+state.settings.appearance==="soft"
+){
+
+document.body.classList.add(
+"soft"
+);
+
 }
 
 
-document.documentElement.style
-.setProperty(
+document.documentElement.style.setProperty(
 "--bg-opacity",
 state.settings.bgOpacity
 );
@@ -4068,15 +4794,18 @@ state.settings.iconData||
 "icon.png";
 
 
+const profile=
 document.getElementById(
 "profilePhoto"
-).src=
-state.settings.profileData||"";
+);
 
 
-document.getElementById(
-"profilePhoto"
-).style.display=
+profile.src=
+state.settings.profileData||
+"";
+
+
+profile.style.display=
 state.settings.profileData
 ?
 "block"
@@ -4095,22 +4824,27 @@ state.settings.backgroundData||
 
 /* IMAGE UPLOAD */
 
-function loadImageSetting(event,key){
+function loadImageSetting(
+event,
+key
+){
 
 const file=
 event.target.files?.[0];
 
 
-if(!file)return;
+if(!file)
+return;
 
 
 compressImage(
 file,
-1200,
-.82,
+1400,
+.85,
 data=>{
 
-state.settings[key]=data;
+state.settings[key]=
+data;
 
 save();
 
@@ -4157,7 +4891,9 @@ img.height
 
 
 const canvas=
-document.createElement("canvas");
+document.createElement(
+"canvas"
+);
 
 
 canvas.width=
@@ -4193,7 +4929,8 @@ quality
 };
 
 
-img.src=reader.result;
+img.src=
+reader.result;
 
 };
 
@@ -4211,7 +4948,8 @@ const file=
 event.target.files?.[0];
 
 
-if(!file)return;
+if(!file)
+return;
 
 
 const reader=
@@ -4228,7 +4966,9 @@ state.settings.alarmSound=
 
 save();
 
-testAlarmSound("custom");
+testAlarmSound(
+"custom"
+);
 
 };
 
@@ -4250,7 +4990,9 @@ new Audio(
 state.settings.customSound
 );
 
-audio.play().catch(()=>{});
+audio.play().catch(
+()=>{}
+);
 
 return;
 
@@ -4262,7 +5004,8 @@ window.AudioContext||
 window.webkitAudioContext;
 
 
-if(!AudioContext)return;
+if(!AudioContext)
+return;
 
 
 const context=
@@ -4302,7 +5045,8 @@ gain.gain.value=.08;
 oscillator.start();
 
 
-setTimeout(()=>{
+setTimeout(
+()=>{
 
 oscillator.frequency.value=
 type==="bell"
@@ -4315,16 +5059,21 @@ type==="beep"
 :
 659;
 
-},180);
+},
+180
+);
 
 
-setTimeout(()=>{
+setTimeout(
+()=>{
 
 oscillator.stop();
 
 context.close();
 
-},380);
+},
+380
+);
 
 }
 
@@ -4351,33 +5100,47 @@ await Notification.requestPermission();
 
 /* TOAST */
 
-function showToast(message){
+function showToast(
+message
+){
 
 const toast=
-document.getElementById("toast");
+document.getElementById(
+"toast"
+);
 
 
-toast.textContent=message;
+toast.textContent=
+message;
 
-toast.classList.add("show");
+toast.classList.add(
+"show"
+);
 
 
-setTimeout(()=>{
+setTimeout(
+()=>{
 
-toast.classList.remove("show");
+toast.classList.remove(
+"show"
+);
 
-},2600);
+},
+2600
+);
 
 }
 
 
-/* CLOSE MODAL */
+/* MODAL */
 
 function closeModal(){
 
 document
 .getElementById("modal")
-.classList.remove("show");
+.classList.remove(
+"show"
+);
 
 }
 
@@ -4412,10 +5175,16 @@ localStorage.getItem(
 )
 )||null;
 
-}catch(e){}
+}catch(e){
+
+activeTimer=null;
+
+}
 
 
 /* START */
+
+save();
 
 applySettings();
 
@@ -4430,7 +5199,8 @@ renderEarnings();
 
 if(activeTimer){
 
-setTimeout(()=>{
+setTimeout(
+()=>{
 
 renderTimerModal();
 
@@ -4440,7 +5210,9 @@ renderTimerModal,
 1000
 );
 
-},300);
+},
+300
+);
 
 }
 
