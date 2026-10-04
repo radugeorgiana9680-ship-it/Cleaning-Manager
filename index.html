@@ -2,942 +2,558 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f7dce8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#f7c8d8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="light">
-<link id="appIcon" rel="apple-touch-icon" href="assets/icon.png">
 
-<title>Pure Shine Cleaning</title>
+<link rel="apple-touch-icon" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QCMRXhpZgAATU0AKgAAAAgABQESAAMAAAABAAEAAAEaAAUAAAABAAAASgEbAAUAAAABAAAAUgEoAAMAAAABAAIAAIdpAAQAAAABAAAAWgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAABNegAwAEAAAAAQAABPUAAAAA/+0AOFBob3Rvc2hvcCAzLjAAOEJJTQQEAAAAAAAAOEJJTQQlAAAAAAAQ1B2M2Y8AsgTpgAmY7PhCfv/AABEIBPUE1wMBIgACEQEDEQH/xAAfAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQIDBAUGBwgJCgv/xAC1EQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGqc..."
+>
+
+<title>Pure Shine Cleaning Manager</title>
 
 <style>
-:root{
-  --pink:#e9c7d8;
-  --pink2:#f4dce7;
-  --pink3:#fff1f7;
-  --blue:#dce9f8;
-  --green:#dcefe7;
-  --yellow:#fff0c9;
-  --purple:#e9def6;
-  --peach:#f6ded8;
-  --bg:#fffafd;
-  --card:#ffffff;
-  --text:#111111;
-  --muted:#555555;
-  --accent:#a45b7b;
-  --shadow:0 8px 28px rgba(70,35,50,.08);
-  --radius:24px;
-  --ui-scale:1;
-  --font:"Georgia",serif;
-  --banner-opacity:1;
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
-
-*{box-sizing:border-box}
 
 html,body{
   margin:0;
   padding:0;
+  width:100%;
   min-height:100%;
-  background:var(--bg);
-  color:var(--text);
+  font-family:'DM Sans',Arial,sans-serif;
+  color:#000;
+  background:#fff;
 }
 
 body{
-  font-family:var(--font);
-  font-size:calc(16px * var(--ui-scale));
   overflow-x:hidden;
 }
 
-button,input,select,textarea{
-  font:inherit;
-  color:#111;
+button,
+input,
+select,
+textarea{
+  font-family:inherit;
 }
 
 button{
   cursor:pointer;
 }
 
-img{
-  max-width:100%;
+:root{
+  --pink:#f7c8d8;
+  --pink2:#fbe1e9;
+  --pink3:#fff1f5;
+  --gold:#c9a24b;
+  --gold2:#ead7a0;
+  --text:#000;
+  --muted:#555;
+  --white:#fff;
+  --border:#ead5dc;
+  --shadow:0 8px 25px rgba(0,0,0,.08);
+  --app-zoom:1.3;
 }
 
 .hidden{
   display:none!important;
 }
 
+#welcome{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:linear-gradient(180deg,#fff7fa,#fbe1e9);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:25px;
+}
+
+.welcome-inner{
+  width:min(500px,100%);
+}
+
+.welcome-logo{
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  object-fit:cover;
+  box-shadow:var(--shadow);
+  margin-bottom:20px;
+}
+
+.welcome-title{
+  font-size:32px;
+  font-weight:800;
+  color:#000;
+  margin:0;
+}
+
+.welcome-sub{
+  font-size:16px;
+  margin:8px 0 25px;
+  color:#000;
+}
+
+.primary{
+  border:0;
+  border-radius:16px;
+  background:linear-gradient(135deg,#eeb6ca,#d8b35c);
+  color:#000;
+  font-weight:700;
+  padding:13px 20px;
+  box-shadow:0 6px 15px rgba(0,0,0,.12);
+}
+
+.secondary{
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#fff;
+  color:#000;
+  padding:10px 14px;
+  font-weight:600;
+}
+
+.danger{
+  border:0;
+  border-radius:10px;
+  background:#f5d4dc;
+  color:#000;
+  padding:8px 12px;
+  font-weight:600;
+}
+
 #app{
+  display:none;
   min-height:100vh;
-  background:
-    linear-gradient(rgba(255,250,253,var(--banner-opacity)),
-                    rgba(255,250,253,var(--banner-opacity))),
-    var(--app-bg-image,none);
-  background-size:cover;
-  background-position:center;
-  background-attachment:fixed;
+  background:#fff;
+  padding-bottom:90px;
 }
 
 .app-shell{
   width:100%;
-  max-width:900px;
-  margin:0 auto;
-  padding:
-    calc(22px * var(--ui-scale))
-    calc(18px * var(--ui-scale))
-    calc(125px * var(--ui-scale));
+  max-width:520px;
+  margin:auto;
 }
 
-.top{
+header{
+  background:linear-gradient(135deg,#f8d3df,#fff);
+  padding:20px 18px 14px;
+  border-bottom:1px solid #efdce2;
+}
+
+.header-row{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:15px;
-  margin-bottom:18px;
+  gap:12px;
 }
 
-.brand{
+.logo-wrap{
   display:flex;
   align-items:center;
-  gap:13px;
-  min-width:0;
+  gap:12px;
 }
 
-.brand-logo{
-  width:58px;
-  height:58px;
-  border-radius:17px;
+.logo{
+  width:54px;
+  height:54px;
+  border-radius:15px;
   object-fit:cover;
-  border:1px solid #efd0df;
-  background:#fff;
-  flex:none;
 }
 
-.brand-text h1{
-  margin:0;
-  font-size:calc(27px * var(--ui-scale));
-  line-height:1.05;
-  color:#111;
+.app-title{
+  font-size:21px;
+  font-weight:800;
+  color:#000;
 }
 
-.brand-text p{
-  margin:6px 0 0;
-  font-size:calc(14px * var(--ui-scale));
-  color:#333;
+.app-subtitle{
+  font-size:12px;
+  color:#000;
+  margin-top:2px;
 }
 
-.profile-wrap{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.profile{
-  width:58px;
-  height:58px;
-  border-radius:50%;
-  object-fit:cover;
-  border:1px solid #ecd3df;
-  background:#fff;
-}
-
-.settings-button{
-  width:58px;
-  height:58px;
+.settings-btn{
+  width:45px;
+  height:45px;
   border:0;
-  border-radius:50%;
+  border-radius:14px;
   background:#fff;
-  box-shadow:var(--shadow);
-  font-size:calc(27px * var(--ui-scale));
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  font-size:21px;
+}
+
+.date-card{
+  padding:14px 18px 5px;
+}
+
+.date-card .today{
+  font-size:20px;
+  font-weight:800;
+  color:#000;
+}
+
+.banner{
+  margin:10px 15px;
+  border-radius:22px;
+  overflow:hidden;
+  position:relative;
+  min-height:120px;
+  background:#fbe1e9;
+}
+
+.banner img{
+  width:100%;
+  height:150px;
+  object-fit:cover;
+  display:block;
+}
+
+.banner-text{
+  position:absolute;
+  inset:auto 15px 15px 15px;
+  font-family:Parisienne,cursive;
+  font-size:27px;
+  color:#000;
+  text-shadow:0 1px 4px rgba(255,255,255,.9);
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  padding:10px 15px;
+}
+
+.stat{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:13px 10px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,.04);
+}
+
+.stat-value{
+  font-size:19px;
+  font-weight:800;
+  color:#000;
+}
+
+.stat-label{
+  font-size:11px;
+  color:#000;
+  margin-top:3px;
 }
 
 .page{
   display:none;
+  padding-bottom:20px;
 }
 
 .page.active{
   display:block;
 }
 
-.welcome{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:25px;
-}
-
-.welcome-card{
-  width:min(620px,100%);
-  background:#fff;
-  border-radius:35px;
-  padding:35px 25px;
-  box-shadow:var(--shadow);
-  text-align:center;
-}
-
-.welcome-card img{
-  width:105px;
-  height:105px;
-  object-fit:cover;
-  border-radius:28px;
-}
-
-.welcome-card h1{
-  font-size:36px;
-  margin:20px 0 8px;
-}
-
-.welcome-card p{
-  color:#333;
-  font-size:18px;
-}
-
-.primary{
-  border:0;
-  background:var(--pink);
-  color:#111;
-  border-radius:18px;
-  padding:15px 22px;
-  font-weight:bold;
-}
-
-.hero{
-  background:var(--pink2);
-  border-radius:27px;
-  padding:24px;
-  margin-bottom:18px;
-  min-height:125px;
-  position:relative;
-}
-
-.hero h2{
-  margin:0 0 8px;
-  font-size:calc(24px * var(--ui-scale));
-}
-
-.hero p{
-  margin:0;
-  color:#333;
-  font-size:calc(15px * var(--ui-scale));
-}
-
-.hero-heart{
-  position:absolute;
-  right:22px;
-  top:17px;
-  font-size:calc(53px * var(--ui-scale));
-  color:#a45b7b;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin-bottom:25px;
-}
-
-.stat{
-  min-height:120px;
-  border-radius:23px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:12px 8px;
-}
-
-.stat:nth-child(1){background:#f1d8e5}
-.stat:nth-child(2){background:#dce9f8}
-.stat:nth-child(3){background:#dcefe7}
-.stat:nth-child(4){background:#fff0c9}
-
-.stat-icon{
-  font-size:calc(22px * var(--ui-scale));
-  margin-bottom:7px;
-}
-
-.stat strong{
-  font-size:calc(21px * var(--ui-scale));
-}
-
-.stat span{
-  font-size:calc(13px * var(--ui-scale));
-  margin-top:5px;
-}
-
-.section-title{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin:22px 3px 12px;
-}
-
-.section-title h2{
-  margin:0;
-  font-size:calc(22px * var(--ui-scale));
-}
-
-.link-btn{
-  border:0;
-  background:none;
-  color:#9a5576;
-  font-weight:bold;
-}
-
-.today-list{
-  background:#fff;
-  border-radius:25px;
-  padding:10px;
-  box-shadow:var(--shadow);
-}
-
-.today-job{
-  display:flex;
-  align-items:center;
-  gap:13px;
-  padding:16px;
-  border-radius:18px;
-  margin-bottom:7px;
-}
-
-.today-job:last-child{
-  margin-bottom:0;
-}
-
-.today-job:nth-child(odd){background:#f9e7ef}
-.today-job:nth-child(even){background:#e7f0fa}
-
-.avatar{
-  width:47px;
-  height:47px;
-  border-radius:50%;
-  background:#f4d1e1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:bold;
-  flex:none;
-}
-
-.job-main{
-  flex:1;
-  min-width:0;
-}
-
-.job-main b{
-  display:block;
-  font-size:calc(17px * var(--ui-scale));
-}
-
-.job-main small{
-  display:block;
-  margin-top:5px;
-  color:#333;
-  font-size:calc(13px * var(--ui-scale));
-}
-
-.rate{
-  font-weight:bold;
-  white-space:nowrap;
-  font-size:calc(15px * var(--ui-scale));
-}
-
-.quick-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:11px;
-  margin-top:14px;
-}
-
-.quick{
-  min-height:64px;
-  border:0;
-  border-radius:19px;
-  font-weight:bold;
-  color:#111;
-  padding:12px;
-}
-
-.quick:nth-child(1){background:#dce9f8}
-.quick:nth-child(2){background:#dcefe7}
-.quick:nth-child(3){background:#f1d8e5}
-.quick:nth-child(4){background:#fff0c9}
-.quick:nth-child(5){background:#e9def6}
-.quick:nth-child(6){background:#f6ded8}
-
-.banner{
-  margin-top:22px;
-  height:155px;
-  border-radius:25px;
-  overflow:hidden;
-  position:relative;
-  background:#f4dce7 center/cover no-repeat;
-  background-image:var(--banner-image,none);
-  display:flex;
-  align-items:flex-end;
-  padding:20px;
-}
-
-.banner-overlay{
-  position:absolute;
-  inset:0;
-  background:rgba(255,255,255,.18);
-}
-
-.banner-text{
-  position:relative;
-  z-index:2;
-  color:#a74272;
-  font-size:calc(34px * var(--ui-scale));
-  font-style:italic;
-  text-shadow:0 1px 5px rgba(255,255,255,.8);
-}
-
-.page-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:20px;
-}
-
-.page-header h2{
-  margin:0;
-  font-size:calc(29px * var(--ui-scale));
-}
-
-.toggle{
-  display:flex;
-  background:#f0e9ee;
-  border-radius:16px;
-  padding:4px;
-}
-
-.toggle button{
-  border:0;
-  background:transparent;
-  padding:11px 16px;
-  border-radius:12px;
-  font-weight:bold;
-}
-
-.toggle button.active{
-  background:#fff;
-  color:#9a5576;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
-}
-
-.year-controls{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:13px;
-}
-
-.year-controls button{
-  border:0;
-  background:#fff;
-  box-shadow:var(--shadow);
-  border-radius:15px;
-  padding:10px 15px;
-  font-weight:bold;
-}
-
-.year-title{
-  font-size:calc(20px * var(--ui-scale));
-  font-weight:bold;
-}
-
-.schedule-list{
-  display:flex;
-  flex-direction:column;
-  gap:13px;
-}
-
-.week-card{
-  background:#fff;
-  border-radius:25px;
-  padding:17px;
-  box-shadow:var(--shadow);
-}
-
-.week-title{
-  font-size:calc(19px * var(--ui-scale));
-  font-weight:bold;
-  margin-bottom:12px;
-}
-
-.day-row{
-  border-radius:18px;
-  background:#fbf5f8;
-  padding:12px;
-  margin-top:9px;
-}
-
-.day-row.today{
-  background:#f3d9e5;
-}
-
-.day-name{
-  font-weight:bold;
-  font-size:calc(15px * var(--ui-scale));
-}
-
-.day-date{
-  color:#444;
-  font-size:calc(13px * var(--ui-scale));
-  margin-top:3px;
-}
-
-.schedule-job{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:9px;
-  background:#fff;
-  border-radius:15px;
-  padding:11px;
-  border:1px solid #eee;
-}
-
-.schedule-job .job-info{
-  flex:1;
-}
-
-.schedule-job b{
-  font-size:calc(16px * var(--ui-scale));
-}
-
-.schedule-job small{
-  display:block;
-  margin-top:4px;
-  color:#333;
-}
-
-.icon-btn{
-  width:42px;
-  height:42px;
-  border:0;
-  border-radius:13px;
-  background:#f3e5ec;
-  font-size:19px;
-}
-
-.calendar{
-  display:grid;
-  gap:12px;
-}
-
-.month-card{
-  background:#fff;
-  border-radius:25px;
-  padding:16px;
-  box-shadow:var(--shadow);
-}
-
-.month-name{
-  font-weight:bold;
-  font-size:calc(21px * var(--ui-scale));
-  margin-bottom:12px;
-}
-
-.calendar-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:5px;
-}
-
-.calendar-head{
-  text-align:center;
-  font-size:calc(11px * var(--ui-scale));
-  font-weight:bold;
-  color:#555;
-  padding-bottom:4px;
-}
-
-.calendar-cell{
-  min-height:75px;
-  border:1px solid #eee;
-  border-radius:11px;
-  padding:5px;
-  background:#fff;
-  overflow:hidden;
-}
-
-.calendar-cell.today{
-  border:2px solid #d18aaa;
-  background:#fff2f7;
-}
-
-.calendar-number{
-  font-weight:bold;
-  font-size:calc(12px * var(--ui-scale));
-}
-
-.calendar-job{
-  background:#f2d9e5;
-  border-radius:7px;
-  padding:3px;
-  margin-top:4px;
-  font-size:calc(9px * var(--ui-scale));
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
+.page-title{
+  font-size:24px;
+  font-weight:800;
+  padding:18px 15px 10px;
+  color:#000;
 }
 
 .card{
   background:#fff;
-  border-radius:23px;
-  padding:18px;
-  box-shadow:var(--shadow);
-  margin-bottom:13px;
+  border:1px solid var(--border);
+  border-radius:18px;
+  margin:10px 15px;
+  padding:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,.04);
 }
 
 .row{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:13px;
-}
-
-.card b{
-  font-size:calc(18px * var(--ui-scale));
+  gap:12px;
 }
 
 .small{
-  color:#444;
-  font-size:calc(13px * var(--ui-scale));
-  margin-top:5px;
+  font-size:12px;
+  color:#000;
+  margin-top:4px;
 }
 
 .money{
-  font-weight:bold;
-  font-size:calc(20px * var(--ui-scale));
-  white-space:nowrap;
+  font-size:19px;
+  font-weight:800;
+  color:#000;
 }
 
-.action-row{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:13px;
+.schedule-card{
+  background:linear-gradient(135deg,#fff,#fff5f8);
 }
 
-.action{
-  border:0;
+.schedule-client{
+  padding:12px;
   border-radius:13px;
-  padding:10px 14px;
-  background:#f0e5eb;
-  font-weight:bold;
-}
-
-.action.danger{
-  background:#f4d8d8;
-}
-
-.action.green{
-  background:#dcefe7;
-}
-
-.month-summary{
-  background:#f0d8e5;
-  border-radius:25px;
-  padding:22px;
-  margin-bottom:17px;
-}
-
-.month-summary h3{
-  margin:0;
-  font-size:calc(21px * var(--ui-scale));
-}
-
-.month-summary .total{
+  background:#fbe7ee;
   margin-top:8px;
-  font-size:calc(32px * var(--ui-scale));
-  font-weight:bold;
+  color:#000;
 }
 
-.history-item{
+.timer-panel{
+  position:fixed;
+  left:12px;
+  right:12px;
+  bottom:82px;
+  z-index:1000;
   background:#fff;
-  border-radius:22px;
-  box-shadow:var(--shadow);
-  padding:17px;
-  margin-bottom:12px;
+  border:2px solid var(--gold2);
+  border-radius:20px;
+  padding:14px;
+  box-shadow:0 12px 30px rgba(0,0,0,.16);
+  display:none;
 }
 
-.history-top{
+.timer-panel.show{
+  display:block;
+}
+
+.timer-value{
+  font-size:30px;
+  font-weight:800;
+  text-align:center;
+  margin:5px 0;
+}
+
+.timer-client{
+  text-align:center;
+  font-weight:700;
+}
+
+.bottom-nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:999;
+  height:75px;
+  background:rgba(255,255,255,.97);
+  border-top:1px solid var(--border);
   display:flex;
-  justify-content:space-between;
-  gap:10px;
+  justify-content:center;
+  box-shadow:0 -5px 20px rgba(0,0,0,.08);
 }
 
-.history-date{
-  font-size:calc(13px * var(--ui-scale));
-  color:#444;
-}
-
-.history-duration{
-  font-weight:bold;
-  margin-top:7px;
-}
-
-.history-money{
-  font-weight:bold;
-  font-size:calc(20px * var(--ui-scale));
-}
-
-.settings-card{
-  background:#fff;
-  border-radius:25px;
-  box-shadow:var(--shadow);
-  padding:19px;
-  margin-bottom:14px;
-}
-
-.settings-card h3{
-  margin:0 0 7px;
-  font-size:calc(19px * var(--ui-scale));
-}
-
-.settings-card p{
-  margin:0 0 15px;
-  color:#444;
-  line-height:1.45;
-}
-
-.setting-line{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin:13px 0;
-}
-
-.setting-line label{
-  font-weight:bold;
-}
-
-.setting-control{
-  width:100%;
-  padding:13px;
-  border:1px solid #ddd;
-  border-radius:14px;
-  background:#fff;
-}
-
-.range{
-  width:100%;
-}
-
-.big-buttons{
-  display:grid;
-  gap:10px;
-}
-
-.settings-action{
-  width:100%;
+.nav{
+  flex:1;
+  max-width:104px;
   border:0;
-  background:#fff;
-  border-radius:18px;
-  box-shadow:var(--shadow);
-  padding:17px;
-  text-align:left;
-  font-weight:bold;
-  margin-bottom:10px;
+  background:transparent;
+  color:#000;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  font-size:11px;
+}
+
+.nav-icon{
+  font-size:24px;
+  line-height:1;
+}
+
+.nav.active{
+  color:#b88421;
+  font-weight:800;
 }
 
 .modal{
   position:fixed;
   inset:0;
-  z-index:1000;
+  background:rgba(0,0,0,.4);
+  z-index:2000;
   display:none;
   align-items:flex-end;
   justify-content:center;
-  background:rgba(0,0,0,.32);
 }
 
 .modal.show{
   display:flex;
 }
 
-.sheet{
-  width:min(720px,100%);
+.modal-box{
+  width:min(520px,100%);
   max-height:92vh;
-  overflow:auto;
+  overflow-y:auto;
   background:#fff;
-  border-radius:30px 30px 0 0;
-  padding:22px;
+  border-radius:25px 25px 0 0;
+  padding:20px;
 }
 
-.sheet-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:18px;
-}
-
-.sheet-head h3{
-  margin:0;
-  font-size:calc(23px * var(--ui-scale));
-}
-
-.close{
-  border:0;
-  background:#f4e8ee;
-  border-radius:50%;
-  width:42px;
-  height:42px;
-}
-
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
+.modal-title{
+  font-size:22px;
+  font-weight:800;
+  margin-bottom:15px;
 }
 
 label{
   display:block;
-  font-weight:bold;
+  font-weight:700;
+  font-size:13px;
   margin:12px 0 6px;
+  color:#000;
 }
 
-input,select,textarea{
+input,
+select,
+textarea{
   width:100%;
-  padding:14px;
-  border:1px solid #ddd;
-  border-radius:14px;
+  border:1px solid #decbd2;
+  border-radius:12px;
   background:#fff;
+  color:#000;
+  padding:12px;
+  font-size:15px;
   outline:none;
 }
 
 textarea{
-  min-height:90px;
+  min-height:80px;
   resize:vertical;
 }
 
-.form-actions{
+.modal-actions{
   display:flex;
   gap:10px;
   margin-top:18px;
 }
 
-.form-actions button{
+.modal-actions button{
   flex:1;
-  border:0;
-  border-radius:15px;
-  padding:15px;
-  font-weight:bold;
 }
 
-.save-btn{
-  background:#e8c5d7;
-}
-
-.cancel-btn{
-  background:#eee;
-}
-
-.bottom-nav{
-  position:fixed;
-  left:50%;
-  bottom:13px;
-  transform:translateX(-50%);
-  width:min(900px,calc(100% - 25px));
-  background:#fff;
-  border-radius:25px;
-  box-shadow:0 5px 30px rgba(40,20,30,.13);
-  padding:7px;
+.calendar{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
-  z-index:500;
-}
-
-.nav{
-  border:0;
-  background:transparent;
-  border-radius:18px;
-  min-height:75px;
-  color:#444;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
+  grid-template-columns:repeat(7,1fr);
   gap:4px;
-  font-weight:bold;
-  font-size:calc(12px * var(--ui-scale));
+  padding:10px;
 }
 
-.nav-icon{
-  font-size:calc(25px * var(--ui-scale));
-  line-height:1;
+.cal-head{
+  text-align:center;
+  font-size:10px;
+  font-weight:800;
+  color:#000;
 }
 
-.nav.active{
-  background:#f0d3e2;
-  color:#9a5576;
+.cal-day{
+  min-height:110px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:5px;
+  background:#fff;
 }
 
-.reminder-box{
-  background:#fff3d2;
+.cal-day .n{
+  font-size:11px;
+  font-weight:800;
+  margin-bottom:4px;
+}
+
+.cal-client{
+  font-size:9px;
+  line-height:1.2;
+  padding:5px;
+  margin-top:3px;
+  border-radius:7px;
+  background:#f7d8e2;
+  color:#000;
+  cursor:pointer;
+}
+
+.add-btn{
+  position:fixed;
+  right:20px;
+  bottom:95px;
+  width:58px;
+  height:58px;
+  border:0;
+  border-radius:50%;
+  background:linear-gradient(135deg,#eeb6ca,#d8b35c);
+  color:#000;
+  font-size:30px;
+  font-weight:300;
+  box-shadow:0 8px 20px rgba(0,0,0,.18);
+  z-index:998;
+}
+
+.settings-section{
+  margin:10px 15px;
+  border:1px solid var(--border);
   border-radius:18px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.settings-item{
   padding:15px;
-  margin-top:13px;
+  border-bottom:1px solid #f0e3e7;
 }
 
-.reminder-box b{
+.settings-item:last-child{
+  border-bottom:0;
+}
+
+.settings-item b{
   display:block;
-  margin-bottom:6px;
+  margin-bottom:5px;
 }
 
-.client-contact{
-  margin-top:10px;
-  color:#333;
+.zoom-controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
-@media(max-width:650px){
+.zoom-controls button{
+  width:42px;
+  height:42px;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:12px;
+  font-size:20px;
+}
+
+#zoomRange{
+  flex:1;
+}
+
+@media(max-width:380px){
   .stats{
-    grid-template-columns:repeat(2,1fr);
+    gap:6px;
+    padding-left:10px;
+    padding-right:10px;
   }
 
-  .calendar-cell{
-    min-height:62px;
+  .stat{
+    padding:10px 5px;
   }
 
-  .calendar-job{
-    font-size:8px;
-  }
-}
-
-@media(max-width:430px){
-  .app-shell{
-    padding-left:13px;
-    padding-right:13px;
+  .calendar{
+    padding:5px;
+    gap:2px;
   }
 
-  .brand-logo,.profile,.settings-button{
-    width:50px;
-    height:50px;
-  }
-
-  .brand-text h1{
-    font-size:23px;
-  }
-
-  .hero{
-    padding:19px;
-  }
-
-  .quick{
-    min-height:70px;
-  }
-
-  .nav{
-    min-height:70px;
-  }
-
-  .nav-icon{
-    font-size:22px;
+  .cal-day{
+    min-height:90px;
   }
 }
 </style>
@@ -945,2077 +561,2029 @@ textarea{
 
 <body>
 
-<div id="welcome" class="welcome">
-  <div class="welcome-card">
-    <img id="welcomeLogo" src="assets/icon.png" alt="Pure Shine">
-    <h1>Pure Shine Cleaning</h1>
-    <p>Your cleaning business ✨</p>
-    <button class="primary" onclick="enterApp()">Get Started</button>
+<div id="welcome">
+  <div class="welcome-inner">
+    <div class="welcome-logo-wrap">
+      <img class="welcome-logo" src="" alt="Pure Shine Cleaning">
+    </div>
+
+    <h1 class="welcome-title">Pure Shine Cleaning</h1>
+    <div class="welcome-sub">Cleaning Manager</div>
+
+    <button class="primary" onclick="enterApp()">
+      Enter Cleaning Manager
+    </button>
   </div>
 </div>
 
-<div id="app" class="hidden">
+<div id="app">
   <div class="app-shell">
 
-    <header class="top">
-      <div class="brand">
-        <img id="brandLogo" class="brand-logo" src="assets/icon.png" alt="">
-        <div class="brand-text">
-          <h1>Cleaning Manager</h1>
-          <p>Your cleaning business ✨</p>
+    <header>
+      <div class="header-row">
+        <div class="logo-wrap">
+          <img class="logo" src="" alt="Pure Shine Cleaning">
+          <div>
+            <div class="app-title">Pure Shine Cleaning</div>
+            <div class="app-subtitle">Cleaning Manager</div>
+          </div>
         </div>
-      </div>
 
-      <div class="profile-wrap">
-        <img id="profilePhoto" class="profile hidden" alt="">
-        <button class="settings-button" onclick="showPage('settings')">⚙️</button>
+        <button class="settings-btn" onclick="showPage('settings')">
+          ⚙️
+        </button>
       </div>
     </header>
 
-    <!-- HOME -->
-    <section id="home" class="page active">
+    <div class="date-card">
+      <div id="today" class="today"></div>
+    </div>
 
-      <div class="hero">
-        <div>
-          <h2 id="todayTitle"></h2>
-          <p>Let's make today productive ✨</p>
-        </div>
-        <div class="hero-heart">♡</div>
+    <div class="banner">
+      <img id="bannerImage" src="" alt="">
+      <div class="banner-text">
+        A clean space is a happy place
       </div>
+    </div>
 
+    <section id="home" class="page active">
       <div class="stats">
         <div class="stat">
-          <div class="stat-icon">🛍️</div>
-          <strong id="todayJobsCount">0</strong>
-          <span>Jobs today</span>
+          <div id="sJobs" class="stat-value">0</div>
+          <div class="stat-label">Jobs</div>
         </div>
 
         <div class="stat">
-          <div class="stat-icon">◷</div>
-          <strong id="todayHours">0h 0m</strong>
-          <span>Hours today</span>
+          <div id="sHours" class="stat-value">0h 0m</div>
+          <div class="stat-label">Hours</div>
         </div>
 
         <div class="stat">
-          <div class="stat-icon">£</div>
-          <strong id="todayEarned">£0.00</strong>
-          <span>Earned today</span>
-        </div>
-
-        <div class="stat">
-          <div class="stat-icon">☼</div>
-          <strong id="monthEarned">£0.00</strong>
-          <span>This month</span>
+          <div id="sEarn" class="stat-value">£0.00</div>
+          <div class="stat-label">Earnings</div>
         </div>
       </div>
 
-      <div class="section-title">
-        <h2>Today's schedule</h2>
-        <button class="link-btn" onclick="showPage('schedule')">See all</button>
+      <div class="page-title">
+        Today's Schedule
       </div>
 
-      <div id="todaySchedule" class="today-list"></div>
-
-      <div class="section-title">
-        <h2>Quick actions</h2>
-      </div>
-
-      <div class="quick-grid">
-        <button class="quick" onclick="startTodayJob()">◷ Start cleaning</button>
-        <button class="quick" onclick="showPage('clients')">♧ Clients</button>
-        <button class="quick" onclick="showPage('schedule')">▣ Schedule</button>
-        <button class="quick" onclick="openCompletedJob()">＋ Past job</button>
-        <button class="quick" onclick="showPage('earnings')">£ Earnings</button>
-        <button class="quick" onclick="showPage('settings')">⚙ Settings</button>
-      </div>
-
-      <div id="banner" class="banner">
-        <div class="banner-overlay"></div>
-        <div class="banner-text">A clean space is a happy place ✨</div>
-      </div>
-
+      <div id="todaySchedule"></div>
     </section>
 
-    <!-- SCHEDULE -->
     <section id="schedule" class="page">
-
-      <div class="page-header">
-        <h2>Schedule</h2>
-
-        <div class="toggle">
-          <button id="listToggle" class="active" onclick="setScheduleView('list')">List</button>
-          <button id="calendarToggle" onclick="setScheduleView('calendar')">Calendar</button>
-        </div>
+      <div class="page-title">
+        Schedule
       </div>
 
-      <div class="year-controls">
-        <button onclick="changeYear(-1)">‹</button>
-        <div id="scheduleYear" class="year-title"></div>
-        <button onclick="changeYear(1)">›</button>
-      </div>
-
-      <div id="scheduleListView"></div>
-      <div id="scheduleCalendarView" class="calendar hidden"></div>
-
+      <div id="calendar" class="calendar"></div>
     </section>
 
-    <!-- CLIENTS -->
     <section id="clients" class="page">
-
-      <div class="page-header">
-        <h2>Clients</h2>
-        <button class="primary" onclick="openClient()">＋ Add</button>
+      <div class="page-title">
+        Clients
       </div>
 
       <div id="clientsList"></div>
-
     </section>
 
-    <!-- EARNINGS -->
+    <section id="jobs" class="page">
+      <div class="page-title">
+        Job History
+      </div>
+
+      <div id="jobsList"></div>
+    </section>
+
     <section id="earnings" class="page">
-
-      <div class="page-header">
-        <h2>Earnings</h2>
+      <div class="page-title">
+        Earnings
       </div>
 
-      <div class="month-summary">
-        <h3 id="earningsMonthTitle"></h3>
-        <div id="earningsMonthTotal" class="total">£0.00</div>
-        <div id="earningsMonthTime"></div>
-      </div>
-
-      <div id="earningsHistory"></div>
-
+      <div id="earningsList"></div>
     </section>
 
-    <!-- SETTINGS -->
     <section id="settings" class="page">
-
-      <div class="page-header">
-        <h2>Settings</h2>
+      <div class="page-title">
+        Settings
       </div>
 
-      <div class="settings-card">
-        <h3>Interface size</h3>
-        <p>Increase the whole interface while keeping everything inside the app width.</p>
+      <div class="settings-section">
 
-        <div class="setting-line">
-          <label>Size</label>
-          <strong id="zoomLabel">110%</strong>
+        <div class="settings-item">
+          <b>App Zoom</b>
+          <div class="zoom-controls">
+            <button onclick="changeZoom(-10)">−</button>
+            <input id="zoomRange"
+                   type="range"
+                   min="80"
+                   max="200"
+                   step="10"
+                   value="130"
+                   oninput="setAppZoom(this.value)">
+            <button onclick="changeZoom(10)">+</button>
+          </div>
+
+          <div id="zoomLabel" class="small">130%</div>
         </div>
 
-        <input id="zoomRange"
-               class="range"
-               type="range"
-               min="90"
-               max="160"
-               step="5"
-               value="110"
-               oninput="setZoom(this.value)">
-      </div>
-
-      <div class="settings-card">
-        <h3>Schedule appearance</h3>
-        <p>Choose how the Schedule page opens.</p>
-
-        <select id="scheduleStyle" class="setting-control" onchange="saveSetting('scheduleStyle',this.value)">
-          <option value="list">List</option>
-          <option value="calendar">Calendar</option>
-        </select>
-      </div>
-
-      <div class="settings-card">
-        <h3>Font</h3>
-        <p>Change the writing style throughout the app.</p>
-
-        <select id="fontStyle" class="setting-control" onchange="changeFont(this.value)">
-          <option value="Georgia">Classic Serif</option>
-          <option value="Arial">Clean</option>
-          <option value="Verdana">Modern</option>
-          <option value="Trebuchet MS">Soft</option>
-          <option value="Courier New">Typewriter</option>
-        </select>
-      </div>
-
-      <div class="settings-card">
-        <h3>App icon</h3>
-        <p>Choose another image for the app icon.</p>
-        <input id="iconUpload" class="setting-control" type="file" accept="image/*" onchange="uploadImage('icon',this)">
-      </div>
-
-      <div class="settings-card">
-        <h3>Profile picture</h3>
-        <p>Add or change the picture displayed beside Settings.</p>
-        <input id="profileUpload" class="setting-control" type="file" accept="image/*" onchange="uploadImage('profile',this)">
-      </div>
-
-      <div class="settings-card">
-        <h3>Background picture</h3>
-        <p>Change the app background and choose how visible it is.</p>
-
-        <input id="backgroundUpload"
-               class="setting-control"
-               type="file"
-               accept="image/*"
-               onchange="uploadImage('background',this)">
-
-        <div class="setting-line">
-          <label>Background visibility</label>
-          <strong id="backgroundOpacityLabel">18%</strong>
+        <div class="settings-item">
+          <b>Calendar</b>
+          <button class="secondary" onclick="addJobsToCalendar()">
+            Add Jobs to Calendar
+          </button>
         </div>
 
-        <input id="backgroundOpacity"
-               class="range"
-               type="range"
-               min="0"
-               max="100"
-               value="18"
-               oninput="setBackgroundOpacity(this.value)">
+        <div class="settings-item">
+          <b>Backup</b>
+          <button class="secondary" onclick="exportData()">
+            Export My Data
+          </button>
+        </div>
+
       </div>
-
-      <div class="settings-card">
-        <h3>Banner picture</h3>
-        <p>Change the image behind “A clean space is a happy place”.</p>
-
-        <input id="bannerUpload"
-               class="setting-control"
-               type="file"
-               accept="image/*"
-               onchange="uploadImage('banner',this)">
-      </div>
-
-      <div class="settings-card">
-        <h3>Reminders & sounds</h3>
-        <p>Choose a sound and enable reminders one day before the cleaning.</p>
-
-        <select id="reminderSound" class="setting-control" onchange="saveSetting('reminderSound',this.value)">
-          <option value="bell">🔔 Bell</option>
-          <option value="soft">✨ Soft bell</option>
-          <option value="chime">🎵 Chime</option>
-          <option value="double">🔔🔔 Double bell</option>
-          <option value="alert">📣 Alert</option>
-        </select>
-
-        <label>
-          <input id="reminderEnabled" type="checkbox" onchange="saveReminderSetting()">
-          Reminder one day before each job
-        </label>
-
-        <button class="settings-action" onclick="requestNotifications()">
-          🔔 Enable phone notifications
-        </button>
-
-        <button class="settings-action" onclick="testReminderSound()">
-          ▶ Test reminder sound
-        </button>
-      </div>
-
-      <div class="settings-card">
-        <h3>Client reminders</h3>
-        <p>You can send the client a confirmation for today's job and a payment reminder after the job.</p>
-
-        <button class="settings-action" onclick="sendTodayConfirmations()">
-          💬 Send today's job confirmations
-        </button>
-
-        <button class="settings-action" onclick="sendTodayPaymentReminders()">
-          💷 Send today's payment reminders
-        </button>
-      </div>
-
-      <div class="settings-card">
-        <h3>Data protection</h3>
-        <p>Your clients, jobs, completed history and settings are stored in this browser and are not replaced when the interface code is updated.</p>
-
-        <button class="settings-action" onclick="exportData()">
-          ⬇️ Export all my data
-        </button>
-
-        <button class="settings-action" onclick="importData()">
-          ⬆️ Import saved data
-        </button>
-
-        <input id="dataImport" type="file" accept=".json" class="hidden" onchange="handleImport(this)">
-      </div>
-
     </section>
 
   </div>
-
-  <!-- NAVIGATION -->
-  <nav class="bottom-nav">
-
-    <button class="nav active" data-page="home" onclick="showPage('home')">
-      <span class="nav-icon">⌂</span>
-      Home
-    </button>
-
-    <button class="nav" data-page="schedule" onclick="showPage('schedule')">
-      <span class="nav-icon">▣</span>
-      Schedule
-    </button>
-
-    <button class="nav" data-page="clients" onclick="showPage('clients')">
-      <span class="nav-icon">♧</span>
-      Clients
-    </button>
-
-    <button class="nav" data-page="earnings" onclick="showPage('earnings')">
-      <span class="nav-icon">£</span>
-      Earnings
-    </button>
-
-    <button class="nav" data-page="settings" onclick="showPage('settings')">
-      <span class="nav-icon">⚙</span>
-      Settings
-    </button>
-
-  </nav>
 </div>
 
-<!-- CLIENT MODAL -->
-<div id="clientModal" class="modal" onclick="if(event.target===this)closeModal('clientModal')">
-  <div class="sheet">
+<div id="timerPanel" class="timer-panel">
+  <div class="timer-client" id="timerClient"></div>
+  <div class="timer-value" id="timerValue">00:00:00</div>
 
-    <div class="sheet-head">
-      <h3 id="clientModalTitle">Add Client</h3>
-      <button class="close" onclick="closeModal('clientModal')">✕</button>
+  <button class="primary"
+          style="width:100%"
+          onclick="stopTimer()">
+    Stop & Save Job
+  </button>
+</div>
+
+<button class="add-btn" onclick="openJob()">
+  +
+</button>
+
+<nav class="bottom-nav">
+
+  <button class="nav active"
+          data-page="home"
+          onclick="showPage('home',this)">
+    <span class="nav-icon">⌂</span>
+    <span>Home</span>
+  </button>
+
+  <button class="nav"
+          data-page="schedule"
+          onclick="showPage('schedule',this)">
+    <span class="nav-icon">▣</span>
+    <span>Schedule</span>
+  </button>
+
+  <button class="nav"
+          data-page="clients"
+          onclick="showPage('clients',this)">
+    <span class="nav-icon">♙</span>
+    <span>Clients</span>
+  </button>
+
+  <button class="nav"
+          data-page="jobs"
+          onclick="showPage('jobs',this)">
+    <span class="nav-icon">✓</span>
+    <span>Jobs</span>
+  </button>
+
+  <button class="nav"
+          data-page="earnings"
+          onclick="showPage('earnings',this)">
+    <span class="nav-icon">£</span>
+    <span>Earnings</span>
+  </button>
+
+</nav>
+
+<div id="clientModal" class="modal">
+  <div class="modal-box">
+
+    <div class="modal-title">
+      Add Client
     </div>
 
-    <input id="clientId" type="hidden">
-
-    <label>Name</label>
-    <input id="clientName">
+    <label>Client Name</label>
+    <input id="cName" type="text">
 
     <label>Type</label>
-    <select id="clientType">
-      <option>Private</option>
-      <option>Agency</option>
-      <option>Occasional</option>
-      <option>Fortnightly</option>
-      <option>Every 3 weeks</option>
-      <option>Monthly</option>
+    <select id="cType">
+      <option value="Private">Private</option>
+      <option value="Agency">Agency</option>
     </select>
 
-    <label>Rate (£ / hour)</label>
-    <input id="clientRate" type="number" step="0.01">
+    <label>Hourly Rate</label>
+    <input id="cRate" type="number" step="0.01">
 
-    <label>Standard hours</label>
-    <input id="clientHours" type="number" step="0.01">
+    <label>Standard Hours</label>
+    <input id="cHours" type="number" step="0.25">
 
-    <label>Phone number</label>
-    <input id="clientPhone" type="tel">
+    <div class="modal-actions">
+      <button class="secondary"
+              onclick="closeModal('clientModal')">
+        Cancel
+      </button>
 
-    <label>Reminder contact</label>
-    <select id="clientContactType">
-      <option value="sms">SMS</option>
-      <option value="whatsapp">WhatsApp</option>
-      <option value="none">None</option>
-    </select>
-
-    <label>Notes</label>
-    <textarea id="clientNotes"></textarea>
-
-    <div class="form-actions">
-      <button class="cancel-btn" onclick="closeModal('clientModal')">Cancel</button>
-      <button class="save-btn" onclick="saveClient()">Save client</button>
+      <button class="primary"
+              onclick="saveClient()">
+        Save
+      </button>
     </div>
 
   </div>
 </div>
 
-<!-- JOB MODAL -->
-<div id="jobModal" class="modal" onclick="if(event.target===this)closeModal('jobModal')">
-  <div class="sheet">
+<div id="jobModal" class="modal">
+  <div class="modal-box">
 
-    <div class="sheet-head">
-      <h3 id="jobModalTitle">Edit job</h3>
-      <button class="close" onclick="closeModal('jobModal')">✕</button>
+    <div id="jobTitle" class="modal-title">
+      Add Cleaning Job
     </div>
 
-    <input id="jobId" type="hidden">
-    <input id="jobOccurrence" type="hidden">
+    <input id="jId" type="hidden">
 
     <label>Client</label>
-    <select id="jobClient" onchange="loadClientRate()"></select>
+    <select id="jClient"></select>
 
-    <div class="form-grid">
-      <div>
-        <label>Date</label>
-        <input id="jobDate" type="date" onchange="updateJobDay()">
-      </div>
+    <label>Date</label>
+    <input id="jDate" type="date">
 
-      <div>
-        <label>Day</label>
-        <input id="jobDay" readonly>
-      </div>
-    </div>
+    <label>Day</label>
+    <select id="jDay">
+      <option>Monday</option>
+      <option>Tuesday</option>
+      <option>Wednesday</option>
+      <option>Thursday</option>
+      <option>Friday</option>
+      <option>Saturday</option>
+      <option>Sunday</option>
+    </select>
 
-    <div class="form-grid">
-      <div>
-        <label>Start time</label>
-        <input id="jobStart" type="time" onchange="calculateJobDuration()">
-      </div>
+    <label>Start Time</label>
+    <input id="jStart"
+           type="time"
+           onchange="calcHours()">
 
-      <div>
-        <label>End time</label>
-        <input id="jobEnd" type="time" onchange="calculateJobDuration()">
-      </div>
-    </div>
+    <label>End Time</label>
+    <input id="jEnd"
+           type="time"
+           onchange="calcHours()">
 
-    <label>Worked duration</label>
-    <input id="jobDuration" placeholder="e.g. 2h 30m">
+    <label>Exact Worked Time</label>
+    <input id="jHours"
+           type="text"
+           readonly>
 
-    <label>Rate (£ / hour)</label>
-    <input id="jobRate" type="number" step="0.01" oninput="calculateJobMoney()">
-
-    <div class="settings-card" style="margin-top:15px">
-      <b>Amount owed</b>
-      <div id="jobMoneyPreview" class="money" style="margin-top:7px">£0.00</div>
-    </div>
-
-    <label>
-      <input id="jobCompleted" type="checkbox">
-      Mark this job as completed
-    </label>
+    <label>Hourly Rate</label>
+    <input id="jRate"
+           type="number"
+           step="0.01">
 
     <label>Notes</label>
-    <textarea id="jobNotes"></textarea>
+    <textarea id="jNotes"></textarea>
 
-    <div class="form-actions">
-      <button class="cancel-btn" onclick="closeModal('jobModal')">Cancel</button>
-      <button class="save-btn" onclick="saveJob()">Save job</button>
-    </div>
+    <div class="modal-actions">
+      <button class="secondary"
+              onclick="closeModal('jobModal')">
+        Cancel
+      </button>
 
-    <div class="action-row">
-      <button class="action danger" onclick="deleteCurrentJob()">🗑 Delete job</button>
-      <button class="action green" onclick="sendJobConfirmationFromModal()">💬 Confirm with client</button>
-      <button class="action" onclick="sendPaymentReminderFromModal()">💷 Payment reminder</button>
+      <button id="deleteJobBtn"
+              class="danger hidden"
+              onclick="deleteJob()">
+        Delete
+      </button>
+
+      <button class="primary"
+              onclick="saveJob()">
+        Save
+      </button>
     </div>
 
   </div>
 </div>
 
 <script>
-/* =========================================================
-   PURE SHINE CLEANING MANAGER
-   Persistent storage:
-   pure_shine_manager_v10
-   ========================================================= */
+const KEY='pure_shine_manager_v10';
+const TIMER='pure_shine_timer_v10';
 
-const KEY = "pure_shine_manager_v10";
-const OVERRIDE_KEY = "pure_shine_schedule_overrides_v1";
-const SETTINGS_KEY = "pure_shine_settings_v3";
-const TIMER_KEY = "pure_shine_timer_v10";
-
-const DEFAULT_CLIENTS = [
-  {id:"lottie",name:"Lottie",type:"Agency",rate:16,hours:2,phone:"",contactType:"sms",notes:""},
-  {id:"christine",name:"Christine",type:"Private",rate:18,hours:3,phone:"",contactType:"sms",notes:""},
-  {id:"matt",name:"Matt",type:"Agency",rate:16,hours:4,phone:"",contactType:"sms",notes:""},
-  {id:"sonia",name:"Sonia",type:"Agency",rate:16,hours:5,phone:"",contactType:"sms",notes:""},
-  {id:"laura",name:"Laura",type:"Private",rate:18,hours:4,phone:"",contactType:"sms",notes:""},
-  {id:"hannah",name:"Hannah",type:"Agency",rate:16,hours:3,phone:"",contactType:"sms",notes:""},
-  {id:"meghan",name:"Meghan",type:"Agency",rate:16,hours:0,phone:"",contactType:"sms",notes:""},
-  {id:"joanna",name:"Johanna",type:"Private",rate:18,hours:2,phone:"",contactType:"sms",notes:""},
-  {id:"sindu",name:"Sindu",type:"Private",rate:16,hours:2,phone:"",contactType:"sms",notes:""},
-  {id:"peter",name:"Peter",type:"Private",rate:25,hours:2.5,phone:"",contactType:"sms",notes:""},
-  {id:"mike",name:"Mike",type:"Private",rate:16,hours:2,phone:"",contactType:"sms",notes:""}
+const days=[
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday'
 ];
 
-/*
-  Fixed recurring schedule.
-  Only clients for whom a recurring day/time was already known are
-  automatically placed here.
+let clients=JSON.parse(
+  localStorage.getItem(KEY+'_clients') || 'null'
+) || [
+  {id:'lottie',name:'Lottie',type:'Agency',rate:16,hours:2},
+  {id:'christine',name:'Christine',type:'Private',rate:18,hours:3},
+  {id:'matt',name:'Matt',type:'Agency',rate:16,hours:4},
+  {id:'sonia',name:'Sonia',type:'Agency',rate:16,hours:5},
+  {id:'laura',name:'Laura',type:'Private',rate:18,hours:4},
+  {id:'hannah',name:'Hannah',type:'Agency',rate:16,hours:3}
+];
+
+let jobs=JSON.parse(
+  localStorage.getItem(KEY+'_jobs') || 'null'
+) || [
+  {
+    id:'1',
+    clientId:'lottie',
+    day:'Monday',
+    date:'',
+    start:'13:00',
+    end:'15:00',
+    hours:2,
+    rate:16,
+    done:false,
+    notes:''
+  },
+  {
+    id:'2',
+    clientId:'christine',
+    day:'Tuesday',
+    date:'',
+    start:'09:30',
+    end:'12:30',
+    hours:3,
+    rate:18,
+    done:false,
+    notes:''
+  },
+  {
+    id:'3',
+    clientId:'matt',
+    day:'Tuesday',
+    date:'',
+    start:'',
+    end:'',
+    hours:4,
+    rate:16,
+    done:false,
+    notes:''
+  },
+  {
+    id:'4',
+    clientId:'sonia',
+    day:'Wednesday',
+    date:'',
+    start:'09:00',
+    end:'14:00',
+    hours:5,
+    rate:16,
+    done:false,
+    notes:''
+  },
+  {
+    id:'5',
+    clientId:'laura',
+    day:'Thursday',
+    date:'',
+    start:'09:00',
+    end:'13:00',
+    hours:4,
+    rate:18,
+    done:false,
+    notes:''
+  },
+  {
+    id:'6',
+    clientId:'hannah',
+    day:'Thursday',
+    date:'',
+    start:'13:00',
+    end:'16:00',
+    hours:3,
+    rate:16,
+    done:false,
+    notes:''
+  }
+];
+
+/* IMPORTANT:
+   Existing saved clients are NEVER replaced or rewritten.
 */
-const RECURRING = [
-  {clientId:"lottie",weekday:1,start:"13:00",end:"15:00",type:"weekly"},
-  {clientId:"christine",weekday:2,start:"09:30",end:"12:30",type:"weekly"},
-  {clientId:"matt",weekday:2,start:"",end:"",type:"weekly"},
-  {clientId:"sonia",weekday:3,start:"09:00",end:"14:00",type:"weekly"},
-  {clientId:"laura",weekday:4,start:"09:00",end:"13:00",type:"weekly"},
-  {clientId:"hannah",weekday:4,start:"13:00",end:"16:00",type:"weekly"},
-
-  /*
-    Friday:
-    Johanna and Sindu alternate every fortnight.
-    Week 40 of 2026 is Johanna's week.
-  */
-  {clientId:"joanna",weekday:5,start:"09:00",end:"11:00",type:"alternate",anchorWeek:40},
-  {clientId:"sindu",weekday:5,start:"09:00",end:"11:00",type:"alternate",anchorWeek:41}
+const requiredClients=[
+  {
+    id:'meghan',
+    name:'Meghan',
+    type:'Agency',
+    rate:16,
+    hours:0
+  },
+  {
+    id:'joanna',
+    name:'Joanna',
+    type:'Agency',
+    rate:16,
+    hours:0
+  },
+  {
+    id:'sindu',
+    name:'Sindu',
+    type:'Agency',
+    rate:16,
+    hours:0
+  },
+  {
+    id:'peter',
+    name:'Peter',
+    type:'Agency',
+    rate:16,
+    hours:0
+  },
+  {
+    id:'mike',
+    name:'Mike',
+    type:'Agency',
+    rate:16,
+    hours:0
+  }
 ];
 
-let clients = loadJSON(KEY+"_clients",null);
-let jobs = loadJSON(KEY+"_jobs",null);
-let overrides = loadJSON(OVERRIDE_KEY,{});
-let settings = loadJSON(SETTINGS_KEY,{});
-let timer = loadJSON(TIMER_KEY,null);
-
-if(!Array.isArray(clients) || !clients.length){
-  clients = DEFAULT_CLIENTS.map(x=>({...x}));
-}else{
-  /*
-    Existing client data is preserved.
-    Missing fields are added, but names/rates already stored by the user
-    are NOT replaced.
-  */
-  clients = clients.map(c=>({
-    ...c,
-    phone:c.phone||"",
-    contactType:c.contactType||"sms",
-    notes:c.notes||""
-  }));
-
-  DEFAULT_CLIENTS.forEach(def=>{
-    if(!clients.some(c=>String(c.id)===String(def.id))){
-      clients.push({...def});
+if(!localStorage.getItem(KEY+'_clients')){
+  requiredClients.forEach(rc=>{
+    if(
+      !clients.some(
+        c=>String(c.name).toLowerCase()===
+           rc.name.toLowerCase()
+      )
+    ){
+      clients.push({...rc});
     }
   });
-}
 
-if(!Array.isArray(jobs)) jobs=[];
-if(!overrides || typeof overrides!=="object") overrides={};
-
-let scheduleYear = new Date().getFullYear();
-let scheduleView = settings.scheduleStyle || "list";
-
-function loadJSON(key,fallback){
-  try{
-    const raw=localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : fallback;
-  }catch(e){
-    return fallback;
-  }
-}
-
-function saveAll(){
-  localStorage.setItem(KEY+"_clients",JSON.stringify(clients));
-  localStorage.setItem(KEY+"_jobs",JSON.stringify(jobs));
-  localStorage.setItem(OVERRIDE_KEY,JSON.stringify(overrides));
-  localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));
-  localStorage.setItem(TIMER_KEY,JSON.stringify(timer));
-}
-
-function saveSetting(key,value){
-  settings[key]=value;
-  localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));
-  applySettings();
-}
-
-function nameOf(id){
-  return clients.find(c=>String(c.id)===String(id))?.name || "Client";
-}
-
-function clientOf(id){
-  return clients.find(c=>String(c.id)===String(id));
-}
-
-function money(value){
-  return "£"+Number(value||0).toFixed(2);
-}
-
-function minutesFromText(value){
-  if(value===null || value===undefined) return 0;
-
-  const s=String(value).trim().toLowerCase();
-
-  if(!s) return 0;
-
-  let h=0,m=0;
-
-  const hm=s.match(/(\d+(?:\.\d+)?)\s*h/);
-  const mm=s.match(/(\d+)\s*m/);
-
-  if(hm) h=Number(hm[1]);
-  if(mm) m=Number(mm[1]);
-
-  if(hm || mm) return Math.round(h*60+m);
-
-  if(/^\d+(?:\.\d+)?$/.test(s)){
-    return Math.round(Number(s)*60);
-  }
-
-  return 0;
-}
-
-function durationText(minutes){
-  minutes=Math.max(0,Math.round(Number(minutes)||0));
-  const h=Math.floor(minutes/60);
-  const m=minutes%60;
-  return h+"h "+m+"m";
-}
-
-function jobMinutes(job){
-  if(job.workedMinutes!==undefined && job.workedMinutes!==null){
-    return Math.max(0,Number(job.workedMinutes)||0);
-  }
-
-  if(job.durationMinutes!==undefined){
-    return Math.max(0,Number(job.durationMinutes)||0);
-  }
-
-  if(job.hours!==undefined && job.hours!==null){
-    return Math.round(Number(job.hours)*60);
-  }
-
-  if(job.duration){
-    return minutesFromText(job.duration);
-  }
-
-  if(job.start && job.end){
-    return timeDifference(job.start,job.end);
-  }
-
-  const c=clientOf(job.clientId);
-  return Math.round(Number(c?.hours||0)*60);
-}
-
-function jobAmount(job){
-  return (jobMinutes(job)/60)*Number(job.rate||clientOf(job.clientId)?.rate||0);
-}
-
-function timeDifference(start,end){
-  if(!start || !end) return 0;
-
-  const [sh,sm]=start.split(":").map(Number);
-  const [eh,em]=end.split(":").map(Number);
-
-  let mins=(eh*60+em)-(sh*60+sm);
-
-  if(mins<0) mins+=1440;
-
-  return mins;
-}
-
-function isoWeek(date){
-  const d=new Date(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate()));
-  const day=d.getUTCDay()||7;
-  d.setUTCDate(d.getUTCDate()+4-day);
-  const yearStart=new Date(Date.UTC(d.getUTCFullYear(),0,1));
-  return Math.ceil((((d-yearStart)/86400000)+1)/7);
-}
-
-function dateKey(date){
-  const y=date.getFullYear();
-  const m=String(date.getMonth()+1).padStart(2,"0");
-  const d=String(date.getDate()).padStart(2,"0");
-  return `${y}-${m}-${d}`;
-}
-
-function parseDate(value){
-  const [y,m,d]=value.split("-").map(Number);
-  return new Date(y,m-1,d);
-}
-
-function formatDate(value){
-  const d=value instanceof Date ? value : parseDate(value);
-  return d.toLocaleDateString("en-GB",{
-    weekday:"long",
-    day:"numeric",
-    month:"long",
-    year:"numeric"
-  });
-}
-
-function shortDate(value){
-  const d=value instanceof Date ? value : parseDate(value);
-  return d.toLocaleDateString("en-GB",{
-    day:"numeric",
-    month:"short"
-  });
-}
-
-function mondayOfWeek(date){
-  const d=new Date(date);
-  const day=d.getDay();
-  const diff=day===0 ? -6 : 1-day;
-  d.setDate(d.getDate()+diff);
-  d.setHours(0,0,0,0);
-  return d;
-}
-
-function recurringForDate(date){
-  const weekday=date.getDay();
-  const key=dateKey(date);
-  const week=isoWeek(date);
-
-  const list=[];
-
-  RECURRING.forEach(rule=>{
-    if(rule.weekday!==weekday) return;
-
-    let include=false;
-
-    if(rule.type==="weekly"){
-      include=true;
-    }
-
-    if(rule.type==="alternate"){
-      include=((week-rule.anchorWeek)%2===0);
-    }
-
-    if(!include) return;
-
-    const c=clientOf(rule.clientId);
-    if(!c) return;
-
-    const override=overrides[key+"_"+rule.clientId];
-
-    if(override?.cancelled) return;
-
-    list.push({
-      id:"scheduled_"+key+"_"+rule.clientId,
-      clientId:rule.clientId,
-      date:key,
-      day:date.toLocaleDateString("en-GB",{weekday:"long"}),
-      start:override?.start ?? rule.start,
-      end:override?.end ?? rule.end,
-      rate:override?.rate ?? Number(c.rate||0),
-      standardMinutes:override?.standardMinutes ?? Math.round(Number(c.hours||0)*60),
-      scheduled:true,
-      overrideKey:key+"_"+rule.clientId
-    });
-  });
-
-  /*
-    A manually scheduled job for this exact date is also displayed.
-    We avoid showing a duplicate if it represents a recurring occurrence.
-  */
-  jobs
-    .filter(j=>j.date===key && !j.hiddenFromSchedule)
-    .forEach(j=>{
-      if(!list.some(x=>x.clientId===j.clientId && x.date===key)){
-        list.push({
-          ...j,
-          scheduled:true,
-          standardMinutes:jobMinutes(j)
-        });
-      }
-    });
-
-  return list.sort((a,b)=>(a.start||"99:99").localeCompare(b.start||"99:99"));
-}
-
-function getTodayJobs(){
-  return recurringForDate(new Date());
-}
-
-function isCompletedJob(job){
-  return Boolean(
-    job.completed ||
-    job.done ||
-    job.status==="completed" ||
-    job.workedMinutes!==undefined ||
-    job.completedAt
+  clients=clients.filter(
+    c=>String(c.name).toLowerCase()!=='gill'
   );
 }
 
-function historyJobs(){
-  /*
-    Completed jobs are always retained.
-    Existing old jobs with done=true are retained as history.
-  */
-  return jobs
-    .filter(j=>isCompletedJob(j))
-    .sort((a,b)=>{
-      const da=a.completedAt||a.date||"";
-      const db=b.completedAt||b.date||"";
-      return String(db).localeCompare(String(da));
-    });
+let timer=JSON.parse(
+  localStorage.getItem(TIMER) || 'null'
+);
+
+/* =====================================================
+   FIXED SAVE FUNCTION
+   ===================================================== */
+
+function save(){
+
+  try{
+
+    const clientsData=JSON.stringify(
+      clients || []
+    );
+
+    const jobsData=JSON.stringify(
+      jobs || []
+    );
+
+    const timerData=JSON.stringify(
+      timer || null
+    );
+
+    localStorage.setItem(
+      KEY+'_clients',
+      clientsData
+    );
+
+    localStorage.setItem(
+      KEY+'_jobs',
+      jobsData
+    );
+
+    localStorage.setItem(
+      TIMER,
+      timerData
+    );
+
+    /* Verify that the browser actually stored
+       the information. */
+
+    const verifyClients=
+      localStorage.getItem(KEY+'_clients');
+
+    const verifyJobs=
+      localStorage.getItem(KEY+'_jobs');
+
+    if(
+      verifyClients!==clientsData ||
+      verifyJobs!==jobsData
+    ){
+      throw new Error(
+        'Local storage verification failed'
+      );
+    }
+
+    console.log(
+      'Pure Shine Cleaning: data saved successfully.'
+    );
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      'Pure Shine Cleaning save error:',
+      error
+    );
+
+    alert(
+      'Datele nu au putut fi salvate. Te rog încearcă din nou.'
+    );
+
+    return false;
+  }
 }
 
-function monthJobs(year,month){
-  return historyJobs().filter(j=>{
-    if(!j.date) return false;
-    const d=parseDate(j.date);
-    return d.getFullYear()===year && d.getMonth()===month;
-  });
-}
+window.addEventListener(
+  'beforeunload',
+  ()=>{
+    try{
+      save();
+    }catch(e){}
+  }
+);
 
-function showPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  const page=document.getElementById(id);
-  if(page) page.classList.add("active");
-
-  document.querySelectorAll(".nav").forEach(n=>{
-    n.classList.toggle("active",n.dataset.page===id);
-  });
-
-  renderAll();
-}
+/* =====================================================
+   APP FUNCTIONS
+   ===================================================== */
 
 function enterApp(){
-  document.getElementById("welcome").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
-  renderAll();
+
+  document.getElementById(
+    'welcome'
+  ).style.display='none';
+
+  document.getElementById(
+    'app'
+  ).style.display='block';
+
+  render();
 }
 
-function applySettings(){
-  const zoom=Number(settings.zoom||110);
-  document.documentElement.style.setProperty("--ui-scale",zoom/100);
+function showPage(id,btn){
 
-  document.getElementById("zoomLabel").textContent=zoom+"%";
-  document.getElementById("zoomRange").value=zoom;
-
-  const font=settings.font||"Georgia";
-  document.documentElement.style.setProperty("--font",font);
-
-  document.getElementById("fontStyle").value=font;
-  document.getElementById("scheduleStyle").value=settings.scheduleStyle||"list";
-  document.getElementById("reminderSound").value=settings.reminderSound||"bell";
-  document.getElementById("reminderEnabled").checked=Boolean(settings.reminderEnabled);
-
-  const opacity=Number(settings.backgroundOpacity ?? 18);
-  document.documentElement.style.setProperty(
-    "--banner-opacity",
-    Math.max(0,Math.min(1,1-opacity/100))
-  );
-
-  document.getElementById("backgroundOpacity").value=opacity;
-  document.getElementById("backgroundOpacityLabel").textContent=opacity+"%";
-
-  if(settings.icon){
-    document.getElementById("brandLogo").src=settings.icon;
-    document.getElementById("welcomeLogo").src=settings.icon;
-    document.getElementById("appIcon").href=settings.icon;
-  }
-
-  if(settings.profile){
-    const p=document.getElementById("profilePhoto");
-    p.src=settings.profile;
-    p.classList.remove("hidden");
-  }
-
-  if(settings.background){
-    document.getElementById("app").style.setProperty(
-      "--app-bg-image",
-      `url("${settings.background}")`
-    );
-  }
-
-  if(settings.banner){
-    document.getElementById("banner").style.setProperty(
-      "--banner-image",
-      `url("${settings.banner}")`
-    );
-  }
-
-  scheduleView=settings.scheduleStyle||"list";
-}
-
-function setZoom(value){
-  settings.zoom=Number(value);
-  localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));
-  applySettings();
-}
-
-function changeFont(value){
-  settings.font=value;
-  localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));
-  applySettings();
-}
-
-function setBackgroundOpacity(value){
-  settings.backgroundOpacity=Number(value);
-  localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));
-  applySettings();
-}
-
-function setScheduleView(view){
-  scheduleView=view;
-  settings.scheduleStyle=view;
-  localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));
-  renderSchedule();
-}
-
-function changeYear(delta){
-  scheduleYear+=delta;
-  renderSchedule();
-}
-
-function uploadImage(type,input){
-  const file=input.files?.[0];
-  if(!file) return;
-
-  const reader=new FileReader();
-
-  reader.onload=()=>{
-    settings[type]=reader.result;
-    localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));
-    applySettings();
-  };
-
-  reader.readAsDataURL(file);
-}
-
-function renderHome(){
-  const now=new Date();
-
-  document.getElementById("todayTitle").textContent=
-    now.toLocaleDateString("en-GB",{
-      weekday:"long",
-      day:"numeric",
-      month:"long"
+  document
+    .querySelectorAll('.page')
+    .forEach(x=>{
+      x.classList.remove('active');
     });
 
-  const today=getTodayJobs();
+  const page=document.getElementById(id);
 
-  const todayHistory=historyJobs().filter(j=>j.date===dateKey(now));
-
-  const allToday=[...today];
-
-  todayHistory.forEach(h=>{
-    if(!allToday.some(x=>x.id===h.id)){
-      allToday.push(h);
-    }
-  });
-
-  let todayMinutes=0;
-  let todayEarned=0;
-
-  todayHistory.forEach(j=>{
-    todayMinutes+=jobMinutes(j);
-    todayEarned+=jobAmount(j);
-  });
-
-  document.getElementById("todayJobsCount").textContent=today.length;
-  document.getElementById("todayHours").textContent=durationText(todayMinutes);
-  document.getElementById("todayEarned").textContent=money(todayEarned);
-
-  const month=new Date(now.getFullYear(),now.getMonth(),1);
-
-  const monthly=historyJobs().filter(j=>{
-    if(!j.date) return false;
-    const d=parseDate(j.date);
-    return d.getFullYear()===month.getFullYear() &&
-           d.getMonth()===month.getMonth();
-  });
-
-  const monthlyTotal=monthly.reduce((sum,j)=>sum+jobAmount(j),0);
-  document.getElementById("monthEarned").textContent=money(monthlyTotal);
-
-  const box=document.getElementById("todaySchedule");
-
-  if(!allToday.length){
-    box.innerHTML=`
-      <div class="card" style="box-shadow:none;margin:0">
-        No cleaning scheduled today.
-      </div>`;
-    return;
+  if(page){
+    page.classList.add('active');
   }
 
-  box.innerHTML=allToday.map(j=>{
-    const c=clientOf(j.clientId);
-    return `
-      <div class="today-job">
-        <div class="avatar">${(c?.name||"?").charAt(0).toUpperCase()}</div>
-        <div class="job-main">
-          <b>${escapeHTML(c?.name||"Client")}</b>
-          <small>
-            ${j.start||""}${j.end?" – "+j.end:""}
-            · ${j.scheduled?"Scheduled":"Completed"}
-          </small>
-        </div>
-        <div class="rate">${money(j.rate||c?.rate||0)}/h</div>
-      </div>`;
-  }).join("");
-}
+  document
+    .querySelectorAll('.nav')
+    .forEach(x=>{
+      x.classList.remove('active');
+    });
 
-function renderSchedule(){
-  document.getElementById("scheduleYear").textContent=scheduleYear;
-
-  document.getElementById("listToggle").classList.toggle("active",scheduleView==="list");
-  document.getElementById("calendarToggle").classList.toggle("active",scheduleView==="calendar");
-
-  document.getElementById("scheduleListView").classList.toggle("hidden",scheduleView!=="list");
-  document.getElementById("scheduleCalendarView").classList.toggle("hidden",scheduleView!=="calendar");
-
-  if(scheduleView==="list") renderScheduleList();
-  else renderScheduleCalendar();
-}
-
-function renderScheduleList(){
-  const container=document.getElementById("scheduleListView");
-
-  const start=new Date(scheduleYear,0,1);
-  const end=new Date(scheduleYear,11,31);
-
-  const firstMonday=mondayOfWeek(start);
-
-  let html="";
-
-  let current=new Date(firstMonday);
-
-  while(current<=end || current.getFullYear()===scheduleYear){
-
-    const weekStart=new Date(current);
-    const weekEnd=new Date(current);
-    weekEnd.setDate(weekEnd.getDate()+6);
-
-    if(weekEnd.getFullYear()<scheduleYear){
-      current.setDate(current.getDate()+7);
-      continue;
-    }
-
-    if(weekStart.getFullYear()>scheduleYear) break;
-
-    html+=`
-      <div class="week-card">
-        <div class="week-title">
-          ${shortDate(weekStart)} – ${shortDate(weekEnd)}
-        </div>`;
-
-    for(let i=0;i<7;i++){
-      const d=new Date(weekStart);
-      d.setDate(d.getDate()+i);
-
-      if(d.getFullYear()!==scheduleYear) continue;
-
-      const key=dateKey(d);
-      const isToday=key===dateKey(new Date());
-      const dayJobs=recurringForDate(d);
-
-      html+=`
-        <div class="day-row ${isToday?"today":""}">
-          <div class="day-name">
-            ${d.toLocaleDateString("en-GB",{weekday:"long"})}
-          </div>
-          <div class="day-date">${shortDate(d)}</div>`;
-
-      if(!dayJobs.length){
-        html+=`<div class="small">No scheduled client</div>`;
-      }else{
-        dayJobs.forEach(j=>{
-          const c=clientOf(j.clientId);
-
-          html+=`
-            <div class="schedule-job">
-              <div class="avatar">
-                ${(c?.name||"?").charAt(0).toUpperCase()}
-              </div>
-
-              <div class="job-info">
-                <b>${escapeHTML(c?.name||"Client")}</b>
-                <small>
-                  ${j.start||"Time not set"}
-                  ${j.end?" – "+j.end:""}
-                  · ${money(j.rate||c?.rate||0)}/h
-                </small>
-              </div>
-
-              <button class="icon-btn"
-                      title="Edit this job"
-                      onclick="editScheduleOccurrence('${key}','${j.clientId}')">
-                ✎
-              </button>
-            </div>`;
-        });
-      }
-
-      html+=`</div>`;
-    }
-
-    html+=`</div>`;
-
-    current.setDate(current.getDate()+7);
+  if(btn){
+    btn.classList.add('active');
   }
 
-  container.innerHTML=html;
+  render();
 }
 
-function renderScheduleCalendar(){
-  const container=document.getElementById("scheduleCalendarView");
+function name(id){
 
-  let html="";
-
-  for(let month=0;month<12;month++){
-
-    const first=new Date(scheduleYear,month,1);
-    const daysInMonth=new Date(scheduleYear,month+1,0).getDate();
-
-    html+=`
-      <div class="month-card">
-        <div class="month-name">
-          ${first.toLocaleDateString("en-GB",{month:"long",year:"numeric"})}
-        </div>
-
-        <div class="calendar-grid">
-          <div class="calendar-head">Mon</div>
-          <div class="calendar-head">Tue</div>
-          <div class="calendar-head">Wed</div>
-          <div class="calendar-head">Thu</div>
-          <div class="calendar-head">Fri</div>
-          <div class="calendar-head">Sat</div>
-          <div class="calendar-head">Sun</div>`;
-
-    let firstDay=first.getDay();
-    let offset=firstDay===0 ? 6 : firstDay-1;
-
-    for(let i=0;i<offset;i++){
-      html+=`<div class="calendar-cell"></div>`;
-    }
-
-    for(let day=1;day<=daysInMonth;day++){
-      const d=new Date(scheduleYear,month,day);
-      const key=dateKey(d);
-      const jobsForDay=recurringForDate(d);
-      const today=key===dateKey(new Date());
-
-      html+=`
-        <div class="calendar-cell ${today?"today":""}">
-          <div class="calendar-number">${day}</div>`;
-
-      jobsForDay.forEach(j=>{
-        const c=clientOf(j.clientId);
-
-        html+=`
-          <div class="calendar-job"
-               title="${escapeHTML(c?.name||"Client")}"
-               onclick="editScheduleOccurrence('${key}','${j.clientId}')">
-            ${escapeHTML(c?.name||"Client")}
-          </div>`;
-      });
-
-      html+=`</div>`;
-    }
-
-    html+=`
-        </div>
-      </div>`;
-  }
-
-  container.innerHTML=html;
-}
-
-function editScheduleOccurrence(date,clientId){
-  const existingJob=jobs.find(
-    j=>j.date===date &&
-       String(j.clientId)===String(clientId) &&
-       j.scheduledOccurrence
+  const c=clients.find(
+    x=>x.id===id
   );
 
-  if(existingJob){
-    openJob(existingJob.id);
+  return c?.name || 'Unknown';
+}
+
+function money(n){
+
+  return '£'+Number(
+    n || 0
+  ).toFixed(2);
+}
+
+function timeText(h){
+
+  let x=Math.max(
+    0,
+    Number(h || 0)
+  );
+
+  let hr=Math.floor(x);
+
+  let m=Math.round(
+    (x-hr)*60
+  );
+
+  if(m===60){
+    hr++;
+    m=0;
+  }
+
+  return hr+'h '+m+'m';
+}
+
+function duration(start,end){
+
+  if(!start || !end){
+    return 0;
+  }
+
+  let a=start
+    .split(':')
+    .map(Number);
+
+  let b=end
+    .split(':')
+    .map(Number);
+
+  let mins=
+    b[0]*60+b[1]-
+    (a[0]*60+a[1]);
+
+  if(mins<0){
+    mins+=1440;
+  }
+
+  return mins/60;
+}
+
+function calcHours(){
+
+  const h=duration(
+    document.getElementById(
+      'jStart'
+    ).value,
+
+    document.getElementById(
+      'jEnd'
+    ).value
+  );
+
+  document.getElementById(
+    'jHours'
+  ).value=h
+    ? timeText(h)
+    : '';
+}
+
+function openClient(){
+
+  document.getElementById(
+    'cName'
+  ).value='';
+
+  document.getElementById(
+    'cType'
+  ).value='Private';
+
+  document.getElementById(
+    'cRate'
+  ).value='18';
+
+  document.getElementById(
+    'cHours'
+  ).value='2';
+
+  document
+    .getElementById('clientModal')
+    .classList.add('show');
+}
+
+function saveClient(){
+
+  let n=document
+    .getElementById('cName')
+    .value
+    .trim();
+
+  if(!n){
     return;
   }
 
-  const d=parseDate(date);
-  const occurrence=recurringForDate(d).find(j=>String(j.clientId)===String(clientId));
+  clients.push({
+    id:'c'+Date.now(),
+    name:n,
+    type:document.getElementById(
+      'cType'
+    ).value,
+    rate:Number(
+      document.getElementById(
+        'cRate'
+      ).value || 0
+    ),
+    hours:Number(
+      document.getElementById(
+        'cHours'
+      ).value || 0
+    )
+  });
 
-  if(!occurrence) return;
+  if(save()){
 
-  document.getElementById("jobId").value="";
-  document.getElementById("jobOccurrence").value=occurrence.overrideKey;
+    closeModal(
+      'clientModal'
+    );
 
-  populateClientSelect(clientId);
-
-  document.getElementById("jobDate").value=date;
-  document.getElementById("jobDay").value=
-    d.toLocaleDateString("en-GB",{weekday:"long"});
-
-  document.getElementById("jobStart").value=occurrence.start||"";
-  document.getElementById("jobEnd").value=occurrence.end||"";
-  document.getElementById("jobDuration").value=
-    durationText(occurrence.standardMinutes||0);
-
-  document.getElementById("jobRate").value=occurrence.rate||clientOf(clientId)?.rate||0;
-  document.getElementById("jobCompleted").checked=false;
-  document.getElementById("jobNotes").value="";
-
-  document.getElementById("jobModalTitle").textContent=
-    "Edit scheduled job";
-
-  calculateJobMoney();
-
-  document.getElementById("jobModal").classList.add("show");
-}
-
-function populateClientSelect(selectedId){
-  const select=document.getElementById("jobClient");
-
-  select.innerHTML=clients.map(c=>`
-    <option value="${c.id}">
-      ${escapeHTML(c.name)}
-    </option>
-  `).join("");
-
-  if(selectedId) select.value=selectedId;
+    render();
+  }
 }
 
 function openJob(id){
-  populateClientSelect();
 
-  const j=jobs.find(x=>x.id===id);
+  let j=jobs.find(
+    x=>x.id===id
+  );
 
-  if(!j){
-    openCompletedJob();
+  document.getElementById(
+    'jId'
+  ).value=j?.id || '';
+
+  document.getElementById(
+    'jClient'
+  ).innerHTML=clients
+    .map(c=>`
+      <option value="${c.id}">
+        ${c.name}
+      </option>
+    `)
+    .join('');
+
+  if(j){
+
+    document.getElementById(
+      'jClient'
+    ).value=j.clientId;
+
+    document.getElementById(
+      'jDate'
+    ).value=j.date || '';
+
+    document.getElementById(
+      'jDay'
+    ).value=j.day;
+
+    document.getElementById(
+      'jStart'
+    ).value=j.start || '';
+
+    document.getElementById(
+      'jEnd'
+    ).value=j.end || '';
+
+    document.getElementById(
+      'jRate'
+    ).value=j.rate;
+
+    document.getElementById(
+      'jNotes'
+    ).value=j.notes || '';
+
+    document
+      .getElementById(
+        'deleteJobBtn'
+      )
+      .classList.remove(
+        'hidden'
+      );
+
+    document.getElementById(
+      'jobTitle'
+    ).textContent=
+      'Edit Cleaning Job';
+
+  }else{
+
+    let c=clients[0];
+
+    document.getElementById(
+      'jClient'
+    ).value=c?.id || '';
+
+    document.getElementById(
+      'jDate'
+    ).value='';
+
+    document.getElementById(
+      'jDay'
+    ).value=
+      days[new Date().getDay()];
+
+    document.getElementById(
+      'jStart'
+    ).value='';
+
+    document.getElementById(
+      'jEnd'
+    ).value='';
+
+    document.getElementById(
+      'jRate'
+    ).value=c?.rate || 16;
+
+    document.getElementById(
+      'jNotes'
+    ).value='';
+
+    document
+      .getElementById(
+        'deleteJobBtn'
+      )
+      .classList.add(
+        'hidden'
+      );
+
+    document.getElementById(
+      'jobTitle'
+    ).textContent=
+      'Add Cleaning Job';
+  }
+
+  calcHours();
+
+  document
+    .getElementById('jobModal')
+    .classList.add('show');
+}
+function saveJob(){
+
+  let c=clients.find(
+    x=>x.id===
+      document.getElementById(
+        'jClient'
+      ).value
+  );
+
+  if(!c){
     return;
   }
 
-  document.getElementById("jobId").value=j.id;
-  document.getElementById("jobOccurrence").value="";
-  document.getElementById("jobClient").value=j.clientId;
-  document.getElementById("jobDate").value=j.date||dateKey(new Date());
-  updateJobDay();
+  let id=document.getElementById(
+    'jId'
+  ).value;
 
-  document.getElementById("jobStart").value=j.start||"";
-  document.getElementById("jobEnd").value=j.end||"";
-  document.getElementById("jobDuration").value=durationText(jobMinutes(j));
-  document.getElementById("jobRate").value=j.rate||clientOf(j.clientId)?.rate||0;
-  document.getElementById("jobCompleted").checked=isCompletedJob(j);
-  document.getElementById("jobNotes").value=j.notes||"";
+  let h=duration(
+    document.getElementById(
+      'jStart'
+    ).value,
 
-  document.getElementById("jobModalTitle").textContent="Edit job";
-
-  calculateJobMoney();
-
-  document.getElementById("jobModal").classList.add("show");
-}
-
-function openCompletedJob(){
-  populateClientSelect(clients[0]?.id);
-
-  document.getElementById("jobId").value="";
-  document.getElementById("jobOccurrence").value="";
-  document.getElementById("jobDate").value=dateKey(new Date());
-  updateJobDay();
-
-  document.getElementById("jobStart").value="";
-  document.getElementById("jobEnd").value="";
-  document.getElementById("jobDuration").value="";
-  document.getElementById("jobRate").value=clients[0]?.rate||0;
-  document.getElementById("jobCompleted").checked=true;
-  document.getElementById("jobNotes").value="";
-
-  document.getElementById("jobModalTitle").textContent="Add completed job";
-
-  calculateJobMoney();
-
-  document.getElementById("jobModal").classList.add("show");
-}
-
-function loadClientRate(){
-  const c=clientOf(document.getElementById("jobClient").value);
-
-  if(c){
-    document.getElementById("jobRate").value=c.rate||0;
-    calculateJobMoney();
-  }
-}
-
-function updateJobDay(){
-  const value=document.getElementById("jobDate").value;
-  if(!value) return;
-
-  document.getElementById("jobDay").value=
-    parseDate(value).toLocaleDateString("en-GB",{weekday:"long"});
-}
-
-function calculateJobDuration(){
-  const start=document.getElementById("jobStart").value;
-  const end=document.getElementById("jobEnd").value;
-
-  if(start && end){
-    document.getElementById("jobDuration").value=
-      durationText(timeDifference(start,end));
-  }
-
-  calculateJobMoney();
-}
-
-function calculateJobMoney(){
-  const mins=minutesFromText(document.getElementById("jobDuration").value);
-  const rate=Number(document.getElementById("jobRate").value||0);
-
-  document.getElementById("jobMoneyPreview").textContent=
-    money((mins/60)*rate);
-}
-
-function saveJob(){
-  const id=document.getElementById("jobId").value;
-  const occurrence=document.getElementById("jobOccurrence").value;
-
-  const clientId=document.getElementById("jobClient").value;
-  const client=clientOf(clientId);
-
-  if(!client) return;
-
-  const date=document.getElementById("jobDate").value || dateKey(new Date());
-
-  const start=document.getElementById("jobStart").value;
-  const end=document.getElementById("jobEnd").value;
-
-  let workedMinutes=minutesFromText(
-    document.getElementById("jobDuration").value
+    document.getElementById(
+      'jEnd'
+    ).value
   );
 
-  if(start && end){
-    workedMinutes=timeDifference(start,end);
-  }
-
-  const rate=Number(
-    document.getElementById("jobRate").value ||
-    client.rate ||
-    0
+  let old=jobs.find(
+    x=>x.id===id
   );
 
-  const completed=document.getElementById("jobCompleted").checked;
+  let o={
+    id:id || 'j'+Date.now(),
 
-  /*
-    Editing a recurring occurrence changes ONLY that occurrence.
-    It does not change every Friday/week or the client's master schedule.
-  */
-  if(occurrence){
+    clientId:c.id,
 
-    const key=occurrence;
+    date:document.getElementById(
+      'jDate'
+    ).value,
 
-    const recurring=recurringForDate(parseDate(date))
-      .find(x=>String(x.clientId)===String(clientId));
+    day:document.getElementById(
+      'jDay'
+    ).value,
 
-    if(recurring){
-      overrides[key]={
-        start:start,
-        end:end,
-        rate:rate,
-        standardMinutes:workedMinutes || recurring.standardMinutes,
-        cancelled:false
-      };
+    start:document.getElementById(
+      'jStart'
+    ).value,
 
-      saveAll();
-      closeModal("jobModal");
-      renderAll();
-      return;
-    }
-  }
+    end:document.getElementById(
+      'jEnd'
+    ).value,
 
-  const object={
-    id:id || "job_"+Date.now(),
-    clientId,
-    date,
-    day:parseDate(date).toLocaleDateString("en-GB",{weekday:"long"}),
-    start,
-    end,
-    workedMinutes,
-    hours:workedMinutes/60,
-    rate,
-    completed,
-    done:completed,
-    completedAt:completed ? new Date().toISOString() : null,
-    notes:document.getElementById("jobNotes").value.trim()
+    hours:h ||
+      Number(
+        old?.hours ??
+        c.hours ??
+        0
+      ),
+
+    rate:Number(
+      document.getElementById(
+        'jRate'
+      ).value ||
+      old?.rate ||
+      c.rate ||
+      0
+    ),
+
+    done:old?.done || false,
+
+    notes:document.getElementById(
+      'jNotes'
+    ).value.trim()
   };
 
   if(id){
-    jobs=jobs.map(j=>j.id===id ? {...j,...object,id:j.id}:j);
+
+    jobs=jobs.map(
+      x=>x.id===id
+        ? {...x,...o}
+        : x
+    );
+
   }else{
-    jobs.push(object);
+
+    jobs=[
+      ...jobs,
+      o
+    ];
   }
 
-  saveAll();
-  closeModal("jobModal");
-  renderAll();
+  /*
+    SAVE FIRST.
+    The modal only closes if the save
+    was successful.
+  */
+
+  if(save()){
+
+    closeModal(
+      'jobModal'
+    );
+
+    render();
+  }
 }
 
-function deleteCurrentJob(){
-  const id=document.getElementById("jobId").value;
-  const occurrence=document.getElementById("jobOccurrence").value;
 
-  if(occurrence){
-    if(!confirm("Cancel this cleaning only on this date?")) return;
+function deleteJob(){
 
-    overrides[occurrence]={
-      cancelled:true
-    };
+  let id=document.getElementById(
+    'jId'
+  ).value;
 
-    saveAll();
-    closeModal("jobModal");
-    renderAll();
+  if(!id){
     return;
   }
 
-  if(!id) return;
+  jobs=jobs.filter(
+    x=>x.id!==id
+  );
 
-  if(!confirm("Delete this job?")) return;
-
-  jobs=jobs.filter(j=>j.id!==id);
-
-  if(timer?.jobId===id){
+  if(
+    timer &&
+    timer.jobId===id
+  ){
     timer=null;
   }
 
-  saveAll();
-  closeModal("jobModal");
-  renderAll();
-}
+  if(save()){
 
-function closeModal(id){
-  document.getElementById(id).classList.remove("show");
-}
+    closeModal(
+      'jobModal'
+    );
 
-function startTodayJob(){
-  const today=getTodayJobs();
-
-  if(!today.length){
-    openCompletedJob();
-    return;
+    render();
   }
-
-  const first=today[0];
-
-  const existing=jobs.find(
-    j=>j.date===first.date &&
-       String(j.clientId)===String(first.clientId) &&
-       j.scheduledOccurrence
-  );
-
-  if(existing){
-    startTimer(existing.id);
-    return;
-  }
-
-  const job={
-    id:"timer_"+Date.now(),
-    clientId:first.clientId,
-    date:first.date,
-    day:first.day,
-    start:first.start||"",
-    end:first.end||"",
-    workedMinutes:0,
-    rate:first.rate,
-    completed:false,
-    scheduledOccurrence:true,
-    notes:""
-  };
-
-  jobs.push(job);
-  timer={
-    jobId:job.id,
-    startedAt:Date.now()
-  };
-
-  saveAll();
-  renderAll();
 }
+
 
 function startTimer(id){
-  if(timer?.jobId===id){
+
+  if(
+    timer &&
+    timer.jobId===id
+  ){
+
     stopTimer();
+
     return;
   }
 
-  const j=jobs.find(x=>x.id===id);
+  let j=jobs.find(
+    x=>x.id===id
+  );
 
-  if(!j) return;
+  if(!j){
+    return;
+  }
 
   timer={
     jobId:id,
-    startedAt:Date.now()
+    startedAt:Date.now(),
+    baseHours:0
   };
 
-  saveAll();
-  renderAll();
+  save();
+
+  render();
 }
 
-function stopTimer(){
-  if(!timer) return;
 
-  const j=jobs.find(x=>x.id===timer.jobId);
+function startNextTimer(){
+
+  let j=jobs[0];
 
   if(j){
-    const elapsed=Math.max(
-      0,
-      Math.round((Date.now()-timer.startedAt)/60000)
-    );
 
-    j.workedMinutes=elapsed;
-    j.hours=elapsed/60;
-    j.completed=true;
+    startTimer(j.id);
+
+  }else{
+
+    openJob();
+  }
+}
+
+
+function stopTimer(){
+
+  if(!timer){
+    return;
+  }
+
+  let j=jobs.find(
+    x=>x.id===timer.jobId
+  );
+
+  if(j){
+
+    let extra=
+      (Date.now()-timer.startedAt)
+      /3600000;
+
+    j.hours=
+      Number(timer.baseHours || 0)
+      +extra;
+
     j.done=true;
-    j.completedAt=new Date().toISOString();
-
-    if(!j.date){
-      j.date=dateKey(new Date());
-    }
   }
 
   timer=null;
 
-  saveAll();
-  renderAll();
+  if(save()){
+    render();
+  }
+}
+
+
+function updateTimer(){
+
+  let p=document.getElementById(
+    'timerPanel'
+  );
+
+  if(!timer){
+
+    p.classList.remove(
+      'show'
+    );
+
+    return;
+  }
+
+  let j=jobs.find(
+    x=>x.id===timer.jobId
+  );
+
+  if(!j){
+
+    timer=null;
+
+    save();
+
+    p.classList.remove(
+      'show'
+    );
+
+    return;
+  }
+
+  p.classList.add(
+    'show'
+  );
+
+  document.getElementById(
+    'timerClient'
+  ).textContent=
+    name(j.clientId);
+
+  let s=Math.floor(
+    (Date.now()-timer.startedAt)
+    /1000
+  );
+
+  document.getElementById(
+    'timerValue'
+  ).textContent=
+    String(
+      Math.floor(s/3600)
+    ).padStart(2,'0')
+    +':'+
+    String(
+      Math.floor(
+        (s%3600)/60
+      )
+    ).padStart(2,'0')
+    +':'+
+    String(
+      s%60
+    ).padStart(2,'0');
+}
+
+
+function closeModal(id){
+
+  document.getElementById(
+    id
+  ).classList.remove(
+    'show'
+  );
+}
+
+
+/* =====================================================
+   ZOOM
+   ===================================================== */
+
+function applyAppZoom(value){
+
+  let z=Math.max(
+    80,
+    Math.min(
+      200,
+      Number(value) || 130
+    )
+  );
+
+  document.documentElement.style.setProperty(
+    '--app-zoom',
+    z/100
+  );
+
+  document.getElementById(
+    'zoomLabel'
+  ) &&
+  (
+    document.getElementById(
+      'zoomLabel'
+    ).textContent=
+      z+'%'
+  );
+
+  document.getElementById(
+    'zoomRange'
+  ) &&
+  (
+    document.getElementById(
+      'zoomRange'
+    ).value=z
+  );
+
+  localStorage.setItem(
+    'pure_shine_app_zoom',
+    String(z)
+  );
+}
+
+
+function setAppZoom(value){
+
+  applyAppZoom(value);
+}
+
+
+function changeZoom(delta){
+
+  let current=Number(
+    localStorage.getItem(
+      'pure_shine_app_zoom'
+    ) || 130
+  );
+
+  applyAppZoom(
+    current+delta
+  );
+}
+
+
+/* =====================================================
+   CALENDAR EXPORT
+   ===================================================== */
+
+function addJobsToCalendar(){
+
+  let ics=[
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Pure Shine Cleaning Manager//EN',
+    'CALSCALE:GREGORIAN'
+  ];
+
+  jobs.forEach(j=>{
+
+    let c=clients.find(
+      x=>x.id===j.clientId
+    );
+
+    if(!j.date){
+      return;
+    }
+
+    let d=j.date.replaceAll(
+      '-',
+      ''
+    );
+
+    let st=
+      (j.start || '09:00')
+      .replace(':','')
+      +'00';
+
+    let en=
+      (j.end || '10:00')
+      .replace(':','')
+      +'00';
+
+    ics.push(
+      'BEGIN:VEVENT',
+      'UID:'+j.id+'@pureshine',
+      'DTSTART:'+d+'T'+st,
+      'DTEND:'+d+'T'+en,
+      'SUMMARY:'+
+        ((c?.name)||'Cleaning Job'),
+      'DESCRIPTION:Pure Shine Cleaning Manager',
+      'END:VEVENT'
+    );
+  });
+
+  ics.push(
+    'END:VCALENDAR'
+  );
+
+  let blob=new Blob(
+    [ics.join('\r\n')],
+    {
+      type:'text/calendar'
+    }
+  );
+
+  let a=document.createElement(
+    'a'
+  );
+
+  a.href=
+    URL.createObjectURL(blob);
+
+  a.download=
+    'Pure-Shine-Cleaning-Calendar.ics';
+
+  a.click();
+
+  setTimeout(
+    ()=>{
+      URL.revokeObjectURL(
+        a.href
+      );
+    },
+    1000
+  );
+}
+
+
+/* =====================================================
+   DATA EXPORT
+   ===================================================== */
+
+function exportData(){
+
+  let data={
+    clients,
+    jobs,
+    timer,
+    exportedAt:
+      new Date().toISOString()
+  };
+
+  let blob=new Blob(
+    [
+      JSON.stringify(
+        data,
+        null,
+        2
+      )
+    ],
+    {
+      type:'application/json'
+    }
+  );
+
+  let a=document.createElement(
+    'a'
+  );
+
+  a.href=
+    URL.createObjectURL(blob);
+
+  a.download=
+    'Pure-Shine-Cleaning-Manager-Data.json';
+
+  a.click();
+
+  setTimeout(
+    ()=>{
+      URL.revokeObjectURL(
+        a.href
+      );
+    },
+    1000
+  );
+}
+
+
+function resetAppData(){
+
+  if(
+    !confirm(
+      'Reset all Pure Shine app data?'
+    )
+  ){
+    return;
+  }
+
+  localStorage.removeItem(
+    KEY+'_clients'
+  );
+
+  localStorage.removeItem(
+    KEY+'_jobs'
+  );
+
+  localStorage.removeItem(
+    TIMER
+  );
+
+  localStorage.removeItem(
+    'pure_shine_app_zoom'
+  );
+
+  location.reload();
+}
+
+
+/* =====================================================
+   RENDER
+   ===================================================== */
+
+function render(){
+
+  document.getElementById(
+    'today'
+  ).textContent=
+    new Date().toLocaleDateString(
+      'en-GB',
+      {
+        weekday:'long',
+        day:'numeric',
+        month:'long'
+      }
+    );
+
+  let totalH=
+    jobs.reduce(
+      (a,j)=>
+        a+Number(j.hours||0),
+      0
+    );
+
+  let earn=
+    jobs.reduce(
+      (a,j)=>
+        a+
+        Number(j.hours||0)*
+        Number(j.rate||0),
+      0
+    );
+
+  document.getElementById(
+    'sJobs'
+  ).textContent=
+    jobs.length;
+
+  document.getElementById(
+    'sHours'
+  ).textContent=
+    timeText(totalH);
+
+  document.getElementById(
+    'sEarn'
+  ).textContent=
+    money(earn);
+
+  renderTodaySchedule();
+
+  renderCalendar();
+
+  renderClients();
+
+  renderJobs();
+
+  renderEarnings();
+
+  updateTimer();
+}
+
+
+/* =====================================================
+   TODAY'S SCHEDULE
+   ===================================================== */
+
+function renderTodaySchedule(){
+
+  const today=
+    days[new Date().getDay()];
+
+  let arr=jobs.filter(
+    j=>j.day===today
+  );
+
+  let box=document.getElementById(
+    'todaySchedule'
+  );
+
+  if(!arr.length){
+
+    box.innerHTML=`
+      <div class="card">
+        <b>No cleaning jobs scheduled today.</b>
+      </div>
+    `;
+
+    return;
+  }
+
+  box.innerHTML=
+    arr.map(
+      j=>`
+        <div class="card schedule-card">
+          <div class="row">
+
+            <div>
+              <b>${name(j.clientId)}</b>
+
+              <div class="small">
+                ${
+                  j.start ||
+                  ''
+                }
+                ${
+                  j.end
+                    ? '– '+j.end
+                    : ''
+                }
+              </div>
+
+              <div class="small">
+                ${timeText(j.hours)}
+              </div>
+            </div>
+
+            <div>
+              <button
+                class="secondary"
+                onclick="openJob('${j.id}')">
+                Edit
+              </button>
+            </div>
+
+          </div>
+        </div>
+      `
+    )
+    .join('');
+}
+
+
+/* =====================================================
+   WEEKLY CALENDAR
+   ===================================================== */
+
+function renderCalendar(){
+
+  let headers=
+    days
+      .slice(1)
+      .concat('Sunday')
+      .map(
+        d=>`
+          <div class="cal-head">
+            ${d.slice(0,3)}
+          </div>
+        `
+      )
+      .join('');
+
+  let items=
+    days
+      .slice(1)
+      .concat('Sunday')
+      .map(
+        d=>{
+
+          let arr=
+            jobs.filter(
+              j=>j.day===d
+            );
+
+          return `
+            <div class="cal-day">
+
+              <div class="n">
+                ${d}
+              </div>
+
+              ${
+                arr.map(
+                  j=>`
+                    <div
+                      class="cal-client"
+                      onclick="openJob('${j.id}')">
+
+                      <b>
+                        ${name(j.clientId)}
+                      </b>
+
+                      <br>
+
+                      ${
+                        j.start || ''
+                      }
+
+                      ${
+                        j.end
+                          ? '–'+j.end
+                          : ''
+                      }
+
+                    </div>
+                  `
+                ).join('')
+              }
+
+            </div>
+          `;
+        }
+      )
+      .join('');
+
+  document.getElementById(
+    'calendar'
+  ).innerHTML=
+    headers+items;
+}
+
+
+/* =====================================================
+   CLIENTS
+   ===================================================== */
+
+function renderClients(){
+
+  let box=document.getElementById(
+    'clientsList'
+  );
+
+  box.innerHTML=
+    clients
+      .map(
+        c=>`
+          <div class="card">
+
+            <div class="row">
+
+              <div>
+
+                <b>
+                  ${c.name}
+                </b>
+
+                <div class="small">
+                  ${c.type}
+                  ·
+                  ${money(c.rate)}/h
+                  ·
+                  ${timeText(c.hours)}
+                  standard
+                </div>
+
+              </div>
+
+              <button
+                class="danger"
+                onclick="removeClient('${c.id}')">
+
+                Delete
+
+              </button>
+
+            </div>
+
+          </div>
+        `
+      )
+      .join('')
+      ||
+      `
+        <div class="card">
+          No clients yet.
+        </div>
+      `;
+}
+
+
+function removeClient(id){
+
+  if(
+    !confirm(
+      'Delete this client?'
+    )
+  ){
+    return;
+  }
+
+  clients=clients.filter(
+    c=>c.id!==id
+  );
+
+  jobs=jobs.filter(
+    j=>j.clientId!==id
+  );
+
+  if(save()){
+    render();
+  }
+}
+
+
+/* =====================================================
+   JOB HISTORY
+   ===================================================== */
+
+function renderJobs(){
+
+  let box=document.getElementById(
+    'jobsList'
+  );
+
+  box.innerHTML=
+    jobs
+      .slice()
+      .reverse()
+      .map(
+        j=>`
+
+          <div class="card">
+
+            <div class="row">
+
+              <div>
+
+                <b>
+                  ${name(j.clientId)}
+                </b>
+
+                <div class="small">
+
+                  ${j.day}
+
+                  ${
+                    j.date
+                      ? ' · '+j.date
+                      : ''
+                  }
+
+                  ·
+
+                  ${
+                    j.start || '—'
+                  }
+
+                  ${
+                    j.end
+                      ? '– '+j.end
+                      : ''
+                  }
+
+                </div>
+
+                <div class="small">
+
+                  Worked:
+                  ${timeText(j.hours)}
+
+                  ·
+
+                  ${
+                    j.done
+                      ? 'Completed'
+                      : 'Scheduled'
+                  }
+
+                </div>
+
+              </div>
+
+              <div
+                style="text-align:right">
+
+                <div class="money">
+
+                  ${
+                    money(
+                      Number(j.hours||0)*
+                      Number(j.rate||0)
+                    )
+                  }
+
+                </div>
+
+                <button
+                  class="primary"
+                  style="margin-top:7px;padding:8px 10px"
+                  onclick="startTimer('${j.id}')">
+
+                  ${
+                    timer?.jobId===j.id
+                      ? 'Stop'
+                      : 'Timer'
+                  }
+
+                </button>
+
+                <button
+                  class="secondary"
+                  style="margin-top:7px;padding:8px 10px"
+                  onclick="openJob('${j.id}')">
+
+                  Edit
+
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        `
+      )
+      .join('')
+      ||
+      `
+        <div class="card">
+          No jobs yet.
+        </div>
+      `;
+}
+
+
+/* =====================================================
+   EARNINGS
+   ===================================================== */
+
+function renderEarnings(){
+
+  let map={};
+
+  jobs.forEach(
+    j=>{
+
+      if(!map[j.clientId]){
+
+        map[j.clientId]={
+          h:0,
+          e:0
+        };
+      }
+
+      map[j.clientId].h+=
+        Number(j.hours||0);
+
+      map[j.clientId].e+=
+        Number(j.hours||0)*
+        Number(j.rate||0);
+    }
+  );
+
+  document.getElementById(
+    'earningsList'
+  ).innerHTML=
+    Object.entries(map)
+      .map(
+        ([id,x])=>`
+
+          <div class="card">
+
+            <div class="row">
+
+              <div>
+
+                <b>
+                  ${name(id)}
+                </b>
+
+                <div class="small">
+                  ${timeText(x.h)}
+                  worked
+                </div>
+
+              </div>
+
+              <div class="money">
+                ${money(x.e)}
+              </div>
+
+            </div>
+
+          </div>
+
+        `
+      )
+      .join('')
+      ||
+      `
+        <div class="card">
+          No earnings yet.
+        </div>
+      `;
+}
+
+
+/* =====================================================
+   TIMER + STARTUP
+   ===================================================== */
+
+setInterval(
+  updateTimer,
+  1000
+);
+
+applyAppZoom(
+  Number(
+    localStorage.getItem(
+      'pure_shine_app_zoom'
+    ) || 130
+  )
+);
+
+render();
+
+</script>
+
+</body>
+</html>
+function render(){
+document.getElementById('today').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+
+let totalH=jobs.reduce((a,j)=>a+Number(j.hours||0),0),
+earn=jobs.reduce((a,j)=>a+Number(j.hours||0)*Number(j.rate||0),0);
+
+document.getElementById('sJobs').textContent=jobs.length;
+document.getElementById('sHours').textContent=timeText(totalH);
+document.getElementById('sEarn').textContent=money(earn);
+document.getElementById('sFree').textContent=timeText(Math.max(0,40-totalH));
+
+renderCalendar();
+renderClients();
+renderJobs();
+renderEarnings();
+updateTimer();
+}
+
+function renderCalendar(){
+let out=days.slice(1).concat('Sunday')
+.map(d=>`<div class="cal-head">${d.slice(0,3)}</div>`).join('');
+
+let items=days.slice(1).concat('Sunday').map(d=>{
+let arr=jobs.filter(j=>j.day===d);
+
+return `<div class="cal-day">
+<div class="n">${d}</div>
+${arr.map(j=>`
+<div class="cal-client" onclick="openJob('${j.id}')">
+${name(j.clientId)}<br>
+${j.start||''}${j.end?'–'+j.end:''}
+</div>`).join('')}
+</div>`;
+}).join('');
+
+document.getElementById('calendar').innerHTML=out+items;
 }
 
 function renderClients(){
-  const box=document.getElementById("clientsList");
-
-  if(!clients.length){
-    box.innerHTML=`<div class="card">No clients.</div>`;
-    return;
-  }
-
-  box.innerHTML=clients.map(c=>`
-    <div class="card">
-
-      <div class="row">
-        <div>
-          <b>${escapeHTML(c.name)}</b>
-          <div class="small">
-            ${escapeHTML(c.type||"Client")}
-            · ${money(c.rate||0)}/h
-            ${c.hours ? " · "+durationText(Number(c.hours)*60)+" standard":""}
-          </div>
-        </div>
-
-        <button class="icon-btn"
-                onclick="editClient('${c.id}')">
-          ✎
-        </button>
-      </div>
-
-      ${c.phone ? `
-        <div class="client-contact">
-          📞 ${escapeHTML(c.phone)}
-        </div>` : ""}
-
-      <div class="action-row">
-
-        <button class="action"
-                onclick="editClient('${c.id}')">
-          Edit details
-        </button>
-
-        ${c.phone ? `
-          <button class="action green"
-                  onclick="sendClientMessage('${c.id}','confirm')">
-            💬 Confirm
-          </button>
-
-          <button class="action"
-                  onclick="sendClientMessage('${c.id}','payment')">
-            💷 Payment
-          </button>
-        `:""}
-
-      </div>
-
-    </div>
-  `).join("");
+document.getElementById('clientsList').innerHTML=clients.map(c=>`
+<div class="card">
+<div class="row">
+<div>
+<b>${c.name}</b>
+<div class="small">
+${c.type} · ${money(c.rate)}/h · ${timeText(c.hours)} standard
+</div>
+</div>
+<button class="danger" onclick="removeClient('${c.id}')">Delete</button>
+</div>
+</div>
+`).join('')||'<div class="card">No clients yet.</div>';
 }
 
-function openClient(){
-  document.getElementById("clientId").value="";
-  document.getElementById("clientModalTitle").textContent="Add Client";
+function removeClient(id){
+if(!confirm('Delete this client?'))return;
 
-  document.getElementById("clientName").value="";
-  document.getElementById("clientType").value="Private";
-  document.getElementById("clientRate").value="18";
-  document.getElementById("clientHours").value="";
-  document.getElementById("clientPhone").value="";
-  document.getElementById("clientContactType").value="sms";
-  document.getElementById("clientNotes").value="";
+clients=clients.filter(c=>c.id!==id);
+jobs=jobs.filter(j=>j.clientId!==id);
 
-  document.getElementById("clientModal").classList.add("show");
+if(!save())return;
+
+render();
 }
 
-function editClient(id){
-  const c=clientOf(id);
+function renderJobs(){
+document.getElementById('jobsList').innerHTML=jobs.slice().reverse().map(j=>`
+<div class="card">
+<div class="row">
+<div>
+<b>${name(j.clientId)}</b>
+<div class="small">
+${j.day}${j.date?' · '+j.date:''} · ${j.start||'—'} ${j.end?'– '+j.end:''}
+</div>
+<div class="small">
+Worked: ${timeText(j.hours)} · ${j.done?'Completed':'Scheduled'}
+</div>
+</div>
 
-  if(!c) return;
+<div style="text-align:right">
+<div class="money">${money(j.hours*j.rate)}</div>
 
-  document.getElementById("clientId").value=c.id;
-  document.getElementById("clientModalTitle").textContent="Edit Client";
+<button
+class="primary"
+style="margin-top:7px;padding:8px 10px"
+onclick="startTimer('${j.id}')">
+${timer?.jobId===j.id?'Stop':'Timer'}
+</button>
 
-  document.getElementById("clientName").value=c.name||"";
-  document.getElementById("clientType").value=c.type||"Private";
-  document.getElementById("clientRate").value=c.rate||0;
-  document.getElementById("clientHours").value=c.hours||0;
-  document.getElementById("clientPhone").value=c.phone||"";
-  document.getElementById("clientContactType").value=c.contactType||"sms";
-  document.getElementById("clientNotes").value=c.notes||"";
+<button
+class="secondary"
+style="margin-top:7px;padding:8px 10px"
+onclick="openJob('${j.id}')">
+Edit
+</button>
 
-  document.getElementById("clientModal").classList.add("show");
-}
-
-function saveClient(){
-  const id=document.getElementById("clientId").value;
-
-  const object={
-    id:id || "client_"+Date.now(),
-    name:document.getElementById("clientName").value.trim(),
-    type:document.getElementById("clientType").value,
-    rate:Number(document.getElementById("clientRate").value||0),
-    hours:Number(document.getElementById("clientHours").value||0),
-    phone:document.getElementById("clientPhone").value.trim(),
-    contactType:document.getElementById("clientContactType").value,
-    notes:document.getElementById("clientNotes").value.trim()
-  };
-
-  if(!object.name) return;
-
-  if(id){
-    clients=clients.map(c=>c.id===id ? {...c,...object,id}:c);
-  }else{
-    clients.push(object);
-  }
-
-  saveAll();
-  closeModal("clientModal");
-  renderAll();
+</div>
+</div>
+</div>
+`).join('')||'<div class="card">No jobs yet.</div>';
 }
 
 function renderEarnings(){
-  const now=new Date();
+let map={};
 
-  const monthJobsList=monthJobs(now.getFullYear(),now.getMonth());
+jobs.forEach(j=>{
+if(!map[j.clientId])map[j.clientId]={h:0,e:0};
 
-  const total=monthJobsList.reduce((s,j)=>s+jobAmount(j),0);
-  const mins=monthJobsList.reduce((s,j)=>s+jobMinutes(j),0);
+map[j.clientId].h+=Number(j.hours||0);
+map[j.clientId].e+=Number(j.hours||0)*Number(j.rate||0);
+});
 
-  document.getElementById("earningsMonthTitle").textContent=
-    now.toLocaleDateString("en-GB",{month:"long",year:"numeric"});
-
-  document.getElementById("earningsMonthTotal").textContent=money(total);
-  document.getElementById("earningsMonthTime").textContent=
-    durationText(mins)+" worked";
-
-  const history=historyJobs();
-
-  if(!history.length){
-    document.getElementById("earningsHistory").innerHTML=`
-      <div class="card">No completed jobs yet.</div>`;
-    return;
-  }
-
-  document.getElementById("earningsHistory").innerHTML=history.map(j=>{
-
-    const c=clientOf(j.clientId);
-
-    return `
-      <div class="history-item">
-
-        <div class="history-top">
-
-          <div>
-            <b>${escapeHTML(c?.name||"Client")}</b>
-
-            <div class="history-date">
-              ${j.date ? formatDate(j.date) : "Date not recorded"}
-            </div>
-
-            <div class="history-duration">
-              ${durationText(jobMinutes(j))}
-              ${j.start ? " · "+j.start : ""}
-              ${j.end ? " – "+j.end : ""}
-            </div>
-          </div>
-
-          <div class="history-money">
-            ${money(jobAmount(j))}
-          </div>
-
-        </div>
-
-        <div class="action-row">
-
-          <button class="action"
-                  onclick="openJob('${j.id}')">
-            ✎ Edit
-          </button>
-
-          <button class="action danger"
-                  onclick="deleteHistoryJob('${j.id}')">
-            🗑 Delete
-          </button>
-
-          ${c?.phone ? `
-            <button class="action green"
-                    onclick="sendPaymentReminder('${j.id}')">
-              💷 Payment reminder
-            </button>
-          `:""}
-
-        </div>
-
-      </div>`;
-  }).join("");
+document.getElementById('earningsList').innerHTML=
+Object.entries(map).map(([id,x])=>`
+<div class="card">
+<div class="row">
+<div>
+<b>${name(id)}</b>
+<div class="small">${timeText(x.h)} worked</div>
+</div>
+<div class="money">${money(x.e)}</div>
+</div>
+</div>
+`).join('')||'<div class="card">No earnings yet.</div>';
 }
 
-function deleteHistoryJob(id){
-  if(!confirm("Delete this completed job from your history?")) return;
+setInterval(updateTimer,1000);
 
-  jobs=jobs.filter(j=>j.id!==id);
-
-  saveAll();
-  renderAll();
-}
-
-function renderAll(){
-  applySettings();
-  renderHome();
-  renderSchedule();
-  renderClients();
-  renderEarnings();
-  updateTimerUI();
-}
-
-function updateTimerUI(){
-  /*
-    The timer is stored persistently.
-    It continues correctly even if the phone is locked/backgrounded,
-    because elapsed time is calculated from startedAt when the app
-    becomes active again.
-  */
-}
-
-function escapeHTML(value){
-  return String(value??"")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-/* =========================================================
-   CLIENT MESSAGES
-   ========================================================= */
-
-function clientMessageURL(client,message){
-  if(!client?.phone) return null;
-
-  const phone=client.phone.replace(/[^\d+]/g,"");
-
-  if(client.contactType==="whatsapp"){
-    return "https://wa.me/"+phone.replace("+","")+"?text="+encodeURIComponent(message);
-  }
-
-  if(client.contactType==="sms"){
-    return "sms:"+phone+"?body="+encodeURIComponent(message);
-  }
-
-  return null;
-}
-
-function openMessage(url){
-  if(!url){
-    alert("This client does not have a phone number saved.");
-    return;
-  }
-
-  window.location.href=url;
-}
-
-function todayJobForClient(clientId){
-  return getTodayJobs().find(j=>String(j.clientId)===String(clientId));
-}
-
-function sendClientMessage(clientId,type){
-  const c=clientOf(clientId);
-  const j=todayJobForClient(clientId);
-
-  if(!c) return;
-
-  if(type==="confirm"){
-    const date=formatDate(dateKey(new Date()));
-
-    const message=
-      `Hi ${c.name}, just confirming your cleaning appointment with Pure Shine Cleaning today, ${date}. Please let me know if anything changes. Thank you ✨`;
-
-    openMessage(clientMessageURL(c,message));
-    return;
-  }
-
-  const completed=historyJobs()
-    .filter(x=>String(x.clientId)===String(clientId))
-    .sort((a,b)=>String(b.completedAt||b.date).localeCompare(String(a.completedAt||a.date)))[0];
-
-  const amount=completed ? jobAmount(completed) : 0;
-
-  const message=
-    `Hi ${c.name}, just a friendly reminder regarding today's cleaning payment. The amount due is ${money(amount)}. Thank you ✨`;
-
-  openMessage(clientMessageURL(c,message));
-}
-
-function sendJobConfirmationFromModal(){
-  const client=clientOf(document.getElementById("jobClient").value);
-  if(!client) return;
-
-  const date=document.getElementById("jobDate").value;
-  const start=document.getElementById("jobStart").value;
-
-  const message=
-    `Hi ${client.name}, just confirming your cleaning appointment with Pure Shine Cleaning on ${formatDate(date)}${start?" at "+start:""}. Thank you ✨`;
-
-  openMessage(clientMessageURL(client,message));
-}
-
-function sendPaymentReminderFromModal(){
-  const client=clientOf(document.getElementById("jobClient").value);
-  if(!client) return;
-
-  const mins=minutesFromText(document.getElementById("jobDuration").value);
-  const rate=Number(document.getElementById("jobRate").value||client.rate||0);
-  const amount=(mins/60)*rate;
-
-  const message=
-    `Hi ${client.name}, just a friendly reminder for the cleaning payment. The amount due is ${money(amount)}. Thank you ✨`;
-
-  openMessage(clientMessageURL(client,message));
-}
-
-function sendPaymentReminder(jobId){
-  const job=jobs.find(j=>j.id===jobId);
-  if(!job) return;
-
-  const client=clientOf(job.clientId);
-  if(!client) return;
-
-  const message=
-    `Hi ${client.name}, just a friendly reminder regarding the cleaning payment for ${job.date ? formatDate(job.date):"the cleaning"}. The amount due is ${money(jobAmount(job))}. Thank you ✨`;
-
-  openMessage(clientMessageURL(client,message));
-}
-
-function sendTodayConfirmations(){
-  const today=getTodayJobs();
-
-  if(!today.length){
-    alert("There are no cleaning jobs scheduled today.");
-    return;
-  }
-
-  const client=today[0] && clientOf(today[0].clientId);
-
-  if(client) sendClientMessage(client.id,"confirm");
-}
-
-function sendTodayPaymentReminders(){
-  const today=dateKey(new Date());
-
-  const completed=historyJobs().filter(j=>j.date===today);
-
-  if(!completed.length){
-    alert("There are no completed jobs today yet.");
-    return;
-  }
-
-  sendPaymentReminder(completed[0].id);
-}
-
-/* =========================================================
-   REMINDERS
-   ========================================================= */
-
-async function requestNotifications(){
-  if(!("Notification" in window)){
-    alert("Notifications are not supported by this browser.");
-    return;
-  }
-
-  try{
-    const permission=await Notification.requestPermission();
-
-    if(permission==="granted"){
-      alert("Phone notifications are enabled.");
-      checkReminders();
-    }else{
-      alert("Notifications were not enabled.");
-    }
-  }catch(e){
-    alert("Please enable notifications from your browser settings.");
-  }
-}
-
-function saveReminderSetting(){
-  settings.reminderEnabled=
-    document.getElementById("reminderEnabled").checked;
-
-  settings.reminderSound=
-    document.getElementById("reminderSound").value;
-
-  localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));
-
-  if(settings.reminderEnabled){
-    checkReminders();
-  }
-}
-
-function reminderAlreadyShown(key){
-  const shown=loadJSON("pure_shine_reminders_shown",{});
-  return Boolean(shown[key]);
-}
-
-function markReminderShown(key){
-  const shown=loadJSON("pure_shine_reminders_shown",{});
-  shown[key]=Date.now();
-  localStorage.setItem(
-    "pure_shine_reminders_shown",
-    JSON.stringify(shown)
-  );
-}
-
-function checkReminders(){
-  if(!settings.reminderEnabled) return;
-
-  const tomorrow=new Date();
-  tomorrow.setDate(tomorrow.getDate()+1);
-
-  const jobsTomorrow=recurringForDate(tomorrow);
-
-  jobsTomorrow.forEach(j=>{
-    const key=dateKey(tomorrow)+"_"+j.clientId;
-
-    if(reminderAlreadyShown(key)) return;
-
-    const client=clientOf(j.clientId);
-
-    if("Notification" in window &&
-       Notification.permission==="granted"){
-
-      new Notification("Pure Shine Cleaning ✨",{
-        body:`Tomorrow: ${client?.name||"Cleaning"}${j.start?" at "+j.start:""}`,
-        icon:settings.icon||"assets/icon.png"
-      });
-    }
-
-    markReminderShown(key);
-  });
-}
-
-function playSound(type){
-  try{
-    const AudioContext=
-      window.AudioContext ||
-      window.webkitAudioContext;
-
-    if(!AudioContext) return;
-
-    const ctx=new AudioContext();
-
-    const sounds={
-      bell:[880,660],
-      soft:[660,520],
-      chime:[523,659,784],
-      double:[880,880],
-      alert:[440,880]
-    };
-
-    const notes=sounds[type]||sounds.bell;
-
-    notes.forEach((frequency,index)=>{
-      const osc=ctx.createOscillator();
-      const gain=ctx.createGain();
-
-      osc.frequency.value=frequency;
-      osc.type="sine";
-
-      gain.gain.setValueAtTime(0,ctx.currentTime+index*.18);
-      gain.gain.linearRampToValueAtTime(
-        .18,
-        ctx.currentTime+index*.18+.02
-      );
-      gain.gain.exponentialRampToValueAtTime(
-        .001,
-        ctx.currentTime+index*.18+.28
-      );
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start(ctx.currentTime+index*.18);
-      osc.stop(ctx.currentTime+index*.18+.3);
-    });
-
-  }catch(e){}
-}
-
-function testReminderSound(){
-  playSound(settings.reminderSound||"bell");
-}
-
-/* =========================================================
-   EXPORT / IMPORT
-   ========================================================= */
-
-function exportData(){
-  const data={
-    clients,
-    jobs,
-    overrides,
-    settings,
-    exportedAt:new Date().toISOString()
-  };
-
-  const blob=new Blob(
-    [JSON.stringify(data,null,2)],
-    {type:"application/json"}
-  );
-
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-
-  a.href=url;
-  a.download="Pure-Shine-Cleaning-Backup.json";
-  a.click();
-
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-
-function importData(){
-  document.getElementById("dataImport").click();
-}
-
-function handleImport(input){
-  const file=input.files?.[0];
-  if(!file) return;
-
-  const reader=new FileReader();
-
-  reader.onload=()=>{
-    try{
-      const data=JSON.parse(reader.result);
-
-      if(Array.isArray(data.clients)) clients=data.clients;
-      if(Array.isArray(data.jobs)) jobs=data.jobs;
-      if(data.overrides) overrides=data.overrides;
-      if(data.settings) settings={...settings,...data.settings};
-
-      saveAll();
-      renderAll();
-
-      alert("Your Pure Shine data has been restored.");
-    }catch(e){
-      alert("The backup file could not be read.");
-    }
-  };
-
-  reader.readAsText(file);
-}
-
-/* =========================================================
-   REMINDER CHECK
-   ========================================================= */
-
-setInterval(()=>{
-  checkReminders();
-  updateTimerUI();
-},60000);
-
-/* =========================================================
-   STARTUP
-   ========================================================= */
-
-applySettings();
-
-document.getElementById("app").addEventListener(
-  "click",
-  ()=>{
-    if(settings.reminderEnabled){
-      checkReminders();
-    }
-  },
-  {passive:true}
+applyAppZoom(
+Number(localStorage.getItem('pure_shine_app_zoom')||130)
 );
 
-renderAll();
+render();
 </script>
 
 </body>
