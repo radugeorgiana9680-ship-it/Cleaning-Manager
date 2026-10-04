@@ -1,345 +1,1034 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#fff8fc">
-<title>Pure Shine Cleaning Manager</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="icon.png">
+<title>Pure Shine Cleaning</title>
 
 <style>
 :root{
- --pink:#e98bb1;--pink2:#f5d6e4;--blue:#dceaff;--green:#dcefe5;
- --yellow:#fff0c6;--purple:#e7def7;--peach:#f7ddd7;
- --ink:#26232a;--muted:#77717b;--shadow:0 6px 22px #5d405d12;
- --ui:1;--font:system-ui,-apple-system,"SF Pro Display","Segoe UI",sans-serif;
- --bgOpacity:.18
+ --pink:#e987ae;
+ --pink-dark:#a45f7e;
+ --pink-soft:#f4d8e5;
+ --pink-pale:#fff4f9;
+ --blue:#dce9f8;
+ --green:#dcefe5;
+ --yellow:#fff0c5;
+ --purple:#e7def7;
+ --peach:#f7ddd7;
+ --ink:#252128;
+ --muted:#8c838c;
+ --white:#fff;
+ --line:#eee6eb;
+ --shadow:0 6px 25px rgba(80,50,70,.09);
+ --font-ui:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+ --bg-opacity:.92;
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+*{
+ box-sizing:border-box;
+ -webkit-tap-highlight-color:transparent;
+}
+
 html,body{
- margin:0;width:100%;min-height:100%;font-family:var(--font);
- color:var(--ink);background:#fff8fc;-webkit-text-size-adjust:100%;
- overflow-x:hidden
-}
-button,input,select,textarea{font:inherit;font-size:16px}
-button{border:0;cursor:pointer}
-button:active{transform:scale(.98)}
-
-#bg{
- position:fixed;inset:0;background:center/cover no-repeat;
- opacity:var(--bgOpacity);z-index:-1;pointer-events:none
+ margin:0;
+ padding:0;
+ width:100%;
+ min-height:100%;
+ overflow-x:hidden;
+ -webkit-text-size-adjust:100%;
 }
 
-.app{
- min-height:100vh;
- padding-bottom:92px;
- zoom:var(--ui);
- width:calc(100% / var(--ui))
+body{
+ background:#fff8fc;
+ color:var(--ink);
+ font-family:var(--font-ui);
 }
+
+button,input,select,textarea{
+ font:inherit;
+}
+
+button{
+ border:0;
+ cursor:pointer;
+}
+
+button:active{
+ transform:scale(.98);
+}
+
+#bgLayer{
+ position:fixed;
+ inset:0;
+ z-index:-2;
+ background-position:center;
+ background-size:cover;
+ background-repeat:no-repeat;
+ opacity:var(--bg-opacity);
+ pointer-events:none;
+}
+
+#app{
+ min-height:100dvh;
+ padding-bottom:110px;
+}
+
+main{
+ width:100%;
+ max-width:900px;
+ margin:auto;
+ padding:0 18px;
+}
+
+.page{
+ display:none;
+ padding-top:16px;
+}
+
+.page.active{
+ display:block;
+}
+
+/* HEADER */
 
 .top{
- padding:calc(12px + env(safe-area-inset-top)) 18px 12px;
- background:#fffafdE8;
- backdrop-filter:blur(14px);
- position:sticky;top:0;z-index:20
+ padding:calc(13px + env(safe-area-inset-top)) 20px 14px;
+ background:rgba(255,250,253,.94);
+ backdrop-filter:blur(18px);
+ border-bottom:1px solid rgba(230,220,228,.6);
 }
-.toprow{
- display:flex;align-items:center;justify-content:space-between;gap:10px
+
+.top-row{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
 }
-.brand{display:flex;align-items:center;gap:11px;min-width:0}
+
+.brand{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ min-width:0;
+}
+
 .brand img{
- width:58px;height:58px;border-radius:15px;object-fit:cover;
- box-shadow:0 3px 12px #c65c8d20
+ width:58px;
+ height:58px;
+ border-radius:15px;
+ object-fit:cover;
+ box-shadow:0 3px 12px rgba(170,70,120,.12);
 }
+
 .brand h1{
- font-size:23px;margin:0 0 3px;white-space:nowrap
+ margin:0 0 4px;
+ font-family:Georgia,"Times New Roman",serif;
+ font-size:25px;
+ line-height:1;
+ white-space:nowrap;
 }
-.brand p{font-size:13px;color:var(--muted);margin:0}
-.actions{display:flex;gap:7px}
-.icon{
- width:45px;height:45px;border-radius:50%;background:#fff;
- box-shadow:var(--shadow);display:grid;place-items:center;font-size:22px
-}
-.icon.add{background:var(--pink);color:#fff}
 
-main{width:100%;max-width:680px;margin:auto;padding:0 17px}
-.page{display:none;padding-top:12px}
-.page.active{display:block}
-
-.date{
- background:linear-gradient(105deg,#f7d7e5,#f4dbe8);
- border-radius:22px;padding:20px 22px;margin-bottom:18px
+.brand p{
+ margin:0;
+ color:#77717a;
+ font-size:14px;
 }
-.date strong{font-size:21px}
-.date span{display:block;color:#746d76;margin-top:5px}
+
+.header-actions{
+ display:flex;
+ gap:8px;
+}
+
+.circle-btn{
+ width:50px;
+ height:50px;
+ border-radius:50%;
+ background:#fff;
+ box-shadow:var(--shadow);
+ display:grid;
+ place-items:center;
+ font-size:25px;
+}
+
+/* HOME */
+
+.date-banner{
+ min-height:105px;
+ border-radius:27px;
+ background:#f3d5e3;
+ padding:20px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:18px;
+}
+
+.date-banner h2{
+ margin:0;
+ font-family:Georgia,serif;
+ font-size:23px;
+}
+
+.date-banner p{
+ margin:7px 0 0;
+ color:#8b7580;
+ font-size:15px;
+}
+
+.heart{
+ font-size:48px;
+ color:#a45f7e;
+ font-weight:300;
+}
 
 .stats{
- display:grid;grid-template-columns:repeat(2,1fr);
- gap:11px;margin-bottom:26px
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:11px;
+ margin-bottom:27px;
 }
+
 .stat{
- border-radius:20px;min-height:118px;padding:18px;text-align:center;
- display:flex;flex-direction:column;justify-content:center;
- box-shadow:var(--shadow)
+ min-height:125px;
+ border-radius:22px;
+ padding:14px;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ box-shadow:var(--shadow);
 }
-.stat:nth-child(1){background:#f3d5e4}
+
+.stat:nth-child(1){background:#f3d7e5}
 .stat:nth-child(2){background:#dce8f8}
-.stat:nth-child(3){background:#dcefe6}
-.stat:nth-child(4){background:#fff0c6}
-.stat b{font-size:23px}
-.stat span{color:#655f68;margin-top:5px}
+.stat:nth-child(3){background:#dcefe5}
+.stat:nth-child(4){background:#fff0c5}
 
-.head{
- display:flex;align-items:center;justify-content:space-between;
- margin:0 2px 11px
+.stat-icon{
+ font-size:25px;
+ margin-bottom:7px;
 }
-.head h2{font-size:22px;margin:0}
-.link{background:none;color:#a64d76;font-weight:700}
 
-.card,.row,.earn{
- background:#fff;box-shadow:var(--shadow);border-radius:18px
+.stat-value{
+ font-family:Georgia,serif;
+ font-size:22px;
+ font-weight:bold;
 }
-.job{
- display:flex;align-items:center;gap:10px;padding:13px;margin-bottom:9px
-}
-.dot{width:6px;height:56px;background:var(--pink);border-radius:5px}
-.jobinfo{flex:1;min-width:0}
-.jobinfo b{font-size:17px}
-.jobinfo small{display:block;color:var(--muted);margin-top:4px}
-.tools{display:flex;gap:6px;align-items:center}
-.mini{
- min-width:40px;height:40px;border-radius:11px;background:#eee6f8
-}
-.mini.edit{background:#f7dce8}
-.mini.del{background:#fde1e1;color:#9a4141}
 
-.quicktitle{
- font-size:22px;font-weight:800;margin:18px 2px 11px
+.stat-label{
+ margin-top:6px;
+ color:#69616a;
+ font-size:14px;
 }
+
+.section-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:12px;
+}
+
+.section-head h2,
+.page-title{
+ font-family:Georgia,serif;
+ font-size:27px;
+ margin:0;
+}
+
+.text-btn{
+ background:none;
+ color:#a45f7e;
+ font-weight:700;
+}
+
+.today-list{
+ background:#fff;
+ border-radius:26px;
+ padding:12px;
+ box-shadow:var(--shadow);
+ margin-bottom:25px;
+}
+
+.today-empty{
+ text-align:center;
+ padding:30px 15px;
+ color:var(--muted);
+}
+
+.today-job{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ padding:13px;
+ border-radius:18px;
+ margin-bottom:8px;
+}
+
+.today-job:last-child{
+ margin-bottom:0;
+}
+
+.today-job:nth-child(odd){
+ background:#f8e3ec;
+}
+
+.today-job:nth-child(even){
+ background:#e4eef9;
+}
+
+.initial{
+ width:48px;
+ height:48px;
+ min-width:48px;
+ border-radius:50%;
+ background:#f5d3e1;
+ display:grid;
+ place-items:center;
+ color:#9e5b79;
+ font-family:Georgia,serif;
+ font-size:20px;
+}
+
+.today-info{
+ flex:1;
+ min-width:0;
+}
+
+.today-info strong{
+ display:block;
+ font-size:17px;
+}
+
+.today-info span{
+ display:block;
+ margin-top:4px;
+ color:#817782;
+ font-size:14px;
+}
+
+.today-rate{
+ font-weight:bold;
+ color:#6b5963;
+ white-space:nowrap;
+}
+
+.quick-title{
+ font-family:Georgia,serif;
+ font-size:24px;
+ font-weight:bold;
+ margin:0 0 12px;
+}
+
+.quick-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+}
+
 .quick{
- display:grid;grid-template-columns:1fr 1fr;gap:10px
-}
-.quick button{
- height:70px;border-radius:18px;box-shadow:var(--shadow);
- font-weight:700
-}
-.q1{background:var(--blue)}
-.q2{background:var(--green)}
-.q3{background:#f5d5e4}
-.q4{background:var(--yellow)}
-.q5{background:var(--purple)}
-.q6{background:var(--peach)}
-
-.banner{
- height:120px;margin:16px 0;border-radius:18px;
- background:url('https://images.unsplash.com/photo-1561181226-e8a7edd504c6?auto=format&fit=crop&w=1400&q=75') center/cover;
- display:grid;place-items:center;overflow:hidden
-}
-.banner div{
- background:#fff9fbd9;padding:12px 22px;border-radius:14px;
- text-align:center;font-family:Georgia,serif;font-size:23px;color:#9d3f6c
+ min-height:75px;
+ border-radius:19px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:9px;
+ box-shadow:var(--shadow);
+ font-size:16px;
+ font-weight:600;
 }
 
-.primary,.secondary,.danger{
- border-radius:12px;padding:11px 15px;font-weight:700
-}
-.primary{background:var(--pink);color:#fff}
-.secondary{background:#eee9f6;color:#66547b}
-.danger{background:#f8dede;color:#9b3e3e}
+.quick.blue{background:var(--blue);color:#315879}
+.quick.green{background:var(--green);color:#41705c}
+.quick.pink{background:#f2d5e3;color:#8c4f6d}
+.quick.yellow{background:var(--yellow);color:#87651a}
+.quick.purple{background:var(--purple);color:#6d5689}
+.quick.peach{background:var(--peach);color:#8c554b}
 
-.view{
- display:flex;background:#f3edf3;padding:5px;
- border-radius:14px;margin-bottom:12px
-}
-.view button{
- flex:1;padding:10px;border-radius:10px;background:transparent;
- color:#746d77;font-weight:700
-}
-.view .on{
- background:#fff;color:#a64d76;
- box-shadow:0 2px 8px #0001
+.quote{
+ height:145px;
+ margin-top:17px;
+ margin-bottom:20px;
+ border-radius:20px;
+ overflow:hidden;
+ background-image:url("https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/pure-shine-cleaning-background.png");
+ background-size:cover;
+ background-position:center;
+ box-shadow:var(--shadow);
+ display:flex;
+ align-items:center;
+ justify-content:center;
 }
 
-.daytitle{font-size:18px;margin:17px 2px 8px}
+/* SCHEDULE */
 
-.row{
- padding:13px;margin-bottom:8px;display:flex;
- justify-content:space-between;gap:10px;align-items:center
+.schedule-header{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:24px;
+ gap:12px;
 }
-.row h3{margin:0;font-size:16px}
-.row p{margin:4px 0 0;color:var(--muted);font-size:13px}
-.rowactions{
- display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end
+
+.schedule-header h2{
+ font-family:Georgia,serif;
+ font-size:32px;
+ margin:0;
 }
-.rowactions button{padding:8px 10px;font-size:12px}
+
+.switch{
+ display:flex;
+ background:#f1e9ee;
+ border-radius:17px;
+ padding:4px;
+}
+
+.switch button{
+ background:transparent;
+ color:#827681;
+ padding:10px 14px;
+ border-radius:13px;
+ font-family:Georgia,serif;
+ font-weight:bold;
+ font-size:16px;
+}
+
+.switch button.active{
+ background:#fff;
+ color:#a45f7e;
+ box-shadow:0 2px 7px rgba(70,50,60,.08);
+}
+
+.day-heading{
+ background:#fff;
+ border-radius:24px;
+ padding:19px;
+ margin-bottom:10px;
+ box-shadow:var(--shadow);
+}
+
+.day-heading strong{
+ display:block;
+ font-family:Georgia,serif;
+ font-size:20px;
+}
+
+.day-heading span{
+ display:block;
+ color:#978b94;
+ font-size:14px;
+ margin-top:5px;
+}
+
+.schedule-card{
+ background:#fff;
+ border-radius:25px;
+ padding:17px;
+ margin-bottom:11px;
+ box-shadow:var(--shadow);
+}
+
+.schedule-main{
+ display:flex;
+ align-items:center;
+ gap:13px;
+}
+
+.schedule-info{
+ flex:1;
+ min-width:0;
+}
+
+.schedule-info strong{
+ display:block;
+ font-family:Georgia,serif;
+ font-size:19px;
+}
+
+.schedule-info span{
+ display:block;
+ color:#958a93;
+ margin-top:5px;
+ font-size:15px;
+}
+
+.schedule-price{
+ font-family:Georgia,serif;
+ font-size:18px;
+ font-weight:bold;
+ white-space:nowrap;
+}
+
+.schedule-arrow{
+ font-size:28px;
+ color:#a45f7e;
+ padding:0 2px;
+}
+
+.job-actions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:9px;
+ margin-top:13px;
+}
+
+.edit-btn,
+.delete-btn,
+.invoice-btn{
+ border-radius:15px;
+ padding:12px;
+ font-weight:700;
+ font-family:Georgia,serif;
+ font-size:15px;
+}
+
+.edit-btn{
+ background:#e5edf8;
+ color:#5c718c;
+}
+
+.delete-btn{
+ background:#f7dddd;
+ color:#9e5d65;
+}
+
+.invoice-btn{
+ background:#f2e5ec;
+ color:#806273;
+}
 
 .calendar{
- display:grid;grid-template-columns:repeat(7,1fr);gap:5px
-}
-.calhead{text-align:center;font-size:11px;font-weight:800;color:var(--muted)}
-.calday{
- background:#fff;border-radius:11px;min-height:86px;
- padding:6px;box-shadow:var(--shadow)
-}
-.calday.today{outline:2px solid var(--pink)}
-.calnum{font-weight:800;font-size:12px}
-.caljob{
- background:#f7dce8;border-radius:7px;padding:4px;
- margin-top:4px;font-size:9px;cursor:pointer
-}
-.caljob b{display:block}
-
-.empty{
- background:#fff;border-radius:18px;padding:28px;
- text-align:center;color:var(--muted);box-shadow:var(--shadow)
+ background:#fff;
+ border-radius:25px;
+ padding:15px;
+ box-shadow:var(--shadow);
 }
 
-.earnsummary{
- display:grid;grid-template-columns:1fr 1fr;
- gap:10px;margin-bottom:12px
+.calendar-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:15px;
 }
-.earnbox{
- background:#fff;border-radius:17px;padding:16px;
- box-shadow:var(--shadow)
-}
-.earnbox span{display:block;color:var(--muted);font-size:13px}
-.earnbox b{font-size:21px;display:block;margin-top:5px}
-.earn{padding:14px;margin-bottom:9px}
-.earnhead{display:flex;justify-content:space-between;gap:10px}
-.earn strong{font-size:17px}
-.earn small{display:block;color:var(--muted);margin-top:4px}
-.earnbuttons{
- display:flex;gap:6px;flex-wrap:wrap;margin-top:10px
-}
-.earnbuttons button{
- padding:8px 10px;border-radius:10px;font-size:12px
-}
-.invoice{background:#e2f0e7;color:#416551}
-.edit{background:#e8e0f5;color:#654f7d}
 
-.bottom{
- position:fixed;bottom:10px;left:12px;right:12px;z-index:30;
- background:#fffdfef2;backdrop-filter:blur(14px);
- border-radius:22px;box-shadow:0 5px 25px #4b2e4b16;
- padding:7px;display:grid;grid-template-columns:repeat(5,1fr)
+.calendar-head button{
+ width:40px;
+ height:40px;
+ border-radius:50%;
+ background:#f5e4ec;
+ color:#9d5e7b;
 }
-.nav{
- background:transparent;border-radius:16px;padding:10px 2px 8px;
- color:#77717b;font-size:11px
+
+.calendar-title{
+ font-family:Georgia,serif;
+ font-size:21px;
+ font-weight:bold;
 }
-.nav.active{background:#f2d5e3;color:#a64d76}
-.nav i{
- display:block;font-style:normal;font-size:20px;margin-bottom:3px
+
+.calendar-grid{
+ display:grid;
+ grid-template-columns:repeat(7,1fr);
+ gap:6px;
 }
+
+.calendar-week{
+ text-align:center;
+ color:#a0969e;
+ font-size:12px;
+ padding:4px;
+}
+
+.calendar-day{
+ min-height:76px;
+ border-radius:13px;
+ background:#fffafd;
+ border:1px solid #f0e9ee;
+ padding:6px;
+ cursor:pointer;
+}
+
+.calendar-day.today{
+ border:2px solid #e3a3bd;
+}
+
+.calendar-number{
+ font-weight:bold;
+ font-size:14px;
+}
+
+.calendar-job{
+ margin-top:4px;
+ background:#f1d7e3;
+ color:#89526d;
+ border-radius:7px;
+ padding:3px;
+ font-size:10px;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
+}
+
+/* EARNINGS */
+
+.earnings-summary{
+ background:#dcefe5;
+ border-radius:25px;
+ padding:25px;
+ text-align:center;
+ margin-bottom:18px;
+ box-shadow:var(--shadow);
+}
+
+.earnings-summary small{
+ color:#65766c;
+}
+
+.earnings-summary strong{
+ display:block;
+ font-family:Georgia,serif;
+ font-size:35px;
+ margin-top:5px;
+}
+
+.history-card{
+ background:#fff;
+ border-radius:22px;
+ padding:17px;
+ margin-bottom:10px;
+ box-shadow:var(--shadow);
+}
+
+.history-top{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+}
+
+.history-name{
+ font-family:Georgia,serif;
+ font-size:19px;
+ font-weight:bold;
+}
+
+.history-money{
+ font-family:Georgia,serif;
+ font-weight:bold;
+ font-size:19px;
+}
+
+.history-details{
+ margin-top:7px;
+ color:#8f858e;
+ font-size:14px;
+}
+
+.history-actions{
+ display:flex;
+ gap:8px;
+ margin-top:12px;
+}
+
+/* CLIENTS */
+
+.client-card{
+ background:#fff;
+ border-radius:22px;
+ padding:17px;
+ margin-bottom:10px;
+ box-shadow:var(--shadow);
+ display:flex;
+ align-items:center;
+ gap:12px;
+}
+
+.client-info{
+ flex:1;
+}
+
+.client-info strong{
+ display:block;
+ font-family:Georgia,serif;
+ font-size:19px;
+}
+
+.client-info span{
+ display:block;
+ color:#90858e;
+ margin-top:5px;
+ font-size:14px;
+}
+
+.client-buttons{
+ display:flex;
+ gap:6px;
+}
+
+.client-buttons button{
+ width:42px;
+ height:42px;
+ border-radius:12px;
+ background:#f4e3eb;
+}
+
+/* SETTINGS */
+
+.settings-card{
+ background:#fff;
+ border-radius:25px;
+ padding:20px;
+ margin-bottom:12px;
+ box-shadow:var(--shadow);
+}
+
+.settings-card h3{
+ font-family:Georgia,serif;
+ font-size:20px;
+ margin:0 0 7px;
+}
+
+.settings-card p{
+ color:#8c838b;
+ font-size:14px;
+ line-height:1.5;
+}
+
+.setting-row{
+ margin-top:17px;
+}
+
+.setting-row label{
+ display:block;
+ font-weight:700;
+ margin-bottom:8px;
+}
+
+.setting-row input,
+.setting-row select{
+ width:100%;
+ border:1px solid #e7dfe5;
+ border-radius:14px;
+ padding:13px;
+ background:#fff;
+}
+
+.zoom-control{
+ display:grid;
+ grid-template-columns:52px 1fr 52px;
+ gap:9px;
+ align-items:center;
+}
+
+.zoom-control button{
+ height:48px;
+ border-radius:15px;
+ background:#f1d5e2;
+ color:#975b77;
+ font-size:25px;
+}
+
+.zoom-value{
+ text-align:center;
+ font-family:Georgia,serif;
+ font-weight:bold;
+ font-size:20px;
+}
+
+input[type=range]{
+ width:100%;
+ accent-color:#d879a0;
+}
+
+.setting-button{
+ width:100%;
+ background:#fff;
+ border-radius:18px;
+ padding:17px;
+ margin-bottom:10px;
+ text-align:left;
+ box-shadow:var(--shadow);
+ font-weight:600;
+}
+
+.setting-button.danger{
+ color:#9d5c64;
+ background:#fae1e1;
+}
+
+.segment{
+ display:flex;
+ background:#f1e9ee;
+ padding:4px;
+ border-radius:15px;
+}
+
+.segment button{
+ flex:1;
+ background:transparent;
+ padding:10px;
+ border-radius:11px;
+ color:#827681;
+}
+
+.segment button.active{
+ background:#fff;
+ color:#9d5c78;
+}
+
+/* MODALS */
 
 .modal{
- display:none;position:fixed;inset:0;background:#28182466;
- z-index:100;align-items:flex-end
+ position:fixed;
+ inset:0;
+ background:rgba(45,30,40,.35);
+ backdrop-filter:blur(5px);
+ z-index:9999;
+ display:none;
+ align-items:flex-end;
 }
-.modal.show{display:flex}
-.sheet{
- width:100%;max-height:90vh;overflow:auto;
- background:#fffafd;border-radius:25px 25px 0 0;padding:18px
+
+.modal.show{
+ display:flex;
 }
-.sheethead{
- display:flex;align-items:center;justify-content:space-between;
- margin-bottom:15px
+
+.modal-box{
+ width:100%;
+ max-width:700px;
+ max-height:93dvh;
+ overflow:auto;
+ margin:auto auto 0;
+ background:#fffafd;
+ border-radius:30px 30px 0 0;
+ padding:23px 19px 35px;
 }
-.sheet h3{margin:0;font-size:22px}
+
+.modal-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:18px;
+}
+
+.modal-head h3{
+ font-family:Georgia,serif;
+ font-size:25px;
+ margin:0;
+}
+
 .close{
- width:40px;height:40px;border-radius:50%;background:#f1eaf0
+ width:42px;
+ height:42px;
+ border-radius:50%;
+ background:#f1e2e9;
+ color:#93627a;
+ font-size:23px;
 }
-.field{margin:10px 0}
-.field label{
- display:block;font-weight:700;font-size:13px;margin-bottom:6px
-}
-.field input,.field select,.field textarea,
-.sheet>input,.sheet>select,.sheet>textarea{
- width:100%;border:1px solid #e7dfe7;background:#fff;
- border-radius:12px;padding:11px;outline:none
-}
-.grid2{
- display:grid;grid-template-columns:1fr 1fr;gap:9px
-}
-.actions2{display:flex;gap:8px;margin-top:16px}
-.actions2>*{flex:1}
 
-.settingssection{
- font-size:14px;font-weight:800;color:#80506a;margin:18px 0 7px
+.form-group{
+ margin-bottom:13px;
 }
-.setting{
- background:#fff;border:1px solid #eee5ed;
- border-radius:16px;padding:13px;margin:8px 0
-}
-.setting small{
- color:var(--muted);display:block;margin-top:5px;line-height:1.35
-}
-.zoomrow{
- display:flex;justify-content:space-between;align-items:center
-}
-.zoom{width:100%;margin-top:12px}
-.scale{
- display:flex;justify-content:space-between;
- color:var(--muted);font-size:11px
-}
-.toggle{
- display:flex;justify-content:space-between;align-items:center
-}
-.switch{width:52px;height:30px;position:relative}
-.switch input{display:none}
-.switch span{
- position:absolute;inset:0;background:#ddd;border-radius:20px
-}
-.switch span:before{
- content:'';position:absolute;width:24px;height:24px;
- left:3px;top:3px;background:#fff;border-radius:50%;
- transition:.2s
-}
-.switch input:checked+span{background:var(--pink)}
-.switch input:checked+span:before{transform:translateX(22px)}
 
-.timer{
- display:none;position:fixed;right:13px;bottom:95px;z-index:40;
- background:#fff;padding:12px 14px;border-radius:16px;
- box-shadow:0 8px 28px #0002
+.form-group label{
+ display:block;
+ font-weight:700;
+ margin-bottom:6px;
 }
-.timer.show{display:block}
-.timer b,.timer span{display:block}
-.timer span{font-variant-numeric:tabular-nums;margin-top:3px}
-.note{font-size:12px;color:var(--muted);margin-top:7px}
 
-@media(max-width:390px){
- .brand h1{font-size:20px}
- .brand img{width:52px;height:52px}
- .quick button{font-size:13px}
- .rowactions{max-width:125px}
- .calday{min-height:72px}
- .caljob{font-size:8px}
+.form-group input,
+.form-group select,
+.form-group textarea{
+ width:100%;
+ border:1px solid #e5dce3;
+ border-radius:14px;
+ padding:13px;
+ background:#fff;
+ outline:none;
+}
+
+.form-group textarea{
+ min-height:80px;
+ resize:vertical;
+}
+
+.form-row{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+}
+
+.modal-save{
+ width:100%;
+ padding:15px;
+ border-radius:17px;
+ background:#e8c7d7;
+ color:#8f5470;
+ font-family:Georgia,serif;
+ font-weight:bold;
+ font-size:17px;
+ margin-top:5px;
+}
+
+.modal-delete{
+ width:100%;
+ padding:15px;
+ border-radius:17px;
+ background:#f7dddd;
+ color:#9d5c65;
+ font-weight:bold;
+ font-size:16px;
+ margin-top:10px;
+}
+
+.calculated{
+ background:#dcefe5;
+ border-radius:17px;
+ padding:14px;
+ margin-bottom:13px;
+ line-height:1.7;
+}
+
+/* TIMER */
+
+.timer-panel{
+ position:fixed;
+ left:14px;
+ right:14px;
+ bottom:100px;
+ background:#42313b;
+ color:white;
+ border-radius:23px;
+ padding:14px 16px;
+ z-index:7000;
+ display:none;
+ align-items:center;
+ justify-content:space-between;
+ box-shadow:0 10px 35px rgba(40,20,30,.25);
+}
+
+.timer-panel.show{
+ display:flex;
+}
+
+.timer-name{
+ font-weight:bold;
+}
+
+.timer-value{
+ font-family:monospace;
+ font-size:23px;
+ margin-top:3px;
+}
+
+.timer-stop{
+ background:#f2b4c9;
+ color:#603b4b;
+ padding:11px 17px;
+ border-radius:14px;
+ font-weight:bold;
+}
+
+/* BOTTOM NAV */
+
+.bottom{
+ position:fixed;
+ left:14px;
+ right:14px;
+ bottom:13px;
+ z-index:8000;
+ background:rgba(255,255,255,.96);
+ backdrop-filter:blur(15px);
+ border-radius:27px;
+ padding:7px;
+ box-shadow:0 7px 30px rgba(60,40,55,.13);
+ display:flex;
+}
+
+.bottom button{
+ flex:1;
+ background:transparent;
+ color:#837982;
+ border-radius:20px;
+ padding:10px 3px 9px;
+ font-size:12px;
+}
+
+.bottom button.active{
+ background:#f1d3e1;
+ color:#985a77;
+}
+
+.bottom .nav-icon{
+ display:block;
+ font-size:21px;
+ margin-bottom:4px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:700px){
+ .stats{
+  grid-template-columns:repeat(2,1fr);
+ }
+}
+
+@media(min-width:701px){
+ .modal{
+  align-items:center;
+ }
+ .modal-box{
+  margin:auto;
+  border-radius:30px;
+ }
+}
+
+@media(max-width:430px){
+ .brand h1{
+  font-size:21px;
+ }
+ .brand img{
+  width:52px;
+  height:52px;
+ }
+ .stats{
+  gap:8px;
+ }
+ .stat{
+  min-height:110px;
+ }
+ .stat-value{
+  font-size:20px;
+ }
+ .schedule-header h2{
+  font-size:28px;
+ }
 }
 </style>
 </head>
 
 <body>
 
-<div id="bg"></div>
+<div id="bgLayer"></div>
 
-<div class="app">
+<div id="app">
 
 <header class="top">
- <div class="toprow">
+ <div class="top-row">
 
   <div class="brand">
-   <img id="appIcon"
-    src="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Cleaning-Manager/main/icon.png">
+   <img id="appIcon" src="https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Pure-Shine-Cleaning/main/icon.png" alt="Pure Shine">
    <div>
     <h1>Cleaning Manager</h1>
     <p>Your cleaning business ✨</p>
    </div>
   </div>
 
-  <div class="actions">
-   <button class="icon" onclick="startNext()">🔔</button>
-   <button class="icon" onclick="openSettings()">⚙️</button>
-   <button class="icon add" onclick="openJob()">＋</button>
+  <div class="header-actions">
+   <button class="circle-btn" onclick="openSettings()">⚙️</button>
   </div>
 
  </div>
@@ -347,314 +1036,225 @@ main{width:100%;max-width:680px;margin:auto;padding:0 17px}
 
 <main>
 
-<section id="home" class="page active">
+<!-- HOME -->
 
- <div class="date">
-  <strong id="today"></strong>
-  <span>Let's make today productive ✨</span>
+<section id="homePage" class="page active">
+
+ <div class="date-banner">
+  <div>
+   <h2 id="homeDate"></h2>
+   <p>Let's make today productive ✨</p>
+  </div>
+  <div class="heart">♡</div>
  </div>
 
  <div class="stats">
+
   <div class="stat">
-   <b id="sj">0</b>
-   <span>Jobs</span>
+   <div class="stat-icon">🛍️</div>
+   <div class="stat-value" id="todayJobsCount">0</div>
+   <div class="stat-label">Jobs</div>
   </div>
 
   <div class="stat">
-   <b id="sh">0h 0m</b>
-   <span>Hours</span>
+   <div class="stat-icon">◷</div>
+   <div class="stat-value" id="todayHours">0h 0m</div>
+   <div class="stat-label">Hours</div>
   </div>
 
   <div class="stat">
-   <b id="se">£0.00</b>
-   <span>Earned</span>
+   <div class="stat-icon">£</div>
+   <div class="stat-value" id="todayEarned">£0.00</div>
+   <div class="stat-label">Earned</div>
   </div>
 
   <div class="stat">
-   <b id="sa">8h 0m</b>
-   <span>Available</span>
+   <div class="stat-icon">☼</div>
+   <div class="stat-value" id="availableHours">8h 0m</div>
+   <div class="stat-label">Available</div>
   </div>
+
  </div>
 
- <div class="head">
+ <div class="section-head">
   <h2>Today's schedule</h2>
-  <button class="link" onclick="page('schedule')">See all</button>
+  <button class="text-btn" onclick="showPage('schedule')">See all</button>
  </div>
 
- <div id="todayJobs"></div>
+ <div id="todayList" class="today-list"></div>
 
- <div class="quicktitle">Quick actions</div>
+ <h2 class="quick-title">Quick actions</h2>
 
- <div class="quick">
-  <button class="q1" onclick="startNext()">◷ Start cleaning</button>
-  <button class="q2" onclick="page('clients')">♧ Clients</button>
-  <button class="q3" onclick="page('schedule')">▣ Schedule</button>
-  <button class="q4" onclick="page('free')">⌕ Find free time</button>
-  <button class="q5" onclick="page('earnings')">▥ Earnings</button>
-  <button class="q6" onclick="openJob()">＋ Past jobs</button>
+ <div class="quick-grid">
+
+  <button class="quick blue" onclick="startCleaning()">
+   ⏱️ Start cleaning
+  </button>
+
+  <button class="quick green" onclick="showPage('clients')">
+   ♧ Clients
+  </button>
+
+  <button class="quick pink" onclick="showPage('schedule')">
+   ▣ Schedule
+  </button>
+
+  <button class="quick yellow" onclick="showPage('free')">
+   ⌕ Find free time
+  </button>
+
+  <button class="quick purple" onclick="showPage('earnings')">
+   ▣ Earnings
+  </button>
+
+  <button class="quick peach" onclick="openJobModal()">
+   ＋ Past jobs
+  </button>
+
  </div>
 
- <div class="banner">
-  <div>A clean space<br>is a happy place ♡</div>
- </div>
+ <div class="quote"></div>
 
 </section>
 
-<section id="schedule" class="page">
 
- <div class="head">
+<!-- SCHEDULE -->
+
+<section id="schedulePage" class="page">
+
+ <div class="schedule-header">
   <h2>Schedule</h2>
-  <button class="primary" onclick="openJob()">＋ Add</button>
- </div>
 
- <div class="view">
-  <button id="vl" onclick="scheduleView('list')">☷ List</button>
-  <button id="vc" onclick="scheduleView('calendar')">▦ Calendar</button>
+  <div class="switch">
+   <button id="listViewBtn" class="active" onclick="setScheduleView('list')">List</button>
+   <button id="calendarViewBtn" onclick="setScheduleView('calendar')">Calendar</button>
+  </div>
  </div>
 
  <div id="scheduleList"></div>
- <div id="scheduleCalendar" style="display:none"></div>
+ <div id="calendarView" style="display:none"></div>
 
 </section>
 
-<section id="clients" class="page">
 
- <div class="head">
-  <h2>Clients</h2>
-  <button class="primary" onclick="openClient()">＋ Add</button>
+<!-- CLIENTS -->
+
+<section id="clientsPage" class="page">
+
+ <div class="section-head">
+  <h2 class="page-title">Clients</h2>
+  <button class="text-btn" onclick="openClientModal()">＋ Add</button>
  </div>
 
  <div id="clientsList"></div>
 
 </section>
 
-<section id="free" class="page">
 
- <div class="head">
-  <h2>Free time</h2>
+<!-- EARNINGS -->
+
+<section id="earningsPage" class="page">
+
+ <div class="section-head">
+  <h2 class="page-title">Earnings</h2>
  </div>
 
- <div id="freeText" class="empty"></div>
-
-</section>
-
-<section id="earnings" class="page">
-
- <div class="head">
-  <h2>Earnings history</h2>
- </div>
-
- <div class="earnsummary">
-  <div class="earnbox">
-   <span>Total hours</span>
-   <b id="eh">0h 0m</b>
-  </div>
-
-  <div class="earnbox">
-   <span>Total earned</span>
-   <b id="et">£0.00</b>
-  </div>
+ <div class="earnings-summary">
+  <small>Total earned</small>
+  <strong id="totalEarned">£0.00</strong>
  </div>
 
  <div id="earningsList"></div>
 
 </section>
 
+
+<!-- FREE TIME -->
+
+<section id="freePage" class="page">
+
+ <div class="section-head">
+  <h2 class="page-title">Free time</h2>
+ </div>
+
+ <div class="settings-card">
+  <h3>Today's availability</h3>
+  <p id="freeTimeText"></p>
+ </div>
+
+</section>
+
 </main>
+
+
+<!-- TIMER -->
+
+<div id="timerPanel" class="timer-panel">
+ <div>
+  <div class="timer-name" id="timerName">Cleaning</div>
+  <div class="timer-value" id="timerValue">00:00:00</div>
+ </div>
+ <button class="timer-stop" onclick="stopTimer()">Stop</button>
+</div>
+
+
+<!-- BOTTOM -->
 
 <nav class="bottom">
 
- <button class="nav active" data-p="home" onclick="page('home')">
-  <i>⌂</i>Home
+ <button class="active" data-page="home" onclick="showPage('home',this)">
+  <span class="nav-icon">⌂</span>
+  Home
  </button>
 
- <button class="nav" data-p="schedule" onclick="page('schedule')">
-  <i>▣</i>Schedule
+ <button data-page="schedule" onclick="showPage('schedule',this)">
+  <span class="nav-icon">▣</span>
+  Schedule
  </button>
 
- <button class="nav" data-p="clients" onclick="page('clients')">
-  <i>♧</i>Clients
+ <button data-page="clients" onclick="showPage('clients',this)">
+  <span class="nav-icon">♧</span>
+  Clients
  </button>
 
- <button class="nav" data-p="free" onclick="page('free')">
-  <i>◷</i>Free time
+ <button data-page="free" onclick="showPage('free',this)">
+  <span class="nav-icon">◷</span>
+  Free time
  </button>
 
- <button class="nav" data-p="earnings" onclick="page('earnings')">
-  <i>▥</i>Earnings
+ <button data-page="earnings" onclick="showPage('earnings',this)">
+  <span class="nav-icon">▥</span>
+  Earnings
  </button>
 
 </nav>
 
-</div>
 
-<div id="timer" class="timer">
- <b id="timerName">Cleaning</b>
- <span id="timerValue">00:00:00</span>
- <button class="danger" style="margin-top:7px" onclick="stopTimer()">Stop</button>
-</div>
+<!-- CLIENT MODAL -->
 
-<!-- SETTINGS -->
+<div id="clientModal" class="modal">
+ <div class="modal-box">
 
-<div id="settings" class="modal"
- onclick="if(event.target===this)closeM('settings')">
-
- <div class="sheet">
-
-  <div class="sheethead">
-   <h3>Settings</h3>
-   <button class="close" onclick="closeM('settings')">✕</button>
+  <div class="modal-head">
+   <h3 id="clientModalTitle">Add Client</h3>
+   <button class="close" onclick="closeModal('clientModal')">×</button>
   </div>
 
-  <div class="setting">
+  <input type="hidden" id="clientId">
 
-   <div class="zoomrow">
-    <b>Interface size</b>
-    <b id="zoomLabel">150%</b>
-   </div>
-
-   <input
-    id="zoomRange"
-    class="zoom"
-    type="range"
-    min="100"
-    max="220"
-    step="5"
-    oninput="setZoom(this.value)">
-
-   <div class="scale">
-    <span>100%</span>
-    <span>140%</span>
-    <span>180%</span>
-    <span>220%</span>
-   </div>
-
-   <small>
-    Scales the whole interface so buttons, cards, text and icons are easier to see.
-   </small>
-
+  <div class="form-group">
+   <label>Client name</label>
+   <input id="clientName" type="text">
   </div>
 
-  <div class="settingssection">Schedule appearance</div>
-
-  <div class="setting">
-
-   <div class="view">
-    <button id="svl" onclick="scheduleView('list')">☷ List</button>
-    <button id="svc" onclick="scheduleView('calendar')">▦ Calendar</button>
-   </div>
-
+  <div class="form-group">
+   <label>Phone number</label>
+   <input id="clientPhone" type="tel" placeholder="Phone number">
   </div>
 
-  <div class="settingssection">App appearance</div>
+  <div class="form-row">
 
-  <div class="setting">
-   <b>App icon</b>
-   <input type="file" accept="image/*"
-    onchange="uploadImage(this,'icon')">
-   <small>Change the icon shown in the header.</small>
-  </div>
-
-  <div class="setting">
-   <b>Profile picture</b>
-   <input type="file" accept="image/*"
-    onchange="uploadImage(this,'profile')">
-   <small>Change the picture beside the app title.</small>
-  </div>
-
-  <div class="setting">
-
-   <b>Background picture</b>
-
-   <input type="file" accept="image/*"
-    onchange="uploadImage(this,'background')">
-
-   <div class="grid2" style="margin-top:10px">
-
-    <div>
-     <label>Visibility</label>
-     <input
-      id="bgOpacity"
-      type="range"
-      min="0"
-      max="100"
-      oninput="setBgOpacity(this.value)">
-    </div>
-
-    <div>
-     <label>Writing style</label>
-     <select id="fontSelect" onchange="setFont(this.value)">
-      <option value="system">System</option>
-      <option value="serif">Elegant Serif</option>
-      <option value="rounded">Rounded</option>
-      <option value="mono">Clean Mono</option>
-     </select>
-    </div>
-
-   </div>
-
-   <small>
-    Make the background clearer or more transparent.
-   </small>
-
-  </div>
-
-  <div class="setting">
-
-   <div class="toggle">
-
-    <div>
-     <b>Reminder sound</b>
-     <small>Use a sound when a reminder is triggered.</small>
-    </div>
-
-    <label class="switch">
-     <input id="sound" type="checkbox"
-      onchange="setSound(this.checked)">
-     <span></span>
-    </label>
-
-   </div>
-
-  </div>
-
-  <button
-   class="primary"
-   style="width:100%;margin-top:8px"
-   onclick="setZoom(150)">
-   Reset interface to 150%
-  </button>
-
-  <div class="note">
-   Changes are saved automatically on this device.
-  </div>
-
- </div>
-
-</div>
-
-<!-- CLIENT -->
-
-<div id="clientModal" class="modal"
- onclick="if(event.target===this)closeM('clientModal')">
-
- <div class="sheet">
-
-  <div class="sheethead">
-   <h3 id="clientTitle">Add client</h3>
-   <button class="close" onclick="closeM('clientModal')">✕</button>
-  </div>
-
-  <input id="clientId" type="hidden">
-
-  <div class="field">
-   <label>Name</label>
-   <input id="clientName">
-  </div>
-
-  <div class="grid2">
-
-   <div class="field">
+   <div class="form-group">
     <label>Type</label>
     <select id="clientType">
      <option>Private</option>
@@ -662,1682 +1262,1905 @@ main{width:100%;max-width:680px;margin:auto;padding:0 17px}
     </select>
    </div>
 
-   <div class="field">
-    <label>Rate £/h</label>
-    <input id="clientRate" type="number" step=".01">
+   <div class="form-group">
+    <label>Rate £/hour</label>
+    <input id="clientRate" type="number" step="0.01">
    </div>
 
   </div>
 
-  <div class="field">
-   <label>Phone number</label>
-   <input id="clientPhone" type="tel">
-  </div>
-
-  <div class="actions2">
-   <button class="secondary" onclick="closeM('clientModal')">Cancel</button>
-   <button class="primary" onclick="saveClient()">Save</button>
-  </div>
+  <button class="modal-save" onclick="saveClient()">Save client</button>
+  <button id="deleteClientButton" class="modal-delete" style="display:none" onclick="deleteCurrentClient()">Delete client</button>
 
  </div>
-
 </div>
 
-<!-- JOB -->
 
-<div id="jobModal" class="modal"
- onclick="if(event.target===this)closeM('jobModal')">
+<!-- JOB MODAL -->
 
- <div class="sheet">
+<div id="jobModal" class="modal">
+ <div class="modal-box">
 
-  <div class="sheethead">
-   <h3 id="jobTitle">Add cleaning job</h3>
-   <button class="close" onclick="closeM('jobModal')">✕</button>
+  <div class="modal-head">
+   <h3 id="jobModalTitle">Add Cleaning Job</h3>
+   <button class="close" onclick="closeModal('jobModal')">×</button>
   </div>
 
-  <input id="jobId" type="hidden">
+  <input type="hidden" id="jobId">
 
-  <div class="field">
+  <div class="form-group">
    <label>Client</label>
    <select id="jobClient"></select>
   </div>
 
-  <div class="grid2">
-
-   <div class="field">
-    <label>Day</label>
-    <select id="jobDay">
-     <option>Monday</option>
-     <option>Tuesday</option>
-     <option>Wednesday</option>
-     <option>Thursday</option>
-     <option>Friday</option>
-     <option>Saturday</option>
-     <option>Sunday</option>
-    </select>
-   </div>
-
-   <div class="field">
-    <label>Date</label>
-    <input id="jobDate" type="date">
-   </div>
-
+  <div class="form-group">
+   <label>Date</label>
+   <input id="jobDate" type="date">
   </div>
 
-  <div class="grid2">
+  <div class="form-row">
 
-   <div class="field">
+   <div class="form-group">
     <label>Start</label>
     <input id="jobStart" type="time">
    </div>
 
-   <div class="field">
+   <div class="form-group">
     <label>End</label>
     <input id="jobEnd" type="time">
    </div>
 
   </div>
 
-  <div class="grid2">
+  <div class="form-row">
 
-   <div class="field">
+   <div class="form-group">
     <label>Hours</label>
-    <input id="jobHours" type="number" step=".01">
+    <input id="jobHours" type="number" min="0" step="0.0166667">
    </div>
 
-   <div class="field">
-    <label>Rate £/h</label>
-    <input id="jobRate" type="number" step=".01">
+   <div class="form-group">
+    <label>Rate £/hour</label>
+    <input id="jobRate" type="number" min="0" step="0.01">
    </div>
 
   </div>
 
-  <div class="field">
-   <label>Reminder time</label>
-   <input id="jobReminder" type="datetime-local">
+  <div class="calculated">
+   <strong>Duration:</strong> <span id="jobDurationText">0 minutes</span><br>
+   <strong>Client owes:</strong> £<span id="jobAmountText">0.00</span>
   </div>
 
-  <div class="field">
+  <div class="form-group">
    <label>Notes</label>
-   <textarea id="jobNotes" rows="2"></textarea>
+   <textarea id="jobNotes"></textarea>
   </div>
 
-  <div class="note">
-   A dated/completed job appears in Earnings history.
-   You can edit or delete it later.
-  </div>
-
-  <div class="actions2">
-
-   <button
-    id="jobDelete"
-    class="danger"
-    onclick="deleteCurrentJob()">
-    Delete
-   </button>
-
-   <button
-    class="secondary"
-    onclick="closeM('jobModal')">
-    Cancel
-   </button>
-
-   <button
-    class="primary"
-    onclick="saveJob()">
-    Save
-   </button>
-
-  </div>
+  <button class="modal-save" onclick="saveJob()">Save job</button>
+  <button id="deleteJobButton" class="modal-delete" style="display:none" onclick="deleteCurrentJob()">🗑 Delete this job</button>
 
  </div>
+</div>
+
+
+<!-- SETTINGS MODAL -->
+
+<div id="settingsModal" class="modal">
+ <div class="modal-box">
+
+  <div class="modal-head">
+   <h3>Settings</h3>
+   <button class="close" onclick="closeModal('settingsModal')">×</button>
+  </div>
+
+
+  <div class="settings-card">
+
+   <h3>Interface size</h3>
+
+   <p>
+    This changes the size of the whole application, including text,
+    buttons and navigation.
+   </p>
+
+   <div class="zoom-control">
+    <button onclick="changeZoom(-10)">−</button>
+    <div class="zoom-value" id="zoomLabel">130%</div>
+    <button onclick="changeZoom(10)">＋</button>
+   </div>
+
+   <input
+    id="zoomRange"
+    type="range"
+    min="100"
+    max="200"
+    step="5"
+    value="130"
+    oninput="setZoom(this.value)"
+   >
+
+  </div>
+
+
+  <div class="settings-card">
+
+   <h3>Schedule appearance</h3>
+
+   <p>Choose how your schedule is displayed.</p>
+
+   <div class="segment">
+    <button id="settingsListBtn" class="active" onclick="setScheduleView('list')">List</button>
+    <button id="settingsCalendarBtn" onclick="setScheduleView('calendar')">Calendar</button>
+   </div>
+
+  </div>
+
+
+  <div class="settings-card">
+
+   <h3>App icon</h3>
+
+   <div class="setting-row">
+    <input type="file" accept="image/*" onchange="uploadImage(this,'icon')">
+   </div>
+
+  </div>
+
+
+  <div class="settings-card">
+
+   <h3>Profile / logo image</h3>
+
+   <div class="setting-row">
+    <input type="file" accept="image/*" onchange="uploadImage(this,'profile')">
+   </div>
+
+  </div>
+
+
+  <div class="settings-card">
+
+   <h3>Background image</h3>
+
+   <div class="setting-row">
+    <input type="file" accept="image/*" onchange="uploadImage(this,'background')">
+   </div>
+
+   <div class="setting-row">
+    <label>Background visibility</label>
+    <input
+     id="backgroundOpacity"
+     type="range"
+     min="0"
+     max="100"
+     value="92"
+     oninput="setBackgroundOpacity(this.value)"
+    >
+   </div>
+
+  </div>
+
+
+  <div class="settings-card">
+
+   <h3>Writing style</h3>
+
+   <div class="setting-row">
+    <select id="fontStyle" onchange="setFontStyle(this.value)">
+     <option value="system">Modern</option>
+     <option value="serif">Elegant Serif</option>
+     <option value="rounded">Rounded</option>
+     <option value="mono">Minimal</option>
+    </select>
+   </div>
+
+  </div>
+
+
+  <div class="settings-card">
+
+   <h3>Reminders</h3>
+
+   <div class="setting-row">
+    <label>
+     <input id="soundToggle" type="checkbox" onchange="setReminderSound(this.checked)">
+     Enable reminder sound
+    </label>
+   </div>
+
+  </div>
+
+
+  <button class="setting-button" onclick="exportData()">
+   ⬇️ Export my data
+  </button>
+
+  <button class="setting-button" onclick="addCalendarEvents()">
+   📅 Add jobs to iPhone Calendar
+  </button>
+
+  <button class="setting-button danger" onclick="resetSettings()">
+   Reset appearance settings
+  </button>
+
+ </div>
+</div>
 
 </div>
 
+
 <script>
-const KEY='pure_shine_manager_v7';
-const TKEY='pure_shine_timer_v7';
+"use strict";
 
-const DAYS=[
- 'Sunday','Monday','Tuesday','Wednesday',
- 'Thursday','Friday','Saturday'
+/* =========================================================
+   PURE SHINE CLEANING
+   ========================================================= */
+
+const DEFAULT_CLIENTS = [
+ {id:"lottie",name:"Lottie",type:"Agency",rate:16,phone:""},
+ {id:"christine",name:"Christine",type:"Private",rate:18,phone:""},
+ {id:"matt",name:"Matt",type:"Agency",rate:16,phone:""},
+ {id:"sonia",name:"Sonia",type:"Agency",rate:16,phone:""},
+ {id:"laura",name:"Laura",type:"Private",rate:18,phone:""},
+ {id:"hannah",name:"Hannah",type:"Agency",rate:16,phone:""},
+ {id:"meghan",name:"Meghan",type:"Agency",rate:16,phone:""},
+ {id:"johanna",name:"Johanna",type:"Private",rate:18,phone:""},
+ {id:"sindu",name:"Sindu",type:"Private",rate:16,phone:""},
+ {id:"peter",name:"Peter",type:"Private",rate:25,phone:""},
+ {id:"mike",name:"Mike",type:"Private",rate:18,phone:""}
 ];
-
-const defaultClients=[
- ['lottie','Lottie','Agency',16],
- ['christine','Christine','Private',18],
- ['matt','Matt','Agency',16],
- ['sonia','Sonia','Agency',16],
- ['laura','Laura','Private',18],
- ['hannah','Hannah','Agency',16],
- ['meghan','Meghan','Private',18],
- ['johanna','Johanna','Private',18],
- ['joanna','Joanna','Private',18],
- ['sindu','Sindu','Private',16]
-].map(x=>({
- id:x[0],
- name:x[1],
- type:x[2],
- rate:x[3],
- phone:''
-}));
-
-const defaultJobs=[
- ['lottie','Monday','13:00','15:00',2,16],
- ['christine','Tuesday','09:30','12:30',3,18],
- ['matt','Tuesday','','',4,16],
- ['sonia','Wednesday','09:00','14:00',5,16],
- ['laura','Thursday','09:00','13:00',4,18],
- ['hannah','Thursday','13:00','16:00',3,16]
-].map(x=>({
- id:'weekly-'+x[0],
- clientId:x[0],
- day:x[1],
- date:'',
- start:x[2],
- end:x[3],
- hours:x[4],
- rate:x[5],
- template:true
-}));
 
 let clients=[];
 let jobs=[];
 let timer=null;
 
-const todayISO=()=>{
- let d=new Date();
- return new Date(
-  d-d.getTimezoneOffset()*60000
- ).toISOString().slice(0,10);
-};
+const STORAGE="pure_shine_cleaning_manager_v4";
 
-const todayName=()=>DAYS[new Date().getDay()];
-
-const esc=s=>String(s??'').replace(
- /[&<>"']/g,
- m=>({
-  '&':'&amp;',
-  '<':'&lt;',
-  '>':'&gt;',
-  '"':'&quot;',
-  "'":'&#039;'
- }[m])
-);
-
-const money=n=>'£'+Number(n||0).toFixed(2);
-
-function hm(h){
- let x=Math.max(0,Number(h||0));
- let hr=Math.floor(x);
- let m=Math.round((x-hr)*60);
-
- if(m===60){
-  hr++;
-  m=0;
- }
-
- return `${hr}h ${m}m`;
-}
-
-function client(id){
- return clients.find(c=>c.id===id);
-}
-
-function clone(x){
- return JSON.parse(JSON.stringify(x));
-}
-
-/* Joanna this week, Sindu next week, alternating */
-function weekDiff(iso){
- let a=new Date('2026-10-02T12:00:00');
- let b=new Date((iso||todayISO())+'T12:00:00');
- return Math.round((b-a)/604800000);
-}
-
-function recurringVisible(id,iso){
- let c=client(id);
- if(!c)return false;
-
- let n=c.name.toLowerCase();
-
- if(n!=='joanna' && n!=='sindu'){
-  return true;
- }
-
- let w=((weekDiff(iso)%2)+2)%2;
-
- return n==='joanna' ? w===0 : w===1;
-}
-
-function save(){
- localStorage.setItem(
-  KEY,
-  JSON.stringify({clients,jobs})
- );
-
- localStorage.setItem(
-  TKEY,
-  JSON.stringify(timer)
- );
-}
-
-/*
- Preserve jobs already stored by the previous versions.
- Also remove Gill and Mike so they cannot suddenly appear.
-*/
-function load(){
-
- let data=null;
+function loadData(){
 
  try{
-  data=JSON.parse(
-   localStorage.getItem(KEY)||'null'
-  );
+
+  const raw=localStorage.getItem(STORAGE);
+
+  if(raw){
+
+   const d=JSON.parse(raw);
+
+   clients=Array.isArray(d.clients)?d.clients:[...DEFAULT_CLIENTS];
+   jobs=Array.isArray(d.jobs)?d.jobs:[];
+
+   if(!clients.length){
+    clients=[...DEFAULT_CLIENTS];
+   }
+
+   timer=d.timer||null;
+
+   return;
+  }
+
  }catch(e){}
 
- let found=[];
+ clients=[...DEFAULT_CLIENTS];
+ jobs=[];
+ timer=null;
 
- for(let i=0;i<localStorage.length;i++){
+ saveData();
+}
 
-  let k=localStorage.key(i);
+function saveData(){
 
-  if(!k || k===KEY || k===TKEY)continue;
+ localStorage.setItem(
+  STORAGE,
+  JSON.stringify({
+   clients,
+   jobs,
+   timer
+  })
+ );
+}
 
-  try{
+function esc(v){
 
-   let x=JSON.parse(
-    localStorage.getItem(k)||'null'
-   );
+ return String(v??"")
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
+}
 
-   if(x && Array.isArray(x.jobs)){
-    found.push(x);
-   }
+function clientById(id){
+ return clients.find(c=>String(c.id)===String(id));
+}
 
-  }catch(e){}
- }
+function todayISO(){
 
- if(data && Array.isArray(data.jobs)){
+ const d=new Date();
 
-  clients=Array.isArray(data.clients)
-   ? clone(data.clients)
-   : [];
+ return d.getFullYear()+"-"+
+  String(d.getMonth()+1).padStart(2,"0")+"-"+
+  String(d.getDate()).padStart(2,"0");
+}
 
-  jobs=clone(data.jobs);
+function dateText(date){
 
- }else if(found.length){
+ if(!date)return "";
 
-  clients=[];
-  jobs=[];
+ const d=new Date(date+"T12:00:00");
 
-  found.forEach(x=>{
+ if(isNaN(d))return date;
 
-   (x.clients||[]).forEach(c=>{
+ return d.toLocaleDateString("en-GB",{
+  weekday:"long",
+  day:"numeric",
+  month:"long"
+ });
+}
 
-    if(
-     c &&
-     !clients.some(a=>
-      a.id===c.id ||
-      a.name.toLowerCase()===
-      String(c.name).toLowerCase()
-     )
-    ){
-     clients.push(c);
-    }
+function timeText(time){
 
-   });
+ if(!time)return "";
 
-   (x.jobs||[]).forEach(j=>{
+ const p=time.split(":");
 
-    if(
-     j &&
-     !jobs.some(a=>a.id===j.id)
-    ){
-     jobs.push(j);
-    }
+ let h=Number(p[0]);
+ const m=p[1]||"00";
+ const suffix=h>=12?"PM":"AM";
 
-   });
+ h=h%12||12;
 
-  });
+ return h+":"+m+" "+suffix;
+}
 
+function hoursMinutes(hours){
+
+ const total=Math.round(Number(hours||0)*60);
+
+ const h=Math.floor(total/60);
+ const m=total%60;
+
+ if(h && m)
+  return h+" hour"+(h===1?"":"s")+" "+m+" minute"+(m===1?"":"s");
+
+ if(h)
+  return h+" hour"+(h===1?"":"s");
+
+ return m+" minute"+(m===1?"":"s");
+}
+
+function money(n){
+
+ return "£"+Number(n||0).toFixed(2);
+}
+
+function jobAmount(job){
+
+ return Number(job.hours||0)*Number(job.rate||0);
+}
+
+function getTodayJobs(){
+
+ return jobs.filter(j=>j.date===todayISO());
+}
+
+function formatToday(){
+
+ const d=new Date();
+
+ return d.toLocaleDateString("en-GB",{
+  weekday:"long",
+  day:"numeric",
+  month:"long"
+ });
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+function showPage(page,button){
+
+ document.querySelectorAll(".page")
+  .forEach(p=>p.classList.remove("active"));
+
+ const el=document.getElementById(page+"Page");
+
+ if(el)el.classList.add("active");
+
+ document.querySelectorAll(".bottom button")
+  .forEach(b=>b.classList.remove("active"));
+
+ if(button){
+  button.classList.add("active");
  }else{
 
-  clients=clone(defaultClients);
-  jobs=clone(defaultJobs);
+  const b=document.querySelector(
+   `.bottom button[data-page="${page}"]`
+  );
 
+  if(b)b.classList.add("active");
  }
 
- const banned=n=>{
-  n=String(n||'').toLowerCase();
-  return n==='gill'||n==='mike';
- };
+ if(page==="schedule")
+  renderSchedule();
 
- clients=clients.filter(c=>!banned(c.name));
+ if(page==="earnings")
+  renderEarnings();
 
- defaultClients.forEach(c=>{
-  if(
-   !clients.some(x=>x.id===c.id) &&
-   !banned(c.name)
-  ){
-   clients.push(clone(c));
-  }
+ if(page==="clients")
+  renderClients();
+
+ if(page==="free")
+  renderFree();
+}
+
+
+/* =========================================================
+   HOME
+   ========================================================= */
+
+function renderHome(){
+
+ document.getElementById("homeDate").textContent=formatToday();
+
+ const today=getTodayJobs();
+
+ let minutes=0;
+ let earned=0;
+
+ today.forEach(j=>{
+  minutes+=Math.round(Number(j.hours||0)*60);
+  earned+=jobAmount(j);
  });
 
- jobs=jobs.filter(j=>
-  client(j.clientId) &&
-  !banned(client(j.clientId).name)
- );
+ document.getElementById("todayJobsCount").textContent=today.length;
 
- if(!jobs.some(j=>j.id==='weekly-joanna')){
+ document.getElementById("todayHours").textContent=
+  Math.floor(minutes/60)+"h "+minutes%60+"m";
 
-  jobs.push({
-   id:'weekly-joanna',
-   clientId:'joanna',
-   day:'Friday',
-   date:'',
-   start:'09:00',
-   end:'12:00',
-   hours:3,
-   rate:18,
-   template:true,
-   alternate:true
-  });
+ document.getElementById("todayEarned").textContent=
+  money(earned);
 
- }
+ const available=Math.max(0,480-minutes);
 
- if(!jobs.some(j=>j.id==='weekly-sindu')){
+ document.getElementById("availableHours").textContent=
+  Math.floor(available/60)+"h "+available%60+"m";
 
-  jobs.push({
-   id:'weekly-sindu',
-   clientId:'sindu',
-   day:'Friday',
-   date:'',
-   start:'09:00',
-   end:'12:00',
-   hours:3,
-   rate:16,
-   template:true,
-   alternate:true
-  });
+ const box=document.getElementById("todayList");
 
- }
+ if(!today.length){
 
- try{
-  timer=JSON.parse(
-   localStorage.getItem(TKEY)||'null'
-  );
- }catch(e){
-  timer=null;
- }
-
- save();
-}
-
-function dated(j){
- return !!(
-  j &&
-  (
-   j.completed ||
-   j.history ||
-   j.isHistory ||
-   j.date
-  )
- );
-}
-
-function todayJobs(){
-
- let d=todayISO();
- let n=todayName();
-
- return jobs.filter(j=>{
-
-  if(j.date){
-   return (
-    j.date===d &&
-    recurringVisible(j.clientId,d)
-   );
-  }
-
-  return (
-   j.day===n &&
-   recurringVisible(j.clientId,d)
-  );
-
- });
-}
-
-function page(id){
-
- document.querySelectorAll('.page')
-  .forEach(p=>
-   p.classList.toggle('active',p.id===id)
-  );
-
- document.querySelectorAll('.nav')
-  .forEach(n=>
-   n.classList.toggle(
-    'active',
-    n.dataset.p===id
-   )
-  );
-
- scrollTo(0,0);
-}
-
-function render(){
-
- let a=todayJobs();
-
- let h=a.reduce(
-  (s,j)=>s+Number(j.hours||0),
-  0
- );
-
- let e=a.reduce(
-  (s,j)=>s+
-   Number(j.hours||0)*
-   Number(j.rate||0),
-  0
- );
-
- document.getElementById('today').textContent=
-  new Date().toLocaleDateString(
-   'en-GB',
-   {
-    weekday:'long',
-    day:'numeric',
-    month:'long'
-   }
-  );
-
- document.getElementById('sj').textContent=a.length;
- document.getElementById('sh').textContent=hm(h);
- document.getElementById('se').textContent=money(e);
- document.getElementById('sa').textContent=
-  hm(Math.max(0,8-h));
-
- document.getElementById('todayJobs').innerHTML=
-  a.length
-   ? a.map(jobCard).join('')
-   : `
-    <div class="empty">
-     No cleaning jobs today 🌸
-     <br>
-     <button
-      class="primary"
-      style="margin-top:12px"
-      onclick="openJob()">
-      ＋ Add cleaning job
-     </button>
+  box.innerHTML=`
+   <div class="today-empty">
+    <div style="font-size:40px">♡</div>
+    <strong>No jobs scheduled today</strong>
+    <div style="margin-top:5px">
+     Your schedule is clear.
     </div>
-   `;
+   </div>
+  `;
+
+  return;
+ }
+
+ box.innerHTML=today.map(j=>{
+
+  const c=clientById(j.clientId);
+
+  return`
+   <div class="today-job"
+        onclick="openJobModal('${j.id}')">
+
+    <div class="initial">
+     ${esc((c?.name||"?").charAt(0).toUpperCase())}
+    </div>
+
+    <div class="today-info">
+     <strong>${esc(c?.name||"Client")}</strong>
+     <span>
+      ${j.start?esc(timeText(j.start))+" – ":""}
+      ${j.end?esc(timeText(j.end)):""}
+     </span>
+    </div>
+
+    <div class="today-rate">
+     ${money(j.rate)}/h
+    </div>
+
+   </div>
+  `;
+
+ }).join("");
+}
+
+
+/* =========================================================
+   SCHEDULE
+   ========================================================= */
+
+let scheduleView=
+ localStorage.getItem("pure_shine_schedule_view")||"list";
+
+function setScheduleView(view){
+
+ scheduleView=view;
+
+ localStorage.setItem(
+  "pure_shine_schedule_view",
+  view
+ );
+
+ document.getElementById("listViewBtn")
+  ?.classList.toggle("active",view==="list");
+
+ document.getElementById("calendarViewBtn")
+  ?.classList.toggle("active",view==="calendar");
+
+ document.getElementById("settingsListBtn")
+  ?.classList.toggle("active",view==="list");
+
+ document.getElementById("settingsCalendarBtn")
+  ?.classList.toggle("active",view==="calendar");
 
  renderSchedule();
- renderClients();
- renderEarnings();
- renderFree();
- tick();
-}
-
-function jobCard(j){
-
- let c=client(j.clientId);
- let run=timer && timer.jobId===j.id;
-
- return `
- <div class="card job">
-
-  <div class="dot"></div>
-
-  <div class="jobinfo">
-   <b>${esc(c?.name)}</b>
-   <small>
-    ${esc(j.start||'')} – ${esc(j.end||'')}
-    · ${hm(j.hours)}
-    · ${money(j.rate)}/h
-   </small>
-  </div>
-
-  <div class="tools">
-
-   <button
-    class="mini"
-    onclick="toggleTimer('${j.id}')">
-    ${run?'■':'◷'}
-   </button>
-
-   <button
-    class="mini edit"
-    onclick="openJob('${j.id}')">
-    ✎
-   </button>
-
-  </div>
-
- </div>
- `;
 }
 
 function renderSchedule(){
 
- let order=[
-  'Monday','Tuesday','Wednesday',
-  'Thursday','Friday','Saturday','Sunday'
- ];
+ if(scheduleView==="calendar"){
+  document.getElementById("scheduleList").style.display="none";
+  document.getElementById("calendarView").style.display="block";
+  renderCalendar();
+ }else{
+  document.getElementById("scheduleList").style.display="block";
+  document.getElementById("calendarView").style.display="none";
+  renderScheduleList();
+ }
+}
 
- let html='';
+function renderScheduleList(){
 
- order.forEach(d=>{
+ const box=document.getElementById("scheduleList");
 
-  let a=jobs.filter(
-   j=>j.day===d && client(j.clientId)
-  );
+ if(!jobs.length){
 
-  if(!a.length)return;
-
-  html+=`
-   <h3 class="daytitle">${d}</h3>
+  box.innerHTML=`
+   <div class="today-empty" style="background:#fff;border-radius:25px">
+    No jobs scheduled yet.
+   </div>
   `;
 
-  a.forEach(j=>{
+  return;
+ }
 
-   let c=client(j.clientId);
+ const sorted=[...jobs].sort((a,b)=>{
+
+  if(a.date!==b.date)
+   return String(a.date).localeCompare(String(b.date));
+
+  return String(a.start||"").localeCompare(String(b.start||""));
+ });
+
+ const groups={};
+
+ sorted.forEach(j=>{
+  if(!groups[j.date])groups[j.date]=[];
+  groups[j.date].push(j);
+ });
+
+ let html="";
+
+ Object.keys(groups).forEach(date=>{
+
+  html+=`
+   <div class="day-heading">
+    <strong>${esc(dateText(date))}</strong>
+    <span>
+     ${groups[date].length}
+     ${groups[date].length===1?"scheduled client":"scheduled clients"}
+    </span>
+   </div>
+  `;
+
+  groups[date].forEach(j=>{
+
+   const c=clientById(j.clientId);
+   const amount=jobAmount(j);
 
    html+=`
-    <div class="row">
+    <div class="schedule-card">
 
-     <div>
-      <h3>${esc(c.name)}</h3>
-      <p>
-       ${esc(j.start||'')} – ${esc(j.end||'')}
-       · ${hm(j.hours)}
-       · ${money(j.rate)}/h
-       ${j.date?' · '+esc(j.date):''}
-      </p>
+     <div class="schedule-main">
+
+      <div class="initial">
+       ${esc((c?.name||"?").charAt(0).toUpperCase())}
+      </div>
+
+      <div class="schedule-info">
+
+       <strong>${esc(c?.name||"Client")}</strong>
+
+       <span>
+        ${j.start?esc(timeText(j.start))+" – ":""}
+        ${j.end?esc(timeText(j.end)):""}
+        ${j.start||j.end?" · ":""}
+        ${esc(hoursMinutes(j.hours))}
+       </span>
+
+      </div>
+
+      <div class="schedule-price">
+       ${money(amount)}
+      </div>
+
+      <div class="schedule-arrow"
+           onclick="openJobModal('${j.id}')">
+       ›
+      </div>
+
      </div>
 
-     <div class="rowactions">
+     <div class="job-actions">
 
-      <button
-       class="secondary"
-       onclick="openJob('${j.id}')">
-       Edit
+      <button class="edit-btn"
+       onclick="openJobModal('${j.id}')">
+       ✏️ Edit job
       </button>
 
-      <button
-       class="danger"
-       onclick="deleteJob('${j.id}')">
-       Delete
+      <button class="delete-btn"
+       onclick="deleteJobById('${j.id}')">
+       🗑 Delete
       </button>
 
      </div>
 
     </div>
    `;
-
   });
-
  });
 
- document.getElementById('scheduleList').innerHTML=
-  html ||
-  '<div class="empty">No scheduled jobs.</div>';
+ box.innerHTML=html;
+}
+
+
+/* =========================================================
+   CALENDAR
+   ========================================================= */
+
+let calendarDate=new Date();
+
+function renderCalendar(){
+
+ const box=document.getElementById("calendarView");
+
+ const year=calendarDate.getFullYear();
+ const month=calendarDate.getMonth();
+
+ const first=new Date(year,month,1);
+ const last=new Date(year,month+1,0);
+
+ const startDay=first.getDay();
+
+ const monthName=first.toLocaleDateString("en-GB",{
+  month:"long",
+  year:"numeric"
+ });
+
+ let html=`
+  <div class="calendar">
+
+   <div class="calendar-head">
+    <button onclick="changeCalendarMonth(-1)">‹</button>
+    <div class="calendar-title">${monthName}</div>
+    <button onclick="changeCalendarMonth(1)">›</button>
+   </div>
+
+   <div class="calendar-grid">
+ `;
+
+ ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
+ .forEach(d=>{
+  html+=`<div class="calendar-week">${d}</div>`;
+ });
+
+ for(let i=0;i<startDay;i++)
+  html+=`<div></div>`;
+
+ for(let day=1;day<=last.getDate();day++){
+
+  const date=
+   year+"-"+
+   String(month+1).padStart(2,"0")+"-"+
+   String(day).padStart(2,"0");
+
+  const dayJobs=jobs.filter(j=>j.date===date);
+
+  html+=`
+   <div class="calendar-day ${date===todayISO()?"today":""}"
+        onclick="calendarDay('${date}')">
+
+    <div class="calendar-number">${day}</div>
+
+    ${dayJobs.map(j=>{
+
+     const c=clientById(j.clientId);
+
+     return`
+      <div class="calendar-job">
+       ${esc(c?.name||"Client")}
+      </div>
+     `;
+
+    }).join("")}
+
+   </div>
+  `;
+ }
+
+ html+=`
+   </div>
+  </div>
+ `;
+
+ box.innerHTML=html;
+}
+
+function changeCalendarMonth(amount){
+
+ calendarDate.setMonth(
+  calendarDate.getMonth()+amount
+ );
 
  renderCalendar();
 }
 
-function renderCalendar(){
+function calendarDay(date){
 
- let b=document.getElementById('scheduleCalendar');
+ const found=jobs.filter(j=>j.date===date);
 
- let n=new Date();
- let y=n.getFullYear();
- let m=n.getMonth();
-
- let first=new Date(y,m,1);
- let last=new Date(y,m+1,0);
-
- let offset=(first.getDay()+6)%7;
-
- let arr=[];
-
- for(let i=0;i<offset;i++){
-  arr.push(null);
+ if(found.length===1){
+  openJobModal(found[0].id);
+  return;
  }
 
- for(let d=1;d<=last.getDate();d++){
-  arr.push(new Date(y,m,d));
+ if(found.length>1){
+
+  setScheduleView("list");
+
+  setTimeout(()=>{
+
+   const cards=[...document.querySelectorAll(".schedule-card")];
+
+   const index=jobs.indexOf(found[0]);
+
+   if(cards[index])
+    cards[index].scrollIntoView({behavior:"smooth"});
+
+  },100);
+
+  return;
  }
 
- while(arr.length%7){
-  arr.push(null);
- }
-
- let heads=[
-  'Mon','Tue','Wed','Thu','Fri','Sat','Sun'
- ];
-
- b.innerHTML=`
-  <div class="calendar">
-
-   ${heads.map(x=>
-    `<div class="calhead">${x}</div>`
-   ).join('')}
-
-   ${arr.map(d=>{
-
-    if(!d){
-     return '<div class="calday"></div>';
-    }
-
-    let iso=
-     new Date(
-      d-d.getTimezoneOffset()*60000
-     ).toISOString().slice(0,10);
-
-    let a=jobs.filter(j=>
-     j.date===iso ||
-     (
-      j.template &&
-      j.day===DAYS[d.getDay()] &&
-      recurringVisible(j.clientId,iso)
-     )
-    );
-
-    return `
-     <div class="calday ${iso===todayISO()?'today':''}">
-
-      <div class="calnum">
-       ${d.getDate()}
-      </div>
-
-      ${a.map(j=>`
-       <div
-        class="caljob"
-        onclick="openJob('${j.id}')">
-
-        <b>
-         ${esc(client(j.clientId)?.name)}
-        </b>
-
-        ${esc(j.start||'')}
-        ${hm(j.hours)}
-
-       </div>
-      `).join('')}
-
-     </div>
-    `;
-
-   }).join('')}
-
-  </div>
- `;
+ openJobModal(null,date);
 }
 
-function scheduleView(v){
 
- localStorage.setItem(
-  'pure_shine_schedule_view',
-  v
- );
-
- document.getElementById(
-  'scheduleList'
- ).style.display=
-  v==='list'?'block':'none';
-
- document.getElementById(
-  'scheduleCalendar'
- ).style.display=
-  v==='calendar'?'block':'none';
-
- ['vl','svl'].forEach(id=>
-  document.getElementById(id)?.classList.toggle(
-   'on',
-   v==='list'
-  )
- );
-
- ['vc','svc'].forEach(id=>
-  document.getElementById(id)?.classList.toggle(
-   'on',
-   v==='calendar'
-  )
- );
-}
+/* =========================================================
+   CLIENTS
+   ========================================================= */
 
 function renderClients(){
 
- document.getElementById('clientsList').innerHTML=
-  clients.map(c=>`
+ const box=document.getElementById("clientsList");
 
-   <div class="row">
+ box.innerHTML=clients.map(c=>`
 
-    <div>
-     <h3>${esc(c.name)}</h3>
+  <div class="client-card">
 
-     <p>
-      ${esc(c.type)}
-      · ${money(c.rate)}/h
-      ${c.phone?' · '+esc(c.phone):''}
-     </p>
+   <div class="initial">
+    ${esc(c.name.charAt(0).toUpperCase())}
+   </div>
+
+   <div class="client-info">
+
+    <strong>${esc(c.name)}</strong>
+
+    <span>
+     ${esc(c.type)} · ${money(c.rate)}/h
+     ${c.phone?" · "+esc(c.phone):""}
+    </span>
+
+   </div>
+
+   <div class="client-buttons">
+
+    <button onclick="openClientModal('${c.id}')">
+     ✏️
+    </button>
+
+   </div>
+
+  </div>
+
+ `).join("");
+}
+
+
+/* =========================================================
+   EARNINGS / HISTORY
+   ========================================================= */
+
+function renderEarnings(){
+
+ let total=0;
+
+ jobs.forEach(j=>{
+  total+=jobAmount(j);
+ });
+
+ document.getElementById("totalEarned").textContent=
+  money(total);
+
+ const box=document.getElementById("earningsList");
+
+ const sorted=[...jobs].sort((a,b)=>
+  String(b.date).localeCompare(String(a.date))
+ );
+
+ if(!sorted.length){
+
+  box.innerHTML=`
+   <div class="today-empty">
+    No completed jobs yet.
+   </div>
+  `;
+
+  return;
+ }
+
+ box.innerHTML=sorted.map(j=>{
+
+  const c=clientById(j.clientId);
+  const amount=jobAmount(j);
+
+  return`
+   <div class="history-card">
+
+    <div class="history-top">
+
+     <div class="history-name">
+      ${esc(c?.name||"Client")}
+     </div>
+
+     <div class="history-money">
+      ${money(amount)}
+     </div>
+
     </div>
 
-    <div class="rowactions">
+    <div class="history-details">
+     ${esc(dateText(j.date))}
+     · ${esc(hoursMinutes(j.hours))}
+     · ${money(j.rate)}/h
+    </div>
 
-     <button
-      class="secondary"
-      onclick="openClient('${c.id}')">
-      Edit
+    <div class="history-actions">
+
+     <button class="edit-btn"
+      onclick="openJobModal('${j.id}')">
+      ✏️ Edit
      </button>
 
-     <button
-      class="danger"
-      onclick="deleteClient('${c.id}')">
-      Delete
+     <button class="invoice-btn"
+      onclick="createInvoice('${j.id}')">
+      Invoice
+     </button>
+
+     <button class="delete-btn"
+      onclick="deleteJobById('${j.id}')">
+      🗑
      </button>
 
     </div>
 
    </div>
+  `;
 
-  `).join('');
+ }).join("");
 }
 
-function renderEarnings(){
 
- let a=jobs
-  .filter(dated)
-  .filter(j=>client(j.clientId))
-  .sort(
-   (x,y)=>
-    String(y.date||'')
-    .localeCompare(String(x.date||''))
-  );
-
- let h=a.reduce(
-  (s,j)=>s+Number(j.hours||0),
-  0
- );
-
- let e=a.reduce(
-  (s,j)=>
-   s+
-   Number(j.hours||0)*
-   Number(j.rate||0),
-  0
- );
-
- document.getElementById('eh').textContent=hm(h);
- document.getElementById('et').textContent=money(e);
-
- document.getElementById('earningsList').innerHTML=
-  a.length
-   ? a.map(j=>{
-
-      let c=client(j.clientId);
-      let total=
-       Number(j.hours||0)*
-       Number(j.rate||0);
-
-      return `
-       <div class="earn">
-
-        <div class="earnhead">
-         <strong>${esc(c.name)}</strong>
-         <b>${money(total)}</b>
-        </div>
-
-        <small>
-         ${esc(j.date||'No date')}
-         · ${hm(j.hours)}
-         · ${money(j.rate)}/h
-         · ${esc(j.start||'')}–${esc(j.end||'')}
-        </small>
-
-        <div class="earnbuttons">
-
-         <button
-          class="edit"
-          onclick="openJob('${j.id}')">
-          ✎ Edit
-         </button>
-
-         <button
-          class="invoice"
-          onclick="invoice('${j.id}')">
-          Invoice
-         </button>
-
-         <button
-          class="danger"
-          onclick="deleteJob('${j.id}')">
-          Delete
-         </button>
-
-        </div>
-
-       </div>
-      `;
-
-     }).join('')
-   : '<div class="empty">No completed jobs in history yet.</div>';
-}
+/* =========================================================
+   FREE TIME
+   ========================================================= */
 
 function renderFree(){
 
- let h=todayJobs().reduce(
-  (s,j)=>s+Number(j.hours||0),
-  0
- );
+ const today=getTodayJobs();
 
- document.getElementById('freeText').innerHTML=
-  `You have approximately <b>${hm(
-   Math.max(0,8-h)
-  )}</b> available today.`;
+ let minutes=0;
+
+ today.forEach(j=>{
+  minutes+=Number(j.hours||0)*60;
+ });
+
+ const free=Math.max(0,480-minutes);
+
+ document.getElementById("freeTimeText").innerHTML=`
+  You have approximately
+  <strong>${Math.floor(free/60)} hours ${Math.round(free%60)} minutes</strong>
+  available today.
+ `;
 }
 
-function openClient(id){
 
- let c=id&&client(id);
+/* =========================================================
+   CLIENT MODAL
+   ========================================================= */
 
- document.getElementById('clientTitle').textContent=
-  id?'Edit client':'Add client';
+function openClientModal(id=null){
 
- document.getElementById('clientId').value=
-  id||'';
+ const c=id?clientById(id):null;
 
- document.getElementById('clientName').value=
-  c?.name||'';
+ document.getElementById("clientModalTitle").textContent=
+  id?"Edit Client":"Add Client";
 
- document.getElementById('clientType').value=
-  c?.type||'Private';
+ document.getElementById("clientId").value=id||"";
 
- document.getElementById('clientRate').value=
+ document.getElementById("clientName").value=c?.name||"";
+
+ document.getElementById("clientPhone").value=c?.phone||"";
+
+ document.getElementById("clientType").value=
+  c?.type||"Private";
+
+ document.getElementById("clientRate").value=
   c?.rate??18;
 
- document.getElementById('clientPhone').value=
-  c?.phone||'';
+ document.getElementById("deleteClientButton").style.display=
+  id?"block":"none";
 
- document.getElementById(
-  'clientModal'
- ).classList.add('show');
+ document.getElementById("clientModal").classList.add("show");
 }
 
 function saveClient(){
 
- let id=document.getElementById(
-  'clientId'
- ).value;
+ const id=document.getElementById("clientId").value;
 
- let n=document.getElementById(
-  'clientName'
- ).value.trim();
+ const name=
+  document.getElementById("clientName").value.trim();
 
- if(
-  !n ||
-  /^(gill|mike)$/i.test(n)
- ){
-  alert('Please enter a valid client name.');
+ if(!name){
+  alert("Please enter a client name.");
   return;
  }
 
- let o={
-  id:id||'c-'+Date.now(),
-  name:n,
-  type:document.getElementById(
-   'clientType'
-  ).value,
-  rate:Number(
-   document.getElementById(
-    'clientRate'
-   ).value||0
-  ),
-  phone:document.getElementById(
-   'clientPhone'
-  ).value.trim()
+ if(name.toLowerCase()==="gill"){
+  alert("Gill is no longer a client.");
+  return;
+ }
+
+ const obj={
+  id:id||"client-"+Date.now(),
+  name,
+  phone:document.getElementById("clientPhone").value.trim(),
+  type:document.getElementById("clientType").value,
+  rate:Number(document.getElementById("clientRate").value||0)
  };
 
- clients=id
-  ?clients.map(c=>
-    c.id===id?o:c
-   )
-  :[...clients,o];
+ if(id){
 
- save();
- closeM('clientModal');
- render();
-}
+  clients=clients.map(c=>
+   c.id===id?obj:c
+  );
 
-function deleteClient(id){
+ }else{
 
- let c=client(id);
-
- if(
-  !c ||
-  !confirm(`Delete ${c.name}?`)
- )return;
-
- clients=clients.filter(
-  x=>x.id!==id
- );
-
- jobs=jobs.filter(
-  j=>j.clientId!==id
- );
-
- save();
- render();
-}
-
-function openJob(id){
-
- let j=id&&jobs.find(
-  x=>x.id===id
- );
-
- let s=document.getElementById(
-  'jobClient'
- );
-
- s.innerHTML=clients.map(c=>
-  `<option value="${c.id}">
-   ${esc(c.name)}
-  </option>`
- ).join('');
-
- document.getElementById('jobTitle').textContent=
-  id?'Edit cleaning job':'Add cleaning job';
-
- document.getElementById('jobId').value=
-  id||'';
-
- document.getElementById('jobDelete').style.display=
-  id?'block':'none';
-
- s.value=
-  j?.clientId||
-  clients[0]?.id||
-  '';
-
- document.getElementById('jobDay').value=
-  j?.day||todayName();
-
- document.getElementById('jobDate').value=
-  j?.date||'';
-
- document.getElementById('jobStart').value=
-  j?.start||'09:00';
-
- document.getElementById('jobEnd').value=
-  j?.end||'12:00';
-
- document.getElementById('jobHours').value=
-  j?.hours??3;
-
- document.getElementById('jobRate').value=
-  j?.rate??client(s.value)?.rate??16;
-
- document.getElementById('jobReminder').value=
-  j?.reminder||'';
-
- document.getElementById('jobNotes').value=
-  j?.notes||'';
-
- document.getElementById(
-  'jobModal'
- ).classList.add('show');
-}
-
-document.getElementById(
- 'jobClient'
-).addEventListener(
- 'change',
- e=>{
-  let c=client(e.target.value);
-
-  if(c){
-   document.getElementById(
-    'jobRate'
-   ).value=c.rate;
-  }
+  clients.push(obj);
  }
-);
 
-function saveJob(){
+ saveData();
 
- let id=document.getElementById(
-  'jobId'
- ).value;
+ closeModal("clientModal");
 
- let cid=document.getElementById(
-  'jobClient'
- ).value;
+ renderAll();
+}
 
- let c=client(cid);
+function deleteCurrentClient(){
+
+ const id=document.getElementById("clientId").value;
+
+ const c=clientById(id);
 
  if(!c)return;
 
- let old=
-  id &&
-  jobs.find(j=>j.id===id);
+ if(!confirm(
+  `Delete ${c.name}?\n\nExisting jobs for this client will also be removed.`
+ ))return;
 
- let date=
-  document.getElementById(
-   'jobDate'
-  ).value;
+ clients=clients.filter(x=>x.id!==id);
 
- let o={
-  id:id||'j-'+Date.now(),
-  clientId:cid,
-  day:document.getElementById(
-   'jobDay'
-  ).value,
-  date:date,
-  start:document.getElementById(
-   'jobStart'
-  ).value,
-  end:document.getElementById(
-   'jobEnd'
-  ).value,
-  hours:Number(
-   document.getElementById(
-    'jobHours'
-   ).value||0
-  ),
-  rate:Number(
-   document.getElementById(
-    'jobRate'
-   ).value||c.rate
-  ),
-  reminder:document.getElementById(
-   'jobReminder'
-  ).value,
-  notes:document.getElementById(
-   'jobNotes'
-  ).value.trim(),
-  template:!date
- };
+ jobs=jobs.filter(j=>j.clientId!==id);
 
- if(
-  date ||
-  old?.completed ||
-  old?.history ||
-  old?.isHistory
- ){
-  o.completed=true;
+ saveData();
+
+ closeModal("clientModal");
+
+ renderAll();
+}
+
+
+/* =========================================================
+   JOB MODAL
+   ========================================================= */
+
+function openJobModal(id=null,presetDate=""){
+
+ const select=document.getElementById("jobClient");
+
+ select.innerHTML=clients.map(c=>`
+  <option value="${c.id}">
+   ${esc(c.name)}
+  </option>
+ `).join("");
+
+ const j=id?jobs.find(x=>x.id===id):null;
+
+ document.getElementById("jobModalTitle").textContent=
+  id?"Edit Cleaning Job":"Add Cleaning Job";
+
+ document.getElementById("jobId").value=id||"";
+
+ document.getElementById("deleteJobButton").style.display=
+  id?"block":"none";
+
+ select.value=j?.clientId||clients[0]?.id||"";
+
+ document.getElementById("jobDate").value=
+  j?.date||presetDate||todayISO();
+
+ document.getElementById("jobStart").value=
+  j?.start||"09:00";
+
+ document.getElementById("jobEnd").value=
+  j?.end||"12:00";
+
+ document.getElementById("jobHours").value=
+  j?.hours??3;
+
+ document.getElementById("jobRate").value=
+  j?.rate??clientById(select.value)?.rate??16;
+
+ document.getElementById("jobNotes").value=
+  j?.notes||"";
+
+ updateJobCalculation();
+
+ document.getElementById("jobModal").classList.add("show");
+}
+
+document.getElementById("jobClient").addEventListener(
+ "change",
+ function(){
+
+  const c=clientById(this.value);
+
+  if(c)
+   document.getElementById("jobRate").value=c.rate;
+
+  updateJobCalculation();
+ }
+);
+
+["jobHours","jobRate"].forEach(id=>{
+
+ document.getElementById(id).addEventListener(
+  "input",
+  updateJobCalculation
+ );
+
+});
+
+function updateJobCalculation(){
+
+ const hours=
+  Number(document.getElementById("jobHours").value||0);
+
+ const rate=
+  Number(document.getElementById("jobRate").value||0);
+
+ document.getElementById("jobDurationText").textContent=
+  hoursMinutes(hours);
+
+ document.getElementById("jobAmountText").textContent=
+  (hours*rate).toFixed(2);
+}
+
+function saveJob(){
+
+ const id=document.getElementById("jobId").value;
+
+ const clientId=
+  document.getElementById("jobClient").value;
+
+ const c=clientById(clientId);
+
+ if(!c){
+  alert("Please select a client.");
+  return;
  }
 
- jobs=id
-  ?jobs.map(j=>
-    j.id===id
-     ?{...j,...o}
-     :j
-   )
-  :[...jobs,o];
+ const obj={
+  id:id||"job-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),
 
- save();
- closeM('jobModal');
- scheduleReminder(o);
- render();
+  clientId,
+
+  date:document.getElementById("jobDate").value,
+
+  start:document.getElementById("jobStart").value,
+
+  end:document.getElementById("jobEnd").value,
+
+  hours:Number(
+   document.getElementById("jobHours").value||0
+  ),
+
+  rate:Number(
+   document.getElementById("jobRate").value||c.rate||0
+  ),
+
+  notes:
+   document.getElementById("jobNotes").value.trim()
+ };
+
+ if(!obj.date){
+  alert("Please choose a date.");
+  return;
+ }
+
+ if(id){
+
+  jobs=jobs.map(j=>
+   j.id===id?obj:j
+  );
+
+ }else{
+
+  jobs.push(obj);
+ }
+
+ saveData();
+
+ closeModal("jobModal");
+
+ renderAll();
 }
 
 function deleteCurrentJob(){
 
- let id=document.getElementById(
-  'jobId'
- ).value;
+ const id=document.getElementById("jobId").value;
 
- if(id){
-  deleteJob(id,false);
- }
-
- closeM('jobModal');
+ if(id)
+  deleteJobById(id);
 }
 
-function deleteJob(id,ask=true){
+function deleteJobById(id){
 
- if(
-  ask &&
-  !confirm(
-   'Delete this job from the schedule/history?'
-  )
- )return;
+ const j=jobs.find(x=>x.id===id);
 
- jobs=jobs.filter(
-  j=>j.id!==id
- );
+ if(!j)return;
 
- if(
-  timer?.jobId===id
- ){
+ const c=clientById(j.clientId);
+
+ if(!confirm(
+  `Delete the job for ${c?.name||"this client"}?\n\nThis cannot be undone.`
+ ))return;
+
+ jobs=jobs.filter(x=>x.id!==id);
+
+ if(timer?.jobId===id)
   timer=null;
- }
 
- save();
- render();
+ saveData();
+
+ closeModal("jobModal");
+
+ renderAll();
+}
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+function startCleaning(){
+
+ const today=getTodayJobs();
+
+ if(today.length){
+
+  toggleTimer(today[0].id);
+
+ }else{
+
+  openJobModal();
+
+ }
 }
 
 function toggleTimer(id){
 
- if(
-  timer?.jobId===id
- ){
+ if(timer?.jobId===id){
+
   stopTimer();
   return;
  }
 
- let j=jobs.find(
-  x=>x.id===id
- );
+ const j=jobs.find(x=>x.id===id);
 
  if(!j)return;
 
  timer={
   jobId:id,
   startedAt:Date.now(),
-  baseHours:Number(j.hours||0)
+  originalHours:Number(j.hours||0)
  };
 
- save();
- tick();
-}
+ saveData();
 
-function startNext(){
-
- let j=
-  todayJobs()[0]||
-  jobs.find(x=>dated(x));
-
- if(j){
-  toggleTimer(j.id);
- }else{
-  openJob();
- }
+ updateTimerPanel();
 }
 
 function stopTimer(){
 
  if(!timer)return;
 
- let j=jobs.find(
-  x=>x.id===timer.jobId
- );
+ const j=jobs.find(x=>x.id===timer.jobId);
 
  if(j){
 
+  const elapsed=
+   (Date.now()-timer.startedAt)/3600000;
+
   j.hours=
-   Number(timer.baseHours||0)+
-   (
-    Date.now()-
-    timer.startedAt
-   )/3600000;
+   Number(timer.originalHours||0)+elapsed;
 
-  j.completed=true;
-  j.template=false;
-
-  if(!j.date){
-   j.date=todayISO();
-  }
-
-  j.day=todayName();
  }
 
  timer=null;
 
- save();
- render();
+ saveData();
+
+ renderAll();
 }
 
-function tick(){
+function updateTimerPanel(){
 
- let box=document.getElementById(
-  'timer'
- );
+ const panel=document.getElementById("timerPanel");
 
  if(!timer){
-  box.classList.remove('show');
+
+  panel.classList.remove("show");
   return;
  }
 
- let j=jobs.find(
-  x=>x.id===timer.jobId
- );
+ const j=jobs.find(x=>x.id===timer.jobId);
 
  if(!j){
+
   timer=null;
-  save();
-  box.classList.remove('show');
+  saveData();
+  panel.classList.remove("show");
   return;
  }
 
- box.classList.add('show');
+ const c=clientById(j.clientId);
 
- document.getElementById(
-  'timerName'
- ).textContent=
-  client(j.clientId)?.name||
-  'Cleaning';
+ panel.classList.add("show");
 
- let s=Math.floor(
-  (Date.now()-timer.startedAt)/1000
+ document.getElementById("timerName").textContent=
+  c?.name||"Cleaning";
+
+ const sec=Math.max(
+  0,
+  Math.floor(
+   (Date.now()-timer.startedAt)/1000
+  )
  );
 
- document.getElementById(
-  'timerValue'
- ).textContent=
-  [
-   Math.floor(s/3600),
-   Math.floor((s%3600)/60),
-   s%60
-  ]
-  .map(x=>String(x).padStart(2,'0'))
-  .join(':');
+ const h=Math.floor(sec/3600);
+
+ const m=Math.floor(
+  (sec%3600)/60
+ );
+
+ const s=sec%60;
+
+ document.getElementById("timerValue").textContent=
+  String(h).padStart(2,"0")+":"+
+  String(m).padStart(2,"0")+":"+
+  String(s).padStart(2,"0");
 }
 
-function invoice(id){
 
- let j=jobs.find(
-  x=>x.id===id
- );
+/* =========================================================
+   INVOICE
+   ========================================================= */
 
- let c=j&&client(
-  j.clientId
- );
+function createInvoice(id){
 
- if(!j||!c)return;
+ const j=jobs.find(x=>x.id===id);
 
- let total=
-  Number(j.hours||0)*
-  Number(j.rate||0);
+ if(!j)return;
 
- let w=window.open(
-  '',
-  '_blank'
+ const c=clientById(j.clientId);
+
+ if(!c)return;
+
+ const amount=jobAmount(j);
+
+ const w=window.open(
+  "",
+  "_blank",
+  "width=750,height=850"
  );
 
  if(!w){
+
   alert(
-   'Please allow pop-ups for the invoice.'
+   "Please allow pop-ups to create the invoice."
   );
+
   return;
  }
 
  w.document.write(`
-  <html>
-  <head>
-   <meta name="viewport"
-    content="width=device-width">
 
-   <title>
-    Invoice - ${esc(c.name)}
-   </title>
+ <!DOCTYPE html>
+ <html>
+ <head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width">
+ <title>Pure Shine Cleaning Invoice</title>
 
-   <style>
-    body{
-     font-family:Arial;
-     padding:30px;
-     max-width:700px;
-     margin:auto;
-     color:#222
-    }
-    h1{color:#b54c7c}
-    table{
-     width:100%;
-     border-collapse:collapse;
-     margin-top:25px
-    }
-    td{
-     padding:12px;
-     border-bottom:1px solid #ddd
-    }
-    .total{
-     text-align:right;
-     font-size:22px;
-     font-weight:bold;
-     margin-top:20px
-    }
-    button{
-     padding:12px 18px;
-     margin-top:25px
-    }
-   </style>
+ <style>
 
-  </head>
+ body{
+  margin:0;
+  padding:35px;
+  background:#fff8fc;
+  color:#40383e;
+  font-family:Arial,sans-serif;
+ }
 
-  <body>
+ .invoice{
+  max-width:650px;
+  margin:auto;
+  background:white;
+  padding:40px;
+  border-radius:28px;
+  box-shadow:0 10px 40px rgba(70,40,60,.12);
+ }
 
-   <h1>Pure Shine Cleaning</h1>
+ h1{
+  color:#a45f7e;
+  font-family:Georgia,serif;
+  font-size:34px;
+ }
 
-   <p>
-    <b>Client:</b>
-    ${esc(c.name)}
-   </p>
+ .line{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  padding:15px 0;
+  border-bottom:1px solid #eee4e9;
+ }
 
-   <p>
-    <b>Date:</b>
-    ${esc(j.date||'')}
-   </p>
+ .total{
+  margin-top:25px;
+  padding:20px;
+  background:#f2d7e3;
+  border-radius:18px;
+  display:flex;
+  justify-content:space-between;
+  font-size:22px;
+  font-weight:bold;
+ }
 
-   <table>
-    <tr>
-     <td>Cleaning</td>
-     <td>
-      ${esc(j.start||'')}
-      –
-      ${esc(j.end||'')}
-     </td>
-     <td>${hm(j.hours)}</td>
-     <td>${money(j.rate)}/h</td>
-    </tr>
-   </table>
+ button{
+  width:100%;
+  margin-top:25px;
+  padding:15px;
+  border:0;
+  border-radius:15px;
+  background:#a45f7e;
+  color:white;
+  font-size:17px;
+ }
 
-   <div class="total">
-    Amount due: ${money(total)}
-   </div>
+ @media print{
+  button{display:none}
+  body{padding:0}
+  .invoice{box-shadow:none}
+ }
 
-   ${
-    c.phone
-     ?`<p>Phone: ${esc(c.phone)}</p>`
-     :''
-   }
+ </style>
+ </head>
 
-   <button onclick="window.print()">
-    Print / Save PDF
-   </button>
+ <body>
 
-  </body>
-  </html>
+ <div class="invoice">
+
+  <h1>Pure Shine Cleaning ✨</h1>
+
+  <p>Cleaning invoice</p>
+
+  <div class="line">
+   <strong>Client</strong>
+   <span>${esc(c.name)}</span>
+  </div>
+
+  <div class="line">
+   <strong>Phone</strong>
+   <span>${esc(c.phone||"")}</span>
+  </div>
+
+  <div class="line">
+   <strong>Date</strong>
+   <span>${esc(dateText(j.date))}</span>
+  </div>
+
+  <div class="line">
+   <strong>Cleaning time</strong>
+   <span>
+    ${esc(timeText(j.start||""))}
+    ${j.end?" – "+esc(timeText(j.end)):""}
+   </span>
+  </div>
+
+  <div class="line">
+   <strong>Total time</strong>
+   <span>${esc(hoursMinutes(j.hours))}</span>
+  </div>
+
+  <div class="line">
+   <strong>Hourly rate</strong>
+   <span>${money(j.rate)}/hour</span>
+  </div>
+
+  <div class="total">
+   <span>Amount due</span>
+   <span>${money(amount)}</span>
+  </div>
+
+  <button onclick="window.print()">
+   Print / Save invoice
+  </button>
+
+ </div>
+
+ </body>
+ </html>
+
  `);
 
  w.document.close();
 }
 
-function closeM(id){
- document.getElementById(id)
-  .classList.remove('show');
+
+/* =========================================================
+   SETTINGS — REAL APP ZOOM
+   ========================================================= */
+
+function getZoom(){
+
+ const z=
+  Number(
+   localStorage.getItem("pure_shine_zoom")||130
+  );
+
+ return Math.min(200,Math.max(100,z));
 }
 
-/* REAL WHOLE-INTERFACE ZOOM */
+function setZoom(value){
 
-function setZoom(v){
-
- let z=Math.max(
-  100,
+ const z=
   Math.min(
-   220,
-   Number(v)||150
-  )
- );
-
- localStorage.setItem(
-  'pure_shine_zoom',
-  z
- );
-
- document.documentElement.style.setProperty(
-  '--ui',
-  z/100
- );
-
- document.getElementById(
-  'zoomLabel'
- ).textContent=z+'%';
-
- document.getElementById(
-  'zoomRange'
- ).value=z;
-}
-
-function uploadImage(input,type){
-
- let f=input.files?.[0];
-
- if(!f)return;
-
- let r=new FileReader();
-
- r.onload=()=>{
-
-  localStorage.setItem(
-   'pure_shine_'+type,
-   r.result
+   200,
+   Math.max(
+    100,
+    Number(value)||130
+   )
   );
 
-  applyAppearance();
- };
-
- r.readAsDataURL(f);
-}
-
-function applyAppearance(){
-
- let icon=
-  localStorage.getItem(
-   'pure_shine_icon'
-  );
-
- let profile=
-  localStorage.getItem(
-   'pure_shine_profile'
-  );
-
- let bg=
-  localStorage.getItem(
-   'pure_shine_background'
-  );
-
- document.getElementById(
-  'appIcon'
- ).src=
-  profile||
-  icon||
-  'https://raw.githubusercontent.com/radugeorgiana9680-ship-it/Cleaning-Manager/main/icon.png';
-
- document.getElementById(
-  'bg'
- ).style.backgroundImage=
-  bg
-   ?`url("${bg}")`
-   :'none';
-
- let op=Number(
-  localStorage.getItem(
-   'pure_shine_bg_opacity'
-  )??18
+ localStorage.setItem(
+  "pure_shine_zoom",
+  String(z)
  );
+
+ document.getElementById("zoomLabel").textContent=
+  z+"%";
+
+ document.getElementById("zoomRange").value=z;
+
+ /*
+  This scales the complete application rather than
+  only changing individual text sizes.
+ */
 
  document.documentElement.style.setProperty(
-  '--bgOpacity',
-  op/100
+  "--app-zoom",
+  String(z/100)
  );
 
- let f=
-  localStorage.getItem(
-   'pure_shine_font'
-  )||
-  'system';
-
- document.documentElement.style.setProperty(
-  '--font',
-  ({
-   system:
-    'system-ui,-apple-system,"SF Pro Display","Segoe UI",sans-serif',
-
-   serif:
-    'Georgia,"Times New Roman",serif',
-
-   rounded:
-    '"Trebuchet MS","Avenir Next",sans-serif',
-
-   mono:
-    'ui-monospace,SFMono-Regular,Menlo,monospace'
-
-  })[f]
- );
+ document.body.style.fontSize=
+  (z/100)+"em";
 }
 
-function setBgOpacity(v){
+function changeZoom(amount){
 
- localStorage.setItem(
-  'pure_shine_bg_opacity',
-  v
- );
-
- document.documentElement.style.setProperty(
-  '--bgOpacity',
-  Number(v)/100
- );
-}
-
-function setFont(v){
-
- localStorage.setItem(
-  'pure_shine_font',
-  v
- );
-
- applyAppearance();
-}
-
-function setSound(v){
-
- localStorage.setItem(
-  'pure_shine_sound',
-  v?'1':'0'
- );
-
- if(v){
-  sound();
- }
-}
-
-function sound(){
-
- try{
-
-  let A=
-   window.AudioContext||
-   window.webkitAudioContext;
-
-  let a=new A();
-
-  let o=a.createOscillator();
-  let g=a.createGain();
-
-  o.frequency.value=880;
-  g.gain.value=.05;
-
-  o.connect(g);
-  g.connect(a.destination);
-
-  o.start();
-  o.stop(a.currentTime+.2);
-
- }catch(e){}
-}
-
-function scheduleReminder(j){
-
- if(!j.reminder)return;
-
- let t=
-  new Date(j.reminder).getTime()-
-  Date.now();
-
- if(
-  t>0 &&
-  t<2147483647
- ){
-
-  setTimeout(()=>{
-
-   if(
-    localStorage.getItem(
-     'pure_shine_sound'
-    )==='1'
-   ){
-    sound();
-   }
-
-   alert(
-    `${client(j.clientId)?.name||'Client'} cleaning reminder`
-   );
-
-  },t);
- }
+ setZoom(getZoom()+amount);
 }
 
 function openSettings(){
 
- let z=Number(
-  localStorage.getItem(
-   'pure_shine_zoom'
-  )||150
- );
+ const z=getZoom();
 
- setZoom(z);
+ document.getElementById("zoomRange").value=z;
+ document.getElementById("zoomLabel").textContent=z+"%";
 
- document.getElementById(
-  'bgOpacity'
- ).value=
+ document.getElementById("backgroundOpacity").value=
   Number(
    localStorage.getItem(
-    'pure_shine_bg_opacity'
-   )??18
+    "pure_shine_bg_opacity"
+   )||92
   );
 
- document.getElementById(
-  'fontSelect'
- ).value=
+ document.getElementById("fontStyle").value=
   localStorage.getItem(
-   'pure_shine_font'
-  )||'system';
+   "pure_shine_font"
+  )||"system";
 
- document.getElementById(
-  'sound'
- ).checked=
+ document.getElementById("soundToggle").checked=
   localStorage.getItem(
-   'pure_shine_sound'
-  )==='1';
+   "pure_shine_sound"
+  )==="1";
 
- scheduleView(
+ setScheduleView(
   localStorage.getItem(
-   'pure_shine_schedule_view'
-  )||'list'
+   "pure_shine_schedule_view"
+  )||"list"
  );
 
- document.getElementById(
-  'settings'
- ).classList.add('show');
+ document.getElementById("settingsModal")
+  .classList.add("show");
 }
 
-load();
 
-applyAppearance();
+/* =========================================================
+   CUSTOM APP IMAGES
+   ========================================================= */
 
-setZoom(
- Number(
+function uploadImage(input,type){
+
+ const file=input.files?.[0];
+
+ if(!file)return;
+
+ const reader=new FileReader();
+
+ reader.onload=function(){
+
+  localStorage.setItem(
+   "pure_shine_"+type,
+   reader.result
+  );
+
+  applyCustomisation();
+
+ };
+
+ reader.readAsDataURL(file);
+}
+
+function applyCustomisation(){
+
+ const icon=
+  localStorage.getItem("pure_shine_icon");
+
+ const profile=
+  localStorage.getItem("pure_shine_profile");
+
+ const background=
+  localStorage.getItem("pure_shine_background");
+
+ if(icon){
+
+  document.getElementById("appIcon").src=icon;
+
+ }
+
+ if(profile){
+
+  document.getElementById("appIcon").src=profile;
+
+ }
+
+ if(background){
+
+  document.getElementById("bgLayer").style.backgroundImage=
+   `url("${background}")`;
+
+ }else{
+
+  document.getElementById("bgLayer").style.backgroundImage=
+   "none";
+ }
+
+ const opacity=
+  Number(
+   localStorage.getItem(
+    "pure_shine_bg_opacity"
+   )||92
+  );
+
+ document.getElementById("bgLayer").style.opacity=
+  opacity/100;
+
+ const font=
   localStorage.getItem(
-   'pure_shine_zoom'
-  )||150
- )
-);
+   "pure_shine_font"
+  )||"system";
 
-scheduleView(
+ applyFont(font);
+}
+
+function setBackgroundOpacity(value){
+
+ localStorage.setItem(
+  "pure_shine_bg_opacity",
+  value
+ );
+
+ document.getElementById("bgLayer").style.opacity=
+  Number(value)/100;
+}
+
+function setFontStyle(value){
+
+ localStorage.setItem(
+  "pure_shine_font",
+  value
+ );
+
+ applyFont(value);
+}
+
+function applyFont(value){
+
+ const fonts={
+  system:'-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif',
+  serif:'Georgia,"Times New Roman",serif',
+  rounded:'"Trebuchet MS","Avenir Next",sans-serif',
+  mono:'ui-monospace,SFMono-Regular,Menlo,monospace'
+ };
+
+ document.documentElement.style.setProperty(
+  "--font-ui",
+  fonts[value]||fonts.system
+ );
+}
+
+function setReminderSound(enabled){
+
+ localStorage.setItem(
+  "pure_shine_sound",
+  enabled?"1":"0"
+ );
+
+ if(enabled)
+  playReminderSound();
+}
+
+function playReminderSound(){
+
+ try{
+
+  const AudioContext=
+   window.AudioContext||
+   window.webkitAudioContext;
+
+  const ctx=new AudioContext();
+
+  const oscillator=
+   ctx.createOscillator();
+
+  const gain=
+   ctx.createGain();
+
+  oscillator.frequency.value=880;
+
+  gain.gain.value=.06;
+
+  oscillator.connect(gain);
+
+  gain.connect(ctx.destination);
+
+  oscillator.start();
+
+  oscillator.stop(
+   ctx.currentTime+.18
+  );
+
+ }catch(e){}
+}
+
+
+/* =========================================================
+   CALENDAR EXPORT
+   ========================================================= */
+
+function addCalendarEvents(){
+
+ if(!jobs.length){
+
+  alert("There are no jobs to add.");
+  return;
+ }
+
+ const lines=[];
+
+ jobs.forEach(j=>{
+
+  const c=clientById(j.clientId);
+
+  lines.push(
+   c?.name+" - "+
+   j.date+" "+
+   (j.start||"")+
+   " "+(j.end||"")
+  );
+
+ });
+
+ alert(
+  "Your jobs are ready:\n\n"+
+  lines.join("\n")+
+  "\n\nOn iPhone you can use the Share menu or Calendar integration supported by your browser."
+ );
+}
+
+
+/* =========================================================
+   EXPORT
+   ========================================================= */
+
+function exportData(){
+
+ const data={
+  clients,
+  jobs,
+  exportedAt:new Date().toISOString()
+ };
+
+ const blob=new Blob(
+  [JSON.stringify(data,null,2)],
+  {type:"application/json"}
+ );
+
+ const url=URL.createObjectURL(blob);
+
+ const a=document.createElement("a");
+
+ a.href=url;
+
+ a.download=
+  "pure-shine-cleaning-backup.json";
+
+ a.click();
+
+ URL.revokeObjectURL(url);
+}
+
+
+/* =========================================================
+   RESET APPEARANCE ONLY
+   ========================================================= */
+
+function resetSettings(){
+
+ if(!confirm(
+  "Reset the appearance settings?"
+ ))return;
+
+ [
+  "pure_shine_zoom",
+  "pure_shine_icon",
+  "pure_shine_profile",
+  "pure_shine_background",
+  "pure_shine_bg_opacity",
+  "pure_shine_font",
+  "pure_shine_sound"
+ ].forEach(k=>
+  localStorage.removeItem(k)
+ );
+
+ setZoom(130);
+
+ document.getElementById("backgroundOpacity").value=92;
+
+ document.getElementById("fontStyle").value="system";
+
+ document.getElementById("soundToggle").checked=false;
+
+ applyCustomisation();
+}
+
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+function closeModal(id){
+
+ document.getElementById(id)
+  .classList.remove("show");
+}
+
+
+/* =========================================================
+   RENDER EVERYTHING
+   ========================================================= */
+
+function renderAll(){
+
+ renderHome();
+ renderSchedule();
+ renderClients();
+ renderEarnings();
+ renderFree();
+ updateTimerPanel();
+}
+
+
+/* =========================================================
+   INIT
+   ========================================================= */
+
+loadData();
+
+setZoom(getZoom());
+
+applyCustomisation();
+
+setScheduleView(
  localStorage.getItem(
-  'pure_shine_schedule_view'
- )||'list'
+  "pure_shine_schedule_view"
+ )||"list"
 );
 
-render();
+renderAll();
 
 setInterval(
- tick,
+ updateTimerPanel,
  1000
 );
+
+document.addEventListener(
+ "visibilitychange",
+ function(){
+
+  if(document.visibilityState==="visible"){
+
+   loadData();
+   renderAll();
+
+  }
+
+ }
+);
+
 </script>
 
 </body>
