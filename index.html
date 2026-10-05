@@ -1,156 +1,991 @@
-<section id="settings" class="page settings-page">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#f7c8d8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="light">
 
-<div class="section-head">
-<h2>Settings</h2>
-</div>
+<title>Pure Shine Cleaning Manager</title>
 
-<!-- APP ZOOM -->
-<div class="settings-card">
+<style>
+:root{
+ --pink:#f7c8d8;
+ --pink2:#f4a8c2;
+ --pink3:#fff0f5;
+ --deep:#a83f6c;
+ --gold:#c99a3d;
+ --gold2:#f2d58b;
+ --cream:#fffaf7;
+ --ink:#442737;
+ --muted:#8d6f7d;
+ --white:#fff;
+ --shadow:0 12px 35px rgba(130,55,84,.13);
+}
 
-<h3>App Zoom</h3>
+*{
+ box-sizing:border-box;
+ -webkit-tap-highlight-color:transparent;
+}
 
-<p>
-Adjust the app size. The setting is saved automatically on this device.
-</p>
+html,body{
+ margin:0;
+ padding:0;
+ width:100%;
+ min-height:100%;
+ overflow-x:hidden;
+ -webkit-text-size-adjust:100%;
+}
 
-<div class="zoom-box">
+body{
+ font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+ color:var(--ink);
+ background:linear-gradient(
+   180deg,
+   #fff7fa,
+   #f9d6e2 55%,
+   #fff8fb
+ );
+}
 
-<button class="zoom-btn"
-onclick="changeZoom(-5)">
-−
-</button>
+button,input,select,textarea{
+ font:inherit;
+ font-size:16px;
+}
 
-<div id="zoomLabel" class="zoom-value">
-130%
-</div>
+button{
+ border:0;
+ cursor:pointer;
+}
 
-<button class="zoom-btn"
-onclick="changeZoom(5)">
-+
-</button>
+button:active{
+ transform:scale(.985);
+}
 
-</div>
+img{
+ max-width:100%;
+ display:block;
+}
 
-<input
-id="zoomRange"
-class="zoom-range"
-type="range"
-min="80"
-max="200"
-step="5"
-value="130"
-oninput="setAppZoom(this.value)"
->
-
-</div>
-
-
-<button
-class="settings-action primary-action"
-onclick="setAppZoom(130)">
-↺ Reset Zoom to 130%
-</button>
-
-
-<!-- APP IMAGES -->
-<div class="settings-card">
-
-<h3>🎨 App Images</h3>
-
-<p>
-Change the images used by your Pure Shine Cleaning app.
-</p>
-
-
-<div class="image-setting">
-
-<div class="image-setting-title">
-📱 App Thumbnail / Logo
-</div>
-
-<div class="image-preview thumbnail-preview">
-<img
-id="thumbnailPreview"
-alt="App Thumbnail"
->
-</div>
-
-<input
-id="thumbnailInput"
-type="file"
-accept="image/*"
-onchange="changeAppImage('thumbnail',this)"
->
-
-</div>
+.hidden{
+ display:none!important;
+}
 
 
-<div class="image-setting">
+/* WELCOME */
 
-<div class="image-setting-title">
-🌸 Welcome Cover
-</div>
+#welcome{
+ min-height:100dvh;
+ padding:
+   calc(18px + env(safe-area-inset-top))
+   22px
+   calc(22px + env(safe-area-inset-bottom));
 
-<div class="image-preview cover-preview">
-<img
-id="coverPreview"
-alt="Welcome Cover"
->
-</div>
+ display:flex;
+ justify-content:center;
+ align-items:center;
 
-<input
-id="coverInput"
-type="file"
-accept="image/*"
-onchange="changeAppImage('cover',this)"
->
+ background:
+   radial-gradient(
+     circle at 18% 12%,
+     rgba(255,255,255,.85),
+     transparent 25%
+   ),
+   radial-gradient(
+     circle at 85% 78%,
+     rgba(255,255,255,.75),
+     transparent 24%
+   ),
+   linear-gradient(
+     135deg,
+     #fff2f6 0%,
+     #f8cbd9 52%,
+     #fff1f6 100%
+   );
 
-</div>
+ position:fixed;
+ inset:0;
+ z-index:9999;
+ overflow:auto;
+}
+
+.welcome-inner{
+ width:min(100%,430px);
+ text-align:center;
+ padding:8px 0 12px;
+}
+
+.logo-ring{
+ width:min(78vw,330px);
+ height:min(78vw,330px);
+ margin:0 auto 20px;
+ border-radius:50%;
+ padding:7px;
+
+ background:
+ linear-gradient(
+   135deg,
+   #fff,
+   #d5aa52,
+   #fff4bd,
+   #b77d1e,
+   #fff
+ );
+
+ box-shadow:
+   0 16px 40px rgba(173,93,119,.22);
+}
+
+.logo-ring img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+ border-radius:50%;
+ border:3px solid rgba(255,255,255,.92);
+}
+
+.welcome-title{
+ margin:0;
+ color:#a92f5e;
+
+ font-family:
+   "Brush Script MT",
+   "Snell Roundhand",
+   "Segoe Script",
+   cursive;
+
+ font-size:clamp(45px,12vw,66px);
+ line-height:.94;
+ font-weight:700;
+
+ text-shadow:
+   0 2px 0 #fff,
+   0 6px 18px rgba(137,40,75,.12);
+}
+
+.welcome-heart{
+ font-size:35px;
+ color:var(--gold);
+ margin:10px 0 5px;
+}
+
+.welcome-sub{
+ font-size:17px;
+ line-height:1.45;
+ color:#704d5c;
+ max-width:360px;
+ margin:0 auto 18px;
+}
+
+.features{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:8px;
+ margin:0 auto 18px;
+}
+
+.feature{
+ min-height:126px;
+ border:1px solid #d7a34c;
+ border-radius:18px;
+ background:rgba(255,251,248,.93);
+
+ box-shadow:
+   0 8px 18px rgba(136,67,93,.11);
+
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+
+ padding:10px 5px;
+}
+
+.feature-icon{
+ font-size:31px;
+ margin-bottom:8px;
+}
+
+.feature b{
+ font-size:13px;
+ line-height:1.12;
+}
+
+.get-started{
+ width:100%;
+ min-height:64px;
+ border-radius:34px;
+
+ background:
+   linear-gradient(
+     180deg,
+     #f28aa9,
+     #dc5d83
+   );
+
+ border:2px solid #e4b04e;
+
+ color:#fff;
+
+ font-family:Georgia,serif;
+ font-size:28px;
+
+ box-shadow:
+   0 9px 22px rgba(184,65,102,.25);
+}
+
+.login{
+ margin-top:17px;
+ font-size:16px;
+ color:#714f5d;
+}
+
+.login button{
+ background:none;
+ color:#a62f5d;
+ font-weight:800;
+ text-decoration:underline;
+ padding:0 4px;
+}
 
 
-<div class="image-setting">
+/* APP */
 
-<div class="image-setting-title">
-✨ Home Banner
-</div>
+#app{
+ display:none;
+ min-height:100dvh;
+ padding-bottom:92px;
+}
 
-<div class="image-preview banner-preview">
-<img
-id="bannerPreview"
-alt="Home Banner"
->
-</div>
+.top{
+ position:sticky;
+ top:0;
+ z-index:50;
 
-<input
-id="bannerInput"
-type="file"
-accept="image/*"
-onchange="changeAppImage('banner',this)"
->
+ background:rgba(255,249,252,.94);
+ backdrop-filter:blur(18px);
 
-</div>
+ border-bottom:
+   1px solid rgba(201,154,61,.25);
 
-</div>
+ padding:
+   calc(10px + env(safe-area-inset-top))
+   16px
+   10px;
+}
+
+.top-row{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+}
+
+.brand{
+ display:flex;
+ align-items:center;
+ gap:10px;
+}
+
+.brand img{
+ width:58px;
+ height:58px;
+ border-radius:16px;
+ object-fit:cover;
+
+ border:2px solid var(--gold);
+
+ box-shadow:
+   0 5px 14px rgba(150,80,105,.15);
+}
+
+.brand h1{
+ font-size:20px;
+ margin:0;
+ color:#8e3157;
+}
+
+.brand p{
+ font-size:12px;
+ margin:3px 0 0;
+ color:var(--muted);
+}
+
+.top-actions{
+ display:flex;
+ gap:7px;
+}
+
+.icon{
+ width:44px;
+ height:44px;
+ border-radius:15px;
+
+ background:#fff;
+ border:1px solid #e5c17b;
+ color:#9b315d;
+
+ font-size:22px;
+}
+
+.icon.add{
+ background:
+   linear-gradient(
+     180deg,
+     #ee9db8,
+     #dc6689
+   );
+
+ color:#fff;
+}
+
+main{
+ width:min(100%,760px);
+ margin:auto;
+ padding:14px;
+}
+
+.page{
+ display:none;
+}
+
+.page.active{
+ display:block;
+}
+
+.section-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin:7px 0 14px;
+}
+
+.section-head h2{
+ margin:0;
+ font-size:25px;
+ color:#7e304f;
+}
+
+.primary{
+ background:
+   linear-gradient(
+     180deg,
+     #ef9bb8,
+     #db6287
+   );
+
+ color:#fff;
+
+ border:1px solid var(--gold);
+ border-radius:14px;
+
+ padding:11px 15px;
+ font-weight:800;
+}
+
+.date-card{
+ display:flex;
+ align-items:center;
+ gap:12px;
+
+ background:
+   linear-gradient(
+     120deg,
+     #f9d1df,
+     #fff5f8
+   );
+
+ border:1px solid #e4b45f;
+ border-radius:19px;
+
+ padding:13px;
+ margin-bottom:13px;
+}
+
+.date-icon{
+ font-size:28px;
+}
+
+.date-main{
+ font-weight:800;
+}
+
+.date-sub{
+ font-size:13px;
+ color:var(--muted);
+ margin-top:3px;
+}
+
+.stats{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+}
+
+.stat{
+ border:1px solid rgba(201,154,61,.45);
+ border-radius:19px;
+ padding:15px;
+ min-height:108px;
+
+ box-shadow:var(--shadow);
+}
+
+.stat:nth-child(1){
+ background:#f8d6e2;
+}
+
+.stat:nth-child(2){
+ background:#f1e4f8;
+}
+
+.stat:nth-child(3){
+ background:#e6f2e9;
+}
+
+.stat:nth-child(4){
+ background:#fff1c9;
+}
+
+.stat .value{
+ font-size:25px;
+ font-weight:900;
+}
+
+.stat .label{
+ font-size:13px;
+ color:var(--muted);
+ margin-top:5px;
+}
+
+.home-hero{
+ margin-top:13px;
+ border-radius:23px;
+ overflow:hidden;
+ min-height:190px;
+
+ background:
+   linear-gradient(
+     110deg,
+     rgba(255,255,255,.92),
+     rgba(255,229,239,.74)
+   );
+
+ border:1px solid #d7a34c;
+
+ display:flex;
+ align-items:center;
+
+ padding:24px;
+}
+
+.home-hero h3{
+ font-family:
+   "Brush Script MT",
+   "Segoe Script",
+   cursive;
+
+ font-size:42px;
+ line-height:.95;
+ color:#a92f5e;
+ margin:0;
+}
+
+.home-hero p{
+ font-size:14px;
+ max-width:260px;
+ color:#694957;
+}
+
+.quick-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+ margin-top:12px;
+}
+
+.quick{
+ min-height:66px;
+ border-radius:17px;
+ border:1px solid #dfb96d;
+
+ background:#fff8fa;
+ color:#7e304f;
+
+ font-weight:800;
+ font-size:16px;
+}
+
+.list{
+ display:grid;
+ gap:10px;
+}
+
+.card{
+ background:rgba(255,255,255,.9);
+ border:1px solid #dfc27f;
+ border-radius:18px;
+ padding:14px;
+
+ box-shadow:
+   0 7px 20px rgba(100,45,65,.08);
+}
+
+.row{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+}
+
+.small{
+ font-size:13px;
+ color:var(--muted);
+}
+
+.money{
+ font-weight:900;
+ color:#9c315a;
+}
+
+.danger{
+ background:#fff0f2;
+ color:#b42e52;
+ border:1px solid #e4a2b3;
+ border-radius:11px;
+ padding:8px 10px;
+}
+
+.secondary{
+ background:#fff;
+ color:#75495a;
+ border:1px solid #d8bdc7;
+ border-radius:11px;
+ padding:10px 13px;
+}
+
+.calendar{
+ display:grid;
+ grid-template-columns:repeat(7,1fr);
+ gap:5px;
+}
+
+.cal-head{
+ font-size:11px;
+ text-align:center;
+ color:#9a6c7e;
+ font-weight:800;
+ padding:5px;
+}
+
+.cal-day{
+ min-height:82px;
+ background:#fff8fb;
+ border:1px solid #e0c17c;
+ border-radius:10px;
+ padding:5px;
+}
+
+.cal-day .n{
+ font-size:11px;
+ color:#a07080;
+}
+
+.cal-client{
+ font-size:10px;
+ font-weight:800;
+ color:#96355a;
+ background:#f8d5e2;
+ border-radius:7px;
+ padding:4px;
+ margin-top:5px;
+ line-height:1.1;
+}
+
+.timer-panel{
+ position:fixed;
+ left:12px;
+ right:12px;
+ bottom:78px;
+ z-index:80;
+
+ background:#4f2438;
+ color:#fff;
+
+ border:2px solid #e1b454;
+ border-radius:18px;
+
+ padding:11px 14px;
+
+ display:none;
+
+ box-shadow:
+   0 12px 30px rgba(60,20,40,.25);
+}
+
+.timer-panel.show{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+}
+
+.timer-value{
+ font-variant-numeric:tabular-nums;
+ font-size:22px;
+ font-weight:900;
+}
+
+.timer-stop{
+ background:#f08eaa;
+ color:#fff;
+ border-radius:11px;
+ padding:9px 12px;
+ font-weight:800;
+}
+
+.bottom{
+ position:fixed;
+ left:0;
+ right:0;
+ bottom:0;
+ z-index:70;
+
+ padding:
+   8px
+   8px
+   calc(8px + env(safe-area-inset-bottom));
+
+ background:rgba(255,249,252,.96);
+ backdrop-filter:blur(18px);
+
+ border-top:1px solid #dfc27f;
+
+ display:grid;
+ grid-template-columns:repeat(6,1fr);
+}
+
+.nav{
+ background:none;
+ color:#947080;
+ font-size:11px;
+
+ display:flex;
+ flex-direction:column;
+ gap:3px;
+ align-items:center;
+}
+
+.nav span:first-child{
+ font-size:22px;
+}
+
+.nav.active{
+ color:#a72f5d;
+ font-weight:900;
+}
+
+.nav.settings-nav{
+ color:#806372;
+}
 
 
-<button
-class="settings-action"
-onclick="addJobsToCalendar()">
-📅 Add Jobs to iPhone Calendar
-</button>
+/* MODALS */
+
+.modal{
+ position:fixed;
+ inset:0;
+ background:rgba(55,22,36,.4);
+ z-index:200;
+ display:none;
+ align-items:flex-end;
+}
+
+.modal.show{
+ display:flex;
+}
+
+.sheet{
+ width:100%;
+ max-height:90dvh;
+ overflow:auto;
+
+ background:#fff8fb;
+
+ border-radius:25px 25px 0 0;
+
+ padding:
+   18px
+   16px
+   calc(25px + env(safe-area-inset-bottom));
+
+ border-top:3px solid var(--gold);
+}
+
+.sheet-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
+
+.sheet h3{
+ margin:0 0 14px;
+ color:#8e3157;
+}
+
+.close{
+ width:38px;
+ height:38px;
+ border-radius:50%;
+ background:#f5d7e2;
+ color:#8e3157;
+}
+
+.sheet label{
+ display:block;
+ font-size:13px;
+ font-weight:800;
+ color:#704b5a;
+ margin:10px 0 5px;
+}
+
+.sheet input,
+.sheet select,
+.sheet textarea{
+ width:100%;
+ padding:12px;
+ border-radius:12px;
+ border:1px solid #d9bfc8;
+ background:#fff;
+ outline:none;
+}
+
+.form-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+}
+
+.form-actions{
+ display:flex;
+ justify-content:flex-end;
+ gap:8px;
+ margin-top:16px;
+}
+
+.save{
+ background:#db6287;
+ color:#fff;
+ border:1px solid var(--gold);
+ border-radius:12px;
+ padding:11px 17px;
+ font-weight:800;
+}
 
 
-<button
-class="settings-action"
-onclick="exportData()">
-⬇️ Export My Data
-</button>
+/* SETTINGS */
+
+.settings-page{
+ padding-bottom:110px;
+}
+
+.settings-card{
+ background:
+   linear-gradient(
+     135deg,
+     #fff8fb,
+     #ffe9f1
+   );
+
+ border:1px solid #d8aa55;
+ border-radius:22px;
+
+ padding:18px;
+ margin-bottom:14px;
+
+ box-shadow:var(--shadow);
+}
+
+.settings-card h3{
+ margin:0 0 6px;
+ color:#7e304f;
+ font-size:20px;
+}
+
+.settings-card p{
+ margin:0 0 16px;
+ color:var(--muted);
+ font-size:14px;
+ line-height:1.4;
+}
+
+.zoom-box{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:14px;
+ margin:8px 0 14px;
+}
+
+.zoom-btn{
+ width:48px;
+ height:48px;
+ border-radius:15px;
+
+ background:#fff;
+ border:1px solid #d4a44f;
+ color:#8d3156;
+
+ font-size:25px;
+ font-weight:800;
+}
+
+.zoom-value{
+ min-width:82px;
+ text-align:center;
+ font-size:22px;
+ font-weight:900;
+ color:#8d3156;
+}
+
+.zoom-range{
+ width:100%;
+ accent-color:#d96d91;
+}
+
+.settings-action{
+ width:100%;
+ min-height:54px;
+ border-radius:17px;
+ margin-top:10px;
+
+ background:#fff;
+ border:1px solid #d9ae5b;
+
+ color:#7e304f;
+ font-weight:800;
+}
+
+.settings-action.primary-action{
+ background:
+   linear-gradient(
+     180deg,
+     #ef9bb8,
+     #db6287
+   );
+
+ color:#fff;
+}
+
+.settings-action.danger-action{
+ background:#fff0f4;
+ color:#a43b61;
+}
 
 
-<button
-class="settings-action danger-action"
-onclick="resetAppData()">
-🔄 Reset App Data
-</button>
+/* IMAGE SETTINGS */
 
-</section>
+.image-setting{
+ background:#fff;
+ border:1px solid #dfc7d0;
+ border-radius:18px;
+ padding:14px;
+ margin-top:12px;
+}
+
+.image-setting-title{
+ font-size:16px;
+ font-weight:800;
+ color:#7e304f;
+ margin-bottom:10px;
+}
+
+.image-preview{
+ width:82px;
+ height:82px;
+ border-radius:16px;
+ overflow:hidden;
+
+ border:1px solid #d8aa55;
+ background:#f8e4ec;
+
+ margin-bottom:10px;
+}
+
+.image-preview img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+
+.cover-preview{
+ width:100%;
+ height:130px;
+}
+
+.banner-preview{
+ width:100%;
+ height:110px;
+}
+
+.image-setting input[type="file"]{
+ width:100%;
+ padding:10px;
+
+ background:#fff8fb;
+ border:1px solid #dfc7d0;
+ border-radius:12px;
+
+ font-size:13px;
+ color:#6d5861;
+}
+
+
+@media(max-width:390px){
+
+ .welcome-inner{
+   padding-top:2px;
+ }
+
+ .logo-ring{
+   width:72vw;
+   height:72vw;
+   margin-bottom:15px;
+ }
+
+ .welcome-title{
+   font-size:46px;
+ }
+
+ .welcome-sub{
+   font-size:15px;
+ }
+
+ .feature{
+   min-height:112px;
+ }
+
+ .feature-icon{
+   font-size:27px;
+ }
+
+ .feature b{
+   font-size:11px;
+ }
+
+ .get-started{
+   min-height:59px;
+   font-size:25px;
+ }
+
+ .brand img{
+   width:52px;
+   height:52px;
+ }
+
+ .brand h1{
+   font-size:18px;
+ }
+
+}
+</style>
