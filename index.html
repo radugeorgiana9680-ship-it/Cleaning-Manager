@@ -2,7155 +2,1079 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#fff9fc">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#f7c8d8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="light">
+<link rel="apple-touch-icon" href="assets/app-icon.jpg">
 <title>Pure Shine Cleaning Manager</title>
-
 <style>
-:root{
-  --pink:#f1d4e2;
-  --pink-dark:#a45f7d;
-  --blue:#dce9f8;
-  --green:#dcefe5;
-  --yellow:#fff0c5;
-  --purple:#e7def7;
-  --peach:#f6ddd8;
-  --white:#fff;
-  --border:#e8dfe4;
-  --shadow:0 7px 25px rgba(70,40,60,.10);
-  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif;
-}
-
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
-html{
-  width:100%;
-  min-height:100%;
-  -webkit-text-size-adjust:100%;
-}
-
-body{
-  margin:0;
-  width:100%;
-  min-height:100dvh;
-  background:#fff9fc;
-  color:#000;
-  font-family:var(--font);
-  overflow-x:hidden;
-}
-
-button,input,select,textarea{
-  font:inherit;
-  color:#000;
-}
-
-button{
-  border:0;
-  cursor:pointer;
-}
-
-a{
-  color:#000;
-}
-
-#backgroundLayer{
-  position:fixed;
-  inset:0;
-  z-index:-10;
-  background-position:center;
-  background-size:cover;
-  background-repeat:no-repeat;
-  opacity:.12;
-  pointer-events:none;
-}
-
-#app{
-  width:100%;
-  min-height:100dvh;
-  padding-bottom:120px;
-}
-
-.app-content{
-  width:100%;
-  max-width:1100px;
-  margin:auto;
-}
-
-.topbar{
-  position:sticky;
-  top:0;
-  z-index:1000;
-  background:rgba(255,249,252,.97);
-  backdrop-filter:blur(18px);
-  padding:calc(12px + env(safe-area-inset-top)) 18px 13px;
-  border-bottom:1px solid #eee4e9;
-}
-
-.brand-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  min-width:0;
-}
-
-.brand-logo{
-  width:58px;
-  height:58px;
-  border-radius:16px;
-  object-fit:cover;
-  background:#fff;
-  box-shadow:var(--shadow);
-}
-
-.brand-title{
-  margin:0;
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:26px;
-  line-height:1.05;
-}
-
-.brand-subtitle{
-  margin:6px 0 0;
-  font-size:14px;
-}
-
-.settings-button{
-  width:54px;
-  height:54px;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:var(--shadow);
-  font-size:26px;
-  flex-shrink:0;
-}
-
-.page{
-  display:none;
-  width:100%;
-  padding:18px;
-}
-
-.page.active{
-  display:block;
-}
-
-.page-title-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:20px;
-}
-
-.page-title{
-  margin:0;
-  font-family:Georgia,serif;
-  font-size:32px;
-}
-
-.small-action{
-  background:var(--pink);
-  border-radius:15px;
-  padding:11px 15px;
-  font-weight:700;
-}
-
-.date-banner{
-  min-height:108px;
-  background:#f1d5e3;
-  border-radius:27px;
-  padding:20px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:17px;
-}
-
-.date-banner h2{
-  margin:0;
-  font-family:Georgia,serif;
-  font-size:24px;
-}
-
-.date-banner p{
-  margin:7px 0 0;
-  font-size:14px;
-}
-
-.heart{
-  font-size:52px;
-  line-height:1;
-  color:#a45f7d;
-}
-
-.stats-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:11px;
-  margin-bottom:26px;
-}
-
-.stat{
-  min-height:124px;
-  border-radius:23px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:12px 7px;
-  box-shadow:var(--shadow);
-}
-
-.stat:nth-child(1){background:#f2d7e5}
-.stat:nth-child(2){background:#dce8f7}
-.stat:nth-child(3){background:#dcefe5}
-.stat:nth-child(4){background:#fff0c5}
-
-.stat-icon{
-  font-size:24px;
-  margin-bottom:6px;
-}
-
-.stat-value{
-  font-family:Georgia,serif;
-  font-size:22px;
-  font-weight:700;
-}
-
-.stat-label{
-  margin-top:5px;
-  font-size:13px;
-}
-
-.section-heading{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:10px;
-}
-
-.section-heading h2,
-.quick-heading{
-  margin:0;
-  font-family:Georgia,serif;
-  font-size:25px;
-}
-
-.link-button{
-  background:none;
-  font-weight:700;
-}
-
-.today-box{
-  background:#fff;
-  border-radius:25px;
-  padding:11px;
-  box-shadow:var(--shadow);
-  margin-bottom:25px;
-}
-
-.today-empty{
-  padding:28px 15px;
-  text-align:center;
-}
-
-.today-job{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:14px;
-  border-radius:19px;
-  margin-bottom:8px;
-  cursor:pointer;
-}
-
-.today-job:last-child{margin-bottom:0}
-.today-job:nth-child(odd){background:#f7e2eb}
-.today-job:nth-child(even){background:#e3edf9}
-
-.avatar{
-  width:50px;
-  height:50px;
-  min-width:50px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:#f3d2e1;
-  font-family:Georgia,serif;
-  font-size:21px;
-}
-
-.today-info{
-  flex:1;
-  min-width:0;
-}
-
-.today-name{
-  font-size:18px;
-  font-weight:800;
-}
-
-.today-detail{
-  margin-top:5px;
-  font-size:14px;
-}
-
-.today-rate{
-  font-weight:700;
-  white-space:nowrap;
-}
-
-.quick-heading{
-  margin-bottom:11px;
-}
-
-.quick-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:11px;
-}
-
-.quick{
-  min-height:72px;
-  border-radius:20px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:7px;
-  font-weight:700;
-  box-shadow:var(--shadow);
-}
-
-.quick-blue{background:var(--blue)}
-.quick-green{background:var(--green)}
-.quick-pink{background:var(--pink)}
-.quick-purple{background:var(--purple)}
-.quick-peach{background:var(--peach)}
-.quick-yellow{background:var(--yellow)}
-
-.banner{
-  width:100%;
-  height:155px;
-  margin-top:17px;
-  border-radius:23px;
-  background-position:center;
-  background-size:cover;
-  background-repeat:no-repeat;
-  box-shadow:var(--shadow);
-}
-
-.day-tabs{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:6px;
-  margin-bottom:16px;
-}
-
-.day-tab{
-  padding:12px 4px;
-  border-radius:16px;
-  background:#fff;
-  box-shadow:var(--shadow);
-  text-align:center;
-  font-weight:700;
-  font-size:12px;
-}
-
-.day-tab span{
-  display:block;
-  font-size:18px;
-  margin-bottom:4px;
-}
-
-.year-controls{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  margin-bottom:15px;
-}
-
-.year-controls button{
-  width:44px;
-  height:44px;
-  border-radius:14px;
-  background:var(--pink);
-  font-size:22px;
-}
-
-.year-label{
-  flex:1;
-  text-align:center;
-  font-family:Georgia,serif;
-  font-size:22px;
-  font-weight:700;
-}
-
-.view-switch{
-  display:flex;
-  gap:3px;
-  padding:4px;
-  border-radius:16px;
-  background:#eee7eb;
-}
-
-.view-switch button{
-  padding:10px 13px;
-  border-radius:12px;
-  background:transparent;
-  font-weight:700;
-}
-
-.view-switch button.active{
-  background:#fff;
-  box-shadow:0 2px 8px rgba(50,30,40,.08);
-}
-
-.year-calendar{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:13px;
-}
-
-.month-card{
-  background:#fff;
-  border-radius:22px;
-  padding:13px;
-  box-shadow:var(--shadow);
-}
-
-.month-name{
-  margin-bottom:9px;
-  font-family:Georgia,serif;
-  font-size:18px;
-  font-weight:700;
-}
-
-.month-weekdays,
-.month-days{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:3px;
-}
-
-.month-weekday{
-  text-align:center;
-  font-size:10px;
-  padding-bottom:4px;
-}
-
-.day{
-  min-height:43px;
-  padding:3px;
-  border:1px solid #f0e7ec;
-  border-radius:8px;
-  background:#fffafd;
-  overflow:hidden;
-  cursor:pointer;
-}
-
-.day.today{
-  border:2px solid #cf7d9f;
-}
-
-.day-number{
-  font-size:10px;
-  font-weight:800;
-}
-
-.day-client{
-  margin-top:2px;
-  padding:2px;
-  border-radius:4px;
-  background:#f0d7e3;
-  font-size:7px;
-  line-height:1.05;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.schedule-list{
-  display:none;
-}
-
-.day-section{
-  margin-bottom:15px;
-}
-
-.day-heading{
-  background:#fff;
-  border-radius:23px;
-  padding:17px;
-  margin-bottom:9px;
-  box-shadow:var(--shadow);
-}
-
-.day-heading strong{
-  display:block;
-  font-family:Georgia,serif;
-  font-size:21px;
-}
-
-.day-heading span{
-  display:block;
-  margin-top:5px;
-  font-size:14px;
-}
-
-.schedule-job,
-.client-card,
-.earnings-job,
-.monthly-card,
-.client-profile,
-.settings-section{
-  background:#fff;
-  border-radius:24px;
-  box-shadow:var(--shadow);
-}
-
-.schedule-job{
-  padding:16px;
-  margin-bottom:9px;
-}
-
-.schedule-job-main{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.schedule-info{
-  flex:1;
-  min-width:0;
-}
-
-.schedule-client{
-  font-family:Georgia,serif;
-  font-size:20px;
-  font-weight:700;
-}
-
-.schedule-detail{
-  margin-top:5px;
-  font-size:14px;
-  line-height:1.4;
-}
-
-.schedule-money{
-  font-family:Georgia,serif;
-  font-size:19px;
-  font-weight:700;
-  white-space:nowrap;
-}
-
-.schedule-actions,
-.earnings-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:8px;
-  margin-top:12px;
-}
-
-.schedule-actions button,
-.earnings-actions button{
-  padding:12px 7px;
-  border-radius:14px;
-  font-size:13px;
-  font-weight:700;
-}
-
-.action-edit{background:var(--blue)}
-.action-delete{background:#f5dada}
-.action-reminder{background:var(--green)}
-
-.client-card{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:16px;
-  margin-bottom:10px;
-  cursor:pointer;
-}
-
-.client-info{
-  flex:1;
-  min-width:0;
-}
-
-.client-name{
-  font-family:Georgia,serif;
-  font-size:20px;
-  font-weight:700;
-}
-
-.client-meta{
-  margin-top:6px;
-  font-size:14px;
-  line-height:1.55;
-}
-
-.client-edit{
-  width:45px;
-  height:45px;
-  border-radius:14px;
-  background:var(--pink);
-  flex-shrink:0;
-}
-
-.client-phone-link{
-  display:inline-block;
-  font-weight:700;
-  text-decoration:none;
-}
-
-.client-profile{
-  padding:20px;
-  margin-bottom:15px;
-}
-
-.profile-header{
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-
-.profile-avatar{
-  width:72px;
-  height:72px;
-  border-radius:50%;
-  background:#f3d2e1;
-  display:grid;
-  place-items:center;
-  font-family:Georgia,serif;
-  font-size:30px;
-}
-
-.profile-name{
-  font-family:Georgia,serif;
-  font-size:27px;
-  font-weight:700;
-}
-
-.profile-sub{
-  margin-top:5px;
-  font-size:14px;
-}
-
-.client-detail-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-top:17px;
-}
-
-.detail-box{
-  padding:14px;
-  border-radius:17px;
-  background:#f8edf2;
-}
-
-.detail-box strong{
-  display:block;
-  margin-bottom:5px;
-  font-size:13px;
-}
-
-.detail-box span{
-  font-size:15px;
-}
-
-.client-history-title{
-  margin:20px 0 10px;
-  font-family:Georgia,serif;
-  font-size:22px;
-}
-
-.client-history-item{
-  background:#fff;
-  border-radius:20px;
-  padding:15px;
-  margin-bottom:9px;
-  box-shadow:var(--shadow);
-}
-
-.earnings-total{
-  background:var(--green);
-  border-radius:25px;
-  padding:25px;
-  text-align:center;
-  box-shadow:var(--shadow);
-  margin-bottom:17px;
-}
-
-.earnings-total small{display:block}
-.earnings-total strong{
-  display:block;
-  margin-top:6px;
-  font-family:Georgia,serif;
-  font-size:35px;
-}
-
-.month-total{
-  background:var(--pink);
-  border-radius:19px;
-  padding:14px;
-  margin:12px 0;
-  font-family:Georgia,serif;
-  font-size:19px;
-  font-weight:700;
-}
-
-.earnings-job{
-  padding:17px;
-  margin-bottom:10px;
-}
-
-.earnings-top{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-}
-
-.earnings-client{
-  font-family:Georgia,serif;
-  font-size:20px;
-  font-weight:700;
-}
-
-.earnings-amount{
-  font-family:Georgia,serif;
-  font-size:20px;
-  font-weight:700;
-  white-space:nowrap;
-}
-
-.earnings-detail{
-  margin-top:7px;
-  line-height:1.55;
-  font-size:14px;
-}
-
-.monthly-card{
-  padding:18px;
-  margin-bottom:11px;
-}
-
-.monthly-card-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-
-.monthly-card-header strong{
-  font-family:Georgia,serif;
-  font-size:20px;
-}
-
-.monthly-money{
-  font-family:Georgia,serif;
-  font-size:21px;
-  font-weight:700;
-}
-
-.monthly-bar{
-  height:11px;
-  background:#eee7eb;
-  border-radius:20px;
-  margin-top:12px;
-  overflow:hidden;
-}
-
-.monthly-bar-fill{
-  height:100%;
-  border-radius:20px;
-  background:#d783a5;
-}
-
-.settings-section{
-  padding:19px;
-  margin-bottom:12px;
-}
-
-.settings-section h3{
-  margin:0;
-  font-family:Georgia,serif;
-  font-size:21px;
-}
-
-.settings-description{
-  margin:7px 0 13px;
-  font-size:14px;
-  line-height:1.45;
-}
-
-.settings-row{
-  margin-top:14px;
-}
-
-.settings-row label{
-  display:block;
-  margin-bottom:7px;
-  font-weight:700;
-}
-
-.settings-row input,
-.settings-row select,
-.settings-row textarea{
-  width:100%;
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:13px;
-  background:#fff;
-}
-
-.zoom-row{
-  display:grid;
-  grid-template-columns:52px 1fr 52px;
-  gap:8px;
-  align-items:center;
-}
-
-.zoom-row button{
-  width:52px;
-  height:50px;
-  border-radius:15px;
-  background:var(--pink);
-  font-size:25px;
-}
-
-.zoom-label{
-  text-align:center;
-  font-family:Georgia,serif;
-  font-size:20px;
-  font-weight:700;
-}
-
-input[type=range]{
-  width:100%;
-  accent-color:#c96f96;
-}
-
-.sound-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-
-.sound-option{
-  background:#f7eaf0;
-  border-radius:15px;
-  padding:13px;
-  font-weight:700;
-}
-
-.sound-option.active{
-  background:#e9bdd0;
-}
-
-.setting-full-button{
-  width:100%;
-  padding:14px;
-  margin-top:9px;
-  border-radius:16px;
-  background:var(--pink);
-  font-weight:700;
-}
-
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:10000;
-  align-items:flex-end;
-  background:rgba(30,20,27,.38);
-  backdrop-filter:blur(5px);
-}
-
-.modal.show{
-  display:flex;
-}
-
-.modal-box{
-  width:100%;
-  max-width:760px;
-  max-height:94dvh;
-  overflow:auto;
-  margin:auto auto 0;
-  padding:22px 18px 35px;
-  background:#fffafd;
-  border-radius:30px 30px 0 0;
-}
-
-.modal-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:18px;
-}
-
-.modal-header h3{
-  margin:0;
-  font-family:Georgia,serif;
-  font-size:26px;
-}
-
-.close-button{
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  background:#f0dfe7;
-  font-size:24px;
-}
-
-.form-group{
-  margin-bottom:13px;
-}
-
-.form-group label{
-  display:block;
-  margin-bottom:6px;
-  font-weight:700;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea{
-  width:100%;
-  padding:13px;
-  border:1px solid #e5dce2;
-  border-radius:14px;
-  background:#fff;
-}
-
-.form-group textarea{
-  min-height:75px;
-  resize:vertical;
-}
-
-.form-two{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.duration-box{
-  background:var(--green);
-  border-radius:18px;
-  padding:14px;
-  margin-bottom:14px;
-  line-height:1.7;
-}
-
-.modal-save{
-  width:100%;
-  padding:16px;
-  border-radius:17px;
-  background:#e8c5d6;
-  font-family:Georgia,serif;
-  font-size:18px;
-  font-weight:800;
-}
-
-.modal-delete{
-  width:100%;
-  padding:14px;
-  border-radius:17px;
-  background:#f5dada;
-  margin-top:9px;
-  font-weight:700;
-}
-
-.message-buttons{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-top:9px;
-}
-
-.message-buttons button{
-  padding:13px 7px;
-  border-radius:15px;
-  background:var(--blue);
-  font-weight:700;
-}
-
-.timer-bar{
-  display:none;
-  position:fixed;
-  left:13px;
-  right:13px;
-  bottom:105px;
-  z-index:6000;
-  padding:13px 15px;
-  border-radius:22px;
-  background:#3d3037;
-  color:#fff;
-  box-shadow:0 10px 35px rgba(30,20,25,.25);
-  align-items:center;
-  justify-content:space-between;
-}
-
-.timer-bar.show{display:flex}
-
-.timer-name,
-.timer-value{color:#fff}
-
-.timer-name{font-weight:800}
-
-.timer-value{
-  margin-top:3px;
-  font-family:monospace;
-  font-size:21px;
-}
-
-.timer-stop{
-  padding:11px 15px;
-  border-radius:14px;
-  background:#efb8cd;
-  font-weight:800;
-}
-
-.bottom-nav{
-  position:fixed;
-  left:13px;
-  right:13px;
-  bottom:12px;
-  z-index:5000;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:4px;
-  padding:7px;
-  background:rgba(255,255,255,.97);
-  backdrop-filter:blur(18px);
-  border-radius:27px;
-  box-shadow:0 7px 30px rgba(55,35,50,.13);
-}
-
-.bottom-nav button{
-  min-width:0;
-  padding:10px 3px;
-  border-radius:20px;
-  background:transparent;
-  font-size:12px;
-}
-
-.bottom-nav button.active{
-  background:var(--pink);
-}
-
-.nav-icon{
-  display:block;
-  margin-bottom:5px;
-  font-size:23px;
-  line-height:1;
-}
-
-@media(max-width:700px){
-  .stats-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .year-calendar{
-    grid-template-columns:1fr;
-  }
-
-  .day-tabs{
-    overflow-x:auto;
-    grid-template-columns:repeat(7,90px);
-    padding-bottom:4px;
-  }
-}
-
-@media(min-width:701px){
-  .modal{
-    align-items:center;
-  }
-
-  .modal-box{
-    margin:auto;
-    border-radius:30px;
-  }
-}
-
-@media(max-width:430px){
-  .brand-title{font-size:22px}
-  .brand-logo{
-    width:52px;
-    height:52px;
-  }
-
-  .page-title{font-size:29px}
-
-  .schedule-actions,
-  .earnings-actions{
-    grid-template-columns:1fr;
-  }
-
-  .client-detail-grid{
-    grid-template-columns:1fr;
-  }
-}
+:root{--pink:#f7c8d8;--pink2:#f4a8c2;--pink3:#fff0f5;--deep:#a83f6c;--gold:#c99a3d;--gold2:#f2d58b;--cream:#fffaf7;--ink:#442737;--muted:#8d6f7d;--white:#fff;--shadow:0 12px 35px rgba(130,55,84,.13)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;width:100%;min-height:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(180deg,#fff7fa,#f9d6e2 55%,#fff8fb)}
+button,input,select,textarea{font:inherit;font-size:16px}button{border:0;cursor:pointer}button:active{transform:scale(.985)}
+img{max-width:100%;display:block}.hidden{display:none!important}
+#welcome{min-height:100dvh;padding:calc(18px + env(safe-area-inset-top)) 22px calc(22px + env(safe-area-inset-bottom));display:flex;justify-content:center;align-items:center;background:radial-gradient(circle at 18% 12%,rgba(255,255,255,.85),transparent 25%),radial-gradient(circle at 85% 78%,rgba(255,255,255,.75),transparent 24%),linear-gradient(135deg,#fff2f6 0%,#f8cbd9 52%,#fff1f6 100%);position:fixed;inset:0;z-index:9999;overflow:auto}
+.welcome-inner{width:min(100%,430px);text-align:center;padding:8px 0 12px}
+.logo-ring{width:min(78vw,330px);height:min(78vw,330px);margin:0 auto 20px;border-radius:50%;padding:7px;background:linear-gradient(135deg,#fff,#d5aa52,#fff4bd,#b77d1e,#fff);box-shadow:0 16px 40px rgba(173,93,119,.22)}
+.logo-ring img{width:100%;height:100%;object-fit:cover;border-radius:50%;border:3px solid rgba(255,255,255,.92)}
+.welcome-title{margin:0;color:#a92f5e;font-family:"Brush Script MT","Snell Roundhand","Segoe Script",cursive;font-size:clamp(45px,12vw,66px);line-height:.94;font-weight:700;text-shadow:0 2px 0 #fff,0 6px 18px rgba(137,40,75,.12)}
+.welcome-heart{font-size:35px;color:var(--gold);margin:10px 0 5px}.welcome-sub{font-size:17px;line-height:1.45;color:#704d5c;max-width:360px;margin:0 auto 18px}
+.features{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 auto 18px}
+.feature{min-height:126px;border:1px solid #d7a34c;border-radius:18px;background:rgba(255,251,248,.93);box-shadow:0 8px 18px rgba(136,67,93,.11);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 5px}
+.feature-icon{font-size:31px;margin-bottom:8px}.feature b{font-size:13px;line-height:1.12}
+.get-started{width:100%;min-height:64px;border-radius:34px;background:linear-gradient(180deg,#f28aa9,#dc5d83);border:2px solid #e4b04e;color:#fff;font-family:Georgia,serif;font-size:28px;box-shadow:0 9px 22px rgba(184,65,102,.25)}
+.login{margin-top:17px;font-size:16px;color:#714f5d}.login button{background:none;color:#a62f5d;font-weight:800;text-decoration:underline;padding:0 4px}
+#app{display:none;min-height:100dvh;padding-bottom:92px}
+.top{position:sticky;top:0;z-index:50;background:rgba(255,249,252,.94);backdrop-filter:blur(18px);border-bottom:1px solid rgba(201,154,61,.25);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:10px}.brand{display:flex;align-items:center;gap:10px}
+.brand img{width:58px;height:58px;border-radius:16px;object-fit:cover;border:2px solid var(--gold);box-shadow:0 5px 14px rgba(150,80,105,.15)}
+.brand h1{font-size:20px;margin:0;color:#8e3157}.brand p{font-size:12px;margin:3px 0 0;color:var(--muted)}.top-actions{display:flex;gap:7px}
+.icon{width:44px;height:44px;border-radius:15px;background:#fff;border:1px solid #e5c17b;color:#9b315d;font-size:22px}.icon.add{background:linear-gradient(180deg,#ee9db8,#dc6689);color:#fff}
+main{width:min(100%,760px);margin:auto;padding:14px}.page{display:none}.page.active{display:block}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:7px 0 14px}.section-head h2{margin:0;font-size:25px;color:#7e304f}
+.primary{background:linear-gradient(180deg,#ef9bb8,#db6287);color:#fff;border:1px solid var(--gold);border-radius:14px;padding:11px 15px;font-weight:800}
+.date-card{display:flex;align-items:center;gap:12px;background:linear-gradient(120deg,#f9d1df,#fff5f8);border:1px solid #e4b45f;border-radius:19px;padding:13px;margin-bottom:13px}.date-icon{font-size:28px}.date-main{font-weight:800}.date-sub{font-size:13px;color:var(--muted);margin-top:3px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{border:1px solid rgba(201,154,61,.45);border-radius:19px;padding:15px;min-height:108px;box-shadow:var(--shadow)}
+.stat:nth-child(1){background:#f8d6e2}.stat:nth-child(2){background:#f1e4f8}.stat:nth-child(3){background:#e6f2e9}.stat:nth-child(4){background:#fff1c9}.stat .value{font-size:25px;font-weight:900}.stat .label{font-size:13px;color:var(--muted);margin-top:5px}
+.home-hero{margin-top:13px;border-radius:23px;overflow:hidden;min-height:190px;background:linear-gradient(110deg,rgba(255,255,255,.92),rgba(255,229,239,.74)),url('assets/home-banner.jpg') center/cover;border:1px solid #d7a34c;display:flex;align-items:center;padding:24px}
+.home-hero h3{font-family:"Brush Script MT","Segoe Script",cursive;font-size:42px;line-height:.95;color:#a92f5e;margin:0}.home-hero p{font-size:14px;max-width:260px;color:#694957}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.quick{min-height:66px;border-radius:17px;border:1px solid #dfb96d;background:#fff8fa;color:#7e304f;font-weight:800;font-size:16px}
+.list{display:grid;gap:10px}.card{background:rgba(255,255,255,.9);border:1px solid #dfc27f;border-radius:18px;padding:14px;box-shadow:0 7px 20px rgba(100,45,65,.08)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.small{font-size:13px;color:var(--muted)}.money{font-weight:900;color:#9c315a}
+.danger{background:#fff0f2;color:#b42e52;border:1px solid #e4a2b3;border-radius:11px;padding:8px 10px}.secondary{background:#fff;color:#75495a;border:1px solid #d8bdc7;border-radius:11px;padding:10px 13px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.cal-head{font-size:11px;text-align:center;color:#9a6c7e;font-weight:800;padding:5px}.cal-day{min-height:82px;background:#fff8fb;border:1px solid #e0c17c;border-radius:10px;padding:5px}.cal-day .n{font-size:11px;color:#a07080}.cal-client{font-size:10px;font-weight:800;color:#96355a;background:#f8d5e2;border-radius:7px;padding:4px;margin-top:5px;line-height:1.1}
+.timer-panel{position:fixed;left:12px;right:12px;bottom:78px;z-index:80;background:#4f2438;color:#fff;border:2px solid #e1b454;border-radius:18px;padding:11px 14px;display:none;box-shadow:0 12px 30px rgba(60,20,40,.25)}.timer-panel.show{display:flex;align-items:center;justify-content:space-between}.timer-value{font-variant-numeric:tabular-nums;font-size:22px;font-weight:900}.timer-stop{background:#f08eaa;color:#fff;border-radius:11px;padding:9px 12px;font-weight:800}
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:70;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:rgba(255,249,252,.96);backdrop-filter:blur(18px);border-top:1px solid #dfc27f;display:grid;grid-template-columns:repeat(5,1fr)}
+.nav{background:none;color:#947080;font-size:11px;display:flex;flex-direction:column;gap:3px;align-items:center}.nav span:first-child{font-size:22px}.nav.active{color:#a72f5d;font-weight:900}
+.modal{position:fixed;inset:0;background:rgba(55,22,36,.4);z-index:200;display:none;align-items:flex-end}.modal.show{display:flex}.sheet{width:100%;max-height:90dvh;overflow:auto;background:#fff8fb;border-radius:25px 25px 0 0;padding:18px 16px calc(25px + env(safe-area-inset-bottom));border-top:3px solid var(--gold)}
+.sheet-head{display:flex;justify-content:space-between;align-items:center}.sheet h3{margin:0 0 14px;color:#8e3157}.close{width:38px;height:38px;border-radius:50%;background:#f5d7e2;color:#8e3157}
+.sheet label{display:block;font-size:13px;font-weight:800;color:#704b5a;margin:10px 0 5px}.sheet input,.sheet select,.sheet textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #d9bfc8;background:#fff;outline:none}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.save{background:#db6287;color:#fff;border:1px solid var(--gold);border-radius:12px;padding:11px 17px;font-weight:800}
+.settings-page{padding-bottom:110px}.settings-card{background:linear-gradient(135deg,#fff8fb,#ffe9f1);border:1px solid #d8aa55;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.settings-card h3{margin:0 0 6px;color:#7e304f;font-size:20px}.settings-card p{margin:0 0 16px;color:var(--muted);font-size:14px;line-height:1.4}
+.zoom-box{display:flex;align-items:center;justify-content:center;gap:14px;margin:8px 0 14px}.zoom-btn{width:48px;height:48px;border-radius:15px;background:#fff;border:1px solid #d4a44f;color:#8d3156;font-size:25px;font-weight:800}.zoom-value{min-width:82px;text-align:center;font-size:22px;font-weight:900;color:#8d3156}.zoom-range{width:100%;accent-color:#d96d91}
+.settings-action{width:100%;min-height:54px;border-radius:17px;margin-top:10px;background:#fff;border:1px solid #d9ae5b;color:#7e304f;font-weight:800}.settings-action.primary-action{background:linear-gradient(180deg,#ef9bb8,#db6287);color:#fff}.settings-action.danger-action{background:#fff0f4;color:#a43b61}
+.ps-setting-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ps-setting-grid label{display:block;font-size:12px;font-weight:800}.ps-setting-grid input,.ps-setting-grid select{margin-top:5px;width:100%;padding:10px;border:1px solid #d9bfc8;border-radius:12px;background:#fff}
+.ps-phone-title{font-weight:900;margin:16px 0 8px}.ps-phone-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:center;margin:7px 0}.ps-phone-row input{padding:9px;border:1px solid #d9bfc8;border-radius:10px}.ps-small-btn{font-size:12px!important;padding:7px 9px!important}
+.invoice{background:#fff;padding:8px;border-radius:15px}.invoice hr{border:0;border-top:1px solid #ddd;margin:14px 0}
+.ps-calendar-toolbar{display:grid;grid-template-columns:46px 1fr 46px;gap:8px;align-items:center;text-align:center;margin-bottom:8px}.ps-week-grid{display:grid;grid-template-columns:repeat(7,minmax(120px,1fr));gap:8px;overflow-x:auto;padding-bottom:6px}
+.ps-day{min-width:120px;background:#fff;border:1px solid #d8aa55;border-radius:16px;padding:8px;min-height:150px}.ps-day-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ead7b2;padding-bottom:7px;margin-bottom:7px}.ps-day-head span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#f7c8d8}
+.ps-job{display:flex;flex-direction:column;width:100%;text-align:left;padding:9px;margin-bottom:6px;border-radius:12px;background:#fff0f5;border:1px solid #e0b46b}.ps-job span,.ps-job small{margin-top:2px;font-size:12px}.ps-empty{font-size:12px;opacity:.55;padding:10px 2px}
+.ps-month-toolbar{display:grid;grid-template-columns:46px 1fr 46px;gap:8px;align-items:center;text-align:center;margin-bottom:10px}.ps-month-total{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.ps-month-total>div{padding:15px;border-radius:17px;background:#fff;border:1px solid #d8aa55}.ps-month-total span{display:block;font-size:12px}.ps-month-total strong{display:block;font-size:22px;margin-top:4px}
+body[data-theme="white"] #app{background:#fff!important}body[data-theme="cream"] #app{background:#fffaf2!important}
+@media(max-width:700px){.ps-week-grid{grid-template-columns:repeat(7,120px)}.ps-setting-grid{grid-template-columns:1fr}.ps-month-total{grid-template-columns:1fr 1fr}}
+@media print{body>*:not(#invoiceModal){display:none!important}#invoiceModal{display:flex!important;position:static;background:#fff}.sheet{max-height:none;border:0}}
+@media(max-width:390px){.welcome-inner{padding-top:2px}.logo-ring{width:72vw;height:72vw;margin-bottom:15px}.welcome-title{font-size:46px}.welcome-sub{font-size:15px}.feature{min-height:112px}.feature-icon{font-size:27px}.feature b{font-size:11px}.get-started{min-height:59px;font-size:25px}.brand img{width:52px;height:52px}.brand h1{font-size:18px}}
 </style>
 </head>
-
 <body>
 
-<div id="backgroundLayer"></div>
+<div id="welcome">
+<div class="welcome-inner">
+<div class="logo-ring">
+<img id="welcomeLogo" src="assets/logo.jpg" alt="Pure Shine Cleaning">
+</div>
+<h1 class="welcome-title">Pure Shine</h1>
+<div class="welcome-heart">✦</div>
+<p class="welcome-sub">Your cleaning business, organised beautifully.</p>
+<div class="features">
+<div class="feature"><div class="feature-icon">🧹</div><b>Jobs</b></div>
+<div class="feature"><div class="feature-icon">📅</div><b>Schedule</b></div>
+<div class="feature"><div class="feature-icon">👥</div><b>Clients</b></div>
+<div class="feature"><div class="feature-icon">£</div><b>Earnings</b></div>
+</div>
+<button class="get-started" onclick="startApp()">Get Started</button>
+<div class="login">Already using the app? <button onclick="startApp()">Open Manager</button></div>
+</div>
+</div>
 
 <div id="app">
-
-<header class="topbar">
-  <div class="app-content">
-    <div class="brand-row">
-
-      <div class="brand">
-
-        <img
-          id="appLogo"
-          class="brand-logo"
-          alt="Pure Shine Cleaning"
-        >
-
-        <div>
-          <h1 class="brand-title">
-            Cleaning Manager
-          </h1>
-
-          <p class="brand-subtitle">
-            Your cleaning business ✨
-          </p>
-        </div>
-
-      </div>
-
-      <button
-        class="settings-button"
-        onclick="openSettings()"
-      >
-        ⚙️
-      </button>
-
-    </div>
-  </div>
+<header class="top">
+<div class="top-row">
+<div class="brand">
+<img id="appLogo" src="assets/logo.jpg" alt="Pure Shine">
+<div><h1>Cleaning Manager</h1><p>Your cleaning business ✨</p></div>
+</div>
+<div class="top-actions">
+<button class="icon add" onclick="openJob()">＋</button>
+<button id="psSettingsButton" class="icon" onclick="showPage('settings')">⚙️</button>
+</div>
+</div>
 </header>
 
+<main>
 
-<!-- HOME -->
+<section id="home" class="page active">
+<div class="date-card">
+<div class="date-icon">📅</div>
+<div><div id="today" class="date-main"></div><div class="date-sub">Let's make today productive 🌸</div></div>
+</div>
 
-<section id="homePage" class="page active">
-<div class="app-content">
+<div class="stats">
+<div class="stat"><div class="value" id="sJobs">0</div><div class="label">Jobs</div></div>
+<div class="stat"><div class="value" id="sHours">0h 0m</div><div class="label">Hours</div></div>
+<div class="stat"><div class="value" id="sEarn">£0.00</div><div class="label">Earned</div></div>
+<div class="stat"><div class="value" id="sFree">0h 0m</div><div class="label">Available</div></div>
+</div>
 
-  <div class="date-banner">
-    <div>
-      <h2 id="homeDate"></h2>
-      <p>Let's make today productive ✨</p>
-    </div>
-    <div class="heart">♡</div>
-  </div>
+<div class="home-hero">
+<div>
+<h3>A clean space<br>is a happy place ♡</h3>
+<p>Everything for your cleaning business — organised, simple and beautiful.</p>
+</div>
+</div>
 
-  <div class="stats-grid">
-
-    <div class="stat">
-      <div class="stat-icon">🛍️</div>
-      <div id="homeJobs" class="stat-value">0</div>
-      <div class="stat-label">Jobs</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">◷</div>
-      <div id="homeHours" class="stat-value">0h 0m</div>
-      <div class="stat-label">Hours</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">£</div>
-      <div id="homeEarned" class="stat-value">£0.00</div>
-      <div class="stat-label">Earned</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">☼</div>
-      <div id="homeAvailable" class="stat-value">8h</div>
-      <div class="stat-label">Available</div>
-    </div>
-
-  </div>
-
-  <div class="section-heading">
-    <h2>Today's schedule</h2>
-
-    <button
-      class="link-button"
-      onclick="showPage('schedule')"
-    >
-      See all
-    </button>
-  </div>
-
-  <div id="todayJobs" class="today-box"></div>
-
-  <h2 class="quick-heading">
-    Quick actions
-  </h2>
-
-  <div class="quick-grid">
-
-    <button
-      class="quick quick-blue"
-      onclick="startCleaningFromHome()"
-    >
-      ⏱️ Start cleaning
-    </button>
-
-    <button
-      class="quick quick-green"
-      onclick="showPage('clients')"
-    >
-      ♧ Clients
-    </button>
-
-    <button
-      class="quick quick-pink"
-      onclick="showPage('schedule')"
-    >
-      ▣ Schedule
-    </button>
-
-    <button
-      class="quick quick-yellow"
-      onclick="openJobModal()"
-    >
-      ＋ Past job
-    </button>
-
-    <button
-      class="quick quick-purple"
-      onclick="showPage('earnings')"
-    >
-      £ Earnings
-    </button>
-
-    <button
-      class="quick quick-peach"
-      onclick="showPage('monthly')"
-    >
-      📊 Monthly money
-    </button>
-
-  </div>
-
-  <div id="homeBanner" class="banner"></div>
-
+<div class="quick-grid">
+<button class="quick" onclick="startNextTimer()">⏱ Start Timer</button>
+<button class="quick" onclick="openJob()">✨ Add Job</button>
 </div>
 </section>
 
-
-<!-- SCHEDULE -->
-
-<section id="schedulePage" class="page">
-<div class="app-content">
-
-  <div class="page-title-row">
-
-    <h2 class="page-title">
-      Schedule
-    </h2>
-
-    <div class="view-switch">
-
-      <button
-        id="calendarViewButton"
-        class="active"
-        onclick="changeScheduleView('calendar')"
-      >
-        Calendar
-      </button>
-
-      <button
-        id="listViewButton"
-        onclick="changeScheduleView('list')"
-      >
-        List
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <div class="day-tabs">
-
-    <button class="day-tab" onclick="openDayPage(1)">
-      <span>🌸</span>Mon
-    </button>
-
-    <button class="day-tab" onclick="openDayPage(2)">
-      <span>🌷</span>Tue
-    </button>
-
-    <button class="day-tab" onclick="openDayPage(3)">
-      <span>🌿</span>Wed
-    </button>
-
-    <button class="day-tab" onclick="openDayPage(4)">
-      <span>🌼</span>Thu
-    </button>
-
-    <button class="day-tab" onclick="openDayPage(5)">
-      <span>🌹</span>Fri
-    </button>
-
-    <button class="day-tab" onclick="openDayPage(6)">
-      <span>☀️</span>Sat
-    </button>
-
-    <button class="day-tab" onclick="openDayPage(0)">
-      <span>♡</span>Sun
-    </button>
-
-  </div>
-
-
-  <div class="year-controls">
-
-    <button onclick="changeScheduleYear(-1)">
-      ‹
-    </button>
-
-    <div id="scheduleYear" class="year-label"></div>
-
-    <button onclick="changeScheduleYear(1)">
-      ›
-    </button>
-
-  </div>
-
-
-  <div id="yearCalendar" class="year-calendar"></div>
-
-  <div id="scheduleList" class="schedule-list"></div>
-
+<section id="schedule" class="page">
+<div class="section-head">
+<h2>Schedule</h2>
+<button class="primary" onclick="openJob()">＋ Add</button>
 </div>
+<div id="calendar" class="calendar"></div>
 </section>
 
-
-<!-- CLIENTS -->
-
-<section id="clientsPage" class="page">
-<div class="app-content">
-
-  <div class="page-title-row">
-
-    <h2 class="page-title">
-      Clients
-    </h2>
-
-    <button
-      class="small-action"
-      onclick="openClientModal()"
-    >
-      ＋ Add
-    </button>
-
-  </div>
-
-  <div id="clientsList"></div>
-
+<section id="clients" class="page">
+<div class="section-head">
+<h2>Clients</h2>
+<button class="primary" onclick="openClient()">＋ Add</button>
 </div>
+<div id="clientsList" class="list"></div>
 </section>
 
-
-<!-- CLIENT PROFILE -->
-
-<section id="clientProfilePage" class="page">
-<div class="app-content">
-
-  <div class="page-title-row">
-
-    <button
-      class="small-action"
-      onclick="showPage('clients')"
-    >
-      ← Clients
-    </button>
-
-    <button
-      class="small-action"
-      id="profileEditButton"
-    >
-      ✏️ Edit
-    </button>
-
-  </div>
-
-  <div id="clientProfileContent"></div>
-
+<section id="jobs" class="page">
+<div class="section-head">
+<h2>Jobs</h2>
+<button class="primary" onclick="openJob()">＋ Add</button>
 </div>
+<div id="jobsList" class="list"></div>
 </section>
 
-
-<!-- EARNINGS -->
-
-<section id="earningsPage" class="page">
-<div class="app-content">
-
-  <div class="page-title-row">
-    <h2 class="page-title">
-      Earnings
-    </h2>
-  </div>
-
-  <div class="earnings-total">
-    <small>Total earned</small>
-    <strong id="earningsTotal">£0.00</strong>
-  </div>
-
-  <div id="earningsHistory"></div>
-
-</div>
+<section id="earnings" class="page">
+<div class="section-head"><h2>Earnings</h2></div>
+<div id="earningsList" class="list"></div>
 </section>
 
+<section id="settings" class="page settings-page">
+<div class="section-head"><h2>Settings</h2></div>
 
-<!-- MONTHLY -->
-
-<section id="monthlyPage" class="page">
-<div class="app-content">
-
-  <div class="page-title-row">
-    <h2 class="page-title">
-      Monthly Earnings
-    </h2>
-  </div>
-
-  <div id="monthlyEarnings"></div>
-
+<div class="settings-card">
+<h3>Interface size</h3>
+<p>Change the size of the entire application.</p>
+<div class="zoom-box">
+<button class="zoom-btn" onclick="changeZoom(-5)">−</button>
+<div id="zoomLabel" class="zoom-value">100%</div>
+<button class="zoom-btn" onclick="changeZoom(5)">+</button>
 </div>
+<input id="zoomRange" class="zoom-range" type="range" min="80" max="200" step="5" value="100" oninput="setAppZoom(this.value)">
+</div>
+
+<div class="settings-card">
+<h3>Schedule appearance</h3>
+<div class="ps-setting-grid">
+<label>View
+<select id="scheduleAppearance">
+<option value="calendar">Calendar</option>
+<option value="list">List</option>
+</select>
+</label>
+</div>
+</div>
+
+<div class="settings-card">
+<h3>App icon</h3>
+<p>Change the picture used for the app.</p>
+<input id="appIconInput" type="file" accept="image/*">
+</div>
+
+<div class="settings-card">
+<h3>Profile / logo picture</h3>
+<input id="profileInput" type="file" accept="image/*">
+</div>
+
+<div class="settings-card">
+<h3>Home banner</h3>
+<p>Change the image behind “A clean space is a happy place”.</p>
+<input id="bannerInput" type="file" accept="image/*">
+</div>
+
+<div class="settings-card">
+<h3>Background</h3>
+<input id="backgroundInput" type="file" accept="image/*">
+<label style="margin-top:14px">Transparency</label>
+<input id="backgroundOpacity" class="zoom-range" type="range" min="0" max="100" value="20">
+</div>
+
+<div class="settings-card">
+<h3>Writing style</h3>
+<select id="fontSelect">
+<option value="modern">Modern</option>
+<option value="serif">Elegant Serif</option>
+<option value="script">Soft Script</option>
+<option value="rounded">Rounded</option>
+</select>
+</div>
+
+<div class="settings-card">
+<h3>Reminder sounds</h3>
+<div class="ps-setting-grid">
+<button class="settings-action" onclick="chooseSound('bell')">🔔 Bell</button>
+<button class="settings-action" onclick="chooseSound('soft')">✨ Soft</button>
+<button class="settings-action" onclick="chooseSound('chime')">🎵 Chime</button>
+<button class="settings-action" onclick="chooseSound('double')">💗 Double</button>
+</div>
+<button class="settings-action" onclick="testReminderSound()">📢 Test sound</button>
+<button class="settings-action" onclick="enableReminders()">🔔 Enable reminders</button>
+</div>
+
+<div class="settings-card">
+<h3>Backup</h3>
+<p>Export your clients, schedule, completed jobs and earnings so your history can be restored.</p>
+<button class="settings-action" onclick="exportData()">⬇️ Export backup</button>
+<button class="settings-action" onclick="importData()">⬆️ Import backup</button>
+<input id="importFile" type="file" accept=".json,application/json" style="display:none">
+</div>
+
+<button id="saveSettingsButton" class="settings-action primary-action" onclick="saveSettingsPanel()">💾 Save changes</button>
+<div id="saveSettingsStatus" class="small" style="text-align:center;margin:8px 0 20px"></div>
 </section>
 
+</main>
 
-<!-- TIMER -->
-
-<div id="timerBar" class="timer-bar">
-
-  <div>
-    <div id="timerName" class="timer-name">
-      Cleaning
-    </div>
-
-    <div id="timerValue" class="timer-value">
-      00:00:00
-    </div>
-  </div>
-
-  <button
-    class="timer-stop"
-    onclick="stopTimer()"
-  >
-    Stop
-  </button>
-
+<div id="timerPanel" class="timer-panel">
+<div>
+<div class="small" style="color:#f8cbd9">CURRENT TIMER</div>
+<b id="timerClient">Client</b>
+<div id="timerValue" class="timer-value">00:00:00</div>
+</div>
+<button class="timer-stop" onclick="stopTimer()">Stop</button>
 </div>
 
-
-<!-- NAV -->
-
-<nav class="bottom-nav">
-
-  <button
-    class="active"
-    data-page="home"
-    onclick="showPage('home',this)"
-  >
-    <span class="nav-icon">⌂</span>
-    Home
-  </button>
-
-  <button
-    data-page="schedule"
-    onclick="showPage('schedule',this)"
-  >
-    <span class="nav-icon">▣</span>
-    Schedule
-  </button>
-
-  <button
-    data-page="clients"
-    onclick="showPage('clients',this)"
-  >
-    <span class="nav-icon">♧</span>
-    Clients
-  </button>
-
-  <button
-    data-page="earnings"
-    onclick="showPage('earnings',this)"
-  >
-    <span class="nav-icon">£</span>
-    Earnings
-  </button>
-
-  <button
-    data-page="monthly"
-    onclick="showPage('monthly',this)"
-  >
-    <span class="nav-icon">▥</span>
-    Monthly
-  </button>
-
+<nav class="bottom">
+<button class="nav active" data-page="home" onclick="showPage('home',this)"><span>⌂</span>Home</button>
+<button class="nav" data-page="schedule" onclick="showPage('schedule',this)"><span>🗓</span>Schedule</button>
+<button class="nav" data-page="clients" onclick="showPage('clients',this)"><span>👥</span>Clients</button>
+<button class="nav" data-page="jobs" onclick="showPage('jobs',this)"><span>🧹</span>Jobs</button>
+<button class="nav" data-page="earnings" onclick="showPage('earnings',this)"><span>£</span>Earnings</button>
 </nav>
+</div>
 
-
-<!-- JOB MODAL -->
-
-<div id="jobModal" class="modal">
-
-<div class="modal-box">
-
-  <div class="modal-header">
-
-    <h3 id="jobModalTitle">
-      Add Job
-    </h3>
-
-    <button
-      class="close-button"
-      onclick="closeModal('jobModal')"
-    >
-      ×
-    </button>
-
-  </div>
-
-  <input id="jobId" type="hidden">
-
-  <div class="form-group">
-
-    <label>Client</label>
-
-    <select id="jobClient"></select>
-
-  </div>
-
-  <div class="form-group">
-
-    <label>Date</label>
-
-    <input id="jobDate" type="date">
-
-  </div>
-
-  <div class="form-two">
-
-    <div class="form-group">
-
-      <label>Start time</label>
-
-      <input id="jobStart" type="time">
-
-    </div>
-
-    <div class="form-group">
-
-      <label>End time</label>
-
-      <input id="jobEnd" type="time">
-
-    </div>
-
-  </div>
-
-  <div class="form-two">
-
-    <div class="form-group">
-
-      <label>Hours</label>
-
-      <input
-        id="jobHours"
-        type="number"
-        min="0"
-        step="1"
-      >
-
-    </div>
-
-    <div class="form-group">
-
-      <label>Minutes</label>
-
-      <input
-        id="jobMinutes"
-        type="number"
-        min="0"
-        max="59"
-        step="1"
-      >
-
-    </div>
-
-  </div>
-
-  <div class="form-group">
-
-    <label>Hourly rate (£)</label>
-
-    <input
-      id="jobRate"
-      type="number"
-      min="0"
-      step="0.01"
-    >
-
-  </div>
-
-  <div class="duration-box">
-
-    <strong>Duration:</strong>
-    <span id="calculatedDuration">
-      0 minutes
-    </span>
-
-    <br>
-
-    <strong>Amount:</strong>
-    £<span id="calculatedAmount">
-      0.00
-    </span>
-
-  </div>
-
-  <div class="form-group">
-
-    <label>Notes</label>
-
-    <textarea id="jobNotes"></textarea>
-
-  </div>
-
-  <button
-    class="modal-save"
-    onclick="saveJob()"
-  >
-    Save job
-  </button>
-
-  <button
-    id="deleteJobButton"
-    class="modal-delete"
-    onclick="deleteCurrentJob()"
-    style="display:none"
-  >
-    🗑 Delete this job
-  </button>
-
-  <div
-    id="messageButtons"
-    class="message-buttons"
-    style="display:none"
-  >
-
-    <button onclick="sendClientConfirmation()">
-      📩 Client reminder
-    </button>
-
-    <button onclick="sendPaymentReminder()">
-      💷 Payment reminder
-    </button>
-
-  </div>
-
+<div id="clientModal" class="modal" onclick="if(event.target===this)closeModal('clientModal')">
+<div class="sheet">
+<div class="sheet-head"><h3 id="clientTitle">Add Client</h3><button class="close" onclick="closeModal('clientModal')">✕</button></div>
+<input id="cId" type="hidden">
+<label>Name</label><input id="cName">
+<label>Client type</label>
+<select id="cType"><option>Private</option><option>Agency</option><option>Occasional</option><option>Every 2 weeks</option><option>Every 3 weeks</option><option>Monthly</option></select>
+<label>Rate (£/hour)</label><input id="cRate" type="number" step="0.01">
+<label>Standard hours</label><input id="cHours" type="number" step="0.25">
+<label>Phone number</label><input id="cPhone" type="tel">
+<div class="form-actions"><button class="secondary" onclick="closeModal('clientModal')">Cancel</button><button class="save" onclick="saveClient()">Save</button></div>
 </div>
 </div>
 
-
-<!-- CLIENT MODAL -->
-
-<div id="clientModal" class="modal">
-
-<div class="modal-box">
-
-  <div class="modal-header">
-
-    <h3 id="clientModalTitle">
-      Client
-    </h3>
-
-    <button
-      class="close-button"
-      onclick="closeModal('clientModal')"
-    >
-      ×
-    </button>
-
-  </div>
-
-  <input id="clientId" type="hidden">
-
-  <div class="form-group">
-
-    <label>Client name</label>
-
-    <input id="clientName" type="text">
-
-  </div>
-
-  <div class="form-group">
-
-    <label>Phone number</label>
-
-    <input id="clientPhone" type="tel">
-
-  </div>
-
-  <div class="form-two">
-
-    <div class="form-group">
-
-      <label>Type</label>
-
-      <select id="clientType">
-
-        <option value="Private">
-          Private
-        </option>
-
-        <option value="Agency">
-          Agency
-        </option>
-
-      </select>
-
-    </div>
-
-    <div class="form-group">
-
-      <label>Hourly rate (£)</label>
-
-      <input
-        id="clientRate"
-        type="number"
-        min="0"
-        step="0.01"
-      >
-
-    </div>
-
-  </div>
-
-  <div class="form-group">
-
-    <label>Frequency</label>
-
-    <select id="clientFrequency">
-
-      <option value="Weekly">
-        Weekly
-      </option>
-
-      <option value="Fortnightly">
-        Fortnightly
-      </option>
-
-      <option value="Every 3 weeks">
-        Every 3 weeks
-      </option>
-
-      <option value="Occasional">
-        Occasional
-      </option>
-
-      <option value="Vacation">
-        Vacation
-      </option>
-
-    </select>
-
-  </div>
-
-  <div class="form-group">
-
-    <label>Day</label>
-
-    <select id="clientDay">
-
-      <option value="">
-        Not set
-      </option>
-
-      <option value="1">
-        Monday
-      </option>
-
-      <option value="2">
-        Tuesday
-      </option>
-
-      <option value="3">
-        Wednesday
-      </option>
-
-      <option value="4">
-        Thursday
-      </option>
-
-      <option value="5">
-        Friday
-      </option>
-
-      <option value="6">
-        Saturday
-      </option>
-
-      <option value="0">
-        Sunday
-      </option>
-
-    </select>
-
-  </div>
-
-  <div class="form-two">
-
-    <div class="form-group">
-
-      <label>Normal start</label>
-
-      <input id="clientStart" type="time">
-
-    </div>
-
-    <div class="form-group">
-
-      <label>Normal end</label>
-
-      <input id="clientEnd" type="time">
-
-    </div>
-
-  </div>
-
-  <div class="form-group">
-
-    <label>Schedule notes</label>
-
-    <textarea
-      id="clientNotes"
-      placeholder="Flexible hours, holidays, agency/private details..."
-    ></textarea>
-
-  </div>
-
-  <button
-    class="modal-save"
-    onclick="saveClient()"
-  >
-    Save client
-  </button>
-
+<div id="jobModal" class="modal" onclick="if(event.target===this)closeModal('jobModal')">
+<div class="sheet">
+<div class="sheet-head"><h3 id="jobTitle">Add Cleaning Job</h3><button class="close" onclick="closeModal('jobModal')">✕</button></div>
+<input id="jId" type="hidden">
+<label>Client</label><select id="jClient"></select>
+<div class="form-grid">
+<div><label>Date</label><input id="jDate" type="date"></div>
+<div><label>Day</label><select id="jDay"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div>
+</div>
+<div class="form-grid">
+<div><label>Start</label><input id="jStart" type="time" onchange="calcHours()"></div>
+<div><label>End</label><input id="jEnd" type="time" onchange="calcHours()"></div>
+</div>
+<div class="form-grid">
+<div><label>Exact worked time</label><input id="jHours" type="number" step="0.0166667"></div>
+<div><label>Rate (£/hour)</label><input id="jRate" type="number" step="0.01"></div>
+</div>
+<label>Notes</label><textarea id="jNotes"></textarea>
+<label><input id="jDone" type="checkbox" style="width:auto"> Completed</label>
+<div class="form-actions">
+<button class="secondary" onclick="closeModal('jobModal')">Cancel</button>
+<button class="save" onclick="saveJob()">Save Job</button>
 </div>
 </div>
-
-
-<!-- SETTINGS -->
-
-<div id="settingsModal" class="modal">
-
-<div class="modal-box">
-
-  <div class="modal-header">
-
-    <h3>Settings</h3>
-
-    <button
-      class="close-button"
-      onclick="closeModal('settingsModal')"
-    >
-      ×
-    </button>
-
-  </div>
-
-
-  <div class="settings-section">
-
-    <h3>Interface size</h3>
-
-    <p class="settings-description">
-      Change the size of the entire application.
-    </p>
-
-    <div class="zoom-row">
-
-      <button onclick="changeZoom(-5)">
-        −
-      </button>
-
-      <div id="zoomLabel" class="zoom-label">
-        100%
-      </div>
-
-      <button onclick="changeZoom(5)">
-        ＋
-      </button>
-
-    </div>
-
-    <div class="settings-row">
-
-      <input
-        id="zoomRange"
-        type="range"
-        min="100"
-        max="160"
-        step="5"
-        value="100"
-        oninput="setZoom(this.value)"
-      >
-
-    </div>
-
-  </div>
-
-
-  <div class="settings-section">
-
-    <h3>Schedule appearance</h3>
-
-    <div class="view-switch">
-
-      <button
-        id="settingsCalendar"
-        onclick="changeScheduleView('calendar')"
-      >
-        Calendar
-      </button>
-
-      <button
-        id="settingsList"
-        onclick="changeScheduleView('list')"
-      >
-        List
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <div class="settings-section">
-
-    <h3>App icon</h3>
-
-    <p class="settings-description">
-      Change the picture used for the app.
-    </p>
-
-    <input
-      type="file"
-      accept="image/*"
-      onchange="uploadImage(this,'icon')"
-    >
-
-  </div>
-
-
-  <div class="settings-section">
-
-    <h3>Profile / logo picture</h3>
-
-    <input
-      type="file"
-      accept="image/*"
-      onchange="uploadImage(this,'profile')"
-    >
-
-  </div>
-
-
-  <div class="settings-section">
-
-    <h3>Home banner</h3>
-
-    <input
-      type="file"
-      accept="image/*"
-      onchange="uploadImage(this,'banner')"
-    >
-
-  </div>
-
-
-  <div class="settings-section">
-
-    <h3>Background</h3>
-
-    <input
-      type="file"
-      accept="image/*"
-      onchange="uploadImage(this,'background')"
-    >
-
-    <div class="settings-row">
-
-      <label>Transparency</label>
-
-      <input
-        id="backgroundOpacity"
-        type="range"
-        min="0"
-        max="100"
-        value="12"
-        oninput="setBackgroundOpacity(this.value)"
-      >
-
-    </div>
-
-  </div>
-
-
-  <div class="settings-section">
-
-    <h3>Writing style</h3>
-
-    <div class="settings-row">
-
-      <select
-        id="fontStyle"
-        onchange="setFontStyle(this.value)"
-      >
-
-        <option value="system">
-          Modern
-        </option>
-
-        <option value="serif">
-          Elegant
-        </option>
-
-        <option value="rounded">
-          Rounded
-        </option>
-
-        <option value="mono">
-          Minimal
-        </option>
-
-      </select>
-
-    </div>
-
-  </div>
-
-
-  <div class="settings-section">
-
-    <h3>Reminder sounds</h3>
-
-    <div class="sound-grid">
-
-      <button
-        class="sound-option"
-        data-sound="bell"
-        onclick="selectSound('bell')"
-      >
-        🔔 Bell
-      </button>
-
-      <button
-        class="sound-option"
-        data-sound="soft"
-        onclick="selectSound('soft')"
-      >
-        ✨ Soft
-      </button>
-
-      <button
-        class="sound-option"
-        data-sound="chime"
-        onclick="selectSound('chime')"
-      >
-        🎵 Chime
-      </button>
-
-      <button
-        class="sound-option"
-        data-sound="double"
-        onclick="selectSound('double')"
-      >
-        💗 Double
-      </button>
-
-    </div>
-
-    <button
-      class="setting-full-button"
-      onclick="testReminderSound()"
-    >
-      🔊 Test sound
-    </button>
-
-    <button
-      class="setting-full-button"
-      onclick="enableNotifications()"
-    >
-      🔔 Enable reminders
-    </button>
-
-  </div>
-
-
-  <div class="settings-section">
-
-    <h3>Backup</h3>
-
-    <p class="settings-description">
-      Save a complete copy of your clients, jobs,
-      schedule and earnings.
-    </p>
-
-    <button
-      class="setting-full-button"
-      onclick="exportData()"
-    >
-      ⬇️ Export backup
-    </button>
-
-    <button
-      class="setting-full-button"
-      onclick="document.getElementById('importFile').click()"
-    >
-      ⬆️ Import backup
-    </button>
-
-    <input
-      id="importFile"
-      type="file"
-      accept=".json"
-      style="display:none"
-      onchange="importData(this)"
-    >
-
-  </div>
-
 </div>
-</div>
-
 
 <script>
-"use strict";
+(function(){
 
+const STORAGE_KEY="PURE_SHINE_CLEANING_MANAGER_PERMANENT_V11";
+const OLD_KEY="PURE_SHINE_CLEANING_MANAGER_PERMANENT";
 
-/* ==========================================================
-   STORAGE
-========================================================== */
-
-const STORAGE_KEY =
-  "PURE_SHINE_CLEANING_MANAGER_PERMANENT_V11";
-
-
-/* ==========================================================
-   CLIENTS
-========================================================== */
-
-const INITIAL_CLIENTS = [
-
-  {
-    id:"lottie",
-    name:"Lottie",
-    phone:"07788 447015",
-    type:"Private",
-    rate:18,
-    frequency:"Weekly",
-    day:1,
-    start:"09:00",
-    end:"11:00",
-    notes:"Monday 9–11."
-  },
-
-  {
-    id:"victoria",
-    name:"Victoria",
-    phone:"07923 054040",
-    type:"Agency",
-    rate:16,
-    privateRate:18,
-    frequency:"Weekly",
-    day:1,
-    start:"13:00",
-    end:"15:00",
-    flexible:true,
-    notes:"Monday 13–15. Agency £16/hour. Private £18/hour. Flexible hours."
-  },
-
-  {
-    id:"matt",
-    name:"Matt",
-    phone:"07886 711055",
-    type:"Private",
-    rate:18,
-    frequency:"Weekly",
-    day:2,
-    start:"09:00",
-    end:"13:00",
-    flexible:true,
-    notes:"Tuesday 9–13."
-  },
-
-  {
-    id:"christine",
-    name:"Christine",
-    phone:"",
-    type:"Private",
-    rate:18,
-    frequency:"Fortnightly",
-    day:2,
-    start:"09:30",
-    end:"12:30",
-    notes:"Fortnightly normally. Currently on holiday.",
-    vacation:true
-  },
-
-  {
-    id:"sonia",
-    name:"Sonia",
-    phone:"+44 7813 677012",
-    type:"Agency",
-    rate:16,
-    frequency:"Weekly",
-    day:3,
-    start:"",
-    end:"",
-    flexible:true,
-    minHours:4,
-    maxHours:7,
-    notes:"Wednesday – 4–7 hours."
-  },
-
-  {
-    id:"laura",
-    name:"Laura",
-    phone:"+44 7958 391731",
-    type:"Private",
-    rate:18,
-    frequency:"Weekly",
-    day:4,
-    start:"09:00",
-    end:"13:00",
-    notes:"Thursday 9–13."
-  },
-
-  {
-    id:"hannah",
-    name:"Hannah",
-    phone:"07920 724916",
-    type:"Agency",
-    rate:16,
-    frequency:"Weekly",
-    day:4,
-    start:"13:00",
-    end:"16:00",
-    notes:"Thursday – 3 hours."
-  },
-
-  {
-    id:"meghan",
-    name:"Meghan",
-    phone:"+44 7740 291352",
-    type:"Private",
-    rate:18,
-    frequency:"Weekly",
-    day:4,
-    start:"",
-    end:"",
-    flexible:true,
-    minHours:1,
-    maxHours:2,
-    notes:"Thursday – 1–2 hours."
-  },
-
-  {
-    id:"sindu",
-    name:"Shindu",
-    phone:"07438 168843",
-    type:"Private",
-    rate:18,
-    frequency:"Fortnightly",
-    day:5,
-    start:"",
-    end:"",
-    flexible:true,
-    minHours:3,
-    maxHours:3,
-    anchor:"2026-10-09",
-    notes:"Friday – fortnightly – 3 hours."
-  },
-
-  {
-    id:"joanna",
-    name:"Joanna",
-    phone:"07872 011386",
-    type:"Private",
-    rate:18,
-    frequency:"Fortnightly",
-    day:5,
-    start:"",
-    end:"",
-    flexible:true,
-    minHours:3,
-    maxHours:4,
-    anchor:"2026-10-02",
-    notes:"Friday – fortnightly – 3–4 hours."
-  }
-
+const INITIAL_CLIENTS=[
+{id:"lottie",name:"Lottie",phone:"07788 447015",type:"Agency",rate:16,hours:2,day:"Monday",start:"09:00",end:"11:00"},
+{id:"victoria",name:"Victoria",phone:"07923 054040",type:"Agency",rate:16,hours:2,day:"Monday",start:"13:00",end:"15:00",privateRate:18,agencyRate:16},
+{id:"matt",name:"Matt",phone:"07886 711055",type:"Agency",rate:16,hours:4,day:"Tuesday",start:"09:00",end:"13:00"},
+{id:"christine",name:"Christine",phone:"",type:"Every 2 weeks",rate:18,hours:3,day:"Tuesday",start:"09:30",end:"12:30"},
+{id:"sonia",name:"Sonia",phone:"+44 7813 677012",type:"Agency",rate:16,hours:5,day:"Wednesday",start:"09:00",end:"14:00",variable:true},
+{id:"laura",name:"Laura",phone:"+44 7958 391731",type:"Private",rate:18,hours:4,day:"Thursday",start:"09:00",end:"13:00",variable:true},
+{id:"hannah",name:"Hannah",phone:"07920 724916",type:"Agency",rate:16,hours:3,day:"Thursday",start:"13:00",end:"16:00"},
+{id:"meghan",name:"Meghan",phone:"+44 7740 291352",type:"Private",rate:18,hours:1,day:"Thursday",start:"",end:"",variable:true},
+{id:"shindu",name:"Shindu",phone:"07438 168843",type:"Every 2 weeks",rate:16,hours:3,day:"Friday",start:"",end:""},
+{id:"joanna",name:"Joanna",phone:"07872 011386",type:"Every 2 weeks",rate:18,hours:3.5,day:"Friday",start:"",end:""}
 ];
 
-
-/* ==========================================================
-   PAST JOBS
-========================================================== */
-
-const INITIAL_PAST_JOBS = [
-
-  {
-    id:"past_20261001_laura",
-    clientId:"laura",
-    clientNameSnapshot:"Laura",
-    date:"2026-10-01",
-    start:"",
-    end:"",
-    totalMinutes:0,
-    rate:18,
-    totalOverride:51.30,
-    notes:"Past job supplied by user.",
-    completed:true,
-    paid:false,
-    source:"past"
-  },
-
-  {
-    id:"past_20261001_hannah",
-    clientId:"hannah",
-    clientNameSnapshot:"Hannah",
-    date:"2026-10-01",
-    start:"",
-    end:"",
-    totalMinutes:0,
-    rate:16,
-    totalOverride:48,
-    notes:"Past job supplied by user.",
-    completed:true,
-    paid:false,
-    source:"past"
-  },
-
-  {
-    id:"past_20261002_joanna",
-    clientId:"joanna",
-    clientNameSnapshot:"Joanna",
-    date:"2026-10-02",
-    start:"",
-    end:"",
-    totalMinutes:0,
-    rate:18,
-    totalOverride:66.60,
-    notes:"Past job supplied by user.",
-    completed:true,
-    paid:false,
-    source:"past"
-  },
-
-  {
-    id:"past_20261004_meghan",
-    clientId:"meghan",
-    clientNameSnapshot:"Meghan",
-    date:"2026-10-04",
-    start:"",
-    end:"",
-    totalMinutes:0,
-    rate:18,
-    totalOverride:30,
-    notes:"Past job supplied by user.",
-    completed:true,
-    paid:false,
-    source:"past"
-  },
-
-  {
-    id:"past_20261005_lottie",
-    clientId:"lottie",
-    clientNameSnapshot:"Lottie",
-    date:"2026-10-05",
-    start:"",
-    end:"",
-    totalMinutes:0,
-    rate:18,
-    totalOverride:32,
-    notes:"Past job supplied by user.",
-    completed:true,
-    paid:false,
-    source:"past"
-  },
-
-  {
-    id:"past_victoria_undated",
-    clientId:"victoria",
-    clientNameSnapshot:"Victoria",
-    date:"",
-    start:"",
-    end:"",
-    totalMinutes:0,
-    rate:16,
-    totalOverride:48,
-    notes:"Past job supplied by user. Date can be edited.",
-    completed:true,
-    paid:false,
-    source:"past"
-  }
-
+const INITIAL_PAST_JOBS=[
+{id:"past-laura-01",clientId:"laura",date:"2026-10-01",day:"Thursday",hours:2.85,rate:18,totalOverride:51.30,done:true},
+{id:"past-hannah-01",clientId:"hannah",date:"2026-10-01",day:"Thursday",hours:3,rate:16,totalOverride:48,done:true},
+{id:"past-joanna-01",clientId:"joanna",date:"2026-10-02",day:"Friday",hours:3.7,rate:18,totalOverride:66.60,done:true},
+{id:"past-meghan-01",clientId:"meghan",date:"2026-10-04",day:"Sunday",hours:1.6666667,rate:18,totalOverride:30,done:true},
+{id:"past-lottie-01",clientId:"lottie",date:"2026-10-05",day:"Monday",hours:2,rate:16,totalOverride:32,done:true},
+{id:"past-victoria-01",clientId:"victoria",date:"",day:"Monday",hours:3,rate:16,totalOverride:48,done:true}
 ];
-
 
 let clients=[];
 let jobs=[];
 let overrides={};
-
 let settings={
-  zoom:100,
-  scheduleView:"calendar",
-  font:"system",
-  sound:"bell",
-  backgroundOpacity:12,
-  profile:"",
-  icon:"",
-  banner:"",
-  background:"",
-  notifications:false
+zoom:100,
+scheduleAppearance:"calendar",
+font:"modern",
+sound:"soft",
+backgroundOpacity:20,
+reminders:false,
+banner:"",
+background:"",
+profile:"",
+icon:""
 };
+let timer={jobId:null,start:null,interval:null};
+let scheduleYear=new Date().getFullYear();
+let earningsMonth=new Date();
+let recurringWeekAnchor=new Date("2026-09-28T00:00:00");
 
-let scheduleYear=
-  new Date().getFullYear();
-
-let scheduleView="calendar";
-
-let activeTimer=null;
-
-let currentClientProfile=null;
-
-let activeDayFilter=null;
-
-
-/* ==========================================================
-   HELPERS
-========================================================== */
-
-function clone(value){
-  return JSON.parse(
-    JSON.stringify(value)
-  );
+function deepClone(x){return JSON.parse(JSON.stringify(x))}
+function money(n){return "£"+Number(n||0).toFixed(2)}
+function timeText(hours){
+const total=Math.round(Number(hours||0)*60);
+return Math.floor(total/60)+"h "+(total%60)+"m";
 }
-
-function uid(prefix){
-  return prefix+
-    "_"+
-    Date.now()+
-    "_"+
-    Math.random()
-      .toString(36)
-      .slice(2,9);
-}
-
-function money(value){
-  return "£"+
-    Number(value||0).toFixed(2);
-}
-
-function todayISO(){
-
-  const d=new Date();
-
-  return d.getFullYear()+
-    "-"+
-    String(d.getMonth()+1).padStart(2,"0")+
-    "-"+
-    String(d.getDate()).padStart(2,"0");
-}
-
-function parseDate(value){
-
-  if(!value)return null;
-
-  return new Date(
-    value+"T12:00:00"
-  );
-}
-
-function dateISO(date){
-
-  const d=new Date(date);
-
-  return d.getFullYear()+
-    "-"+
-    String(d.getMonth()+1).padStart(2,"0")+
-    "-"+
-    String(d.getDate()).padStart(2,"0");
-}
-
-function formatDate(value){
-
-  if(!value)
-    return "Date not provided";
-
-  const d=parseDate(value);
-
-  if(!d)
-    return "Date not provided";
-
-  return d.toLocaleDateString(
-    "en-GB",
-    {
-      weekday:"long",
-      day:"numeric",
-      month:"long",
-      year:"numeric"
-    }
-  );
-}
-
-function formatTime(value){
-
-  if(!value)return "";
-
-  const parts=value.split(":");
-
-  let hour=Number(parts[0]);
-  const minute=parts[1]||"00";
-
-  const suffix=hour>=12?"PM":"AM";
-
-  hour=hour%12||12;
-
-  return hour+":"+minute+" "+suffix;
-}
-
-function minutesFromTime(value){
-
-  if(!value)return null;
-
-  const p=value.split(":");
-
-  if(p.length<2)return null;
-
-  return Number(p[0])*60+
-    Number(p[1]);
-}
-
-function durationBetween(start,end){
-
-  const s=minutesFromTime(start);
-  const e=minutesFromTime(end);
-
-  if(s===null||e===null)
-    return null;
-
-  let result=e-s;
-
-  if(result<0)
-    result+=1440;
-
-  return result;
-}
-
-function durationText(minutes){
-
-  minutes=Math.max(
-    0,
-    Math.round(Number(minutes)||0)
-  );
-
-  const h=Math.floor(minutes/60);
-  const m=minutes%60;
-
-  if(h&&m)return h+"h "+m+"m";
-  if(h)return h+"h";
-  return m+"m";
-}
-
-function longDurationText(minutes){
-
-  minutes=Math.max(
-    0,
-    Math.round(Number(minutes)||0)
-  );
-
-  const h=Math.floor(minutes/60);
-  const m=minutes%60;
-
-  let result="";
-
-  if(h)
-    result+=h+" hour"+(h===1?"":"s");
-
-  if(m){
-    if(result)result+=" ";
-    result+=m+" minute"+(m===1?"":"s");
-  }
-
-  return result||"0 minutes";
-}
-
-function escapeHTML(value){
-
-  return String(value??"")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
-
-function clientById(id){
-
-  return clients.find(
-    client =>
-      String(client.id)===
-      String(id)
-  );
-}
-
-function amountForJob(job){
-
-  if(
-    job.totalOverride!==null &&
-    job.totalOverride!==undefined &&
-    job.totalOverride!==""
-  ){
-
-    return Number(
-      job.totalOverride
-    );
-
-  }
-
-  return (
-    Number(job.totalMinutes||0)/60
-  )*
-  Number(job.rate||0);
-}
-
-
-/* ==========================================================
-   STORAGE — FIXED
-   NU MAI SUPRASCRIE EDITĂRILE CLIENTULUI
-========================================================== */
-
-function saveData(){
-
-  try{
-
-    const data={
-
-      version:11,
-
-      clients:clone(clients),
-
-      jobs:clone(jobs),
-
-      overrides:clone(overrides),
-
-      settings:clone(settings),
-
-      activeTimer:
-        activeTimer
-          ?clone(activeTimer)
-          :null
-
-    };
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(data)
-    );
-
-    return true;
-
-  }catch(error){
-
-    console.error(error);
-
-    alert(
-      "Could not save your changes. Please export a backup."
-    );
-
-    return false;
-
-  }
-}
-
-
-/* ==========================================================
-   LOAD DATA — FIXED
-========================================================== */
+function dateKey(d){return d.toISOString().slice(0,10)}
+function getDayName(d){return d.toLocaleDateString("en-GB",{weekday:"long"})}
+function name(id){return clients.find(c=>c.id===id)?.name||"Unknown client"}
 
 function loadData(){
-
-  let data=null;
-
-  /*
-    First try the new storage.
-  */
-
-  try{
-
-    data=
-      JSON.parse(
-        localStorage.getItem(
-          STORAGE_KEY
-        )
-      );
-
-  }catch(error){
-
-    data=null;
-
-  }
-
-
-  /*
-    If the new storage does not exist,
-    try the old application storage so existing
-    data is not lost.
-  */
-
-  if(!data){
-
-    try{
-
-      data=
-        JSON.parse(
-          localStorage.getItem(
-            "PURE_SHINE_CLEANING_MANAGER_PERMANENT"
-          )
-        );
-
-    }catch(error){
-
-      data=null;
-
-    }
-
-  }
-
-
-  if(data){
-
-    clients=
-      Array.isArray(data.clients)
-        ?data.clients
-        :clone(INITIAL_CLIENTS);
-
-    jobs=
-      Array.isArray(data.jobs)
-        ?data.jobs.map(normalizeJob)
-        :clone(INITIAL_PAST_JOBS);
-
-    overrides=
-      data.overrides||{};
-
-    settings={
-      ...settings,
-      ...(data.settings||{})
-    };
-
-    activeTimer=
-      data.activeTimer||null;
-
-  }else{
-
-    clients=
-      clone(INITIAL_CLIENTS);
-
-    jobs=
-      clone(INITIAL_PAST_JOBS);
-
-  }
-
-
-  /*
-    IMPORTANT:
-    We DO NOT overwrite edited names,
-    rates, times, notes or frequencies.
-
-    We only add a missing client and fill
-    a missing phone number.
-  */
-
-  INITIAL_CLIENTS.forEach(initialClient=>{
-
-    const existing=
-      clients.find(
-        client =>
-          client.id===
-          initialClient.id
-      );
-
-
-    if(!existing){
-
-      clients.push(
-        clone(initialClient)
-      );
-
-      return;
-
-    }
-
-
-    if(
-      existing.phone===undefined||
-      existing.phone===null
-    ){
-
-      existing.phone=
-        initialClient.phone||"";
-
-    }
-
-
-    if(
-      existing.name===undefined||
-      existing.name===null||
-      existing.name===""
-
-    ){
-
-      existing.name=
-        initialClient.name;
-
-    }
-
-
-    if(
-      existing.type===undefined||
-      existing.type===null
-    ){
-
-      existing.type=
-        initialClient.type;
-
-    }
-
-
-    if(
-      existing.rate===undefined||
-      existing.rate===null
-    ){
-
-      existing.rate=
-        initialClient.rate;
-
-    }
-
-
-    if(
-      existing.frequency===undefined||
-      existing.frequency===null
-    ){
-
-      existing.frequency=
-        initialClient.frequency;
-
-    }
-
-
-    if(
-      existing.day===undefined
-    ){
-
-      existing.day=
-        initialClient.day;
-
-    }
-
-
-    if(
-      existing.start===undefined||
-      existing.start===null
-    ){
-
-      existing.start=
-        initialClient.start||"";
-
-    }
-
-
-    if(
-      existing.end===undefined||
-      existing.end===null
-    ){
-
-      existing.end=
-        initialClient.end||"";
-
-    }
-
-
-    if(
-      existing.notes===undefined||
-      existing.notes===null
-    ){
-
-      existing.notes=
-        initialClient.notes||"";
-
-    }
-
-  });
-
-
-  clients=
-    clients.map(
-      (client,index)=>({
-
-        ...client,
-
-        id:
-          client.id||
-          "client_"+index
-
-      })
-    );
-
-
-  jobs=
-    jobs.map(
-      normalizeJob
-    );
-
-
-  saveData();
-
+let raw=localStorage.getItem(STORAGE_KEY);
+if(!raw)raw=localStorage.getItem(OLD_KEY);
+if(raw){
+try{
+const d=JSON.parse(raw);
+clients=Array.isArray(d.clients)?d.clients:[];
+jobs=Array.isArray(d.jobs)?d.jobs:[];
+overrides=d.overrides||{};
+settings={...settings,...(d.settings||{})};
+}catch(e){}
+}
+if(!clients.length)clients=deepClone(INITIAL_CLIENTS);
+
+INITIAL_CLIENTS.forEach(base=>{
+const existing=clients.find(c=>c.id===base.id);
+if(!existing)clients.push(deepClone(base));
+else{
+if(existing.phone==null)existing.phone=base.phone;
+if(existing.day==null)existing.day=base.day;
+if(existing.type==null)existing.type=base.type;
+if(existing.hours==null)existing.hours=base.hours;
+if(existing.start==null)existing.start=base.start;
+if(existing.end==null)existing.end=base.end;
+}
+});
+
+INITIAL_PAST_JOBS.forEach(base=>{
+if(!jobs.some(j=>j.id===base.id)){
+jobs.push(deepClone(base));
+}
+});
+
+save();
 }
 
-
-/* ==========================================================
-   NORMALIZE JOB
-========================================================== */
-
-function normalizeJob(job){
-
-  const client=
-    clientById(
-      job.clientId
-    );
-
-
-  let minutes=
-    Number(
-      job.totalMinutes
-    );
-
-
-  if(!Number.isFinite(minutes)){
-
-    minutes=
-      durationBetween(
-        job.start||"",
-        job.end||""
-      )||0;
-
-  }
-
-
-  return{
-
-    ...job,
-
-    id:
-      job.id||
-      uid("job"),
-
-    clientId:
-      job.clientId||
-      "",
-
-    clientNameSnapshot:
-      job.clientNameSnapshot||
-      client?.name||
-      "Client",
-
-    date:
-      job.date||
-      "",
-
-    start:
-      job.start||
-      "",
-
-    end:
-      job.end||
-      "",
-
-    totalMinutes:
-      Math.max(
-        0,
-        Math.round(minutes||0)
-      ),
-
-    rate:
-      Number(
-        job.rate ??
-        client?.rate ??
-        0
-      ),
-
-    totalOverride:
-      job.totalOverride!==undefined &&
-      job.totalOverride!==null &&
-      job.totalOverride!==""
-        ?Number(job.totalOverride)
-        :null,
-
-    notes:
-      job.notes||
-      "",
-
-    completed:
-      job.completed!==false,
-
-    paid:
-      job.paid===true,
-
-    source:
-      job.source||
-      "history",
-
-    occurrenceKey:
-      job.occurrenceKey||
-      null
-
-  };
-
+function save(){
+localStorage.setItem(STORAGE_KEY,JSON.stringify({clients,jobs,overrides,settings}));
 }
 
+window.startApp=function(){
+document.getElementById("welcome").style.display="none";
+document.getElementById("app").style.display="block";
+applyZoom();
+render();
+};
 
-/* ==========================================================
-   RECURRING SCHEDULE
-========================================================== */
-
-function mondayOfWeek(date){
-
-  const d=new Date(date);
-
-  let day=d.getDay();
-
-  if(day===0)day=7;
-
-  d.setDate(
-    d.getDate()-(day-1)
-  );
-
-  d.setHours(12,0,0,0);
-
-  return d;
+function showPage(id,btn){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+const p=document.getElementById(id);
+if(p)p.classList.add("active");
+document.querySelectorAll(".nav").forEach(n=>n.classList.remove("active"));
+if(btn&&btn.classList.contains("nav"))btn.classList.add("active");
+else{
+const n=document.querySelector('.nav[data-page="'+id+'"]');
+if(n)n.classList.add("active");
 }
-
-function weekDifference(a,b){
-
-  const dateA=
-    mondayOfWeek(
-      parseDate(a)
-    );
-
-  const dateB=
-    mondayOfWeek(
-      parseDate(b)
-    );
-
-  return Math.round(
-    (
-      dateA.getTime()-
-      dateB.getTime()
-    )/
-    (
-      7*24*60*60*1000
-    )
-  );
-
+if(id==="settings")renderSettings();
+render();
 }
+window.showPage=showPage;
 
-function recurringMatches(client,date){
+function openModal(id){document.getElementById(id)?.classList.add("show")}
+function closeModal(id){document.getElementById(id)?.classList.remove("show")}
+window.closeModal=closeModal;
 
-  if(
-    client.day===null||
-    client.day===undefined
-  )
-    return false;
-
-  const d=parseDate(date);
-
-  if(!d)return false;
-
-  if(d.getDay()!==Number(client.day))
-    return false;
-
-  if(client.vacation)
-    return false;
-
-  if(client.frequency==="Weekly")
-    return true;
-
-  if(
-    client.frequency==="Fortnightly"
-  ){
-
-    if(!client.anchor)
-      return false;
-
-    return (
-      weekDifference(
-        date,
-        client.anchor
-      )%2===0
-    );
-
-  }
-
-  if(
-    client.frequency==="Every 3 weeks"
-  ){
-
-    if(!client.anchor)
-      return false;
-
-    return (
-      weekDifference(
-        date,
-        client.anchor
-      )%3===0
-    );
-
-  }
-
-  return false;
-
+function openClient(id){
+const c=id?clients.find(x=>x.id===id):null;
+document.getElementById("clientTitle").textContent=c?"Edit Client":"Add Client";
+document.getElementById("cId").value=c?.id||"";
+document.getElementById("cName").value=c?.name||"";
+document.getElementById("cType").value=c?.type||"Private";
+document.getElementById("cRate").value=c?.rate??"";
+document.getElementById("cHours").value=c?.hours??"";
+document.getElementById("cPhone").value=c?.phone||"";
+openModal("clientModal");
 }
-
-function getOccurrenceKey(
-  client,
-  date
-){
-
-  return client.id+"__"+date;
-
-}
-
-function getRecurringJob(
-  client,
-  date
-){
-
-  const key=
-    getOccurrenceKey(
-      client,
-      date
-    );
-
-
-  const saved=
-    jobs.find(
-      job =>
-        job.occurrenceKey===
-        key
-    );
-
-
-  if(saved)
-    return clone(saved);
-
-
-  if(
-    overrides[key] &&
-    overrides[key].cancelled
-  )
-    return null;
-
-
-  if(
-    !recurringMatches(
-      client,
-      date
-    )
-  )
-    return null;
-
-
-  const totalMinutes=
-    durationBetween(
-      client.start||"",
-      client.end||""
-    )||0;
-
-
-  return{
-
-    id:key,
-
-    clientId:
-      client.id,
-
-    clientNameSnapshot:
-      client.name,
-
-    date,
-
-    start:
-      client.start||"",
-
-    end:
-      client.end||"",
-
-    totalMinutes,
-
-    rate:
-      Number(client.rate||0),
-
-    totalOverride:null,
-
-    notes:
-      client.notes||"",
-
-    completed:false,
-
-    paid:false,
-
-    source:"recurring",
-
-    occurrenceKey:key
-
-  };
-
-}
-
-function getJobsForDate(date){
-
-  const result=[];
-
-
-  clients.forEach(client=>{
-
-    const job=
-      getRecurringJob(
-        client,
-        date
-      );
-
-    if(job)
-      result.push(job);
-
-  });
-
-
-  jobs
-    .filter(
-      job =>
-        job.date===date &&
-        !job.occurrenceKey
-    )
-    .forEach(
-      job =>
-        result.push(
-          clone(job)
-        )
-    );
-
-
-  jobs
-    .filter(
-      job =>
-        job.date===date &&
-        job.occurrenceKey
-    )
-    .forEach(job=>{
-
-      const index=
-        result.findIndex(
-          item =>
-            item.occurrenceKey===
-            job.occurrenceKey
-        );
-
-
-      if(index>=0)
-        result[index]=clone(job);
-      else
-        result.push(clone(job));
-
-    });
-
-
-  result.sort(
-    (a,b)=>
-      String(a.start||"")
-        .localeCompare(
-          String(b.start||"")
-        )
-  );
-
-
-  return result;
-
-}
-
-
-/* ==========================================================
-   SCHEDULE
-========================================================== */
-
-function changeScheduleYear(amount){
-
-  scheduleYear+=amount;
-
-  renderSchedule();
-
-}
-
-function changeScheduleView(view){
-
-  scheduleView=view;
-
-  settings.scheduleView=view;
-
-  saveData();
-
-  renderSchedule();
-
-  updateSettingsViewButtons();
-
-}
-
-function renderSchedule(){
-
-  document.getElementById(
-    "scheduleYear"
-  ).textContent=
-    scheduleYear;
-
-
-  document.getElementById(
-    "calendarViewButton"
-  ).classList.toggle(
-    "active",
-    scheduleView==="calendar"
-  );
-
-
-  document.getElementById(
-    "listViewButton"
-  ).classList.toggle(
-    "active",
-    scheduleView==="list"
-  );
-
-
-  if(scheduleView==="calendar"){
-
-    document.getElementById(
-      "yearCalendar"
-    ).style.display="grid";
-
-    document.getElementById(
-      "scheduleList"
-    ).style.display="none";
-
-    renderYearCalendar();
-
-  }else{
-
-    document.getElementById(
-      "yearCalendar"
-    ).style.display="none";
-
-    document.getElementById(
-      "scheduleList"
-    ).style.display="block";
-
-    renderScheduleList();
-
-  }
-
-}
-
-function renderYearCalendar(){
-
-  const box=
-    document.getElementById(
-      "yearCalendar"
-    );
-
-
-  let html="";
-
-
-  for(
-    let month=0;
-    month<12;
-    month++
-  ){
-
-    const first=
-      new Date(
-        scheduleYear,
-        month,
-        1,
-        12
-      );
-
-    const last=
-      new Date(
-        scheduleYear,
-        month+1,
-        0,
-        12
-      );
-
-
-    let firstDay=first.getDay();
-
-    firstDay=
-      firstDay===0
-        ?6
-        :firstDay-1;
-
-
-    const monthName=
-      first.toLocaleDateString(
-        "en-GB",
-        {month:"long"}
-      );
-
-
-    html+=`
-
-      <div class="month-card">
-
-        <div class="month-name">
-          ${monthName}
-        </div>
-
-        <div class="month-weekdays">
-          <div class="month-weekday">M</div>
-          <div class="month-weekday">T</div>
-          <div class="month-weekday">W</div>
-          <div class="month-weekday">T</div>
-          <div class="month-weekday">F</div>
-          <div class="month-weekday">S</div>
-          <div class="month-weekday">S</div>
-        </div>
-
-        <div class="month-days">
-
-    `;
-
-
-    for(
-      let blank=0;
-      blank<firstDay;
-      blank++
-    ){
-
-      html+="<div></div>";
-
-    }
-
-
-    for(
-      let day=1;
-      day<=last.getDate();
-      day++
-    ){
-
-      const date=
-        scheduleYear+
-        "-"+
-        String(month+1).padStart(2,"0")+
-        "-"+
-        String(day).padStart(2,"0");
-
-
-      const dayJobs=
-        getJobsForDate(date);
-
-
-      html+=`
-
-        <div
-          class="day ${date===todayISO()?"today":""}"
-          onclick="openScheduleDate('${date}')"
-        >
-
-          <div class="day-number">
-            ${day}
-          </div>
-
-          ${dayJobs.map(
-            job=>`
-
-              <div class="day-client">
-                ${escapeHTML(
-                  job.clientNameSnapshot
-                )}
-              </div>
-
-            `
-          ).join("")}
-
-        </div>
-
-      `;
-
-    }
-
-
-    html+=`
-
-        </div>
-      </div>
-
-    `;
-
-  }
-
-
-  box.innerHTML=html;
-
-}
-
-function renderScheduleList(){
-
-  const box=
-    document.getElementById(
-      "scheduleList"
-    );
-
-
-  let html="";
-
-
-  const start=
-    new Date(
-      scheduleYear,
-      0,
-      1,
-      12
-    );
-
-  const end=
-    new Date(
-      scheduleYear,
-      11,
-      31,
-      12
-    );
-
-
-  for(
-    let d=new Date(start);
-    d<=end;
-    d.setDate(
-      d.getDate()+1
-    )
-  ){
-
-    const date=dateISO(d);
-
-    let dayJobs=
-      getJobsForDate(date);
-
-
-    if(
-      activeDayFilter!==null &&
-      d.getDay()!==activeDayFilter
-    ){
-
-      continue;
-
-    }
-
-
-    if(!dayJobs.length)
-      continue;
-
-
-    html+=`
-
-      <div class="day-section">
-
-        <div class="day-heading">
-
-          <strong>
-            ${escapeHTML(
-              formatDate(date)
-            )}
-          </strong>
-
-          <span>
-            ${dayJobs.length}
-            ${dayJobs.length===1?"scheduled job":"scheduled jobs"}
-          </span>
-
-        </div>
-
-    `;
-
-
-    dayJobs.forEach(job=>{
-
-      html+=renderScheduleJob(job);
-
-    });
-
-
-    html+="</div>";
-
-  }
-
-
-  if(!html){
-
-    html=`
-
-      <div class="today-empty"
-        style="
-          background:#fff;
-          border-radius:23px;
-        "
-      >
-        No jobs scheduled for this day.
-      </div>
-
-    `;
-
-  }
-
-
-  box.innerHTML=html;
-
-}
-
-function renderScheduleJob(job){
-
-  const amount=
-    amountForJob(job);
-
-
-  return`
-
-    <div class="schedule-job">
-
-      <div class="schedule-job-main">
-
-        <div class="avatar">
-          ${escapeHTML(
-            String(
-              job.clientNameSnapshot||"?"
-            ).charAt(0).toUpperCase()
-          )}
-        </div>
-
-        <div class="schedule-info">
-
-          <div class="schedule-client">
-            ${escapeHTML(
-              job.clientNameSnapshot
-            )}
-          </div>
-
-          <div class="schedule-detail">
-
-            ${
-              job.start
-                ?escapeHTML(
-                    formatTime(job.start)
-                  )
-                :"Flexible time"
-            }
-
-            ${
-              job.end
-                ?" – "+
-                  escapeHTML(
-                    formatTime(job.end)
-                  )
-                :""
-            }
-
-            ·
-
-            ${
-              job.totalMinutes
-                ?escapeHTML(
-                    longDurationText(
-                      job.totalMinutes
-                    )
-                  )
-                :"Duration flexible"
-            }
-
-            ·
-
-            ${money(job.rate)}/h
-
-          </div>
-
-        </div>
-
-        <div class="schedule-money">
-          ${money(amount)}
-        </div>
-
-      </div>
-
-      <div class="schedule-actions">
-
-        <button
-          class="action-edit"
-          onclick="openJobModal('${escapeHTML(job.id)}')"
-        >
-          ✏️ Edit
-        </button>
-
-        <button
-          class="action-delete"
-          onclick="deleteJob('${escapeHTML(job.id)}')"
-        >
-          🗑 Delete
-        </button>
-
-        <button
-          class="action-reminder"
-          onclick="openReminderForJob('${escapeHTML(job.id)}')"
-        >
-          📩 Reminder
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-function openDayPage(day){
-
-  activeDayFilter=day;
-
-  scheduleView="list";
-
-  renderSchedule();
-
-}
-
-function openScheduleDate(date){
-
-  const dayJobs=
-    getJobsForDate(date);
-
-
-  if(dayJobs.length===1){
-
-    openJobModal(
-      dayJobs[0].id
-    );
-
-    return;
-
-  }
-
-
-  if(dayJobs.length>1){
-
-    activeDayFilter=
-      parseDate(date).getDay();
-
-    scheduleView="list";
-
-    renderSchedule();
-
-    return;
-
-  }
-
-
-  openJobModal(
-    null,
-    date
-  );
-
-}
-
-
-/* ==========================================================
-   FIND JOB
-========================================================== */
-
-function findJob(id){
-
-  const direct=
-    jobs.find(
-      job =>
-        String(job.id)===
-        String(id)
-    );
-
-
-  if(direct)
-    return clone(direct);
-
-
-  const start=
-    new Date(
-      scheduleYear,
-      0,
-      1,
-      12
-    );
-
-  const end=
-    new Date(
-      scheduleYear,
-      11,
-      31,
-      12
-    );
-
-
-  for(
-    let d=new Date(start);
-    d<=end;
-    d.setDate(
-      d.getDate()+1
-    )
-  ){
-
-    const found=
-      getJobsForDate(
-        dateISO(d)
-      ).find(
-        job =>
-          String(job.id)===
-          String(id)
-      );
-
-
-    if(found)
-      return clone(found);
-
-  }
-
-
-  return null;
-
-}
-
-
-/* ==========================================================
-   JOB MODAL
-========================================================== */
-
-function populateJobClients(){
-
-  const select=
-    document.getElementById(
-      "jobClient"
-    );
-
-
-  const oldValue=
-    select.value;
-
-
-  select.innerHTML=
-    clients.map(
-      client=>`
-
-        <option value="${escapeHTML(client.id)}">
-          ${escapeHTML(client.name)}
-        </option>
-
-      `
-    ).join("");
-
-
-  if(
-    oldValue &&
-    clients.some(
-      client =>
-        client.id===oldValue
-    )
-  ){
-
-    select.value=oldValue;
-
-  }
-
-}
-
-function openJobModal(
-  id=null,
-  presetDate=""
-){
-
-  populateJobClients();
-
-
-  const job=
-    id
-      ?findJob(id)
-      :null;
-
-
-  document.getElementById(
-    "jobModalTitle"
-  ).textContent=
-    job
-      ?"Edit job"
-      :"Add Job";
-
-
-  document.getElementById(
-    "jobId"
-  ).value=
-    job?.id||"";
-
-
-  document.getElementById(
-    "jobDate"
-  ).value=
-    job?.date||
-    presetDate||
-    todayISO();
-
-
-  if(job){
-
-    document.getElementById(
-      "jobClient"
-    ).value=
-      job.clientId;
-
-
-    document.getElementById(
-      "jobStart"
-    ).value=
-      job.start||"";
-
-
-    document.getElementById(
-      "jobEnd"
-    ).value=
-      job.end||"";
-
-
-    const minutes=
-      Number(
-        job.totalMinutes||0
-      );
-
-
-    document.getElementById(
-      "jobHours"
-    ).value=
-      Math.floor(minutes/60);
-
-
-    document.getElementById(
-      "jobMinutes"
-    ).value=
-      minutes%60;
-
-
-    document.getElementById(
-      "jobRate"
-    ).value=
-      job.rate??0;
-
-
-    document.getElementById(
-      "jobNotes"
-    ).value=
-      job.notes||"";
-
-  }else{
-
-    const client=
-      clientById(
-        document.getElementById(
-          "jobClient"
-        ).value
-      );
-
-
-    document.getElementById(
-      "jobStart"
-    ).value=
-      client?.start||"";
-
-
-    document.getElementById(
-      "jobEnd"
-    ).value=
-      client?.end||"";
-
-
-    const duration=
-      durationBetween(
-        client?.start,
-        client?.end
-      )||0;
-
-
-    document.getElementById(
-      "jobHours"
-    ).value=
-      Math.floor(duration/60);
-
-
-    document.getElementById(
-      "jobMinutes"
-    ).value=
-      duration%60;
-
-
-    document.getElementById(
-      "jobRate"
-    ).value=
-      client?.rate??0;
-
-
-    document.getElementById(
-      "jobNotes"
-    ).value=
-      client?.notes||"";
-
-  }
-
-
-  document.getElementById(
-    "deleteJobButton"
-  ).style.display=
-    job
-      ?"block"
-      :"none";
-
-
-  document.getElementById(
-    "messageButtons"
-  ).style.display=
-    job
-      ?"grid"
-      :"none";
-
-
-  calculateJob();
-
-
-  document.getElementById(
-    "jobModal"
-  ).classList.add(
-    "show"
-  );
-
-}
-
-
-/* ==========================================================
-   JOB CALCULATION
-========================================================== */
-
-function getModalMinutes(){
-
-  let hours=
-    Number(
-      document.getElementById(
-        "jobHours"
-      ).value||0
-    );
-
-  let minutes=
-    Number(
-      document.getElementById(
-        "jobMinutes"
-      ).value||0
-    );
-
-
-  if(minutes>=60){
-
-    hours+=
-      Math.floor(minutes/60);
-
-    minutes=
-      minutes%60;
-
-  }
-
-
-  return Math.max(
-    0,
-    Math.round(
-      hours*60+minutes
-    )
-  );
-
-}
-
-function calculateJob(){
-
-  const minutes=
-    getModalMinutes();
-
-
-  const rate=
-    Number(
-      document.getElementById(
-        "jobRate"
-      ).value||0
-    );
-
-
-  document.getElementById(
-    "calculatedDuration"
-  ).textContent=
-    longDurationText(
-      minutes
-    );
-
-
-  document.getElementById(
-    "calculatedAmount"
-  ).textContent=
-    (
-      minutes/60*rate
-    ).toFixed(2);
-
-}
-
-function calculateFromTimes(){
-
-  const start=
-    document.getElementById(
-      "jobStart"
-    ).value;
-
-  const end=
-    document.getElementById(
-      "jobEnd"
-    ).value;
-
-
-  const minutes=
-    durationBetween(
-      start,
-      end
-    );
-
-
-  if(minutes!==null){
-
-    document.getElementById(
-      "jobHours"
-    ).value=
-      Math.floor(minutes/60);
-
-    document.getElementById(
-      "jobMinutes"
-    ).value=
-      minutes%60;
-
-  }
-
-
-  calculateJob();
-
-}
-
-
-/* ==========================================================
-   SAVE JOB — FIXED
-========================================================== */
-
-function saveJob(){
-
-  const id=
-    document.getElementById(
-      "jobId"
-    ).value.trim();
-
-
-  const clientId=
-    document.getElementById(
-      "jobClient"
-    ).value;
-
-
-  const client=
-    clientById(clientId);
-
-
-  if(!client){
-
-    alert(
-      "Please select a client."
-    );
-
-    return;
-
-  }
-
-
-  const date=
-    document.getElementById(
-      "jobDate"
-    ).value;
-
-
-  if(!date){
-
-    alert(
-      "Please choose a date."
-    );
-
-    return;
-
-  }
-
-
-  const start=
-    document.getElementById(
-      "jobStart"
-    ).value;
-
-
-  const end=
-    document.getElementById(
-      "jobEnd"
-    ).value;
-
-
-  let totalMinutes=
-    getModalMinutes();
-
-
-  const timedDuration=
-    durationBetween(
-      start,
-      end
-    );
-
-
-  if(
-    timedDuration!==null
-  ){
-
-    totalMinutes=
-      timedDuration;
-
-  }
-
-
-  const rate=
-    Number(
-      document.getElementById(
-        "jobRate"
-      ).value||0
-    );
-
-
-  const notes=
-    document.getElementById(
-      "jobNotes"
-    ).value.trim();
-
-
-  /*
-    First look for the exact saved job.
-  */
-
-  let index=
-    id
-      ?jobs.findIndex(
-          job =>
-            job.id===id
-        )
-      :-1;
-
-
-  let oldJob=
-    index>=0
-      ?clone(jobs[index])
-      :id
-        ?findJob(id)
-        :null;
-
-
-  let occurrenceKey=
-    oldJob?.occurrenceKey||null;
-
-
-  /*
-    If a recurring occurrence was edited,
-    preserve its occurrence key.
-  */
-
-  if(
-    !occurrenceKey &&
-    recurringMatches(
-      client,
-      date
-    )
-  ){
-
-    occurrenceKey=
-      getOccurrenceKey(
-        client,
-        date
-      );
-
-  }
-
-
-  const newJob={
-
-    ...(oldJob||{}),
-
-    id:
-      oldJob?.id||
-      uid("job"),
-
-    clientId,
-
-    clientNameSnapshot:
-      client.name,
-
-    date,
-
-    start,
-
-    end,
-
-    totalMinutes,
-
-    rate,
-
-    /*
-      Normal edited jobs are calculated automatically.
-    */
-
-    totalOverride:null,
-
-    notes,
-
-    completed:true,
-
-    paid:
-      oldJob?.paid===true,
-
-    source:
-      occurrenceKey
-        ?"recurring"
-        :"history",
-
-    occurrenceKey
-
-  };
-
-
-  if(index>=0){
-
-    /*
-      Replace the existing record,
-      rather than adding another one.
-    */
-
-    jobs[index]=
-      newJob;
-
-  }else{
-
-    /*
-      Recurring jobs are stored here after editing
-      so the edit remains permanent.
-    */
-
-    jobs.push(
-      newJob
-    );
-
-  }
-
-
-  if(occurrenceKey){
-
-    delete overrides[
-      occurrenceKey
-    ];
-
-  }
-
-
-  /*
-    SAVE BEFORE CLOSING THE MODAL.
-  */
-
-  if(!saveData())
-    return;
-
-
-  closeModal(
-    "jobModal"
-  );
-
-  renderAll();
-
-}
-
-
-/* ==========================================================
-   DELETE JOB
-========================================================== */
-
-function deleteCurrentJob(){
-
-  const id=
-    document.getElementById(
-      "jobId"
-    ).value;
-
-  if(id)
-    deleteJob(id);
-
-}
-
-function deleteJob(id){
-
-  const job=
-    findJob(id);
-
-
-  if(!job)
-    return;
-
-
-  if(
-    !confirm(
-      "Delete this job?"
-    )
-  )
-    return;
-
-
-  if(job.occurrenceKey){
-
-    overrides[
-      job.occurrenceKey
-    ]={
-      cancelled:true
-    };
-
-
-    jobs=
-      jobs.filter(
-        item =>
-          item.occurrenceKey!==
-          job.occurrenceKey
-      );
-
-  }else{
-
-    jobs=
-      jobs.filter(
-        item =>
-          item.id!==
-          job.id
-      );
-
-  }
-
-
-  saveData();
-
-  closeModal(
-    "jobModal"
-  );
-
-  renderAll();
-
-}
-
-
-/* ==========================================================
-   HOME
-========================================================== */
-
-function renderHome(){
-
-  document.getElementById(
-    "homeDate"
-  ).textContent=
-    formatDate(
-      todayISO()
-    );
-
-
-  const today=
-    getJobsForDate(
-      todayISO()
-    );
-
-
-  let minutes=0;
-  let earned=0;
-
-
-  today.forEach(job=>{
-
-    minutes+=
-      Number(
-        job.totalMinutes||0
-      );
-
-
-    if(job.completed){
-
-      earned+=
-        amountForJob(job);
-
-    }
-
-  });
-
-
-  document.getElementById(
-    "homeJobs"
-  ).textContent=
-    today.length;
-
-
-  document.getElementById(
-    "homeHours"
-  ).textContent=
-    durationText(minutes);
-
-
-  document.getElementById(
-    "homeEarned"
-  ).textContent=
-    money(earned);
-
-
-  document.getElementById(
-    "homeAvailable"
-  ).textContent=
-    durationText(
-      Math.max(
-        0,
-        480-minutes
-      )
-    );
-
-
-  const box=
-    document.getElementById(
-      "todayJobs"
-    );
-
-
-  if(!today.length){
-
-    box.innerHTML=`
-
-      <div class="today-empty">
-
-        <div
-          style="
-            font-size:42px;
-            margin-bottom:7px;
-          "
-        >
-          ♡
-        </div>
-
-        <strong>
-          No jobs scheduled today
-        </strong>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  box.innerHTML=
-    today.map(job=>`
-
-      <div
-        class="today-job"
-        onclick="openJobModal('${escapeHTML(job.id)}')"
-      >
-
-        <div class="avatar">
-          ${escapeHTML(
-            job.clientNameSnapshot
-              .charAt(0)
-              .toUpperCase()
-          )}
-        </div>
-
-        <div class="today-info">
-
-          <div class="today-name">
-            ${escapeHTML(
-              job.clientNameSnapshot
-            )}
-          </div>
-
-          <div class="today-detail">
-
-            ${
-              job.start
-                ?escapeHTML(
-                    formatTime(job.start)
-                  )
-                :"Flexible"
-            }
-
-            ${
-              job.end
-                ?" – "+
-                  escapeHTML(
-                    formatTime(job.end)
-                  )
-                :""
-            }
-
-            ·
-
-            ${
-              job.totalMinutes
-                ?escapeHTML(
-                    durationText(
-                      job.totalMinutes
-                    )
-                  )
-                :"Flexible duration"
-            }
-
-          </div>
-
-        </div>
-
-        <div class="today-rate">
-          ${money(job.rate)}/h
-        </div>
-
-      </div>
-
-    `).join("");
-
-}
-
-
-/* ==========================================================
-   CLIENTS
-========================================================== */
-
-function renderClients(){
-
-  const box=
-    document.getElementById(
-      "clientsList"
-    );
-
-
-  box.innerHTML=
-    clients.map(client=>`
-
-      <div
-        class="client-card"
-        onclick="openClientProfile('${escapeHTML(client.id)}')"
-      >
-
-        <div class="avatar">
-          ${escapeHTML(
-            client.name
-              .charAt(0)
-              .toUpperCase()
-          )}
-        </div>
-
-        <div class="client-info">
-
-          <div class="client-name">
-            ${escapeHTML(client.name)}
-          </div>
-
-          <div class="client-meta">
-
-            ${escapeHTML(
-              client.type||"Private"
-            )}
-
-            ·
-
-            ${
-              client.rate
-                ?money(client.rate)+"/hour"
-                :"Rate flexible"
-            }
-
-            ·
-
-            ${escapeHTML(
-              client.frequency||"Weekly"
-            )}
-
-            <br>
-
-            ${
-              client.phone
-                ?`
-                  📞
-                  <a
-                    class="client-phone-link"
-                    href="tel:${escapeHTML(client.phone)}"
-                    onclick="event.stopPropagation()"
-                  >
-                    ${escapeHTML(client.phone)}
-                  </a>
-                `
-                :"📞 No phone number"
-            }
-
-          </div>
-
-        </div>
-
-        <button
-          class="client-edit"
-          onclick="
-            event.stopPropagation();
-            openClientModal('${escapeHTML(client.id)}')
-          "
-        >
-          ✏️
-        </button>
-
-      </div>
-
-    `).join("");
-
-}
-
-
-/* ==========================================================
-   CLIENT PROFILE
-========================================================== */
-
-function openClientProfile(id){
-
-  const client=
-    clientById(id);
-
-
-  if(!client)
-    return;
-
-
-  currentClientProfile=id;
-
-
-  document.getElementById(
-    "profileEditButton"
-  ).onclick=
-    function(){
-
-      openClientModal(id);
-
-    };
-
-
-  const history=
-    jobs
-      .filter(
-        job =>
-          job.clientId===id
-      )
-      .sort(
-        (a,b)=>
-          String(b.date)
-            .localeCompare(
-              String(a.date)
-            )
-      );
-
-
-  document.getElementById(
-    "clientProfileContent"
-  ).innerHTML=`
-
-    <div class="client-profile">
-
-      <div class="profile-header">
-
-        <div class="profile-avatar">
-          ${escapeHTML(
-            client.name
-              .charAt(0)
-              .toUpperCase()
-          )}
-        </div>
-
-        <div>
-
-          <div class="profile-name">
-            ${escapeHTML(client.name)}
-          </div>
-
-          <div class="profile-sub">
-
-            ${escapeHTML(
-              client.type||"Private"
-            )}
-
-            ·
-
-            ${escapeHTML(
-              client.frequency||"Weekly"
-            )}
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="client-detail-grid">
-
-        <div class="detail-box">
-
-          <strong>📞 Phone</strong>
-
-          <span>
-
-            ${
-              client.phone
-                ?`
-                  <a
-                    href="tel:${escapeHTML(client.phone)}"
-                    style="
-                      text-decoration:none;
-                      font-weight:700;
-                    "
-                  >
-                    ${escapeHTML(client.phone)}
-                  </a>
-                `
-                :"Not added"
-            }
-
-          </span>
-
-        </div>
-
-
-        <div class="detail-box">
-
-          <strong>£ Hourly rate</strong>
-
-          <span>
-            ${
-              client.rate
-                ?money(client.rate)
-                :"Flexible"
-            }
-          </span>
-
-        </div>
-
-
-        <div class="detail-box">
-
-          <strong>🕐 Normal time</strong>
-
-          <span>
-
-            ${
-              client.start
-                ?escapeHTML(
-                    formatTime(client.start)
-                  )
-                :"Flexible"
-            }
-
-            ${
-              client.end
-                ?" – "+
-                  escapeHTML(
-                    formatTime(client.end)
-                  )
-                :""
-            }
-
-          </span>
-
-        </div>
-
-
-        <div class="detail-box">
-
-          <strong>📅 Frequency</strong>
-
-          <span>
-            ${escapeHTML(
-              client.frequency||"Weekly"
-            )}
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div
-        class="detail-box"
-        style="margin-top:9px"
-      >
-
-        <strong>Notes</strong>
-
-        <span>
-          ${escapeHTML(
-            client.notes||"No notes"
-          )}
-        </span>
-
-      </div>
-
-
-      ${
-        client.phone
-          ?`
-
-            <div
-              style="
-                display:grid;
-                grid-template-columns:1fr 1fr;
-                gap:9px;
-                margin-top:10px;
-              "
-            >
-
-              <a
-                href="tel:${escapeHTML(client.phone)}"
-                class="setting-full-button"
-                style="
-                  text-align:center;
-                  text-decoration:none;
-                  margin:0;
-                "
-              >
-                📞 Call
-              </a>
-
-              <button
-                class="setting-full-button"
-                onclick="sendQuickSMS('${escapeHTML(client.phone)}','${escapeHTML(client.name)}')"
-                style="margin:0"
-              >
-                💬 Message
-              </button>
-
-            </div>
-
-          `
-          :""
-      }
-
-
-      <button
-        class="setting-full-button"
-        onclick="openJobModal(null,'${todayISO()}')"
-      >
-        ＋ Add job for ${escapeHTML(client.name)}
-      </button>
-
-    </div>
-
-
-    <h2 class="client-history-title">
-      ${escapeHTML(client.name)} — job history
-    </h2>
-
-
-    ${
-      history.length
-        ?history.map(job=>`
-
-          <div class="client-history-item">
-
-            <strong>
-              ${
-                job.date
-                  ?escapeHTML(
-                      formatDate(job.date)
-                    )
-                  :"Date not provided"
-              }
-            </strong>
-
-            <br>
-
-            ${
-              job.totalMinutes
-                ?escapeHTML(
-                    longDurationText(
-                      job.totalMinutes
-                    )
-                  )
-                :"Duration not entered"
-            }
-
-            ·
-
-            ${money(
-              amountForJob(job)
-            )}
-
-            <br>
-
-            <button
-              class="small-action"
-              style="margin-top:9px"
-              onclick="openJobModal('${escapeHTML(job.id)}')"
-            >
-              ✏️ Edit job
-            </button>
-
-          </div>
-
-        `).join("")
-        :`
-          <div class="today-empty">
-            No saved jobs for this client yet.
-          </div>
-        `
-    }
-
-  `;
-
-
-  showPage(
-    "clientProfile"
-  );
-
-}
-
-
-/* ==========================================================
-   CLIENT SAVE
-========================================================== */
+window.openClient=openClient;
 
 function saveClient(){
-
-  const id=
-    document.getElementById(
-      "clientId"
-    ).value.trim();
-
-
-  const name=
-    document.getElementById(
-      "clientName"
-    ).value.trim();
-
-
-  if(!name){
-
-    alert(
-      "Please enter a client name."
-    );
-
-    return;
-
-  }
-
-
-  const phone=
-    document.getElementById(
-      "clientPhone"
-    ).value.trim();
-
-
-  const type=
-    document.getElementById(
-      "clientType"
-    ).value;
-
-
-  const rate=
-    Number(
-      document.getElementById(
-        "clientRate"
-      ).value||0
-    );
-
-
-  const frequency=
-    document.getElementById(
-      "clientFrequency"
-    ).value;
-
-
-  const dayValue=
-    document.getElementById(
-      "clientDay"
-    ).value;
-
-
-  const start=
-    document.getElementById(
-      "clientStart"
-    ).value;
-
-
-  const end=
-    document.getElementById(
-      "clientEnd"
-    ).value;
-
-
-  const notes=
-    document.getElementById(
-      "clientNotes"
-    ).value.trim();
-
-
-  if(id){
-
-    const index=
-      clients.findIndex(
-        client =>
-          client.id===id
-      );
-
-
-    if(index===-1){
-
-      alert(
-        "Client not found."
-      );
-
-      return;
-
-    }
-
-
-    /*
-      CRITICAL FIX:
-      Preserve all fields that are not
-      currently shown in the form.
-    */
-
-    clients[index]={
-
-      ...clients[index],
-
-      name,
-
-      phone,
-
-      type,
-
-      rate,
-
-      frequency,
-
-      day:
-        dayValue===""
-          ?null
-          :Number(dayValue),
-
-      start,
-
-      end,
-
-      notes
-
-    };
-
-
-  }else{
-
-    const duplicate=
-      clients.find(
-        client =>
-          client.name
-            .trim()
-            .toLowerCase()===
-          name
-            .trim()
-            .toLowerCase()
-      );
-
-
-    if(duplicate){
-
-      alert(
-        "This client already exists."
-      );
-
-      return;
-
-    }
-
-
-    clients.push({
-
-      id:uid("client"),
-
-      name,
-
-      phone,
-
-      type,
-
-      rate,
-
-      frequency,
-
-      day:
-        dayValue===""
-          ?null
-          :Number(dayValue),
-
-      start,
-
-      end,
-
-      notes,
-
-      flexible:false
-
-    });
-
-  }
-
-
-  /*
-    SAVE FIRST.
-  */
-
-  if(!saveData())
-    return;
-
-
-  closeModal(
-    "clientModal"
-  );
-
-
-  renderAll();
-
-
-  if(
-    currentClientProfile &&
-    id===currentClientProfile
-  ){
-
-    openClientProfile(id);
-
-  }
-
+const id=document.getElementById("cId").value||("client-"+Date.now());
+const old=clients.find(c=>c.id===id);
+const c={
+...(old||{}),
+id,
+name:document.getElementById("cName").value.trim(),
+type:document.getElementById("cType").value,
+rate:Number(document.getElementById("cRate").value||0),
+hours:Number(document.getElementById("cHours").value||0),
+phone:document.getElementById("cPhone").value.trim()
+};
+if(!c.name)return;
+const index=clients.findIndex(x=>x.id===id);
+if(index>=0)clients[index]=c;else clients.push(c);
+save();
+closeModal("clientModal");
+render();
+}
+window.saveClient=saveClient;
+
+function removeClient(id){
+if(!confirm("Delete this client?"))return;
+clients=clients.filter(c=>c.id!==id);
+jobs=jobs.filter(j=>j.clientId!==id);
+save();
+render();
+}
+window.removeClient=removeClient;
+
+function populateClientSelect(){
+const s=document.getElementById("jClient");
+s.innerHTML=clients.map(c=>`<option value="${c.id}">${c.name}</option>`).join("");
 }
 
+function openJob(id){
+populateClientSelect();
+const j=id?findJob(id):null;
+const c=j?clients.find(x=>x.id===j.clientId):clients[0];
+document.getElementById("jobTitle").textContent=j?"Edit Cleaning Job":"Add Cleaning Job";
+document.getElementById("jId").value=j?.id||"";
+document.getElementById("jClient").value=j?.clientId||c?.id||"";
+document.getElementById("jDate").value=j?.date||dateKey(new Date());
+document.getElementById("jDay").value=j?.day||getDayName(new Date());
+document.getElementById("jStart").value=j?.start||c?.start||"";
+document.getElementById("jEnd").value=j?.end||c?.end||"";
+document.getElementById("jHours").value=j?.hours??c?.hours??"";
+document.getElementById("jRate").value=j?.rate??c?.rate??"";
+document.getElementById("jNotes").value=j?.notes||"";
+document.getElementById("jDone").checked=!!j?.done;
+openModal("jobModal");
+calcHours();
+}
+window.openJob=openJob;
 
-/* ==========================================================
-   EARNINGS
-========================================================== */
+function calcHours(){
+const start=document.getElementById("jStart").value;
+const end=document.getElementById("jEnd").value;
+if(!start||!end)return;
+const a=start.split(":").map(Number),b=end.split(":").map(Number);
+let mins=(b[0]*60+b[1])-(a[0]*60+a[1]);
+if(mins<0)mins+=1440;
+document.getElementById("jHours").value=(mins/60).toFixed(2);
+}
+window.calcHours=calcHours;
+
+function findJob(id){
+let j=jobs.find(x=>x.id===id);
+if(j)return j;
+const generated=getRecurringJobByKey(id);
+return generated;
+}
+
+function saveJob(){
+const id=document.getElementById("jId").value||("job-"+Date.now());
+const clientId=document.getElementById("jClient").value;
+const old=findJob(id);
+const j={
+...(old||{}),
+id,
+clientId,
+date:document.getElementById("jDate").value,
+day:document.getElementById("jDay").value,
+start:document.getElementById("jStart").value,
+end:document.getElementById("jEnd").value,
+hours:Number(document.getElementById("jHours").value||0),
+rate:Number(document.getElementById("jRate").value||0),
+notes:document.getElementById("jNotes").value,
+done:document.getElementById("jDone").checked
+};
+const index=jobs.findIndex(x=>x.id===id);
+if(index>=0)jobs[index]=j;else jobs.push(j);
+save();
+closeModal("jobModal");
+render();
+}
+window.saveJob=saveJob;
+
+function deleteJob(id){
+if(!confirm("Delete this job?"))return;
+jobs=jobs.filter(j=>j.id!==id);
+delete overrides[id];
+save();
+render();
+}
+window.deleteJob=deleteJob;
+
+function mondayOf(d){
+const x=new Date(d);x.setHours(0,0,0,0);
+const day=x.getDay();
+const diff=day===0?-6:1-day;
+x.setDate(x.getDate()+diff);
+return x;
+}
+
+function weeksBetween(a,b){
+return Math.floor((mondayOf(b)-mondayOf(a))/(7*86400000));
+}
+
+function occurrenceForClient(c,date){
+if(!c||!c.day)return false;
+if(getDayName(date)!==c.day)return false;
+const freq=(c.type||"").toLowerCase();
+if(freq.includes("every 2")||freq.includes("fortnight")||c.frequency==="fortnightly"){
+const w=weeksBetween(recurringWeekAnchor,date);
+if(c.id==="joanna")return ((w%2)+2)%2===0;
+if(c.id==="shindu")return ((w%2)+2)%2===1;
+return ((w%2)+2)%2===0;
+}
+if(freq.includes("every 3"))return ((weeksBetween(recurringWeekAnchor,date)%3)+3)%3===0;
+if(freq.includes("monthly"))return date.getDate()<=7;
+return true;
+}
+
+function occurrenceKey(clientId,date){return clientId+"_"+dateKey(date)}
+function getRecurringJobByKey(key){
+const parts=key.split("_");
+if(parts.length<2)return null;
+const clientId=parts.shift();
+const date=parts.join("_");
+const c=clients.find(x=>x.id===clientId);
+if(!c)return null;
+const d=new Date(date+"T00:00:00");
+if(!occurrenceForClient(c,d))return null;
+const saved=jobs.find(j=>j.occurrenceKey===key);
+if(saved)return saved;
+if(overrides[key]?.cancelled)return null;
+return {
+id:key,
+occurrenceKey:key,
+clientId:c.id,
+date,
+day:getDayName(d),
+start:c.start||"",
+end:c.end||"",
+hours:Number(c.hours||0),
+rate:Number(c.rate||0),
+done:false,
+recurring:true
+};
+}
+
+function recurringMatches(date){
+const result=[];
+clients.forEach(c=>{
+if(!occurrenceForClient(c,date))return;
+const key=occurrenceKey(c.id,date);
+const j=getRecurringJobByKey(key);
+if(j)result.push(j);
+});
+return result;
+}
+
+function jobsForDate(date){
+const key=dateKey(date);
+const actual=jobs.filter(j=>j.date===key);
+const recurring=recurringMatches(date);
+const ids=new Set(actual.map(j=>j.clientId));
+return [...actual,...recurring.filter(j=>!ids.has(j.clientId))];
+}
+
+function renderCalendar(){
+const el=document.getElementById("calendar");
+if(!el)return;
+
+const year=scheduleYear;
+const first=new Date(year,0,1);
+const last=new Date(year,11,31);
+
+let html=`<div style="grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<button class="secondary" onclick="changeScheduleYear(-1)">‹</button>
+<strong>${year}</strong>
+<button class="secondary" onclick="changeScheduleYear(1)">›</button>
+</div>`;
+
+const start=mondayOf(first);
+for(let i=0;i<371;i++){
+const d=new Date(start);
+d.setDate(start.getDate()+i);
+if(d.getFullYear()!==year)continue;
+
+if(i%7===0){
+html+=`<div style="grid-column:1/-1;margin-top:8px;font-weight:900;color:#7e304f">${d.toLocaleDateString("en-GB",{day:"numeric",month:"long"})}</div>`;
+}
+
+const dayJobs=jobsForDate(d);
+html+=`<div class="cal-day"><div class="n">${d.toLocaleDateString("en-GB",{weekday:"short"})} ${d.getDate()}</div>`;
+dayJobs.forEach(j=>{
+html+=`<button class="cal-client" onclick="openJob('${j.id}')">${name(j.clientId)}<br>${j.start||""}${j.end?"–"+j.end:""}</button>`;
+});
+if(!dayJobs.length)html+=`<div style="font-size:9px;color:#c3aeb7;margin-top:8px">—</div>`;
+html+=`</div>`;
+}
+el.innerHTML=html;
+}
+window.changeScheduleYear=function(n){scheduleYear+=n;renderCalendar()};
+
+function renderClients(){
+const el=document.getElementById("clientsList");
+if(!el)return;
+el.innerHTML=clients.map(c=>`
+<div class="card">
+<div class="row">
+<div>
+<b>${c.name}</b>
+<div class="small">${c.type||""} · ${money(c.rate)}/h · ${timeText(c.hours)} standard${c.phone?" · "+c.phone:""}</div>
+<div class="small">${c.day||""}${c.start?" · "+c.start:""}${c.end?"–"+c.end:""}</div>
+</div>
+<div style="display:flex;gap:7px">
+<button class="secondary" onclick="openClient('${c.id}')">Edit</button>
+<button class="danger" onclick="removeClient('${c.id}')">Delete</button>
+</div>
+</div>
+</div>`).join("")||'<div class="card">No clients yet.</div>';
+}
+
+function renderJobs(){
+const el=document.getElementById("jobsList");
+if(!el)return;
+const all=[...jobs].sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+el.innerHTML=all.map(j=>{
+const amount=j.totalOverride!=null?Number(j.totalOverride):Number(j.hours||0)*Number(j.rate||0);
+return `<div class="card">
+<div class="row">
+<div>
+<b>${name(j.clientId)}</b>
+<div class="small">${j.day||""}${j.date?" · "+j.date:""} · ${j.start||"—"} ${j.end?"– "+j.end:""}</div>
+<div class="small">Worked: ${timeText(j.hours)} · ${j.done?"Completed":"Scheduled"}</div>
+${j.notes?`<div class="small">${j.notes}</div>`:""}
+</div>
+<div style="text-align:right">
+<div class="money">${money(amount)}</div>
+<button class="primary" style="margin-top:7px;padding:8px 10px" onclick="startTimer('${j.id}')">${timer.jobId===j.id?"Stop":"Timer"}</button>
+<button class="secondary" style="margin-top:7px;padding:8px 10px" onclick="openJob('${j.id}')">Edit</button>
+<button class="danger" style="margin-top:7px;padding:8px 10px" onclick="deleteJob('${j.id}')">Delete</button>
+<div style="display:flex;flex-wrap:wrap;justify-content:flex-end;gap:5px;margin-top:6px">
+<button class="secondary ps-small-btn" onclick="openInvoice('${j.id}')">Invoice</button>
+<button class="secondary ps-small-btn" onclick="sendClientReminder('${j.id}')">Confirm</button>
+<button class="secondary ps-small-btn" onclick="sendPaymentReminder('${j.id}')">Payment</button>
+</div>
+</div>
+</div>
+</div>`;
+}).join("")||'<div class="card">No jobs yet.</div>';
+}
 
 function renderEarnings(){
-
-  const history=
-    jobs
-      .filter(
-        job =>
-          job.completed
-      )
-      .sort(
-        (a,b)=>
-          String(b.date||"")
-            .localeCompare(
-              String(a.date||"")
-            )
-      );
-
-
-  const total=
-    history.reduce(
-      (sum,job)=>
-        sum+
-        amountForJob(job),
-      0
-    );
-
-
-  document.getElementById(
-    "earningsTotal"
-  ).textContent=
-    money(total);
-
-
-  const box=
-    document.getElementById(
-      "earningsHistory"
-    );
-
-
-  if(!history.length){
-
-    box.innerHTML=`
-
-      <div class="today-empty">
-        No completed jobs yet.
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  let html="";
-  let currentMonth="";
-
-
-  history.forEach(job=>{
-
-    const month=
-      job.date
-        ?job.date.slice(0,7)
-        :"undated";
-
-
-    if(month!==currentMonth){
-
-      currentMonth=month;
-
-
-      const monthJobs=
-        history.filter(
-          item =>
-            (
-              item.date
-                ?item.date.slice(0,7)
-                :"undated"
-            )===month
-        );
-
-
-      const monthTotal=
-        monthJobs.reduce(
-          (sum,item)=>
-            sum+
-            amountForJob(item),
-          0
-        );
-
-
-      html+=`
-
-        <div class="month-total">
-
-          ${
-            month==="undated"
-              ?"Date not provided"
-              :escapeHTML(
-                  parseDate(
-                    month+"-01"
-                  ).toLocaleDateString(
-                    "en-GB",
-                    {
-                      month:"long",
-                      year:"numeric"
-                    }
-                  )
-                )
-          }
-
-          —
-
-          ${money(monthTotal)}
-
-        </div>
-
-      `;
-
-    }
-
-
-    html+=`
-
-      <div class="earnings-job">
-
-        <div class="earnings-top">
-
-          <div class="earnings-client">
-            ${escapeHTML(
-              job.clientNameSnapshot
-            )}
-          </div>
-
-          <div class="earnings-amount">
-            ${money(
-              amountForJob(job)
-            )}
-          </div>
-
-        </div>
-
-
-        <div class="earnings-detail">
-
-          <strong>
-
-            ${
-              job.date
-                ?escapeHTML(
-                    formatDate(job.date)
-                  )
-                :"Date not provided"
-            }
-
-          </strong>
-
-          <br>
-
-          Time spent:
-
-          <strong>
-
-            ${
-              job.totalMinutes
-                ?escapeHTML(
-                    longDurationText(
-                      job.totalMinutes
-                    )
-                  )
-                :"Not entered"
-            }
-
-          </strong>
-
-          <br>
-
-          Rate:
-          ${money(job.rate)}/hour
-
-          <br>
-
-          Amount:
-          <strong>
-            ${money(
-              amountForJob(job)
-            )}
-          </strong>
-
-        </div>
-
-
-        <div class="earnings-actions">
-
-          <button
-            style="background:#dce9f8"
-            onclick="openJobModal('${escapeHTML(job.id)}')"
-          >
-            ✏️ Edit
-          </button>
-
-          <button
-            style="background:#e8dff7"
-            onclick="createInvoice('${escapeHTML(job.id)}')"
-          >
-            Invoice
-          </button>
-
-          <button
-            style="background:#f5dada"
-            onclick="deleteJob('${escapeHTML(job.id)}')"
-          >
-            🗑 Delete
-          </button>
-
-        </div>
-
-      </div>
-
-    `;
-
-  });
-
-
-  box.innerHTML=html;
-
-}
-
-
-/* ==========================================================
-   MONTHLY
-========================================================== */
-
-function renderMonthly(){
-
-  const year=
-    new Date().getFullYear();
-
-
-  const months=[];
-
-
-  for(
-    let month=0;
-    month<12;
-    month++
-  ){
-
-    const key=
-      year+
-      "-"+
-      String(month+1).padStart(2,"0");
-
-
-    const monthJobs=
-      jobs.filter(
-        job =>
-          job.completed &&
-          job.date &&
-          job.date.startsWith(key)
-      );
-
-
-    const total=
-      monthJobs.reduce(
-        (sum,job)=>
-          sum+
-          amountForJob(job),
-        0
-      );
-
-
-    const minutes=
-      monthJobs.reduce(
-        (sum,job)=>
-          sum+
-          Number(job.totalMinutes||0),
-        0
-      );
-
-
-    months.push({
-
-      name:
-        new Date(
-          year,
-          month,
-          1
-        ).toLocaleDateString(
-          "en-GB",
-          {month:"long"}
-        ),
-
-      total,
-
-      minutes
-
-    });
-
-  }
-
-
-  const maximum=
-    Math.max(
-      1,
-      ...months.map(
-        m=>m.total
-      )
-    );
-
-
-  document.getElementById(
-    "monthlyEarnings"
-  ).innerHTML=
-    months.map(month=>`
-
-      <div class="monthly-card">
-
-        <div class="monthly-card-header">
-
-          <strong>
-            ${escapeHTML(month.name)}
-            ${year}
-          </strong>
-
-          <div class="monthly-money">
-            ${money(month.total)}
-          </div>
-
-        </div>
-
-        <div
-          style="
-            margin-top:6px;
-            font-size:14px;
-          "
-        >
-          ${escapeHTML(
-            longDurationText(
-              month.minutes
-            )
-          )}
-        </div>
-
-        <div class="monthly-bar">
-
-          <div
-            class="monthly-bar-fill"
-            style="
-              width:${
-                month.total/
-                maximum*
-                100
-              }%;
-            "
-          ></div>
-
-        </div>
-
-      </div>
-
-    `).join("");
-
-}
-
-
-/* ==========================================================
-   TIMER
-========================================================== */
-
-function startCleaningFromHome(){
-
-  const today=
-    getJobsForDate(
-      todayISO()
-    );
-
-
-  if(today.length){
-
-    const job=today[0];
-
-    /*
-      If the job is already stored, start timer.
-    */
-
-    if(
-      !activeTimer
-    ){
-
-      startTimer(
-        job.id
-      );
-
-    }
-
-  }else{
-
-    openJobModal(
-      null,
-      todayISO()
-    );
-
-  }
-
-}
-
-function startTimer(jobId){
-
-  const job=
-    findJob(jobId);
-
-
-  if(!job)
-    return;
-
-
-  activeTimer={
-
-    jobId,
-
-    startedAt:
-      Date.now()
-
-  };
-
-
-  saveData();
-
-  updateTimer();
-
-}
-
-function stopTimer(){
-
-  if(!activeTimer)
-    return;
-
-
-  const job=
-    findJob(
-      activeTimer.jobId
-    );
-
-
-  if(job){
-
-    const minutes=
-      Math.max(
-        1,
-        Math.round(
-          (
-            Date.now()-
-            activeTimer.startedAt
-          )/60000
-        )
-      );
-
-
-    job.totalMinutes=
-      minutes;
-
-    job.totalOverride=null;
-
-    job.completed=true;
-
-
-    const index=
-      jobs.findIndex(
-        item =>
-          item.id===job.id
-      );
-
-
-    if(index>=0){
-
-      jobs[index]=job;
-
-    }else{
-
-      jobs.push(job);
-
-    }
-
-  }
-
-
-  activeTimer=null;
-
-  saveData();
-
-  renderAll();
-
-}
-
-function updateTimer(){
-
-  const bar=
-    document.getElementById(
-      "timerBar"
-    );
-
-
-  if(!activeTimer){
-
-    bar.classList.remove("show");
-
-    return;
-
-  }
-
-
-  const job=
-    findJob(
-      activeTimer.jobId
-    );
-
-
-  if(!job){
-
-    activeTimer=null;
-
-    saveData();
-
-    bar.classList.remove("show");
-
-    return;
-
-  }
-
-
-  bar.classList.add("show");
-
-
-  document.getElementById(
-    "timerName"
-  ).textContent=
-    job.clientNameSnapshot;
-
-
-  const seconds=
-    Math.floor(
-      (
-        Date.now()-
-        activeTimer.startedAt
-      )/1000
-    );
-
-
-  const hours=
-    Math.floor(seconds/3600);
-
-  const minutes=
-    Math.floor(
-      (seconds%3600)/60
-    );
-
-  const secs=
-    seconds%60;
-
-
-  document.getElementById(
-    "timerValue"
-  ).textContent=
-
-    String(hours).padStart(2,"0")+
-    ":"+
-    String(minutes).padStart(2,"0")+
-    ":"+
-    String(secs).padStart(2,"0");
-
-}
-
-
-/* ==========================================================
-   SMS
-========================================================== */
-
-function openSMS(phone,text){
-
-  const clean=
-    String(phone||"")
-      .replace(/[^\d+]/g,"");
-
-
-  if(!clean){
-
-    alert(
-      "Please add the client's phone number first."
-    );
-
-    return;
-
-  }
-
-
-  window.location.href=
-    "sms:"+
-    clean+
-    "?body="+
-    encodeURIComponent(text);
-
-}
-
-function sendQuickSMS(phone,name){
-
-  openSMS(
-    phone,
-    "Hi "+
-    name+
-    ", just confirming your cleaning. ✨"
-  );
-
-}
-
-function sendClientConfirmation(){
-
-  const job=
-    findJob(
-      document.getElementById(
-        "jobId"
-      ).value
-    );
-
-
-  if(!job)return;
-
-
-  const client=
-    clientById(
-      job.clientId
-    );
-
-
-  if(!client)return;
-
-
-  openSMS(
-    client.phone,
-    "Hi "+
-    client.name+
-    ", just confirming your cleaning for "+
-    formatDate(job.date)+
-    (
-      job.start
-        ?" at "+formatTime(job.start)
-        :""
-    )+
-    ". See you then! ✨"
-  );
-
-}
-
-function sendPaymentReminder(){
-
-  const job=
-    findJob(
-      document.getElementById(
-        "jobId"
-      ).value
-    );
-
-
-  if(!job)return;
-
-
-  const client=
-    clientById(
-      job.clientId
-    );
-
-
-  if(!client)return;
-
-
-  openSMS(
-    client.phone,
-    "Hi "+
-    client.name+
-    ", just a friendly reminder about the cleaning payment of "+
-    money(amountForJob(job))+
-    ". Thank you! ✨"
-  );
-
-}
-
-function openReminderForJob(id){
-
-  openJobModal(id);
-
-}
-
-
-/* ==========================================================
-   INVOICE
-========================================================== */
-
-function createInvoice(id){
-
-  const job=findJob(id);
-
-  if(!job)return;
-
-
-  const client=
-    clientById(
-      job.clientId
-    );
-
-
-  const invoiceWindow=
-    window.open(
-      "",
-      "_blank",
-      "width=720,height=850"
-    );
-
-
-  if(!invoiceWindow){
-
-    alert(
-      "Please allow pop-ups to create the invoice."
-    );
-
-    return;
-
-  }
-
-
-  invoiceWindow.document.write(`
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-
-<title>Pure Shine Cleaning Invoice</title>
-
-<style>
-
-body{
-  margin:0;
-  padding:30px;
-  background:#fff9fc;
-  font-family:Arial,sans-serif;
-}
-
-.invoice{
-  max-width:650px;
-  margin:auto;
-  background:#fff;
-  padding:35px;
-  border-radius:28px;
-  box-shadow:0 10px 40px rgba(60,40,50,.12);
-}
-
-h1{
-  font-family:Georgia,serif;
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  padding:14px 0;
-  border-bottom:1px solid #eee4e9;
-}
-
-.total{
-  display:flex;
-  justify-content:space-between;
-  margin-top:20px;
-  padding:20px;
-  border-radius:18px;
-  background:#f1d5e3;
-  font-size:22px;
-  font-weight:700;
-}
-
-button{
-  width:100%;
-  padding:15px;
-  margin-top:20px;
-  border:0;
-  border-radius:15px;
-  background:#e5bfd2;
-  font-weight:700;
-}
-
-@media print{
-  body{padding:0}
-  .invoice{box-shadow:none}
-  button{display:none}
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="invoice">
-
-<h1>Pure Shine Cleaning ✨</h1>
-
-<p>Cleaning invoice</p>
-
-<div class="row">
-<strong>Client</strong>
-<span>
-${escapeHTML(
-  client?.name||
-  job.clientNameSnapshot
-)}
-</span>
+const el=document.getElementById("earningsList");
+if(!el)return;
+
+const month=earningsMonth.getMonth();
+const year=earningsMonth.getFullYear();
+
+const list=jobs.filter(j=>{
+if(!j.date)return false;
+const d=new Date(j.date+"T00:00:00");
+return d.getMonth()===month&&d.getFullYear()===year;
+});
+
+let hours=list.reduce((a,j)=>a+Number(j.hours||0),0);
+let earned=list.reduce((a,j)=>a+(j.totalOverride!=null?Number(j.totalOverride):Number(j.hours||0)*Number(j.rate||0)),0);
+
+el.innerHTML=`
+<div class="card">
+<div class="ps-month-toolbar">
+<button class="secondary" onclick="moveEarningsMonth(-1)">‹</button>
+<strong>${earningsMonth.toLocaleDateString("en-GB",{month:"long",year:"numeric"})}</strong>
+<button class="secondary" onclick="moveEarningsMonth(1)">›</button>
 </div>
-
-<div class="row">
-<strong>Date</strong>
-<span>
-${
-  job.date
-    ?escapeHTML(
-        formatDate(job.date)
-      )
-    :"Date not provided"
-}
-</span>
+<div class="ps-month-total">
+<div><span>Total hours</span><strong>${timeText(hours)}</strong></div>
+<div><span>Total earned</span><strong>${money(earned)}</strong></div>
 </div>
-
-<div class="row">
-<strong>Time</strong>
-<span>
-${
-  job.start
-    ?escapeHTML(
-        formatTime(job.start)
-      )
-    :""
-}
-${
-  job.end
-    ?" – "+
-      escapeHTML(
-        formatTime(job.end)
-      )
-    :""
-}
-</span>
 </div>
-
-<div class="row">
-<strong>Time spent</strong>
-<span>
-${
-  job.totalMinutes
-    ?escapeHTML(
-        longDurationText(
-          job.totalMinutes
-        )
-      )
-    :"Not entered"
+${list.sort((a,b)=>b.date.localeCompare(a.date)).map(j=>{
+const amount=j.totalOverride!=null?Number(j.totalOverride):Number(j.hours||0)*Number(j.rate||0);
+return `<div class="card"><div class="row"><div><b>${name(j.clientId)}</b><div class="small">${j.date} · ${timeText(j.hours)}</div></div><div class="money">${money(amount)}</div></div></div>`;
+}).join("")||'<div class="card">No completed or scheduled jobs with a date in this month.</div>'}`;
 }
-</span>
-</div>
+window.moveEarningsMonth=function(n){earningsMonth.setMonth(earningsMonth.getMonth()+n);renderEarnings()};
 
-<div class="row">
-<strong>Hourly rate</strong>
-<span>
-${money(job.rate)}/hour
-</span>
-</div>
-
-<div class="total">
-<span>Amount due</span>
-<span>${money(amountForJob(job))}</span>
-</div>
-
-<button onclick="window.print()">
-Print / Save invoice
-</button>
-
-</div>
-
-</body>
-</html>
-
-  `);
-
-  invoiceWindow.document.close();
-
+function renderSettings(){
+const z=Number(settings.zoom||100);
+document.getElementById("zoomRange").value=z;
+document.getElementById("zoomLabel").textContent=z+"%";
+document.getElementById("scheduleAppearance").value=settings.scheduleAppearance||"calendar";
+document.getElementById("fontSelect").value=settings.font||"modern";
+document.getElementById("backgroundOpacity").value=settings.backgroundOpacity??20;
 }
 
+function changeZoom(n){
+let z=Number(document.getElementById("zoomRange").value||100)+n;
+z=Math.max(80,Math.min(200,z));
+setAppZoom(z);
+}
+window.changeZoom=changeZoom;
 
-/* ==========================================================
-   SETTINGS
-========================================================== */
+function setAppZoom(v){
+const z=Number(v);
+settings.zoom=z;
+document.getElementById("zoomRange").value=z;
+document.getElementById("zoomLabel").textContent=z+"%";
+applyZoom();
+save();
+}
+window.setAppZoom=setAppZoom;
 
-function openSettings(){
-
-  document.getElementById(
-    "settingsModal"
-  ).classList.add("show");
-
-
-  document.getElementById(
-    "zoomRange"
-  ).value=
-    settings.zoom||100;
-
-
-  document.getElementById(
-    "zoomLabel"
-  ).textContent=
-    (settings.zoom||100)+"%";
-
-
-  document.getElementById(
-    "backgroundOpacity"
-  ).value=
-    settings.backgroundOpacity||12;
-
-
-  document.getElementById(
-    "fontStyle"
-  ).value=
-    settings.font||"system";
-
-
-  updateSettingsViewButtons();
-
-  updateSoundButtons();
-
+function applyZoom(){
+const app=document.getElementById("app");
+if(!app)return;
+const z=Number(settings.zoom||100)/100;
+if(z===1){
+app.style.zoom="";
+app.style.width="";
+}else{
+app.style.zoom=z;
+app.style.width=(100/z)+"%";
+}
 }
 
-function setZoom(value){
+function chooseSound(sound){
+settings.sound=sound;
+save();
+playSound(sound);
+}
+window.chooseSound=chooseSound;
 
-  const zoom=
-    Math.min(
-      160,
-      Math.max(
-        100,
-        Number(value)||100
-      )
-    );
-
-
-  settings.zoom=zoom;
-
-
-  /*
-    Scale the whole application without using browser zoom.
-  */
-
-  document.documentElement.style.setProperty(
-    "--ui-scale",
-    zoom/100
-  );
-
-
-  document.getElementById(
-    "zoomRange"
-  ).value=zoom;
-
-
-  document.getElementById(
-    "zoomLabel"
-  ).textContent=
-    zoom+"%";
-
-
-  saveData();
-
+function playSound(type){
+try{
+const C=window.AudioContext||window.webkitAudioContext;
+if(!C)return;
+const ctx=new C();
+const notes={
+bell:[880],
+soft:[660],
+chime:[523,659,784],
+double:[660,880]
+}[type]||[660];
+notes.forEach((n,i)=>{
+const o=ctx.createOscillator();
+const g=ctx.createGain();
+o.type="sine";
+o.frequency.value=n;
+g.gain.setValueAtTime(.0001,ctx.currentTime+i*.14);
+g.gain.exponentialRampToValueAtTime(.15,ctx.currentTime+i*.14+.02);
+g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+i*.14+.14);
+o.connect(g);g.connect(ctx.destination);
+o.start(ctx.currentTime+i*.14);
+o.stop(ctx.currentTime+i*.14+.14);
+});
+}catch(e){}
 }
 
-function changeZoom(amount){
+window.testReminderSound=function(){playSound(settings.sound||"soft")};
 
-  setZoom(
-    Number(
-      settings.zoom||100
-    )+
-    amount
-  );
-
+function enableReminders(){
+settings.reminders=true;
+save();
+if("Notification"in window){
+Notification.requestPermission().then(()=>{
+alert("Reminders are enabled when supported by your browser.");
+});
+}else alert("Reminders are enabled in the app.");
 }
 
-function updateSettingsViewButtons(){
+function saveSettingsPanel(){
+settings.zoom=Number(document.getElementById("zoomRange").value||100);
+settings.scheduleAppearance=document.getElementById("scheduleAppearance").value;
+settings.font=document.getElementById("fontSelect").value;
+settings.backgroundOpacity=Number(document.getElementById("backgroundOpacity").value||20);
 
-  document.getElementById(
-    "settingsCalendar"
-  ).classList.toggle(
-    "active",
-    scheduleView==="calendar"
-  );
+save();
+applyZoom();
 
-
-  document.getElementById(
-    "settingsList"
-  ).classList.toggle(
-    "active",
-    scheduleView==="list"
-  );
-
+const status=document.getElementById("saveSettingsStatus");
+status.textContent="✓ Settings saved successfully";
+setTimeout(()=>status.textContent="",2200);
 }
+window.saveSettingsPanel=saveSettingsPanel;
 
-
-/* ==========================================================
-   IMAGES
-========================================================== */
-
-function uploadImage(input,type){
-
-  const file=
-    input.files?.[0];
-
-
-  if(!file)
-    return;
-
-
-  const reader=
-    new FileReader();
-
-
-  reader.onload=function(){
-
-    settings[type]=
-      reader.result;
-
-    saveData();
-
-    applyImages();
-
-  };
-
-
-  reader.readAsDataURL(file);
-
+function saveImageFile(file,key,callback){
+if(!file)return;
+const reader=new FileReader();
+reader.onload=function(){
+try{
+settings[key]=reader.result;
+save();
+if(callback)callback(reader.result);
+}catch(e){
+alert("This image is too large for device storage.");
+}
+};
+reader.readAsDataURL(file);
 }
 
 function applyImages(){
-
-  const defaultLogo=
-    "data:image/svg+xml;charset=UTF-8,"+
-    encodeURIComponent(`
-      <svg xmlns="http://www.w3.org/2000/svg"
-           width="200"
-           height="200"
-           viewBox="0 0 200 200">
-        <rect width="200"
-              height="200"
-              rx="35"
-              fill="#f1d4e2"/>
-        <text x="100"
-              y="112"
-              text-anchor="middle"
-              font-size="72">
-          ✨
-        </text>
-      </svg>
-    `);
-
-
-  document.getElementById(
-    "appLogo"
-  ).src=
-    settings.profile||
-    settings.icon||
-    defaultLogo;
-
-
-  document.getElementById(
-    "homeBanner"
-  ).style.backgroundImage=
-    settings.banner
-      ?'url("'+settings.banner+'")'
-      :"linear-gradient(135deg,#f1d4e2,#f8e9f0)";
-
-
-  const background=
-    document.getElementById(
-      "backgroundLayer"
-    );
-
-
-  background.style.backgroundImage=
-    settings.background
-      ?'url("'+settings.background+'")'
-      :"none";
-
-
-  background.style.opacity=
-    Number(
-      settings.backgroundOpacity||12
-    )/100;
-
+if(settings.profile){
+document.getElementById("appLogo").src=settings.profile;
+document.getElementById("welcomeLogo").src=settings.profile;
+}
+if(settings.banner){
+document.querySelector(".home-hero").style.backgroundImage=`linear-gradient(110deg,rgba(255,255,255,.78),rgba(255,229,239,.55)),url("${settings.banner}")`;
+}
+if(settings.background){
+const opacity=Math.max(0,Math.min(1,Number(settings.backgroundOpacity||20)/100));
+document.body.style.backgroundImage=`linear-gradient(rgba(255,247,250,${opacity}),rgba(249,214,226,${opacity})),url("${settings.background}")`;
+document.body.style.backgroundSize="cover";
+document.body.style.backgroundAttachment="fixed";
+}
 }
 
-function setBackgroundOpacity(value){
-
-  settings.backgroundOpacity=
-    Number(value);
-
-
-  document.getElementById(
-    "backgroundLayer"
-  ).style.opacity=
-    Number(value)/100;
-
-
-  saveData();
-
+function setupImageInputs(){
+document.getElementById("profileInput").onchange=e=>saveImageFile(e.target.files[0],"profile",applyImages);
+document.getElementById("bannerInput").onchange=e=>saveImageFile(e.target.files[0],"banner",applyImages);
+document.getElementById("backgroundInput").onchange=e=>saveImageFile(e.target.files[0],"background",applyImages);
+document.getElementById("appIconInput").onchange=e=>saveImageFile(e.target.files[0],"icon",applyImages);
+document.getElementById("backgroundOpacity").oninput=e=>{
+settings.backgroundOpacity=Number(e.target.value);
+applyImages();
+};
 }
-
-
-/* ==========================================================
-   FONT
-========================================================== */
-
-function getFont(value){
-
-  const fonts={
-
-    system:
-      '-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif',
-
-    serif:
-      'Georgia,"Times New Roman",serif',
-
-    rounded:
-      '"Trebuchet MS","Avenir Next",Arial,sans-serif',
-
-    mono:
-      'ui-monospace,SFMono-Regular,Menlo,monospace'
-
-  };
-
-
-  return fonts[value]||
-    fonts.system;
-
-}
-
-function setFontStyle(value){
-
-  settings.font=value;
-
-  document.documentElement.style.setProperty(
-    "--font",
-    getFont(value)
-  );
-
-  saveData();
-
-}
-
-
-/* ==========================================================
-   SOUND
-========================================================== */
-
-function selectSound(sound){
-
-  settings.sound=sound;
-
-  saveData();
-
-  updateSoundButtons();
-
-  playSound(sound);
-
-}
-
-function updateSoundButtons(){
-
-  const current=
-    settings.sound||"bell";
-
-
-  document.querySelectorAll(
-    ".sound-option"
-  ).forEach(button=>{
-
-    button.classList.toggle(
-      "active",
-      button.dataset.sound===
-      current
-    );
-
-  });
-
-}
-
-function testReminderSound(){
-
-  playSound(
-    settings.sound||"bell"
-  );
-
-}
-
-function playSound(sound){
-
-  try{
-
-    const AudioContext=
-      window.AudioContext||
-      window.webkitAudioContext;
-
-
-    const context=
-      new AudioContext();
-
-
-    const sounds={
-
-      bell:[880],
-
-      soft:[520],
-
-      chime:[660,880],
-
-      double:[660,660]
-
-    };
-
-
-    const frequencies=
-      sounds[sound]||
-      sounds.bell;
-
-
-    frequencies.forEach(
-      (frequency,index)=>{
-
-        const oscillator=
-          context.createOscillator();
-
-        const gain=
-          context.createGain();
-
-
-        oscillator.type="sine";
-
-        oscillator.frequency.value=
-          frequency;
-
-        gain.gain.value=.08;
-
-
-        oscillator.connect(gain);
-
-        gain.connect(
-          context.destination
-        );
-
-
-        const start=
-          context.currentTime+
-          index*.22;
-
-
-        oscillator.start(start);
-
-        oscillator.stop(
-          start+.18
-        );
-
-      }
-    );
-
-  }catch(error){}
-
-}
-
-
-/* ==========================================================
-   NOTIFICATIONS
-========================================================== */
-
-async function enableNotifications(){
-
-  if(
-    !("Notification" in window)
-  ){
-
-    alert(
-      "Notifications are not supported here."
-    );
-
-    return;
-
-  }
-
-
-  const permission=
-    await Notification.requestPermission();
-
-
-  if(permission==="granted"){
-
-    settings.notifications=true;
-
-    saveData();
-
-    alert(
-      "Reminders are enabled."
-    );
-
-  }else{
-
-    alert(
-      "Please allow notifications for this app."
-    );
-
-  }
-
-}
-
-
-/* ==========================================================
-   BACKUP
-========================================================== */
 
 function exportData(){
-
-  const data={
-
-    version:11,
-
-    clients,
-
-    jobs,
-
-    overrides,
-
-    settings,
-
-    activeTimer,
-
-    exportedAt:
-      new Date().toISOString()
-
-  };
-
-
-  const blob=
-    new Blob(
-      [
-        JSON.stringify(
-          data,
-          null,
-          2
-        )
-      ],
-      {
-        type:"application/json"
-      }
-    );
-
-
-  const url=
-    URL.createObjectURL(blob);
-
-
-  const link=
-    document.createElement("a");
-
-
-  link.href=url;
-
-  link.download=
-    "Pure-Shine-Cleaning-backup.json";
-
-
-  document.body.appendChild(link);
-
-  link.click();
-
-  link.remove();
-
-  URL.revokeObjectURL(url);
-
+const payload={
+clients,
+jobs,
+overrides,
+settings,
+exportedAt:new Date().toISOString()
+};
+const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
+a.href=url;
+a.download="pure-shine-cleaning-backup-"+dateKey(new Date())+".json";
+document.body.appendChild(a);
+a.click();
+a.remove();
+URL.revokeObjectURL(url);
 }
+window.exportData=exportData;
 
-function importData(input){
-
-  const file=
-    input.files?.[0];
-
-
-  if(!file)
-    return;
-
-
-  const reader=
-    new FileReader();
-
-
-  reader.onload=function(){
-
-    try{
-
-      const data=
-        JSON.parse(
-          reader.result
-        );
-
-
-      if(
-        !Array.isArray(data.clients)||
-        !Array.isArray(data.jobs)
-      ){
-
-        alert(
-          "Invalid Pure Shine backup."
-        );
-
-        return;
-
-      }
-
-
-      /*
-        IMPORT REPLACES THE CURRENT DATABASE.
-        This prevents old/deleted data from
-        unexpectedly appearing again.
-      */
-
-      clients=
-        data.clients.map(
-          client=>({...client})
-        );
-
-
-      jobs=
-        data.jobs.map(
-          normalizeJob
-        );
-
-
-      overrides=
-        data.overrides||{};
-
-
-      settings={
-        ...settings,
-        ...(data.settings||{})
-      };
-
-
-      activeTimer=
-        data.activeTimer||
-        null;
-
-
-      saveData();
-
-      renderAll();
-
-      applySettings();
-
-      alert(
-        "Backup imported successfully."
-      );
-
-    }catch(error){
-
-      alert(
-        "Could not import this backup."
-      );
-
-    }
-
-  };
-
-
-  reader.readAsText(file);
-
+function importData(){
+document.getElementById("importFile").click();
 }
+window.importData=importData;
 
-
-/* ==========================================================
-   NAVIGATION
-========================================================== */
-
-function showPage(
-  page,
-  button=null
-){
-
-  document.querySelectorAll(
-    ".page"
-  ).forEach(
-    element =>
-      element.classList.remove(
-        "active"
-      )
-  );
-
-
-  const target=
-    document.getElementById(
-      page+"Page"
-    );
-
-
-  if(target){
-
-    target.classList.add(
-      "active"
-    );
-
-  }
-
-
-  document.querySelectorAll(
-    ".bottom-nav button"
-  ).forEach(
-    element =>
-      element.classList.remove(
-        "active"
-      )
-  );
-
-
-  if(button){
-
-    button.classList.add(
-      "active"
-    );
-
-  }else{
-
-    const nav=
-      document.querySelector(
-        `.bottom-nav button[data-page="${page}"]`
-      );
-
-
-    if(nav){
-
-      nav.classList.add(
-        "active"
-      );
-
-    }
-
-  }
-
-
-  if(page==="home")
-    renderHome();
-
-  if(page==="schedule")
-    renderSchedule();
-
-  if(page==="clients")
-    renderClients();
-
-  if(page==="clientProfile")
-    renderClientProfile();
-
-  if(page==="earnings")
-    renderEarnings();
-
-  if(page==="monthly")
-    renderMonthly();
-
-}
-
-function renderClientProfile(){
-
-  if(currentClientProfile){
-
-    openClientProfile(
-      currentClientProfile
-    );
-
-  }
-
-}
-
-
-/* ==========================================================
-   MODALS
-========================================================== */
-
-function closeModal(id){
-
-  const modal=
-    document.getElementById(id);
-
-
-  if(modal){
-
-    modal.classList.remove("show");
-
-  }
-
-}
-
-
-document.querySelectorAll(
-  ".modal"
-).forEach(modal=>{
-
-  modal.addEventListener(
-    "click",
-    event=>{
-
-      if(event.target===modal){
-
-        modal.classList.remove(
-          "show"
-        );
-
-      }
-
-    }
-  );
-
+document.getElementById("importFile").addEventListener("change",e=>{
+const file=e.target.files[0];
+if(!file)return;
+const reader=new FileReader();
+reader.onload=()=>{
+try{
+const d=JSON.parse(reader.result);
+if(Array.isArray(d.clients))clients=d.clients;
+if(Array.isArray(d.jobs))jobs=d.jobs;
+if(d.overrides)overrides=d.overrides;
+if(d.settings)settings={...settings,...d.settings};
+save();
+applyImages();
+applyZoom();
+render();
+alert("Backup imported successfully.");
+}catch(err){alert("Invalid backup file.");}
+};
+reader.readAsText(file);
 });
 
+function startTimer(jobId){
+if(timer.jobId===jobId){stopTimer();return}
+if(timer.interval)clearInterval(timer.interval);
+const j=findJob(jobId);
+if(!j)return;
+timer.jobId=jobId;
+timer.start=Date.now();
+timer.interval=setInterval(updateTimer,1000);
+document.getElementById("timerClient").textContent=name(j.clientId);
+document.getElementById("timerPanel").classList.add("show");
+updateTimer();
+}
+window.startTimer=startTimer;
 
-/* ==========================================================
-   INPUT EVENTS
-========================================================== */
+function startNextTimer(){
+const today=jobsForDate(new Date())[0];
+if(today)startTimer(today.id);
+else openJob();
+}
+window.startNextTimer=startNextTimer;
 
-document.addEventListener(
-  "input",
-  event=>{
-
-    const id=
-      event.target?.id;
-
-
-    if(
-      id==="jobHours"||
-      id==="jobMinutes"||
-      id==="jobRate"
-    ){
-
-      calculateJob();
-
-    }
-
-  }
-);
-
-
-document.addEventListener(
-  "change",
-  event=>{
-
-    const id=
-      event.target?.id;
-
-
-    if(
-      id==="jobStart"||
-      id==="jobEnd"
-    ){
-
-      calculateFromTimes();
-
-    }
-
-  }
-);
-
-
-/* ==========================================================
-   APPLY SETTINGS
-========================================================== */
-
-function applySettings(){
-
-  scheduleView=
-    settings.scheduleView||
-    "calendar";
-
-
-  document.documentElement.style.setProperty(
-    "--font",
-    getFont(
-      settings.font||
-      "system"
-    )
-  );
-
-
-  setZoom(
-    settings.zoom||100
-  );
-
-
-  applyImages();
-
-  updateSettingsViewButtons();
-
-  updateSoundButtons();
-
+function updateTimer(){
+if(!timer.jobId||!timer.start)return;
+const elapsed=Math.max(0,Date.now()-timer.start);
+const total=Math.floor(elapsed/1000);
+const h=Math.floor(total/3600);
+const m=Math.floor((total%3600)/60);
+const s=total%60;
+document.getElementById("timerValue").textContent=
+String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
 }
 
+function stopTimer(){
+if(!timer.jobId)return;
+const j=findJob(timer.jobId);
+const elapsed=(Date.now()-timer.start)/3600000;
+if(j){
+const worked=Math.max(0.0166667,elapsed);
+const existing=jobs.find(x=>x.id===j.id);
+if(existing){
+existing.hours=worked;
+existing.done=true;
+}else{
+jobs.push({...j,hours:worked,done:true,id:"job-"+Date.now(),occurrenceKey:j.occurrenceKey});
+}
+save();
+}
+clearInterval(timer.interval);
+timer={jobId:null,start:null,interval:null};
+document.getElementById("timerPanel").classList.remove("show");
+render();
+}
+window.stopTimer=stopTimer;
 
-/* ==========================================================
-   RENDER ALL
-========================================================== */
+function clientForJob(j){return clients.find(c=>c.id===j.clientId)}
 
-function renderAll(){
+function messageJob(j,payment){
+const c=clientForJob(j);if(!c)return;
+const amount=j.totalOverride!=null?Number(j.totalOverride):Number(j.hours||0)*Number(j.rate||0);
+const body=payment
+?`Hi ${c.name}, just a reminder that the amount due for the cleaning on ${j.date||j.day} is ${money(amount)}. Thank you!`
+:`Hi ${c.name}, just confirming your cleaning on ${j.date||j.day}${j.start?" at "+j.start:""}${j.end?"–"+j.end:""}. See you then!`;
+const phone=(c.phone||"").replace(/[^+\d]/g,"");
+if(phone)location.href="sms:"+phone+"?&body="+encodeURIComponent(body);
+else if(navigator.share)navigator.share({text:body}).catch(()=>{});
+else if(navigator.clipboard)navigator.clipboard.writeText(body).then(()=>alert("Message copied.")).catch(()=>alert(body));
+else alert(body);
+}
+window.sendClientReminder=function(id){const j=jobs.find(x=>x.id===id);if(j)messageJob(j,false)};
+window.sendPaymentReminder=function(id){const j=jobs.find(x=>x.id===id);if(j)messageJob(j,true)};
 
-  renderHome();
+window.openInvoice=function(id){
+const j=jobs.find(x=>x.id===id);if(!j)return;
+const c=clientForJob(j);if(!c)return;
+let modal=document.getElementById("invoiceModal");
+if(!modal){
+modal=document.createElement("div");
+modal.id="invoiceModal";
+modal.className="modal";
+modal.innerHTML='<div class="sheet"><div class="sheet-head"><h3>Invoice</h3><button class="close" onclick="closeModal(\'invoiceModal\')">✕</button></div><div id="invoiceContent"></div><div class="form-actions"><button class="secondary" onclick="printInvoice()">Print</button><button class="save" onclick="shareInvoice()">Send</button></div></div>';
+document.body.appendChild(modal);
+}
+const amount=j.totalOverride!=null?Number(j.totalOverride):Number(j.hours||0)*Number(j.rate||0);
+document.getElementById("invoiceContent").innerHTML=`<div class="invoice"><h2>Pure Shine Cleaning</h2><p><b>Client:</b> ${c.name}</p><p><b>Date:</b> ${j.date||j.day}</p><p><b>Time:</b> ${j.start||"—"}${j.end?" – "+j.end:""}</p><p><b>Worked:</b> ${timeText(j.hours)}</p><p><b>Rate:</b> ${money(j.rate)}/hour</p><hr><h2>Amount owed: ${money(amount)}</h2></div>`;
+modal.classList.add("show");
+};
 
-  renderSchedule();
+window.printInvoice=function(){window.print()};
+window.shareInvoice=function(){
+const txt=document.getElementById("invoiceContent")?.innerText||"";
+if(navigator.share)navigator.share({title:"Pure Shine Cleaning Invoice",text:txt}).catch(()=>{});
+else if(navigator.clipboard)navigator.clipboard.writeText(txt).then(()=>alert("Invoice copied.")).catch(()=>alert(txt));
+else alert(txt);
+};
 
-  renderClients();
-
-  renderEarnings();
-
-  renderMonthly();
-
-  updateTimer();
-
+function tomorrowDate(){
+const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+1);return d;
 }
 
+function tomorrowJobs(){
+const d=tomorrowDate(),key=dateKey(d),day=getDayName(d);
+return jobsForDate(d).filter(j=>j.date===key||j.day===day);
+}
 
-/* ==========================================================
-   AUTO SAVE ON PAGE LEAVE / VISIBILITY
-========================================================== */
+function showTomorrowReminder(){
+if(!settings.reminders)return;
+const d=new Date();
+const marker="pure_shine_reminder_"+dateKey(d);
+if(localStorage.getItem(marker))return;
+const list=tomorrowJobs();
+if(!list.length)return;
+localStorage.setItem(marker,"1");
+const text=list.map(j=>`${name(j.clientId)} ${j.start||""}${j.end?"–"+j.end:""}`).join("\n");
+playSound(settings.sound||"soft");
+setTimeout(()=>alert("Tomorrow's cleaning jobs:\n\n"+text),350);
+}
 
-document.addEventListener(
-  "visibilitychange",
-  function(){
+function render(){
+const today=document.getElementById("today");
+if(today)today.textContent=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"});
 
-    if(
-      document.visibilityState==="hidden"
-    ){
+const totalH=jobs.reduce((a,j)=>a+Number(j.hours||0),0);
+const earn=jobs.reduce((a,j)=>a+(j.totalOverride!=null?Number(j.totalOverride):Number(j.hours||0)*Number(j.rate||0)),0);
 
-      saveData();
+document.getElementById("sJobs").textContent=jobs.length;
+document.getElementById("sHours").textContent=timeText(totalH);
+document.getElementById("sEarn").textContent=money(earn);
+document.getElementById("sFree").textContent=timeText(Math.max(0,40-totalH));
 
-    }
-
-  }
-);
-
-window.addEventListener(
-  "beforeunload",
-  function(){
-
-    saveData();
-
-  }
-);
-
-
-/* ==========================================================
-   START APPLICATION
-========================================================== */
+renderCalendar();
+renderClients();
+renderJobs();
+renderEarnings();
+updateTimer();
+}
 
 loadData();
+setupImageInputs();
+applyImages();
+applyZoom();
+renderSettings();
+render();
 
-applySettings();
+setTimeout(showTomorrowReminder,900);
 
-renderAll();
-
-setInterval(
-  updateTimer,
-  1000
-);
-
+})();
 </script>
-
 </body>
 </html>
-<!-- ADAUGĂ ÎN SETTINGS, LA FINALUL CONȚINUTULUI SETĂRILOR -->
-
-<button
-  type="button"
-  class="settings-action primary-action"
-  onclick="saveSettings()"
->
-  💾 Save changes
-</button>
-
-<script>
-function saveSettings() {
-  try {
-    /* Save current settings */
-    if (typeof settings !== "undefined") {
-      const zoomEl = document.getElementById("zoomRange");
-      if (zoomEl) {
-        settings.zoom = Number(zoomEl.value);
-      }
-
-      const soundEl = document.getElementById("soundSelect");
-      if (soundEl) {
-        settings.sound = soundEl.value;
-      }
-
-      const reminderEl = document.getElementById("reminderToggle");
-      if (reminderEl) {
-        settings.reminders = reminderEl.checked;
-      }
-
-      localStorage.setItem(
-        "PURE_SHINE_CLEANING_MANAGER_PERMANENT_V11",
-        JSON.stringify({
-          clients: typeof clients !== "undefined" ? clients : [],
-          jobs: typeof jobs !== "undefined" ? jobs : [],
-          settings: settings,
-          overrides: typeof overrides !== "undefined" ? overrides : {}
-        })
-      );
-    }
-
-    /* Also save individual Settings controls */
-    const zoom = document.getElementById("zoomRange");
-    if (zoom) {
-      localStorage.setItem("pure_shine_zoom", zoom.value);
-    }
-
-    const sound = document.getElementById("soundSelect");
-    if (sound) {
-      localStorage.setItem("pure_shine_sound", sound.value);
-    }
-
-    const reminder = document.getElementById("reminderToggle");
-    if (reminder) {
-      localStorage.setItem(
-        "pure_shine_reminders",
-        reminder.checked ? "1" : "0"
-      );
-    }
-
-    /* Update zoom immediately */
-    if (typeof setZoom === "function" && zoom) {
-      setZoom(Number(zoom.value));
-    }
-
-    /* Success message */
-    if (typeof toast === "function") {
-      toast("✓ Settings saved successfully");
-    } else {
-      alert("✓ Settings saved successfully");
-    }
-
-  } catch (error) {
-    console.error("Save settings error:", error);
-
-    if (typeof toast === "function") {
-      toast("Could not save settings");
-    } else {
-      alert("Could not save settings");
-    }
-  }
-}
-</script>
