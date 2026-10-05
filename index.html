@@ -7071,3 +7071,86 @@ setInterval(
 
 </body>
 </html>
+<!-- ADAUGĂ ÎN SETTINGS, LA FINALUL CONȚINUTULUI SETĂRILOR -->
+
+<button
+  type="button"
+  class="settings-action primary-action"
+  onclick="saveSettings()"
+>
+  💾 Save changes
+</button>
+
+<script>
+function saveSettings() {
+  try {
+    /* Save current settings */
+    if (typeof settings !== "undefined") {
+      const zoomEl = document.getElementById("zoomRange");
+      if (zoomEl) {
+        settings.zoom = Number(zoomEl.value);
+      }
+
+      const soundEl = document.getElementById("soundSelect");
+      if (soundEl) {
+        settings.sound = soundEl.value;
+      }
+
+      const reminderEl = document.getElementById("reminderToggle");
+      if (reminderEl) {
+        settings.reminders = reminderEl.checked;
+      }
+
+      localStorage.setItem(
+        "PURE_SHINE_CLEANING_MANAGER_PERMANENT_V11",
+        JSON.stringify({
+          clients: typeof clients !== "undefined" ? clients : [],
+          jobs: typeof jobs !== "undefined" ? jobs : [],
+          settings: settings,
+          overrides: typeof overrides !== "undefined" ? overrides : {}
+        })
+      );
+    }
+
+    /* Also save individual Settings controls */
+    const zoom = document.getElementById("zoomRange");
+    if (zoom) {
+      localStorage.setItem("pure_shine_zoom", zoom.value);
+    }
+
+    const sound = document.getElementById("soundSelect");
+    if (sound) {
+      localStorage.setItem("pure_shine_sound", sound.value);
+    }
+
+    const reminder = document.getElementById("reminderToggle");
+    if (reminder) {
+      localStorage.setItem(
+        "pure_shine_reminders",
+        reminder.checked ? "1" : "0"
+      );
+    }
+
+    /* Update zoom immediately */
+    if (typeof setZoom === "function" && zoom) {
+      setZoom(Number(zoom.value));
+    }
+
+    /* Success message */
+    if (typeof toast === "function") {
+      toast("✓ Settings saved successfully");
+    } else {
+      alert("✓ Settings saved successfully");
+    }
+
+  } catch (error) {
+    console.error("Save settings error:", error);
+
+    if (typeof toast === "function") {
+      toast("Could not save settings");
+    } else {
+      alert("Could not save settings");
+    }
+  }
+}
+</script>
