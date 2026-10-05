@@ -1,14 +1,64 @@
-<!-- =========================================================
-     ADAUGĂ ÎN SETTINGS, DUPĂ SECȚIUNEA "APP ZOOM"
-     ========================================================= -->
+<section id="settings" class="page settings-page">
 
+<div class="section-head">
+<h2>Settings</h2>
+</div>
+
+<!-- APP ZOOM -->
+<div class="settings-card">
+
+<h3>App Zoom</h3>
+
+<p>
+Adjust the app size. The setting is saved automatically on this device.
+</p>
+
+<div class="zoom-box">
+
+<button class="zoom-btn"
+onclick="changeZoom(-5)">
+−
+</button>
+
+<div id="zoomLabel" class="zoom-value">
+130%
+</div>
+
+<button class="zoom-btn"
+onclick="changeZoom(5)">
++
+</button>
+
+</div>
+
+<input
+id="zoomRange"
+class="zoom-range"
+type="range"
+min="80"
+max="200"
+step="5"
+value="130"
+oninput="setAppZoom(this.value)"
+>
+
+</div>
+
+
+<button
+class="settings-action primary-action"
+onclick="setAppZoom(130)">
+↺ Reset Zoom to 130%
+</button>
+
+
+<!-- APP IMAGES -->
 <div class="settings-card">
 
 <h3>🎨 App Images</h3>
 
 <p>
-Change the images used by Pure Shine Cleaning. 
-Your selected images are saved on this device.
+Change the images used by your Pure Shine Cleaning app.
 </p>
 
 
@@ -18,8 +68,11 @@ Your selected images are saved on this device.
 📱 App Thumbnail / Logo
 </div>
 
-<div class="image-preview">
-<img id="thumbnailPreview" alt="App thumbnail">
+<div class="image-preview thumbnail-preview">
+<img
+id="thumbnailPreview"
+alt="App Thumbnail"
+>
 </div>
 
 <input
@@ -39,7 +92,10 @@ onchange="changeAppImage('thumbnail',this)"
 </div>
 
 <div class="image-preview cover-preview">
-<img id="coverPreview" alt="Welcome cover">
+<img
+id="coverPreview"
+alt="Welcome Cover"
+>
 </div>
 
 <input
@@ -59,7 +115,10 @@ onchange="changeAppImage('cover',this)"
 </div>
 
 <div class="image-preview banner-preview">
-<img id="bannerPreview" alt="Home banner">
+<img
+id="bannerPreview"
+alt="Home Banner"
+>
 </div>
 
 <input
@@ -71,328 +130,27 @@ onchange="changeAppImage('banner',this)"
 
 </div>
 
-
-<button
-class="settings-action danger-action"
-onclick="resetAppImages()">
-↺ Reset App Images
-</button>
-
 </div>
 
 
-<!-- =========================================================
-     ADAUGĂ ÎN <style>
-     ========================================================= -->
-
-<style>
-
-.image-setting{
-background:#fff;
-border:1px solid #e1c8d2;
-border-radius:18px;
-padding:14px;
-margin-top:12px;
-}
-
-.image-setting-title{
-font-size:16px;
-font-weight:900;
-color:#7e304f;
-margin-bottom:10px;
-}
-
-.image-preview{
-width:82px;
-height:82px;
-border-radius:18px;
-overflow:hidden;
-border:1px solid #d8aa55;
-background:#f8e4ec;
-margin-bottom:10px;
-}
-
-.image-preview img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.cover-preview{
-width:100%;
-height:130px;
-border-radius:17px;
-}
-
-.banner-preview{
-width:100%;
-height:110px;
-border-radius:17px;
-}
-
-.image-setting input[type="file"]{
-width:100%;
-padding:10px;
-background:#fff8fb;
-border:1px solid #dfc8d1;
-border-radius:12px;
-font-size:13px;
-color:#5c4650;
-}
-
-</style>
-
-
-<!-- =========================================================
-     ÎNLOCUIEȘTE/ADAUGĂ ÎN <script>
-     ========================================================= -->
-
-<script>
-
-const IMAGE_KEYS={
-thumbnail:'pure_shine_thumbnail_image',
-cover:'pure_shine_cover_image',
-banner:'pure_shine_banner_image'
-};
-
-
-/* =========================================
-   DEFAULT IMAGES
-   ========================================= */
-
-function getSavedImage(type){
-
-try{
-
-return localStorage.getItem(IMAGE_KEYS[type])||'';
-
-}catch(e){
-
-return '';
-
-}
-
-}
-
-
-/* =========================================
-   CHANGE IMAGE
-   ========================================= */
-
-function changeAppImage(type,input){
-
-const file=input.files?.[0];
-
-if(!file)return;
-
-if(!file.type.startsWith('image/')){
-
-alert('Please select an image.');
-
-input.value='';
-
-return;
-
-}
-
-const reader=new FileReader();
-
-reader.onload=function(e){
-
-const imageData=e.target.result;
-
-try{
-
-localStorage.setItem(
-IMAGE_KEYS[type],
-imageData
-);
-
-applyAppImages();
-
-}catch(error){
-
-console.error(error);
-
-alert(
-'The image could not be saved. Please choose a smaller image.'
-);
-
-}
-
-};
-
-reader.readAsDataURL(file);
-
-}
-
-
-/* =========================================
-   APPLY ALL SAVED IMAGES
-   ========================================= */
-
-function applyAppImages(){
-
-const thumbnail=getSavedImage('thumbnail');
-const cover=getSavedImage('cover');
-const banner=getSavedImage('banner');
-
-
-/* APP THUMBNAIL / LOGO */
-
-if(thumbnail){
-
-document
-.querySelectorAll(
-'.brand img,.logo-ring img'
-)
-.forEach(img=>{
-img.src=thumbnail;
-});
-
-const preview=
-document.getElementById('thumbnailPreview');
-
-if(preview){
-preview.src=thumbnail;
-}
-
-}
-
-
-/* WELCOME COVER */
-
-if(cover){
-
-const welcome=
-document.getElementById('welcome');
-
-if(welcome){
-
-welcome.style.backgroundImage=
-`linear-gradient(
-rgba(255,238,245,.72),
-rgba(255,231,240,.72)
-),url("${cover}")`;
-
-welcome.style.backgroundSize='cover';
-welcome.style.backgroundPosition='center';
-
-}
-
-const preview=
-document.getElementById('coverPreview');
-
-if(preview){
-preview.src=cover;
-}
-
-}
-
-
-/* HOME BANNER */
-
-if(banner){
-
-const hero=
-document.querySelector('.home-hero');
-
-if(hero){
-
-hero.style.backgroundImage=
-`linear-gradient(
-110deg,
-rgba(255,255,255,.78),
-rgba(255,229,239,.58)
-),url("${banner}")`;
-
-hero.style.backgroundSize='cover';
-hero.style.backgroundPosition='center';
-
-}
-
-const preview=
-document.getElementById('bannerPreview');
-
-if(preview){
-preview.src=banner;
-}
-
-}
-
-
-/* PREVIEWS */
-
-if(!thumbnail){
-
-const preview=
-document.getElementById('thumbnailPreview');
-
-if(preview){
-preview.removeAttribute('src');
-}
-
-}
-
-if(!cover){
-
-const preview=
-document.getElementById('coverPreview');
-
-if(preview){
-preview.removeAttribute('src');
-}
-
-}
-
-if(!banner){
-
-const preview=
-document.getElementById('bannerPreview');
-
-if(preview){
-preview.removeAttribute('src');
-}
-
-}
-
-}
-
-
-/* =========================================
-   RESET IMAGES
-   ========================================= */
-
-function resetAppImages(){
-
-if(!confirm(
-'Reset the app images to the original images?'
-))return;
-
-Object.values(IMAGE_KEYS).forEach(key=>{
-localStorage.removeItem(key);
-});
-
-location.reload();
-
-}
-
-
-/* =========================================
-   LOAD SAVED IMAGES
-   ========================================= */
-
-document.addEventListener(
-'DOMContentLoaded',
-function(){
-
-setTimeout(function(){
-
-applyAppImages();
-
-},100);
-
-}
-);
-
-</script>
+<button
+class="settings-action"
+onclick="addJobsToCalendar()">
+📅 Add Jobs to iPhone Calendar
+</button>
+
+
+<button
+class="settings-action"
+onclick="exportData()">
+⬇️ Export My Data
+</button>
+
+
+<button
+class="settings-action danger-action"
+onclick="resetAppData()">
+🔄 Reset App Data
+</button>
+
+</section>
