@@ -1,2418 +1,320 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#f4b4c9">
-<title>Pure Shine Cleaning Manager</title>
-<style>
-:root{--pink:#e96f99;--pink2:#f7c4d5;--pink3:#fff0f5;--gold:#d7aa55;--wine:#9b2f58;--text:#452a36;--muted:#725967;--white:#fff;--zoom:1}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:#fff0f5}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-body{overflow-x:hidden}
-.screen{min-height:100dvh;width:100%;display:none}
-.screen.active{display:block}
-
-#welcome{
-background:radial-gradient(circle at 20% 15%,#fff 0,#fff7fa 15%,transparent 42%),linear-gradient(135deg,#fff6fa 0%,#f9d5e2 45%,#f5bfd3 100%);
-padding:24px 18px 34px
-}
-.welcome-inner{
-width:min(720px,100%);
-margin:auto;
-min-height:calc(100dvh - 58px);
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-text-align:center;
-padding:20px 0
-}
-.profile-wrap{position:relative;margin-bottom:24px}
-.profile{
-width:min(240px,54vw);
-height:min(240px,54vw);
-border-radius:50%;
-object-fit:cover;
-background:linear-gradient(135deg,#fff4a6,#c78b14);
-border:7px solid #fff;
-box-shadow:0 8px 28px #9c587544,0 0 0 4px #d7aa55;
-display:block
-}
-.profile-fallback{
-display:flex;
-align-items:center;
-justify-content:center;
-color:#fff;
-font-size:clamp(55px,15vw,95px);
-font-family:Georgia,serif;
-font-weight:bold
-}
-.edit-photo{
-position:absolute;
-right:-4px;
-bottom:4px;
-width:56px;
-height:56px;
-border-radius:50%;
-border:3px solid #fff;
-background:var(--pink);
-color:#fff;
-font-size:25px;
-box-shadow:0 5px 14px #8e355044
-}
-.welcome-title{
-font-family:"Brush Script MT","Segoe Script",cursive;
-font-size:clamp(52px,11vw,82px);
-line-height:.88;
-color:var(--wine);
-margin:0;
-max-width:690px;
-text-shadow:0 1px #fff
-}
-.heart{font-size:34px;color:var(--gold);margin:14px 0}
-.welcome-sub{
-font-size:clamp(18px,4.5vw,25px);
-line-height:1.4;
-max-width:610px;
-margin:0 0 28px;
-color:#5c4650
-}
-.features{
-width:100%;
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
-margin-bottom:22px
-}
-.feature{
-min-height:155px;
-background:#fffafc;
-border:2px solid var(--gold);
-border-radius:22px;
-padding:18px 8px;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-box-shadow:0 8px 20px #9d4e6820
-}
-.feature-icon{font-size:46px;line-height:1;margin-bottom:15px}
-.feature b{font-size:clamp(16px,3.6vw,21px);line-height:1.1;color:#1678d3}
-.get-started{
-width:100%;
-min-height:76px;
-border:3px solid var(--gold);
-border-radius:42px;
-background:linear-gradient(#f38aaa,#df5f88);
-color:#fff;
-font-family:Georgia,serif;
-font-size:clamp(28px,6vw,38px);
-box-shadow:0 10px 24px #8d345329;
-margin:4px 0 15px
-}
-.login{font-size:18px}
-.linkbtn{
-border:0;
-background:none;
-color:var(--wine);
-font-weight:800;
-text-decoration:underline;
-padding:5px
-}
-
-#app{display:none;min-height:100dvh;background:#fff7fa}
-.app-shell{
-zoom:var(--zoom);
-width:calc(100% / var(--zoom));
-max-width:calc(1100px / var(--zoom));
-margin:0 auto;
-min-height:calc(100dvh / var(--zoom));
-padding-bottom:100px
-}
-.top{
-position:sticky;
-top:0;
-z-index:20;
-background:#fff9fcdd;
-backdrop-filter:blur(14px);
-border-bottom:1px solid #e9cad6
-}
-.top-row{
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:15px 18px
-}
-.brand{display:flex;align-items:center;gap:12px}
-.brand h1{font-size:22px;margin:0;color:var(--wine)}
-.icon-btn{
-width:52px;
-height:52px;
-border:1px solid var(--gold);
-border-radius:16px;
-background:#fff;
-color:var(--wine);
-font-size:26px
-}
-.page{display:none;padding:22px 18px}
-.page.active{display:block}
-.page-title{font-size:clamp(30px,7vw,45px);margin:0 0 6px;color:var(--wine)}
-.page-sub{font-size:18px;color:var(--muted);margin:0 0 20px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.card{
-background:#fff;
-border:1px solid #e6c7d3;
-border-radius:22px;
-padding:20px;
-box-shadow:0 8px 24px #7e304f14
-}
-.card h3{font-size:24px;margin:0 0 8px;color:var(--wine)}
-.big{font-size:28px;font-weight:900}
-.small{font-size:17px;color:var(--muted);line-height:1.45}
-.money{font-size:30px;font-weight:900;color:#2d8b5a}
-.btn{
-min-height:54px;
-border:1px solid var(--gold);
-border-radius:16px;
-background:#fff;
-color:var(--wine);
-font-weight:800;
-padding:12px 18px;
-font-size:18px
-}
-.btn.primary{background:linear-gradient(#f18aaa,#dd6388);color:#fff}
-.btn.danger{background:#fff0f4;color:#a13b5f}
-.row{display:flex;justify-content:space-between;align-items:center;gap:14px}
-.stack{display:grid;gap:12px}
-.list{display:grid;gap:12px}
-.empty{
-padding:28px;
-text-align:center;
-color:var(--muted);
-font-size:18px;
-border:2px dashed #dfb8c7;
-border-radius:20px
-}
-
-.bottom-nav{
-position:fixed;
-z-index:30;
-left:50%;
-bottom:0;
-transform:translateX(-50%);
-width:min(1100px,100%);
-display:grid;
-grid-template-columns:repeat(5,1fr);
-background:#fffdfedd;
-backdrop-filter:blur(16px);
-border-top:1px solid #e4c8d3;
-padding:8px max(8px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom))
-}
-.nav{
-border:0;
-background:none;
-color:#806573;
-font-size:14px;
-font-weight:800;
-padding:8px 2px;
-border-radius:14px
-}
-.nav span{display:block;font-size:25px;margin-bottom:2px}
-.nav.active{background:#fde2ec;color:var(--wine)}
-
-.field{display:grid;gap:7px}
-.field label{font-weight:800;font-size:17px;color:var(--wine)}
-.field input,.field select,.field textarea{
-width:100%;
-min-height:54px;
-border:1px solid #d9b6c5;
-border-radius:15px;
-background:#fff;
-padding:12px 14px;
-font-size:18px;
-color:var(--text)
-}
-.field textarea{min-height:100px;resize:vertical}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-.modal{
-position:fixed;
-inset:0;
-background:#38162277;
-z-index:50;
-display:none;
-align-items:flex-end
-}
-.modal.show{display:flex}
-.modal-box{
-width:100%;
-max-height:90dvh;
-overflow:auto;
-background:#fff8fb;
-border-radius:28px 28px 0 0;
-padding:22px 18px calc(28px + env(safe-area-inset-bottom))
-}
-.modal-title{font-size:28px;color:var(--wine);margin:0 0 18px}
-.actions{display:flex;gap:10px;margin-top:16px}
-.actions>*{flex:1}
-.zoom-control{display:flex;gap:10px;align-items:center}
-.zoom-control .btn{width:58px;padding:0}
-.zoom-label{min-width:80px;text-align:center;font-size:22px;font-weight:900;color:var(--wine)}
-
-@media(max-width:650px){
-.features{gap:8px}
-.feature{min-height:145px;padding:12px 5px;border-radius:18px}
-.feature-icon{font-size:36px}
-.feature b{font-size:15px}
-.grid{grid-template-columns:1fr}
-.two{grid-template-columns:1fr}
-.welcome-inner{justify-content:flex-start;padding-top:35px}
-.welcome-title{font-size:clamp(50px,13vw,70px)}
-}
-</style>
-</head>
-
-<body>
-
-<section id="welcome" class="screen active">
-
-<div class="welcome-inner">
-
-<div class="profile-wrap">
-
-<div id="welcomeProfile" class="profile profile-fallback">
-PS
-</div>
-
-<button
-class="edit-photo"
-type="button"
-onclick="chooseProfile()">
-✎
-</button>
-
-<input
-id="profileInput"
-type="file"
-accept="image/*"
-hidden
-onchange="saveProfileImage(event)">
-
-</div>
-
-<h1 class="welcome-title">
-Your Cleaning<br>
-Business, Simplified
-</h1>
-
-<div class="heart">♡</div>
-
-<p class="welcome-sub">
-Everything you need to organise your cleaning business in one beautiful place.
-</p>
-
-<div class="features">
-
-<button
-class="feature"
-type="button"
-onclick="enterApp();openSection('jobs')">
-
-<div class="feature-icon">🗓️</div>
-<b>Manage<br>Jobs</b>
-
-</button>
-
-<button
-class="feature"
-type="button"
-onclick="enterApp();openSection('clients')">
-
-<div class="feature-icon">👥</div>
-<b>Keep Track<br>of Clients</b>
-
-</button>
-
-<button
-class="feature"
-type="button"
-onclick="enterApp();openSection('earnings')">
-
-<div class="feature-icon">📈</div>
-<b>Track<br>Earnings</b>
-
-</button>
-
-<button
-class="feature"
-type="button"
-onclick="enterApp();openSection('time')">
-
-<div class="feature-icon">⏱️</div>
-<b>More Time<br>for You</b>
-
-</button>
-
-</div>
-
-<button
-class="get-started"
-type="button"
-onclick="enterApp()">
-Get Started ›
-</button>
-
-<div class="login">
-Already have an account?
-<button
-class="linkbtn"
-type="button"
-onclick="enterApp()">
-Log in
-</button>
-</div>
-
-</div>
-</section>
-
-
-<div id="app">
-
-<div class="app-shell">
-
-<header class="top">
-
-<div class="top-row">
-
-<div class="brand">
-
-<div
-id="brandProfile"
-class="profile profile-fallback"
-style="width:58px;height:58px;font-size:20px;border-width:2px">
-PS
-</div>
-
-<div>
-
-<h1>Pure Shine Cleaning</h1>
-
-<div class="small">
-Cleaning Manager
-</div>
-
-</div>
-
-</div>
-
-<button
-class="icon-btn"
-type="button"
-onclick="openSection('settings')">
-⚙️
-</button>
-
-</div>
-
-</header>
-
-
-<section id="jobs" class="page active">
-
-<h2 class="page-title">
-Manage Jobs
-</h2>
-
-<p class="page-sub">
-Your cleaning schedule, jobs and timers.
-</p>
-
-<div class="grid">
-
-<div class="card">
-
-<h3>Today</h3>
-
-<div
-id="todayJobs"
-class="list">
-</div>
-
-</div>
-
-<div class="card">
-
-<h3>Quick actions</h3>
-
-<div class="stack">
-
-<button
-class="btn primary"
-onclick="openJob()">
-＋ Add cleaning job
-</button>
-
-<button
-class="btn"
-onclick="openCalendar()">
-📅 Weekly schedule
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<div
-class="card"
-style="margin-top:16px">
-
-<h3>Job history</h3>
-
-<div
-id="jobHistory"
-class="list">
-</div>
-
-</div>
-
-</section>
-
-
-<section id="clients" class="page">
-
-<h2 class="page-title">
-Keep Track of Clients
-</h2>
-
-<p class="page-sub">
-Your clients, contact details and standard hours.
-</p>
-
-<div class="card">
-
-<button
-class="btn primary"
-style="width:100%"
-onclick="openClient()">
-＋ Add client
-</button>
-
-</div>
-
-<div
-id="clientsList"
-class="list"
-style="margin-top:16px">
-</div>
-
-</section>
-
-
-<section id="earnings" class="page">
-
-<h2 class="page-title">
-Track Earnings
-</h2>
-
-<p class="page-sub">
-See hours worked and money earned.
-</p>
-
-<div class="grid">
-
-<div class="card">
-
-<h3>This month</h3>
-
-<div
-id="monthHours"
-class="big">
-0h 0m
-</div>
-
-<div class="small">
-hours worked
-</div>
-
-</div>
-
-<div class="card">
-
-<h3>Total earned</h3>
-
-<div
-id="monthMoney"
-class="money">
-£0.00
-</div>
-
-<div class="small">
-based on saved jobs
-</div>
-
-</div>
-
-</div>
-
-<div
-class="card"
-style="margin-top:16px">
-
-<h3>By client</h3>
-
-<div
-id="earningsList"
-class="list">
-</div>
-
-</div>
-
-</section>
-
-
-<section id="time" class="page">
-
-<h2 class="page-title">
-More Time for You
-</h2>
-
-<p class="page-sub">
-Use the timer while you clean. Stop it when you finish and the job is saved.
-</p>
-
-<div class="card">
-
-<h3>Cleaning timer</h3>
-
-<div
-id="timerName"
-class="big">
-No timer running
-</div>
-
-<div
-id="timerClock"
-class="big"
-style="font-size:42px;margin:12px 0">
-00:00:00
-</div>
-
-<div class="actions">
-
-<button
-class="btn primary"
-onclick="startFirstTimer()">
-Start
-</button>
-
-<button
-class="btn danger"
-onclick="stopTimer()">
-Stop & save
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section id="settings" class="page">
-
-<h2 class="page-title">
-Settings
-</h2>
-
-<p class="page-sub">
-Personalise your app and make everything easier to read.
-</p>
-
-<div class="card">
-
-<h3>Profile photo</h3>
-
-<button
-class="btn primary"
-onclick="chooseProfile()">
-Change profile photo
-</button>
-
-</div>
-
-<div
-class="card"
-style="margin-top:16px">
-
-<h3>App size</h3>
-
-<div class="zoom-control">
-
-<button
-class="btn"
-onclick="changeZoom(-10)">
-−
-</button>
-
-<div
-id="zoomLabel"
-class="zoom-label">
-130%
-</div>
-
-<button
-class="btn"
-onclick="changeZoom(10)">
-＋
-</button>
-
-</div>
-
-</div>
-
-<div
-class="card"
-style="margin-top:16px">
-
-<h3>Backup</h3>
-
-<div class="actions">
-
-<button
-class="btn"
-onclick="exportData()">
-Export
-</button>
-
-<button
-class="btn"
-onclick="document.getElementById('importInput').click()">
-Import
-</button>
-
-</div>
-
-<input
-id="importInput"
-type="file"
-accept="application/json"
-hidden
-onchange="importData(event)">
-
-</div>
-
-</section>
-
-</div>
-
-
-<nav class="bottom-nav">
-
-<button
-class="nav active"
-data-page="jobs"
-onclick="openSection('jobs')">
-
-<span>🗓️</span>
-Jobs
-
-</button>
-
-<button
-class="nav"
-data-page="clients"
-onclick="openSection('clients')">
-
-<span>👥</span>
-Clients
-
-</button>
-
-<button
-class="nav"
-data-page="earnings"
-onclick="openSection('earnings')">
-
-<span>📈</span>
-Earnings
-
-</button>
-
-<button
-class="nav"
-data-page="time"
-onclick="openSection('time')">
-
-<span>⏱️</span>
-Time
-
-</button>
-
-<button
-class="nav"
-data-page="settings"
-onclick="openSection('settings')">
-
-<span>⚙️</span>
-Settings
-
-</button>
-
-</nav>
-
-</div>
-
-
-<div id="jobModal" class="modal">
-
-<div class="modal-box">
-
-<h3 class="modal-title">
-Cleaning job
-</h3>
-
-<input
-id="jobId"
-type="hidden">
-
-<div class="stack">
-
-<div class="field">
-
-<label>Client</label>
-
-<select id="jobClient"></select>
-
-</div>
-
-<div class="two">
-
-<div class="field">
-
-<label>Date</label>
-
-<input
-id="jobDate"
-type="date">
-
-</div>
-
-<div class="field">
-
-<label>Rate (£/hour)</label>
-
-<input
-id="jobRate"
-type="number"
-step="0.01">
-
-</div>
-
-</div>
-
-<div class="two">
-
-<div class="field">
-
-<label>Start</label>
-
-<input
-id="jobStart"
-type="time">
-
-</div>
-
-<div class="field">
-
-<label>End</label>
-
-<input
-id="jobEnd"
-type="time">
-
-</div>
-
-</div>
-
-<div class="field">
-
-<label>Notes</label>
-
-<textarea id="jobNotes"></textarea>
-
-</div>
-
-<div
-id="jobAmount"
-class="big">
-Amount: £0.00
-</div>
-
-</div>
-
-<div class="actions">
-
-<button
-class="btn"
-onclick="closeModal('jobModal')">
-Cancel
-</button>
-
-<button
-class="btn primary"
-onclick="saveJob()">
-Save job
-</button>
-
-</div>
-
-</div>
-</div>
-
-
-<div id="clientModal" class="modal">
-
-<div class="modal-box">
-
-<h3 class="modal-title">
-Client
-</h3>
-
-<input
-id="clientId"
-type="hidden">
-
-<div class="stack">
-
-<div class="field">
-
-<label>Name</label>
-
-<input id="clientName">
-
-</div>
-
-<div class="field">
-
-<label>Phone</label>
-
-<input
-id="clientPhone"
-type="tel">
-
-</div>
-
-<div class="two">
-
-<div class="field">
-
-<label>Type</label>
-
-<select id="clientType">
-
-<option>Private</option>
-<option>Agency</option>
-
-</select>
-
-</div>
-
-<div class="field">
-
-<label>Rate (£/hour)</label>
-
-<input
-id="clientRate"
-type="number"
-step="0.01">
-
-</div>
-
-</div>
-
-<div class="field">
-
-<label>Standard hours</label>
-
-<input
-id="clientHours"
-type="number"
-step="0.25">
-
-</div>
-
-<div class="field">
-
-<label>Notes</label>
-
-<textarea id="clientNotes"></textarea>
-
-</div>
-
-</div>
-
-<div class="actions">
-
-<button
-class="btn"
-onclick="closeModal('clientModal')">
-Cancel
-</button>
-
-<button
-class="btn primary"
-onclick="saveClient()">
-Save client
-</button>
-
-</div>
-
-</div>
-</div>
-
-
-<div id="calendarModal" class="modal">
-
-<div class="modal-box">
-
-<h3 class="modal-title">
-Weekly schedule
-</h3>
-
-<div
-id="calendarContent"
-class="list">
-</div>
-
-<div class="actions">
-
-<button
-class="btn"
-onclick="closeModal('calendarModal')">
-Close
-</button>
-
-</div>
-
-</div>
-</div>
-
-
-<script>
-'use strict';
-
-const CLIENTS_KEY='ps_clients_working_v1';
-const JOBS_KEY='ps_jobs_working_v1';
-const PROFILE_KEY='ps_profile_working_v1';
-const ZOOM_KEY='ps_zoom_working_v1';
-
-const initialClients=[
-{
-id:'lottie',
-name:'Lottie',
-phone:'07788 447015',
-day:'Monday',
-start:'09:00',
-end:'11:00',
-rate:16,
-hours:2,
-type:'Agency',
-notes:''
-},
-{
-id:'victoria',
-name:'Victoria',
-phone:'07923 054040',
-day:'Monday',
-start:'13:00',
-end:'15:00',
-rate:16,
-hours:2,
-type:'Agency',
-notes:'Flexible hours'
-},
-{
-id:'matt',
-name:'Matt',
-phone:'07886 711055',
-day:'Tuesday',
-start:'09:00',
-end:'13:00',
-rate:16,
-hours:4,
-type:'Agency',
-notes:''
-},
-{
-id:'christine',
-name:'Christine',
-phone:'',
-day:'Tuesday',
-start:'09:30',
-end:'12:30',
-rate:18,
-hours:3,
-type:'Private',
-notes:'Fortnightly / currently on holiday'
-},
-{
-id:'sonia',
-name:'Sonia',
-phone:'+44 7813 677012',
-day:'Wednesday',
-start:'09:00',
-end:'14:00',
-rate:16,
-hours:5,
-type:'Agency',
-notes:'Usually 4–7 hours'
-},
-{
-id:'laura',
-name:'Laura',
-phone:'+44 7958 391731',
-day:'Thursday',
-start:'09:00',
-end:'13:00',
-rate:18,
-hours:4,
-type:'Private',
-notes:''
-},
-{
-id:'hannah',
-name:'Hannah',
-phone:'07920 724916',
-day:'Thursday',
-start:'13:00',
-end:'16:00',
-rate:16,
-hours:3,
-type:'Agency',
-notes:''
-},
-{
-id:'meghan',
-name:'Meghan',
-phone:'+44 7740 291352',
-day:'Thursday',
-start:'',
-end:'',
-rate:18,
-hours:1.5,
-type:'Private',
-notes:'Usually 1–2 hours'
-},
-{
-id:'sindu',
-name:'Sindu',
-phone:'07438 168843',
-day:'Friday',
-start:'',
-end:'',
-rate:16,
-hours:3,
-type:'Agency',
-notes:'Fortnightly; alternates with Joanna'
-},
-{
-id:'joanna',
-name:'Joanna',
-phone:'07872 011386',
-day:'Friday',
-start:'',
-end:'',
-rate:18,
-hours:3.5,
-type:'Private',
-notes:'Fortnightly; alternates with Sindu'
-}
-];
-
-let clients=load(CLIENTS_KEY,initialClients);
-let jobs=load(JOBS_KEY,[]);
-let timer=load('ps_timer_working_v1',null);
-let zoom=Number(localStorage.getItem(ZOOM_KEY)||130);
-
-function load(k,f){
-try{
-const v=JSON.parse(localStorage.getItem(k));
-return v===null||v===undefined?structuredClone(f):v;
-}catch(e){
-return structuredClone(f);
-}
-}
-
-function save(){
-localStorage.setItem(CLIENTS_KEY,JSON.stringify(clients));
-localStorage.setItem(JOBS_KEY,JSON.stringify(jobs));
-localStorage.setItem('ps_timer_working_v1',JSON.stringify(timer));
-}
-
-function money(n){
-return '£'+Number(n||0).toFixed(2);
-}
-
-function minutesBetween(a,b){
-if(!a||!b)return 0;
-let [ah,am]=a.split(':').map(Number);
-let [bh,bm]=b.split(':').map(Number);
-let m=bh*60+bm-ah*60-am;
-if(m<0)m+=1440;
-return m;
-}
-
-function timeText(h){
-let m=Math.round(Number(h||0)*60);
-let hh=Math.floor(m/60);
-let mm=m%60;
-return hh+'h '+mm+'m';
-}
-
-function clientName(id){
-return clients.find(c=>c.id===id)?.name||'Unknown';
-}
-
-function todayKey(){
-return new Date().toISOString().slice(0,10);
-}
-
-function escapeHTML(value){
-return String(value??'')
-.replaceAll('&','&amp;')
-.replaceAll('<','&lt;')
-.replaceAll('>','&gt;')
-.replaceAll('"','&quot;')
-.replaceAll("'","&#039;");
-}
-
-function enterApp(){
-document.getElementById('welcome').classList.remove('active');
-document.getElementById('app').style.display='block';
-openSection('jobs');
-}
-
-function openSection(id){
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.page===id));
-renderAll();
-}
-
-function renderAll(){
-renderProfile();
-renderJobs();
-renderClients();
-renderEarnings();
-renderTimer();
-applyZoom();
-}
-
-function renderProfile(){
-let data=localStorage.getItem(PROFILE_KEY);
-
-['welcomeProfile','brandProfile'].forEach(id=>{
-let el=document.getElementById(id);
-if(!el)return;
-
-if(data){
-el.classList.remove('profile-fallback');
-el.innerHTML='';
-el.style.backgroundImage='url("'+data+'")';
-el.style.backgroundSize='cover';
-el.style.backgroundPosition='center';
-}else{
-el.classList.add('profile-fallback');
-el.style.backgroundImage='';
-el.textContent='PS';
-}
-});
-}
-
-function chooseProfile(){
-document.getElementById('profileInput').click();
-}
-
-function saveProfileImage(e){
-let f=e.target.files?.[0];
-if(!f)return;
-
-let r=new FileReader();
-
-r.onload=()=>{
-localStorage.setItem(PROFILE_KEY,r.result);
-renderProfile();
-};
-
-r.readAsDataURL(f);
-}
-
-function renderJobs(){
-
-let today=jobs.filter(j=>j.date===todayKey());
-
-document.getElementById('todayJobs').innerHTML=
-today.length
-?today.map(jobCard).join('')
-:'<div class="empty">No jobs saved for today. Add one above.</div>';
-
-document.getElementById('jobHistory').innerHTML=
-jobs.length
-?jobs.slice().reverse().map(jobCard).join('')
-:'<div class="empty">No saved jobs yet.</div>';
-}
-
-function jobCard(j){
-
-let amount=
-Number(j.hours||0)*Number(j.rate||0);
-
-return `
-<div class="card">
-
-<div class="row">
-
-<div>
-
-<h3>
-${escapeHTML(clientName(j.clientId))}
-</h3>
-
-<div class="small">
-${escapeHTML(j.date||'No date')}
- ·
-${escapeHTML(j.start||'')}
-${j.end?' – '+escapeHTML(j.end):''}
-</div>
-
-<div class="small">
-Worked: ${timeText(j.hours)}
-</div>
-
-</div>
-
-<div style="text-align:right">
-
-<div class="money">
-${money(amount)}
-</div>
-
-<div class="actions">
-
-<button
-class="btn"
-onclick="startTimerFor('${j.id}')">
-${timer?.jobId===j.id?'Stop':'Timer'}
-</button>
-
-<button
-class="btn"
-onclick="openJob('${j.id}')">
-Edit
-</button>
-
-<button
-class="btn"
-onclick="sendClientReminder('${j.id}')">
-📩 Reminder
-</button>
-
-<button
-class="btn"
-onclick="sendPaymentReminder('${j.id}')">
-💷 Payment
-</button>
-
-<button
-class="btn"
-onclick="openInvoice('${j.id}')">
-🧾 Invoice
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-`;
-}
-
-function openJob(id){
-
-let j=jobs.find(x=>x.id===id);
-
-let sel=document.getElementById('jobClient');
-
-sel.innerHTML=
-clients.map(
-c=>'<option value="'+c.id+'">'+escapeHTML(c.name)+'</option>'
-).join('');
-
-document.getElementById('jobId').value=j?.id||'';
-
-document.getElementById('jobClient').value=
-j?.clientId||clients[0]?.id||'';
-
-document.getElementById('jobDate').value=
-j?.date||todayKey();
-
-let c=
-clients.find(
-x=>x.id===document.getElementById('jobClient').value
-)||clients[0];
-
-document.getElementById('jobRate').value=
-j?.rate??c?.rate??18;
-
-document.getElementById('jobStart').value=
-j?.start||c?.start||'';
-
-document.getElementById('jobEnd').value=
-j?.end||c?.end||'';
-
-document.getElementById('jobNotes').value=
-j?.notes||'';
-
-updateAmount();
-
-document.getElementById('jobModal').classList.add('show');
-}
-
-document.getElementById('jobStart').addEventListener('input',updateAmount);
-document.getElementById('jobEnd').addEventListener('input',updateAmount);
-document.getElementById('jobRate').addEventListener('input',updateAmount);
-
-document.getElementById('jobClient').addEventListener('change',()=>{
-
-let c=
-clients.find(
-x=>x.id===document.getElementById('jobClient').value
-);
-
-if(c&&!document.getElementById('jobRate').value)
-document.getElementById('jobRate').value=c.rate;
-
-updateAmount();
-});
-
-function updateAmount(){
-
-let h=
-minutesBetween(
-document.getElementById('jobStart').value,
-document.getElementById('jobEnd').value
-)/60;
-
-document.getElementById('jobAmount').textContent=
-'Amount: '+
-money(
-h*Number(
-document.getElementById('jobRate').value||0
-)
-)+
-' · '+
-timeText(h);
-}
-
-function saveJob(){
-
-let id=document.getElementById('jobId').value;
-
-let c=
-clients.find(
-x=>x.id===document.getElementById('jobClient').value
-);
-
-if(!c)return;
-
-let h=
-minutesBetween(
-document.getElementById('jobStart').value,
-document.getElementById('jobEnd').value
-)/60;
-
-let obj={
-
-id:id||'j'+Date.now(),
-
-clientId:c.id,
-
-date:document.getElementById('jobDate').value,
-
-start:document.getElementById('jobStart').value,
-
-end:document.getElementById('jobEnd').value,
-
-hours:h||Number(c.hours||0),
-
-rate:Number(
-document.getElementById('jobRate').value||
-c.rate||
-0
-),
-
-notes:document.getElementById('jobNotes').value
-
-};
-
-if(id)
-jobs=jobs.map(x=>x.id===id?obj:x);
-else
-jobs.push(obj);
-
-save();
-
-closeModal('jobModal');
-
-renderAll();
-}
-
-
-/* ================================
-   CLIENT REMINDERS
-================================ */
-
-function getJobClient(j){
-return clients.find(c=>c.id===j.clientId);
-}
-
-function sendClientReminder(id){
-
-const j=jobs.find(x=>x.id===id);
-
-if(!j)return;
-
-const c=getJobClient(j);
-
-if(!c)return;
-
-const text=
-`Hi ${c.name}, just confirming your cleaning on ${j.date||''}${j.start?' at '+j.start:''}${j.end?'–'+j.end:''}. See you then!`;
-
-const phone=
-(c.phone||'').replace(/[^+\d]/g,'');
-
-if(phone){
-
-window.location.href=
-'sms:'+phone+
-'?&body='+
-encodeURIComponent(text);
-
-}else if(navigator.share){
-
-navigator.share({
-title:'Cleaning reminder',
-text:text
-}).catch(()=>{});
-
-}else{
-
-if(navigator.clipboard)
-navigator.clipboard.writeText(text);
-
-alert(text);
-
-}
-}
-
-
-function sendPaymentReminder(id){
-
-const j=jobs.find(x=>x.id===id);
-
-if(!j)return;
-
-const c=getJobClient(j);
-
-if(!c)return;
-
-const amount=
-Number(j.hours||0)*
-Number(j.rate||0);
-
-const text=
-`Hi ${c.name}, just a reminder that the amount due for your cleaning on ${j.date||''} is £${amount.toFixed(2)}. Thank you!`;
-
-const phone=
-(c.phone||'').replace(/[^+\d]/g,'');
-
-if(phone){
-
-window.location.href=
-'sms:'+phone+
-'?&body='+
-encodeURIComponent(text);
-
-}else if(navigator.share){
-
-navigator.share({
-title:'Payment reminder',
-text:text
-}).catch(()=>{});
-
-}else{
-
-if(navigator.clipboard)
-navigator.clipboard.writeText(text);
-
-alert(text);
-
-}
-}
-
-
-/* ================================
-   INVOICE
-================================ */
-
-function openInvoice(id){
-
-const j=jobs.find(x=>x.id===id);
-
-if(!j)return;
-
-const c=getJobClient(j);
-
-if(!c)return;
-
-const amount=
-Number(j.hours||0)*
-Number(j.rate||0);
-
-document
-.getElementById('invoiceModal')
-?.remove();
-
-const modal=
-document.createElement('div');
-
-modal.id='invoiceModal';
-
-modal.className='modal show';
-
-modal.innerHTML=`
-
-<div class="modal-box">
-
-<h3 class="modal-title">
-Invoice
-</h3>
-
-<div
-class="card"
-id="invoiceContent">
-
-<h3>
-Pure Shine Cleaning
-</h3>
-
-<p>
-<strong>Client:</strong>
-${escapeHTML(c.name)}
-</p>
-
-<p>
-<strong>Date:</strong>
-${escapeHTML(j.date||'')}
-</p>
-
-<p>
-<strong>Time:</strong>
-${escapeHTML(j.start||'')}
-${j.end?'– '+escapeHTML(j.end):''}
-</p>
-
-<p>
-<strong>Time spent:</strong>
-${timeText(j.hours)}
-</p>
-
-<p>
-<strong>Rate:</strong>
-£${Number(j.rate||0).toFixed(2)}/hour
-</p>
-
-<hr>
-
-<h3>
-Amount due:
-£${amount.toFixed(2)}
-</h3>
-
-</div>
-
-<div class="actions">
-
-<button
-class="btn"
-onclick="printInvoice()">
-🖨️ Print
-</button>
-
-<button
-class="btn primary"
-onclick="shareInvoice()">
-📤 Send
-</button>
-
-</div>
-
-<button
-class="btn"
-style="width:100%;margin-top:10px"
-onclick="closeInvoice()">
-Close
-</button>
-
-</div>
-`;
-
-document.body.appendChild(modal);
-}
-
-function closeInvoice(){
-
-document
-.getElementById('invoiceModal')
-?.remove();
-
-}
-
-function printInvoice(){
-
-const content=
-document.getElementById('invoiceContent');
-
-if(!content)return;
-
-const w=
-window.open(
-'',
-'',
-'width=700,height=800'
-);
-
-if(!w)return;
-
-w.document.write(`
-<html>
-<head>
-<title>Pure Shine Cleaning Invoice</title>
-
-<style>
-
-body{
-font-family:Arial;
-padding:40px;
-color:#222
-}
-
-h3{
-color:#9b2f58
-}
-
-hr{
-border:0;
-border-top:1px solid #ddd
-}
-
-</style>
-
-</head>
-
-<body>
-
-${content.outerHTML}
-
-</body>
-
-</html>
-`);
-
-w.document.close();
-
-w.focus();
-
-setTimeout(
-()=>w.print(),
-300
-);
-
-}
-
-function shareInvoice(){
-
-const text=
-document
-.getElementById('invoiceContent')
-?.innerText||'';
-
-if(navigator.share){
-
-navigator.share({
-title:'Pure Shine Cleaning Invoice',
-text:text
-}).catch(()=>{});
-
-}else if(navigator.clipboard){
-
-navigator.clipboard
-.writeText(text)
-.then(
-()=>alert(
-'Invoice copied. You can paste it into a message.'
-)
-);
-
-}else{
-
-alert(text);
-
-}
-
-}
-
-
-/* ================================
-   CLIENTS
-================================ */
-
-function renderClients(){
-
-document.getElementById('clientsList').innerHTML=
-
-clients.map(c=>`
-
-<div class="card">
-
-<div class="row">
-
-<div>
-
-<h3>
-${escapeHTML(c.name)}
-</h3>
-
-<div class="small">
-
-${c.phone
-?escapeHTML(c.phone)
-:'No phone saved'}
-
-<br>
-
-${escapeHTML(c.day)}
-
- ·
-
-${c.start&&c.end
-?escapeHTML(c.start)+'–'+escapeHTML(c.end)
-:'flexible'}
-
- ·
-
-${timeText(c.hours)}
-
- ·
-
-${money(c.rate)}/h
-
-</div>
-
-</div>
-
-<button
-class="btn"
-onclick="openClient('${c.id}')">
-Edit
-</button>
-
-</div>
-
-</div>
-
-`).join('');
-
-}
-
-function openClient(id){
-
-let c=
-clients.find(
-x=>x.id===id
-);
-
-document.getElementById('clientId').value=
-c?.id||'';
-
-document.getElementById('clientName').value=
-c?.name||'';
-
-document.getElementById('clientPhone').value=
-c?.phone||'';
-
-document.getElementById('clientType').value=
-c?.type||'Private';
-
-document.getElementById('clientRate').value=
-c?.rate||18;
-
-document.getElementById('clientHours').value=
-c?.hours||2;
-
-document.getElementById('clientNotes').value=
-c?.notes||'';
-
-document
-.getElementById('clientModal')
-.classList.add('show');
-
-}
-
-function saveClient(){
-
-let id=
-document.getElementById('clientId').value;
-
-let obj={
-
-id:id||'c'+Date.now(),
-
-name:
-document.getElementById('clientName').value.trim(),
-
-phone:
-document.getElementById('clientPhone').value.trim(),
-
-type:
-document.getElementById('clientType').value,
-
-rate:
-Number(
-document.getElementById('clientRate').value||0
-),
-
-hours:
-Number(
-document.getElementById('clientHours').value||0
-),
-
-notes:
-document.getElementById('clientNotes').value
-
-};
-
-if(!obj.name)return;
-
-if(id){
-
-clients=
-clients.map(
-c=>c.id===id
-?{...c,...obj}
-:c
-);
-
-}else{
-
-clients.push(obj);
-
-}
-
-save();
-
-closeModal('clientModal');
-
-renderAll();
-
-}
-
-
-/* ================================
-   EARNINGS
-================================ */
-
-function renderEarnings(){
-
-let now=new Date();
-
-let month=now.getMonth();
-let year=now.getFullYear();
-
-let arr=
-jobs.filter(
-j=>{
-
-let d=
-new Date(j.date||'');
-
-return
-d.getMonth()===month&&
-d.getFullYear()===year;
-
-}
-);
-
-let h=
-arr.reduce(
-(s,j)=>s+Number(j.hours||0),
-0
-);
-
-let m=
-arr.reduce(
-(s,j)=>
-s+
-Number(j.hours||0)*
-Number(j.rate||0),
-0
-);
-
-document.getElementById('monthHours')
-.textContent=
-timeText(h);
-
-document.getElementById('monthMoney')
-.textContent=
-money(m);
-
-let map={};
-
-arr.forEach(j=>{
-
-if(!map[j.clientId])
-map[j.clientId]={
-h:0,
-m:0
-};
-
-map[j.clientId].h+=
-Number(j.hours||0);
-
-map[j.clientId].m+=
-Number(j.hours||0)*
-Number(j.rate||0);
-
-});
-
-document.getElementById('earningsList').innerHTML=
-
-Object
-.entries(map)
-.map(
-([id,x])=>`
-
-<div class="card">
-
-<div class="row">
-
-<div>
-
-<h3>
-${escapeHTML(clientName(id))}
-</h3>
-
-<div class="small">
-${timeText(x.h)}
-</div>
-
-</div>
-
-<div class="money">
-${money(x.m)}
-</div>
-
-</div>
-
-</div>
-
-`
-)
-.join('')
-||
-'<div class="empty">No earnings saved for this month.</div>';
-
-}
-
-
-/* ================================
-   TIMER
-================================ */
-
-function startTimerFor(id){
-
-if(timer?.jobId===id){
-
-stopTimer();
-
-return;
-
-}
-
-timer={
-jobId:id,
-startedAt:Date.now()
-};
-
-save();
-
-renderTimer();
-
-}
-
-function startFirstTimer(){
-
-let j=jobs[0];
-
-if(!j){
-
-openJob();
-
-return;
-
-}
-
-startTimerFor(j.id);
-
-}
-
-function stopTimer(){
-
-if(!timer)return;
-
-let j=
-jobs.find(
-x=>x.id===timer.jobId
-);
-
-if(j){
-
-let extra=
-(Date.now()-timer.startedAt)/
-3600000;
-
-j.hours=
-Number(j.hours||0)+extra;
-
-j.done=true;
-
-save();
-
-}
-
-timer=null;
-
-save();
-
-renderAll();
-
-}
-
-function renderTimer(){
-
-let n=
-document.getElementById('timerName');
-
-let c=
-document.getElementById('timerClock');
-
-if(!n||!c)return;
-
-if(!timer){
-
-n.textContent=
-'No timer running';
-
-c.textContent=
-'00:00:00';
-
-return;
-
-}
-
-let j=
-jobs.find(
-x=>x.id===timer.jobId
-);
-
-if(!j){
-
-timer=null;
-
-save();
-
-renderTimer();
-
-return;
-
-}
-
-n.textContent=
-clientName(j.clientId);
-
-let sec=
-Math.floor(
-(Date.now()-timer.startedAt)/1000
-);
-
-c.textContent=
-[
-Math.floor(sec/3600),
-Math.floor(sec/60)%60,
-sec%60
-]
-.map(
-x=>String(x).padStart(2,'0')
-)
-.join(':');
-
-}
-
-setInterval(
-renderTimer,
-1000
-);
-
-
-/* ================================
-   WEEKLY SCHEDULE
-================================ */
-
-function openCalendar(){
-
-let days=[
-'Monday',
-'Tuesday',
-'Wednesday',
-'Thursday',
-'Friday',
-'Saturday',
-'Sunday'
-];
-
-document.getElementById('calendarContent').innerHTML=
-
-days.map(d=>{
-
-let rows=
-clients
-.filter(c=>c.day===d)
-.map(
-c=>
-escapeHTML(c.name)+
-' · '+
-timeText(c.hours)+
-' · '+
-money(c.rate)+
-'/h'
-)
-.join('<br>')
-||
-'No regular client';
-
-return `
-
-<div class="card">
-
-<h3>
-${d}
-</h3>
-
-<div class="small">
-${rows}
-</div>
-
-</div>
-
-`;
-
-}).join('');
-
-document
-.getElementById('calendarModal')
-.classList.add('show');
-
-}
-
-function closeModal(id){
-
-document
-.getElementById(id)
-.classList.remove('show');
-
-}
-
-
-/* ================================
-   ZOOM
-================================ */
-
-function applyZoom(){
-
-zoom=
-Math.max(
-100,
-Math.min(
-180,
-zoom
-)
-);
-
-document
-.documentElement
-.style
-.setProperty(
-'--zoom',
-zoom/100
-);
-
-document
-.getElementById('zoomLabel')
-.textContent=
-zoom+'%';
-
-localStorage.setItem(
-ZOOM_KEY,
-zoom
-);
-
-}
-
-function changeZoom(d){
-
-zoom+=d;
-
-applyZoom();
-
-}
-
-
-/* ================================
-   BACKUP
-================================ */
-
-function exportData(){
-
-let backup={
-
-clients,
-
-jobs,
-
-profile:
-localStorage.getItem(PROFILE_KEY),
-
-zoom
-
-};
-
-let blob=
-new Blob(
-[
-JSON.stringify(
-backup,
-null,
-2
-)
-],
-{
-type:'application/json'
-}
-);
-
-let a=
-document.createElement('a');
-
-a.href=
-URL.createObjectURL(blob);
-
-a.download=
-'Pure-Shine-backup.json';
-
-document.body.appendChild(a);
-
-a.click();
-
-a.remove();
-
-setTimeout(
-()=>URL.revokeObjectURL(a.href),
-500
-);
-
-}
-
-function importData(e){
-
-let f=
-e.target.files?.[0];
-
-if(!f)return;
-
-let r=
-new FileReader();
-
-r.onload=()=>{
-
-try{
-
-let d=
-JSON.parse(r.result);
-
-if(Array.isArray(d.clients))
-clients=d.clients;
-
-if(Array.isArray(d.jobs))
-jobs=d.jobs;
-
-if(d.profile)
-localStorage.setItem(
-PROFILE_KEY,
-d.profile
-);
-
-if(d.zoom)
-zoom=Number(d.zoom);
-
-save();
-
-renderAll();
-
-alert(
-'Backup imported successfully.'
-);
-
-}catch(err){
-
-alert(
-'This backup file is not valid.'
-);
-
-}
-
-};
-
-r.readAsText(f);
-
-}
-
-
-/* ================================
-   START
-================================ */
-
-renderProfile();
-renderAll();
-
-</script>
-
-</body>
-</html>
+0001 <!doctype html>
+0002 <html lang="en">
+0003 <head>
+0004 <meta charset="utf-8">
+0005 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+0006 <meta name="theme-color" content="#f4b4c9">
+0007 <title>Pure Shine Cleaning Manager</title>
+0008 <style>
+0009 :root{--pink:#e96f99;--pink2:#f7c4d5;--pink3:#fff0f5;--gold:#d7aa55;--wine:#9b2f58;--text:#452a36;--muted:#725967;--white:#fff;--zoom:1}
+0010 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe
+UI",sans-serif;color:var(--text);background:#fff0f5}button,input,select,textarea{font:inherit}button{cursor:pointer}
+0011 body{overflow-x:hidden}.screen{min-height:100dvh;width:100%;display:none}.screen.active{display:block}
+0012 #welcome{background:radial-gradient(circle at 20% 15%,#fff 0,#fff7fa 15%,transparent 42%),linear-gradient(135deg,#fff6fa 0%,#f9d5e2 45%,#f5bfd3
+100%);padding:24px 18px 34px;position:relative}
+0013 .welcome-inner{width:min(720px,100%);margin:auto;min-height:calc(100dvh -
+58px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px 0}
+0014 .profile-wrap{position:relative;margin-bottom:24px}.profile{width:min(240px,54vw);height:min(240px,54vw);border-radius:50%;object-fit:cover;background:
+linear-gradient(135deg,#fff4a6,#c78b14);border:7px solid #fff;box-shadow:0 8px 28px #9c587544,0 0 0 4px #d7aa55;display:block}.profile-fallback{display:flex
+;align-items:center;justify-content:center;color:#fff;font-size:clamp(55px,15vw,95px);font-family:Georgia,serif;font-weight:bold}.edit-photo{position:absolu
+te;right:-4px;bottom:4px;width:56px;height:56px;border-radius:50%;border:3px solid #fff;background:var(--pink);color:#fff;font-size:25px;box-shadow:0 5px
+14px #8e355044}
+0015 .welcome-title{font-family:"Brush Script MT","Segoe
+Script",cursive;font-size:clamp(52px,11vw,82px);line-height:.88;color:var(--wine);margin:0;max-width:690px;text-shadow:0 1px
+#fff}.heart{font-size:34px;color:var(--gold);margin:14px 0}.welcome-sub{font-size:clamp(18px,4.5vw,25px);line-height:1.4;max-width:610px;margin:0 0
+28px;color:#5c4650}
+0016
+.features{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}.feature{min-height:155px;background:#fffafc;border:2px
+solid var(--gold);border-radius:22px;padding:18px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 8px 20px
+#9d4e6820}.feature-icon{font-size:46px;line-height:1;margin-bottom:15px}.feature
+b{font-size:clamp(16px,3.6vw,21px);line-height:1.1;color:#1678d3}.get-started{width:100%;min-height:76px;border:3px solid
+var(--gold);border-radius:42px;background:linear-gradient(#f38aaa,#df5f88);color:#fff;font-family:Georgia,serif;font-size:clamp(28px,6vw,38px);box-shadow:0
+10px 24px #8d345329;margin:4px 0
+15px}.login{font-size:18px}.linkbtn{border:0;background:none;color:var(--wine);font-weight:800;text-decoration:underline;padding:5px}
+0017 #app{display:none;min-height:100dvh;background:#fff7fa}.app-shell{zoom:var(--zoom);width:calc(100% / var(--zoom));max-width:calc(1100px /
+var(--zoom));margin:0 auto;min-height:calc(100dvh /
+var(--zoom));padding-bottom:100px}.top{position:sticky;top:0;z-index:20;background:#fff9fcdd;backdrop-filter:blur(14px);border-bottom:1px solid
+#e9cad6}.top-row{display:flex;align-items:center;justify-content:space-between;padding:15px 18px}.brand{display:flex;align-items:center;gap:12px}.brand
+img{width:58px;height:58px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 0 0 2px var(--gold)}.brand
+h1{font-size:22px;margin:0;color:var(--wine)}.icon-btn{width:52px;height:52px;border:1px solid
+var(--gold);border-radius:16px;background:#fff;color:var(--wine);font-size:26px}
+0018 .page{display:none;padding:22px 18px}.page.active{display:block}.page-title{font-size:clamp(30px,7vw,45px);margin:0 0
+6px;color:var(--wine)}.page-sub{font-size:18px;color:var(--muted);margin:0 0
+20px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.card{background:#fff;border:1px solid
+#e6c7d3;border-radius:22px;padding:20px;box-shadow:0 8px 24px #7e304f14}.card h3{font-size:24px;margin:0 0 8px;color:var(--wine)}.big{font-size:28px;font-we
+ight:900}.small{font-size:17px;color:var(--muted);line-height:1.45}.money{font-size:30px;font-weight:900;color:#2d8b5a}.btn{min-height:54px;border:1px solid
+var(--gold);border-radius:16px;background:#fff;color:var(--wine);font-weight:800;padding:12px 18px;font-size:18px}.btn.primary{background:linear-gradient(#f
+18aaa,#dd6388);color:#fff}.btn.danger{background:#fff0f4;color:#a13b5f}.row{display:flex;justify-content:space-between;align-items:center;gap:14px}.stack{di
+splay:grid;gap:12px}.list{display:grid;gap:12px}.empty{padding:28px;text-align:center;color:var(--muted);font-size:18px;border:2px dashed
+#dfb8c7;border-radius:20px}
+0019 .bottom-nav{position:fixed;z-index:30;left:50%;bottom:0;transform:translateX(-50%);width:min(1100px,100%);display:grid;grid-template-columns:repeat(5,1
+fr);background:#fffdfedd;backdrop-filter:blur(16px);border-top:1px solid #e4c8d3;padding:8px max(8px,env(safe-area-inset-left)) calc(8px +
+env(safe-area-inset-bottom))}.nav{border:0;background:none;color:#806573;font-size:14px;font-weight:800;padding:8px 2px;border-radius:14px}.nav
+span{display:block;font-size:25px;margin-bottom:2px}.nav.active{background:#fde2ec;color:var(--wine)}
+0020 .field{display:grid;gap:7px}.field label{font-weight:800;font-size:17px;color:var(--wine)}.field input,.field select,.field
+textarea{width:100%;min-height:54px;border:1px solid #d9b6c5;border-radius:15px;background:#fff;padding:12px 14px;font-size:18px;color:var(--text)}.field
+textarea{min-height:100px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+0021 .modal{position:fixed;inset:0;background:#38162277;z-index:50;display:none;align-items:flex-end}.modal.show{display:flex}.modal-box{width:100%;max-heig
+ht:90dvh;overflow:auto;background:#fff8fb;border-radius:28px 28px 0 0;padding:22px 18px calc(28px +
+env(safe-area-inset-bottom))}.modal-title{font-size:28px;color:var(--wine);margin:0 0 18px}.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}.ac
+tions>*{flex:1;min-width:120px}.job-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;margin-top:8px}.job-actions
+.btn{min-height:42px;padding:8px 11px;font-size:14px}
+0022 .setting-img{width:120px;height:120px;border-radius:24px;object-fit:cover;border:2px solid
+var(--gold);background:#f8dce7}.zoom-control{display:flex;gap:10px;align-items:center}.zoom-control
+.btn{width:58px;padding:0}.zoom-label{min-width:80px;text-align:center;font-size:22px;font-weight:900;color:var(--wine)}
+0023 @media(max-width:650px){.features{gap:8px}.feature{min-height:145px;padding:12px 5px;border-radius:18px}.feature-icon{font-size:36px}.feature b{font-si
+ze:15px}.grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}.welcome-inner{justify-content:flex-start;padding-top:35px}.welcome-title{font-size:c
+lamp(50px,13vw,70px)}}
+0024 @media(min-width:900px){.welcome-inner{justify-content:center}.feature{min-height:180px}}
+0025 </style>
+0026 </head>
+0027 <body>
+0028 <section id="welcome" class="screen active">
+0029 <div class="welcome-inner">
+0030 <div class="profile-wrap">
+0031 <div id="welcomeProfile" class="profile profile-fallback">PS</div>
+0032 <button class="edit-photo" type="button" onclick="chooseProfile()" aria-label="Change profile photo">✎</button>
+0033 <input id="profileInput" type="file" accept="image/*" hidden onchange="saveProfileImage(event)">
+0034 </div>
+0035 <h1 class="welcome-title">Your Cleaning<br>Business, Simplified</h1>
+0036 <div class="heart">♡</div>
+0037 <p class="welcome-sub">Everything you need to organise your cleaning business in one beautiful place.</p>
+0038 <div class="features">
+0039 <button class="feature" type="button" onclick="openSection('jobs')"><div class="feature-icon">  </div><b>Manage<br>Jobs</b></button>
+0040 <button class="feature" type="button" onclick="openSection('clients')"><div class="feature-icon"> </div><b>Keep Track<br>of Clients</b></button>
+0041 <button class="feature" type="button" onclick="openSection('earnings')"><div class="feature-icon"> </div><b>Track<br>Earnings</b></button>
+0042 <button class="feature" type="button" onclick="openSection('time')"><div class="feature-icon">  </div><b>More Time<br>for You</b></button>
+0043 </div>
+0044 <button class="get-started" type="button" onclick="enterApp()">Get Started ›</button>
+0045 <div class="login">Already have an account? <button class="linkbtn" type="button" onclick="enterApp()">Log in</button></div>
+0046 </div>
+0047 </section>
+0048
+0049 <div id="app">
+0050 <div class="app-shell">
+0051 <header class="top"><div class="top-row"><div class="brand"><div id="brandProfile" class="profile profile-fallback"
+style="width:58px;height:58px;font-size:20px;border-width:2px">PS</div><div><h1>Pure Shine Cleaning</h1><div class="small">Cleaning
+Manager</div></div></div><button class="icon-btn" type="button" onclick="openSection('settings')">⚙ </button></div></header>
+0052
+0053 <section id="jobs" class="page active"><h2 class="page-title">Manage Jobs</h2><p class="page-sub">Your cleaning schedule, jobs and timers.</p><div
+class="grid"><div class="card"><h3>Today</h3><div id="todayJobs" class="list"></div></div><div class="card"><h3>Quick actions</h3><div class="stack"><button
+class="btn primary" onclick="openJob()">  Add cleaning job</button><button class="btn" onclick="openCalendar()">  Weekly
+schedule</button></div></div></div><div class="card" style="margin-top:16px"><h3>Job history</h3><div id="jobHistory" class="list"></div></div></section>
+0054
+0055 <section id="clients" class="page"><h2 class="page-title">Keep Track of Clients</h2><p class="page-sub">Your clients, contact details and standard
+hours.</p><div class="card"><button class="btn primary" style="width:100%" onclick="openClient()">  Add client</button></div><div id="clientsList"
+class="list" style="margin-top:16px"></div></section>
+0056
+0057 <section id="earnings" class="page"><h2 class="page-title">Track Earnings</h2><p class="page-sub">See hours worked and money earned.</p><div
+class="grid"><div class="card"><h3>This month</h3><div id="monthHours" class="big">0h 0m</div><div class="small">hours worked</div></div><div
+class="card"><h3>Total earned</h3><div id="monthMoney" class="money">£0.00</div><div class="small">based on saved jobs</div></div></div><div class="card"
+style="margin-top:16px"><h3>By client</h3><div id="earningsList" class="list"></div></div></section>
+0058
+0059 <section id="time" class="page"><h2 class="page-title">More Time for You</h2><p class="page-sub">Use the timer while you clean. Stop it when you finish
+and the job is saved.</p><div id="timerCard" class="card"><h3>Cleaning timer</h3><div id="timerName" class="big">No timer running</div><div id="timerClock"
+class="big" style="font-size:42px;margin:12px 0">00:00:00</div><div class="actions"><button class="btn primary"
+onclick="startFirstTimer()">Start</button><button class="btn danger" onclick="stopTimer()">Stop & save</button></div></div><div class="card"
+style="margin-top:16px"><h3>How it works</h3><div class="small">Choose a job, start the timer, clean normally, then press Stop & save. The exact time is
+calculated and the amount owed is stored automatically.</div></div></section>
+0060
+0061 <section id="settings" class="page"><h2 class="page-title">Settings</h2><p class="page-sub">Make the app easier to read and personalise it.</p><div
+class="card"><h3>Profile photo</h3><div class="row"><div id="settingsProfile" class="profile profile-fallback"
+style="width:120px;height:120px;font-size:35px">PS</div><button class="btn primary" onclick="chooseProfile()">Change photo</button></div></div><div
+class="card" style="margin-top:16px"><h3>App size</h3><div class="small" style="margin-bottom:12px">Increase the whole interface so everything stays large
+and readable.</div><div class="zoom-control"><button class="btn" onclick="changeZoom(-10)">−</button><div id="zoomLabel"
+class="zoom-label">130%</div><button class="btn" onclick="changeZoom(10)"> </button></div></div><div class="card"
+style="margin-top:16px"><h3>Backup</h3><div class="actions"><button class="btn" onclick="exportData()">Export</button><button class="btn"
+onclick="document.getElementById('importInput').click()">Import</button></div><input id="importInput" type="file" accept="application/json" hidden
+onchange="importData(event)"></div></section>
+0062 </div>
+0063 <nav class="bottom-nav"><button class="nav active" data-page="jobs" onclick="openSection('jobs')"><span>  </span>Jobs</button><button class="nav"
+data-page="clients" onclick="openSection('clients')"><span> </span>Clients</button><button class="nav" data-page="earnings"
+onclick="openSection('earnings')"><span> </span>Earnings</button><button class="nav" data-page="time"
+onclick="openSection('time')"><span>  </span>Time</button><button class="nav" data-page="settings"
+onclick="openSection('settings')"><span>⚙ </span>Settings</button></nav>
+0064 </div>
+0065
+0066 <div id="jobModal" class="modal"><div class="modal-box"><h3 class="modal-title">Cleaning job</h3><input id="jobId" type="hidden"><div
+class="stack"><div class="field"><label>Client</label><select id="jobClient"></select></div><div class="two"><div class="field"><label>Date</label><input
+id="jobDate" type="date"></div><div class="field"><label>Rate (£/hour)</label><input id="jobRate" type="number" step="0.01"></div></div><div
+class="two"><div class="field"><label>Start</label><input id="jobStart" type="time"></div><div class="field"><label>End</label><input id="jobEnd"
+type="time"></div></div><div class="field"><label>Notes</label><textarea id="jobNotes"></textarea></div><div id="jobAmount" class="big">Amount:
+£0.00</div></div><div class="actions"><button class="btn" onclick="closeModal('jobModal')">Cancel</button><button class="btn primary"
+onclick="saveJob()">Save job</button></div></div></div>
+0067 <div id="clientModal" class="modal"><div class="modal-box"><h3 class="modal-title">Client</h3><input id="clientId" type="hidden"><div
+class="stack"><div class="field"><label>Name</label><input id="clientName"></div><div class="field"><label>Phone</label><input id="clientPhone"
+type="tel"></div><div class="two"><div class="field"><label>Type</label><select
+id="clientType"><option>Private</option><option>Agency</option></select></div><div class="field"><label>Rate (£/hour)</label><input id="clientRate"
+type="number" step="0.01"></div></div><div class="field"><label>Standard hours</label><input id="clientHours" type="number" step="0.25"></div><div
+class="field"><label>Notes</label><textarea id="clientNotes"></textarea></div></div><div class="actions"><button class="btn"
+onclick="closeModal('clientModal')">Cancel</button><button class="btn primary" onclick="saveClient()">Save client</button></div></div></div>
+0068 <div id="calendarModal" class="modal"><div class="modal-box"><h3 class="modal-title">Weekly schedule</h3><div id="calendarContent"
+class="list"></div><div class="actions"><button class="btn" onclick="closeModal('calendarModal')">Close</button></div></div></div>
+0069
+0070 <script>
+0071 'use strict';
+0072 const CLIENTS_KEY='ps_clients_working_v1',JOBS_KEY='ps_jobs_working_v1',PROFILE_KEY='ps_profile_working_v1',ZOOM_KEY='ps_zoom_working_v1';
+0073 const initialClients=[
+0074 {id:'lottie',name:'Lottie',phone:'07788 447015',day:'Monday',start:'09:00',end:'11:00',rate:16,hours:2,type:'Agency',notes:''},
+0075 {id:'victoria',name:'Victoria',phone:'07923 054040',day:'Monday',start:'13:00',end:'15:00',rate:16,hours:2,type:'Agency',notes:'Flexible hours'},
+0076 {id:'matt',name:'Matt',phone:'07886 711055',day:'Tuesday',start:'09:00',end:'13:00',rate:16,hours:4,type:'Agency',notes:''},
+0077 {id:'christine',name:'Christine',phone:'',day:'Tuesday',start:'09:30',end:'12:30',rate:18,hours:3,type:'Private',notes:'Fortnightly / currently on
+holiday'},
+0078 {id:'sonia',name:'Sonia',phone:'+44 7813 677012',day:'Wednesday',start:'09:00',end:'14:00',rate:16,hours:5,type:'Agency',notes:'Usually 4–7 hours'},
+0079 {id:'laura',name:'Laura',phone:'+44 7958 391731',day:'Thursday',start:'09:00',end:'13:00',rate:18,hours:4,type:'Private',notes:''},
+0080 {id:'hannah',name:'Hannah',phone:'07920 724916',day:'Thursday',start:'13:00',end:'16:00',rate:16,hours:3,type:'Agency',notes:''},
+0081 {id:'meghan',name:'Meghan',phone:'+44 7740 291352',day:'Thursday',start:'',end:'',rate:18,hours:1.5,type:'Private',notes:'Usually 1–2 hours'},
+0082 {id:'sindu',name:'Sindu',phone:'07438 168843',day:'Friday',start:'',end:'',rate:16,hours:3,type:'Agency',notes:'Fortnightly; alternates with Joanna'},
+0083 {id:'joanna',name:'Joanna',phone:'07872 011386',day:'Friday',start:'',end:'',rate:18,hours:3.5,type:'Private',notes:'Fortnightly; alternates with
+Sindu'}
+0084 ];
+0085 let
+clients=load(CLIENTS_KEY,initialClients),jobs=load(JOBS_KEY,[]),timer=load('ps_timer_working_v1',null),zoom=Number(localStorage.getItem(ZOOM_KEY)||130);
+0086 if(!jobs.length){jobs=[
+0087 {id:'past-laura-20261001',clientId:'laura',date:'2026-10-01',start:'09:00',end:'11:51',hours:2.85,rate:18,notes:'Completed',done:true},
+0088 {id:'past-hannah-20261001',clientId:'hannah',date:'2026-10-01',start:'09:00',end:'12:00',hours:3,rate:16,notes:'Completed',done:true},
+0089 {id:'past-joanna-20261002',clientId:'joanna',date:'2026-10-02',start:'09:00',end:'12:42',hours:3.7,rate:18,notes:'Completed',done:true},
+0090 {id:'past-meghan-20261004',clientId:'meghan',date:'2026-10-04',start:'09:00',end:'10:40',hours:1.6666667,rate:18,notes:'Completed',done:true},
+0091 {id:'past-lottie-20261005',clientId:'lottie',date:'2026-10-05',start:'09:00',end:'11:00',hours:2,rate:16,notes:'Completed',done:true}
+0092 ];localStorage.setItem(JOBS_KEY,JSON.stringify(jobs));}
+0093 function load(k,f){try{const v=JSON.parse(localStorage.getItem(k));return v===null||v===undefined?structuredClone(f):v}catch(e){return
+structuredClone(f)}}
+0094 function save(){localStorage.setItem(CLIENTS_KEY,JSON.stringify(clients));localStorage.setItem(JOBS_KEY,JSON.stringify(jobs));localStorage.setItem('ps_
+timer_working_v1',JSON.stringify(timer))}
+0095 function money(n){return '£'+Number(n||0).toFixed(2)}
+0096 function minutesBetween(a,b){if(!a||!b)return 0;let
+[ah,am]=a.split(':').map(Number),[bh,bm]=b.split(':').map(Number),m=bh*60+bm-ah*60-am;if(m<0)m+=1440;return m}
+0097 function timeText(h){let m=Math.round(Number(h||0)*60),hh=Math.floor(m/60),mm=m%60;return hh+'h '+mm+'m'}
+0098 function clientName(id){return clients.find(c=>c.id===id)?.name||'Unknown'}
+0099 function todayKey(){return new Date().toISOString().slice(0,10)}
+0100 function
+enterApp(){document.getElementById('welcome').classList.remove('active');document.getElementById('app').style.display='block';openSection('jobs')}
+0101 function openSection(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active'
+);document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.page===id));renderAll()}
+0102 function renderAll(){renderProfile();renderJobs();renderClients();renderEarnings();renderTimer();applyZoom()}
+0103 function renderProfile(){let data=localStorage.getItem(PROFILE_KEY);['welcomeProfile','brandProfile','settingsProfile'].forEach(id=>{let el=document.ge
+tElementById(id);if(!el)return;if(data){el.classList.remove('profile-fallback');el.innerHTML='';el.style.backgroundImage='url("'+data+'")';el.style.backgrou
+ndSize='cover';el.style.backgroundPosition='center';}else{el.classList.add('profile-fallback');el.style.backgroundImage='';el.textContent='PS';}})}
+0104 function chooseProfile(){document.getElementById('profileInput').click()}
+0105 function saveProfileImage(e){let f=e.target.files?.[0];if(!f)return;let r=new
+FileReader();r.onload=()=>{localStorage.setItem(PROFILE_KEY,r.result);renderProfile()};r.readAsDataURL(f)}
+0106 function renderJobs(){let
+today=jobs.filter(j=>j.date===todayKey());document.getElementById('todayJobs').innerHTML=today.length?today.map(jobCard).join(''):'<div class="empty">No
+jobs saved for today. Add one above.</div>';document.getElementById('jobHistory').innerHTML=jobs.length?jobs.slice().reverse().map(jobCard).join(''):'<div
+class="empty">No saved jobs yet.</div>'}
+0107 function jobCard(j){let amount=Number(j.hours||0)*Number(j.rate||0);return '<div class="card"><div
+class="row"><div><h3>'+clientName(j.clientId)+'</h3><div class="small">'+(j.date||'No date')+' · '+(j.start||'')+(j.end?' – '+j.end:'')+'</div><div
+class="small">Worked: '+timeText(j.hours)+'</div></div><div style="text-align:right"><div class="money">'+money(amount)+'</div><div
+class="job-actions"><button class="btn" onclick="startTimerFor(\''+j.id+'\')">'+(timer?.jobId===j.id?'Stop':'Timer')+'</button><button class="btn"
+onclick="openJob(\''+j.id+'\')">Edit</button><button class="btn" onclick="sendClientReminder(\''+j.id+'\')">  Reminder</button><button class="btn"
+onclick="sendPaymentReminder(\''+j.id+'\')">  Payment</button><button class="btn" onclick="openInvoice(\''+j.id+'\')"> 
+Invoice</button></div></div></div></div>'}
+0108 function openJob(id){let j=jobs.find(x=>x.id===id),sel=document.getElementById('jobClient');sel.innerHTML=clients.map(c=>'<option value="'+c.id+'">'+c.
+name+'</option>').join('');document.getElementById('jobId').value=j?.id||'';document.getElementById('jobClient').value=j?.clientId||clients[0]?.id||'';docum
+ent.getElementById('jobDate').value=j?.date||todayKey();let c=clients.find(x=>x.id===document.getElementById('jobClient').value)||clients[0];document.getEle
+mentById('jobRate').value=j?.rate??c?.rate??18;document.getElementById('jobStart').value=j?.start||c?.start||'';document.getElementById('jobEnd').value=j?.e
+nd||c?.end||'';document.getElementById('jobNotes').value=j?.notes||'';updateAmount();document.getElementById('jobModal').classList.add('show')}
+0109 document.getElementById('jobStart').addEventListener('input',updateAmount);document.getElementById('jobEnd').addEventListener('input',updateAmount);doc
+ument.getElementById('jobRate').addEventListener('input',updateAmount);document.getElementById('jobClient').addEventListener('change',()=>{let c=clients.fin
+d(x=>x.id===document.getElementById('jobClient').value);if(c&&!document.getElementById('jobRate').value)document.getElementById('jobRate').value=c.rate;upda
+teAmount()});
+0110 function updateAmount(){let h=minutesBetween(document.getElementById('jobStart').value,document.getElementById('jobEnd').value)/60;document.getElementB
+yId('jobAmount').textContent='Amount: '+money(h*Number(document.getElementById('jobRate').value||0))+' · '+timeText(h)}
+0111 function saveJob(){let id=document.getElementById('jobId').value,c=clients.find(x=>x.id===document.getElementById('jobClient').value),h=minutesBetween(
+document.getElementById('jobStart').value,document.getElementById('jobEnd').value)/60;let obj={id:id||'j'+Date.now(),clientId:c.id,date:document.getElementB
+yId('jobDate').value,start:document.getElementById('jobStart').value,end:document.getElementById('jobEnd').value,hours:h||Number(c.hours||0),rate:Number(doc
+ument.getElementById('jobRate').value||c.rate||0),notes:document.getElementById('jobNotes').value};if(id)jobs=jobs.map(x=>x.id===id?obj:x);else
+jobs.push(obj);save();closeModal('jobModal');renderAll()}
+0112 function getJobClient(j){return clients.find(c=>c.id===j.clientId)}
+0113 function sendClientReminder(id){const j=jobs.find(x=>x.id===id);if(!j)return;const c=getJobClient(j);if(!c)return;const text=`Hi ${c.name}, just
+confirming your cleaning on ${j.date||''}${j.start?' at '+j.start:''}${j.end?'–'+j.end:''}. See you then!`;const
+phone=(c.phone||'').replace(/[^+\d]/g,'');if(phone)window.location.href='sms:'+phone+'?&body='+encodeURIComponent(text);else
+if(navigator.share)navigator.share({title:'Cleaning
+reminder',text}).catch(()=>{});else{if(navigator.clipboard)navigator.clipboard.writeText(text);alert(text)}}
+0114 function sendPaymentReminder(id){const j=jobs.find(x=>x.id===id);if(!j)return;const c=getJobClient(j);if(!c)return;const
+amount=Number(j.hours||0)*Number(j.rate||0);const text=`Hi ${c.name}, just a reminder that the amount due for your cleaning on ${j.date||''} is
+£${amount.toFixed(2)}. Thank you!`;const
+phone=(c.phone||'').replace(/[^+\d]/g,'');if(phone)window.location.href='sms:'+phone+'?&body='+encodeURIComponent(text);else
+if(navigator.share)navigator.share({title:'Payment
+reminder',text}).catch(()=>{});else{if(navigator.clipboard)navigator.clipboard.writeText(text);alert(text)}}
+0115 function openInvoice(id){const j=jobs.find(x=>x.id===id);if(!j)return;const c=getJobClient(j);if(!c)return;const
+amount=Number(j.hours||0)*Number(j.rate||0);document.getElementById('invoiceModal')?.remove();const
+modal=document.createElement('div');modal.id='invoiceModal';modal.className='modal show';modal.innerHTML=`<div class="modal-box"><h3
+class="modal-title">Invoice</h3><div class="card" id="invoiceContent"><h3>Pure Shine Cleaning</h3><p><strong>Client:</strong>
+${escapeHTML(c.name)}</p><p><strong>Date:</strong> ${escapeHTML(j.date||'')}</p><p><strong>Time:</strong> ${escapeHTML(j.start||'')} ${j.end?'–
+'+escapeHTML(j.end):''}</p><p><strong>Time spent:</strong> ${timeText(j.hours)}</p><p><strong>Rate:</strong>
+£${Number(j.rate||0).toFixed(2)}/hour</p><hr><h3>Amount due: £${amount.toFixed(2)}</h3></div><div class="actions"><button class="btn"
+onclick="printInvoice()">   Print</button><button class="btn primary" onclick="shareInvoice()">  Send</button></div><button class="btn"
+style="width:100%;margin-top:10px" onclick="closeInvoice()">Close</button></div>`;document.body.appendChild(modal)}
+0116 function closeInvoice(){document.getElementById('invoiceModal')?.remove()}
+0117 function printInvoice(){const content=document.getElementById('invoiceContent');if(!content)return;const
+w=window.open('','','width=700,height=800');if(!w)return;w.document.write('<html><head><title>Pure Shine Cleaning
+Invoice</title><style>body{font-family:Arial;padding:40px;color:#222}h3{color:#9b2f58}hr{border:0;border-top:1px solid
+#ddd}</style></head><body>'+content.outerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),300)}
+0118 function shareInvoice(){const text=document.getElementById('invoiceContent')?.innerText||'';if(navigator.share)navigator.share({title:'Pure Shine
+Cleaning Invoice',text}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>alert('Invoice copied. You can paste it into
+a message.'));else alert(text)}
+0119
+0120 function clientReminderFromProfile(id){
+0121 const c=clients.find(x=>x.id===id);if(!c)return;
+0122 const text=`Hi ${c.name}, just confirming your cleaning${c.day?' on '+c.day:''}${c.start?' at '+c.start:''}${c.end?'–'+c.end:''}. See you then!`;
+0123 const phone=(c.phone||'').replace(/[^+\d]/g,'');
+0124 if(phone)window.location.href='sms:'+phone+'?&body='+encodeURIComponent(text);
+0125 else if(navigator.share)navigator.share({title:'Cleaning reminder',text}).catch(()=>{});
+0126 else{if(navigator.clipboard)navigator.clipboard.writeText(text);alert(text)}
+0127 }
+0128 function paymentReminderFromProfile(id){
+0129 const c=clients.find(x=>x.id===id);if(!c)return;
+0130 const text=`Hi ${c.name}, just a reminder regarding payment for your cleaning. Thank you!`;
+0131 const phone=(c.phone||'').replace(/[^+\d]/g,'');
+0132 if(phone)window.location.href='sms:'+phone+'?&body='+encodeURIComponent(text);
+0133 else if(navigator.share)navigator.share({title:'Payment reminder',text}).catch(()=>{});
+0134 else{if(navigator.clipboard)navigator.clipboard.writeText(text);alert(text)}
+0135 }
+0136 function renderClients(){document.getElementById('clientsList').innerHTML=clients.map(c=>'<div class="card"><div
+class="row"><div><h3>'+c.name+'</h3><div class="small">'+(c.phone||'No phone saved')+'<br>'+c.day+' · '+(c.start&&c.end?c.start+'–'+c.end:'flexible')+' ·
+'+timeText(c.hours)+' · '+money(c.rate)+'/h</div></div><button class="btn" onclick="openClient(\''+c.id+'\')">Edit</button></div><div class="job-actions"
+style="justify-content:flex-start"><button class="btn" onclick="clientReminderFromProfile(\''+c.id+'\')">  Reminder</button><button class="btn"
+onclick="paymentReminderFromProfile(\''+c.id+'\')">  Payment</button></div></div>').join('')}
+0137 function openClient(id){let c=clients.find(x=>x.id===id);document.getElementById('clientId').value=c?.id||'';document.getElementById('clientName').valu
+e=c?.name||'';document.getElementById('clientPhone').value=c?.phone||'';document.getElementById('clientType').value=c?.type||'Private';document.getElementBy
+Id('clientRate').value=c?.rate||18;document.getElementById('clientHours').value=c?.hours||2;document.getElementById('clientNotes').value=c?.notes||'';docume
+nt.getElementById('clientModal').classList.add('show')}
+0138 function saveClient(){let id=document.getElementById('clientId').value,obj={id:id||'c'+Date.now(),name:document.getElementById('clientName').value.trim
+(),phone:document.getElementById('clientPhone').value.trim(),type:document.getElementById('clientType').value,rate:Number(document.getElementById('clientRat
+e').value||0),hours:Number(document.getElementById('clientHours').value||0),notes:document.getElementById('clientNotes').value};if(!obj.name)return;if(id)cl
+ients=clients.map(c=>c.id===id?{...c,...obj}:c);else clients.push(obj);save();closeModal('clientModal');renderAll()}
+0139 function renderEarnings(){let now=new Date(),month=now.getMonth(),year=now.getFullYear(),arr=jobs.filter(j=>{let d=new Date(j.date||'');return
+d.getMonth()===month&&d.getFullYear()===year});let h=arr.reduce((s,j)=>s+Number(j.hours||0),0),m=arr.reduce((s,j)=>s+Number(j.hours||0)*Number(j.rate||0),0)
+;document.getElementById('monthHours').textContent=timeText(h);document.getElementById('monthMoney').textContent=money(m);let map={};arr.forEach(j=>{map[j.c
+lientId]??={h:0,m:0};map[j.clientId].h+=Number(j.hours||0);map[j.clientId].m+=Number(j.hours||0)*Number(j.rate||0)});document.getElementById('earningsList')
+.innerHTML=Object.entries(map).map(([id,x])=>'<div class="card"><div class="row"><div><h3>'+clientName(id)+'</h3><div
+class="small">'+timeText(x.h)+'</div></div><div class="money">'+money(x.m)+'</div></div></div>').join('')||'<div class="empty">No earnings saved for this
+month.</div>'}
+0140 function startTimerFor(id){if(timer?.jobId===id){stopTimer();return}timer={jobId:id,startedAt:Date.now()};save();renderTimer();}
+0141 function startFirstTimer(){let j=jobs[0];if(!j){openJob();return}startTimerFor(j.id)}
+0142 function stopTimer(){if(!timer)return;let j=jobs.find(x=>x.id===timer.jobId);if(j){let
+extra=(Date.now()-timer.startedAt)/3600000;j.hours=Number(j.hours||0)+extra;j.done=true;save()}timer=null;save();renderAll()}
+0143 function renderTimer(){let n=document.getElementById('timerName'),c=document.getElementById('timerClock');if(!n||!c)return;if(!timer){n.textContent='No
+timer running';c.textContent='00:00:00';return}let
+j=jobs.find(x=>x.id===timer.jobId);if(!j){timer=null;save();renderTimer();return}n.textContent=clientName(j.clientId);let sec=Math.floor((Date.now()-timer.s
+tartedAt)/1000);c.textContent=[Math.floor(sec/3600),Math.floor(sec/60)%60,sec%60].map(x=>String(x).padStart(2,'0')).join(':')}
+0144 setInterval(renderTimer,1000);
+0145 function openCalendar(){let
+days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];document.getElementById('calendarContent').innerHTML=days.map(d=>{let
+rows=clients.filter(c=>c.day===d).map(c=>c.name+' · '+timeText(c.hours)+' · '+money(c.rate)+'/h').join('<br>')||'No regular client';return '<div
+class="card"><h3>'+d+'</h3><div class="small">'+rows+'</div></div>'}).join('');document.getElementById('calendarModal').classList.add('show')}
+0146 function closeModal(id){document.getElementById(id).classList.remove('show')}
+0147 function applyZoom(){zoom=Math.max(100,Math.min(180,zoom));document.documentElement.style.setProperty('--zoom',zoom/100);document.getElementById('zoomL
+abel').textContent=zoom+'%';localStorage.setItem(ZOOM_KEY,zoom)}
+0148 function changeZoom(d){zoom+=d;applyZoom()}
+0149 function exportData(){let data={clients,jobs,profile:localStorage.getItem(PROFILE_KEY),zoom};let blob=new Blob([JSON.stringify(data)],{type:'applicatio
+n/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Pure-Shine-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.
+href),500)}
+0150 function importData(e){let f=e.target.files?.[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(Array.isArray(d.cl
+ients))clients=d.clients;if(Array.isArray(d.jobs))jobs=d.jobs;if(d.profile)localStorage.setItem(PROFILE_KEY,d.profile);if(d.zoom)zoom=Number(d.zoom);save();
+renderAll();alert('Backup imported successfully.')}catch(err){alert('This backup file is not valid.')}};r.readAsText(f)}
+0151 renderProfile();renderAll();
+0152 </script>
+0153 </body>
+0154 </html>
