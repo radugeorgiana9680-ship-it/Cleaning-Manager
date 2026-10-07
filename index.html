@@ -1,5075 +1,3824 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#f7dce8">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>Pure Shine Cleaning Manager</title>
 
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Parisienne&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Parisienne&display=swap');
-
 :root{
-  --pink:#e47aa2;
-  --pink-dark:#a65375;
-  --pink-soft:#fde8f0;
-  --pink-pale:#fff5f8;
-  --gold:#d8a55f;
-  --text:#252329;
-  --muted:#8d858a;
-  --border:#efd7e1;
-  --white:#fff;
-  --green:#dff3e7;
-  --blue:#e5efff;
-  --yellow:#fff2ca;
-  --purple:#eee2fa;
-
-  --scale:1;
-  --radius:22px;
-  --nav-h:96px;
-  --icon-size:30px;
+ --pink:#d8789e;
+ --dark:#9a5b78;
+ --soft:#f8dfeb;
+ --line:#ecd4df;
+ --muted:#918b92;
+ --ink:#26232a;
+ --blue:#dce9fa;
+ --green:#dff1e8;
+ --yellow:#fff0c8;
+ --purple:#e9def7;
+ --peach:#f4ddd8;
+ --nav:92px;
+ --scale:1;
 }
 
 *{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+ box-sizing:border-box;
+ -webkit-tap-highlight-color:transparent
 }
 
 html,body{
-  margin:0;
-  padding:0;
-  width:100%;
-  min-height:100%;
-  background:#fff;
-  color:var(--text);
-  font-family:"DM Sans",sans-serif;
+ margin:0;
+ width:100%;
+ min-height:100%;
+ background:#fffafd;
+ color:var(--ink);
+ font-family:'DM Sans',sans-serif
 }
 
 body{
-  overflow-x:hidden;
+ font-size:calc(16px * var(--scale));
+ overflow-x:hidden
 }
 
 button,input,select,textarea{
-  font-family:inherit;
+ font:inherit
 }
 
 button{
-  cursor:pointer;
+ border:0;
+ cursor:pointer
 }
 
 .app{
-  width:100%;
-  min-height:100vh;
-  min-height:100dvh;
-  background:#fff;
-  padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));
+ min-height:100dvh;
+ padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom));
+ background:linear-gradient(#fffafd,#fff)
 }
 
-/* =========================
-   WELCOME
-========================= */
-
-#welcome{
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  background:#fbe8ef;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
+body.high{
+ --line:#b9879e;
+ --muted:#57525a;
+ --ink:#111
 }
 
-.welcome-inner{
-  width:100%;
-  max-width:600px;
-  height:100%;
-  min-height:100dvh;
-  position:relative;
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(255,245,248,.18),
-      rgba(255,230,239,.74)
-    ),
-    url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1200&q=90")
-    center/cover no-repeat;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding:
-    calc(70px + env(safe-area-inset-top))
-    32px
-    calc(30px + env(safe-area-inset-bottom));
-  text-align:center;
+body.large{
+ --scale:1.14
 }
 
-.welcome-logo{
-  width:190px;
-  height:190px;
-  border-radius:50%;
-  background:#f8cadc;
-  border:5px solid rgba(255,255,255,.9);
-  box-shadow:0 10px 35px rgba(132,55,83,.18);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  margin-top:20px;
+/* HEADER */
+
+.top{
+ background:#fff;
+ border-bottom:1px solid #f0dce5;
+ padding:18px max(20px,4vw) 12px;
+ position:sticky;
+ top:0;
+ z-index:20
 }
 
-.welcome-logo img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.logo-placeholder{
-  width:100%;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  color:#9c5474;
-  background:
-    radial-gradient(circle at center,#fff0f5 0 35%,transparent 36%),
-    linear-gradient(145deg,#fbdce8,#fff8fb);
-}
-
-.logo-placeholder strong{
-  font-family:Parisienne,cursive;
-  font-size:34px;
-}
-
-.logo-placeholder span{
-  font-size:10px;
-  letter-spacing:2px;
-}
-
-.welcome-title{
-  font-family:Parisienne,cursive;
-  color:#9c526f;
-  font-size:58px;
-  line-height:1;
-  margin:30px 0 8px;
-  text-shadow:0 2px 10px rgba(255,255,255,.8);
-}
-
-.welcome-subtitle{
-  font-family:Parisienne,cursive;
-  color:#994b68;
-  font-size:34px;
-  line-height:1.15;
-  max-width:500px;
-}
-
-.welcome-actions{
-  margin-top:auto;
-  width:100%;
-}
-
-.get-started{
-  width:100%;
-  height:64px;
-  border:0;
-  border-radius:34px;
-  background:var(--pink);
-  color:#fff;
-  font-size:21px;
-  font-weight:600;
-  box-shadow:0 10px 25px rgba(197,82,125,.25);
-}
-
-.login-link{
-  margin-top:20px;
-  color:#754a5d;
-  font-size:15px;
-}
-
-.login-link u{
-  color:#a34d70;
-  font-weight:700;
-}
-
-/* =========================
-   MAIN
-========================= */
-
-#mainApp{
-  display:none;
-}
-
-.app-shell{
-  width:100%;
-  min-height:100vh;
-  min-height:100dvh;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.topbar{
-  width:100%;
-  padding:
-    calc(18px + env(safe-area-inset-top))
-    clamp(18px,4vw,44px)
-    16px;
-  background:#fff;
-  border-bottom:1px solid #f0dce5;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
+.topin{
+ width:100%;
+ max-width:1100px;
+ margin:auto;
+ display:flex;
+ align-items:center;
+ justify-content:space-between
 }
 
 .brand{
-  display:flex;
-  align-items:center;
-  gap:15px;
-  min-width:0;
+ display:flex;
+ align-items:center;
+ gap:13px;
+ min-width:0
 }
 
-.brand-logo{
-  width:64px;
-  height:64px;
-  flex:0 0 64px;
-  border-radius:50%;
-  overflow:hidden;
-  border:3px solid #f4d5e1;
-  background:#fce6ef;
-  box-shadow:0 4px 15px rgba(164,76,111,.12);
+.profile{
+ width:64px;
+ height:64px;
+ border-radius:50%;
+ object-fit:cover;
+ border:3px solid #f0d6e1;
+ box-shadow:0 5px 18px #c7839d33
 }
 
-.brand-logo img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+.brandtext{
+ min-width:0
 }
 
-.brand-placeholder{
-  width:100%;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:Parisienne,cursive;
-  color:#a55474;
-  font-size:18px;
+.brandname{
+ font-family:Parisienne,cursive;
+ color:var(--dark);
+ font-size:clamp(31px,5vw,48px);
+ line-height:1;
+ white-space:nowrap
 }
 
-.brand-text h1{
-  margin:0;
-  color:#9b5470;
-  font-family:Parisienne,cursive;
-  font-size:34px;
-  font-weight:400;
-  line-height:1;
+.subtitle{
+ color:var(--muted);
+ margin-top:5px;
+ font-size:14px
 }
 
-.brand-text p{
-  margin:7px 0 0;
-  color:#8c8589;
-  font-size:15px;
+.topactions{
+ display:flex;
+ gap:8px
 }
 
-.header-actions{
-  display:flex;
-  gap:10px;
+.topbtn{
+ width:55px;
+ height:55px;
+ border-radius:18px;
+ background:#f9e4ed;
+ color:var(--dark);
+ font-size:24px
 }
 
-.header-btn{
-  width:56px;
-  height:56px;
-  border:0;
-  border-radius:18px;
-  background:#fde8f0;
-  font-size:27px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+/* PAGES */
 
-/* =========================
-   PAGES
-========================= */
+.pages{
+ width:100%
+}
 
 .page{
-  display:none;
-  width:100%;
-  padding:
-    26px
-    clamp(18px,4vw,60px)
-    35px;
+ display:none;
+ width:100%;
+ max-width:1100px;
+ margin:auto;
+ padding:18px max(20px,4vw) 35px
 }
 
 .page.active{
-  display:block;
+ display:block
 }
 
-.page-inner{
-  width:100%;
-  max-width:1400px;
-  margin:auto;
+/* DATE */
+
+.date{
+ background:linear-gradient(135deg,#f7ddea,#fff);
+ border:1px solid var(--line);
+ border-radius:25px;
+ padding:25px 28px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center
 }
 
-/* =========================
-   DATE BANNER
-========================= */
-
-.date-banner{
-  width:100%;
-  min-height:104px;
-  border-radius:30px;
-  background:linear-gradient(110deg,#fde7ef,#fff9fb);
-  border:1px solid #efd4df;
-  padding:25px 32px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:25px;
+.date h1{
+ margin:0;
+ color:var(--dark);
+ font-size:clamp(24px,4vw,34px)
 }
 
-.date-banner h2{
-  margin:0;
-  color:#a65c78;
-  font-size:28px;
-  font-weight:800;
+.date p{
+ margin:6px 0 0;
+ color:var(--muted)
 }
 
-.date-banner p{
-  margin:8px 0 0;
-  color:#9b969a;
-  font-size:17px;
+.heart{
+ font-size:45px;
+ color:var(--dark)
 }
 
-.sparkles{
-  font-size:28px;
-}
-
-/* =========================
-   STATS
-========================= */
+/* STATS */
 
 .stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:18px;
-  margin-bottom:35px;
+ display:grid;
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:10px;
+ margin:16px 0 24px
 }
 
 .stat{
-  min-height:145px;
-  border:1px solid #eed5df;
-  border-radius:28px;
-  background:#fff;
-  padding:22px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  box-shadow:0 8px 30px rgba(125,63,88,.045);
+ min-height:118px;
+ border:1px solid var(--line);
+ border-radius:22px;
+ padding:15px;
+ display:flex;
+ flex-direction:column;
+ justify-content:center
 }
 
-.stat-icon{
-  font-size:30px;
-  margin-bottom:12px;
+.stat:nth-child(1){background:#f1d8e5}
+.stat:nth-child(2){background:var(--blue)}
+.stat:nth-child(3){background:var(--green)}
+.stat:nth-child(4){background:var(--yellow)}
+
+.stat .ico{
+ font-size:22px
 }
 
-.stat-value{
-  color:#a65978;
-  font-size:27px;
-  font-weight:800;
+.stat b{
+ font-size:clamp(21px,3vw,30px);
+ margin:4px 0
 }
 
-.stat-label{
-  color:#928c91;
-  font-size:16px;
-  margin-top:5px;
+.stat span{
+ color:#706a71;
+ font-size:13px
 }
 
-/* =========================
-   SECTION TITLES
-========================= */
+/* SECTIONS */
 
-.section-title{
-  color:#9c5874;
-  font-size:23px;
-  font-weight:800;
-  letter-spacing:.5px;
-  text-transform:uppercase;
-  margin:30px 8px 17px;
+.sect{
+ font-size:22px;
+ color:var(--dark);
+ font-weight:800;
+ text-transform:uppercase;
+ letter-spacing:.04em;
+ margin:22px 2px 11px
 }
 
-/* =========================
-   SCHEDULE
-========================= */
-
-.schedule-box{
-  border:1px solid #efd6e0;
-  border-radius:28px;
-  padding:20px;
-  background:#fff;
+.sect small{
+ float:right;
+ font-size:13px;
+ text-transform:none;
+ letter-spacing:0;
+ padding-top:5px
 }
 
-.job-card{
-  border:1px solid #efd5df;
-  border-radius:25px;
-  padding:23px;
-  background:#fff;
-  box-shadow:0 7px 25px rgba(115,55,80,.04);
+/* SCHEDULE */
+
+.schedule{
+ background:#fff;
+ border:1px solid #f0dce5;
+ border-radius:25px;
+ padding:12px
 }
 
-.job-top{
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
+.job{
+ border:1px solid var(--line);
+ border-radius:20px;
+ padding:16px;
+ margin-bottom:9px;
+ background:#fff
 }
 
-.job-name{
-  font-size:22px;
-  font-weight:800;
+.jobhead{
+ display:flex;
+ justify-content:space-between;
+ gap:12px
 }
 
-.job-type{
-  color:#908a8f;
-  margin-top:6px;
+.jobname{
+ font-weight:800;
+ font-size:19px
 }
 
-.job-time{
-  color:#a65677;
-  font-size:21px;
-  font-weight:800;
+.jobtime{
+ font-weight:800;
+ color:var(--dark);
+ white-space:nowrap
 }
 
-.job-details{
-  color:#8c858a;
-  margin-top:15px;
-  font-size:16px;
+.meta{
+ color:var(--muted);
+ font-size:13px;
+ margin-top:5px
 }
 
-.job-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:18px;
+.money{
+ margin-top:12px;
+ color:#817b82
+}
+
+.money strong{
+ color:var(--dark)
+}
+
+.jobactions{
+ display:flex;
+ flex-wrap:wrap;
+ gap:8px;
+ margin-top:12px
 }
 
 .btn{
-  border:0;
-  min-height:50px;
-  padding:0 20px;
-  border-radius:17px;
-  font-weight:700;
-  font-size:15px;
+ padding:11px 14px;
+ border-radius:13px;
+ background:#f7e8ef;
+ color:#945873;
+ font-weight:700
 }
 
-.btn-primary{
-  background:var(--pink);
-  color:white;
+.primary{
+ background:var(--pink);
+ color:#fff
 }
 
-.btn-soft{
-  background:#fae9f0;
-  color:#a05271;
+.pdf{
+ background:#f7ecd7;
+ color:#896f47
 }
 
-.btn-gold{
-  background:#f8ecd7;
-  color:#8f7041;
+.paid{
+ background:#dcefe4;
+ color:#397359
 }
 
-.btn-green{
-  background:#e3f4e9;
-  color:#397253;
+.unpaid{
+ background:#ececed;
+ color:#666
 }
 
-.add-job-wide{
-  width:100%;
-  height:58px;
-  border:0;
-  border-radius:30px;
-  background:var(--pink);
-  color:#fff;
-  font-size:17px;
-  font-weight:700;
-  margin-top:14px;
+.add{
+ width:100%;
+ padding:15px;
+ border-radius:18px;
+ background:var(--pink);
+ color:#fff;
+ font-weight:800
 }
 
-/* =========================
-   QUICK ACTIONS
-========================= */
+/* QUICK ACTIONS */
 
-.quick-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
+.quickgrid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:10px
 }
 
 .quick{
-  min-height:78px;
-  border:0;
-  border-radius:18px;
-  padding:15px 18px;
-  display:flex;
-  align-items:center;
-  gap:14px;
-  font-size:17px;
-  font-weight:600;
+ min-height:72px;
+ border-radius:18px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:9px;
+ font-weight:700
 }
 
-.quick-icon{
-  font-size:29px;
+.blue{
+ background:var(--blue);
+ color:#315b8c
 }
 
-.quick-blue{background:#e7f0ff;color:#24568e}
-.quick-green{background:#e4f5e9;color:#27664b}
-.quick-pink{background:#fde3ec;color:#8d3859}
-.quick-yellow{background:#fff0c9;color:#795f1c}
-.quick-purple{background:#eee1fa;color:#643b8e}
-.quick-peach{background:#fde9e2;color:#95503e}
-
-/* =========================
-   BOTTOM NAV
-========================= */
-
-.bottom-nav{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  z-index:5000;
-  height:calc(var(--nav-h) + env(safe-area-inset-bottom));
-  padding:
-    8px
-    max(8px,env(safe-area-inset-left))
-    env(safe-area-inset-bottom)
-    max(8px,env(safe-area-inset-right));
-  background:rgba(255,255,255,.98);
-  border-top:1px solid #edd8e1;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  box-shadow:0 -7px 25px rgba(99,48,70,.08);
+.green{
+ background:var(--green);
+ color:#477967
 }
 
-.nav-btn{
-  border:0;
-  background:transparent;
-  border-radius:22px;
-  color:#989297;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:5px;
-  min-width:0;
-  padding:7px 3px;
+.qpink{
+ background:#f2d9e5;
+ color:#8e5872
 }
 
-.nav-btn.active{
-  background:#fde3ec;
-  color:#a54f70;
-  font-weight:800;
+.yellow{
+ background:var(--yellow);
+ color:#8b7040
 }
 
-.nav-icon{
-  font-size:29px;
-  line-height:1;
+.purple{
+ background:var(--purple);
+ color:#73568a
 }
 
-.nav-label{
-  font-size:14px;
+.peach{
+ background:var(--peach);
+ color:#946157
 }
 
-/* =========================
-   FLOATING BUTTON
-========================= */
+/* BANNER */
+
+.banner{
+ display:block;
+ width:100%;
+ height:190px;
+ object-fit:cover;
+ border-radius:22px;
+ border:1px solid #efd2df;
+ margin-top:18px
+}
+
+/* BOTTOM NAV */
+
+.bottom{
+ position:fixed;
+ left:0;
+ right:0;
+ bottom:0;
+ height:var(--nav);
+ z-index:50;
+ background:#fff;
+ padding:7px 9px calc(7px + env(safe-area-inset-bottom));
+ box-shadow:0 -5px 25px #c7819a1c
+}
+
+.nav{
+ max-width:1100px;
+ height:100%;
+ margin:auto;
+ display:grid;
+ grid-template-columns:repeat(5,1fr);
+ gap:5px
+}
+
+.nav button{
+ background:transparent;
+ color:#8b858c;
+ border-radius:20px;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:4px
+}
+
+.nav button.active{
+ background:var(--soft);
+ color:var(--dark);
+ font-weight:800
+}
+
+.ni{
+ font-size:24px;
+ line-height:1
+}
+
+.nav label{
+ font-size:12px
+}
 
 .fab{
-  position:fixed;
-  right:25px;
-  bottom:calc(var(--nav-h) + 22px);
-  width:68px;
-  height:68px;
-  border:0;
-  border-radius:50%;
-  background:var(--pink);
-  color:#fff;
-  font-size:36px;
-  box-shadow:0 10px 30px rgba(166,69,107,.28);
-  z-index:4000;
+ position:fixed;
+ right:22px;
+ bottom:calc(var(--nav) + 18px);
+ z-index:55;
+ width:64px;
+ height:64px;
+ border-radius:50%;
+ background:var(--pink);
+ color:#fff;
+ font-size:36px;
+ box-shadow:0 8px 25px #b9688840
 }
 
-/* =========================
-   SETTINGS
-========================= */
+/* CLIENTS / EARNINGS */
 
-.settings-section{
-  margin-top:30px;
+.title{
+ font-size:29px;
+ color:var(--dark);
+ margin:5px 0 15px
 }
 
-.settings-title{
-  margin:0 0 12px 5px;
-  color:#9a5c75;
-  font-size:17px;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.7px;
+.list{
+ display:grid;
+ gap:10px
 }
 
-.setting-card{
-  width:100%;
-  min-height:82px;
-  border:1px solid #e9d0db;
-  border-radius:22px;
-  background:#fff;
-  padding:15px;
-  display:flex;
-  align-items:center;
-  gap:14px;
-  margin-bottom:12px;
+.client,.card{
+ background:#fff;
+ border:1px solid var(--line);
+ border-radius:20px;
+ padding:14px
 }
 
-.setting-icon{
-  width:52px;
-  height:52px;
-  flex:0 0 52px;
-  border-radius:17px;
-  background:#fbe5ee;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:27px;
+.client{
+ display:flex;
+ align-items:center;
+ gap:12px
 }
 
-.setting-content{
-  min-width:0;
-  flex:1;
+.avatar{
+ width:47px;
+ height:47px;
+ border-radius:50%;
+ display:grid;
+ place-items:center;
+ background:#f6dce7;
+ color:var(--dark);
+ font-weight:800
 }
 
-.setting-name{
-  font-size:16px;
-  font-weight:800;
+.ci{
+ flex:1
 }
 
-.setting-description{
-  color:#979095;
-  font-size:13px;
-  margin-top:4px;
+.ci b{
+ display:block
 }
 
-.setting-control{
-  flex:0 0 auto;
+.ci span{
+ font-size:12px;
+ color:var(--muted)
 }
 
-.setting-select{
-  border:0;
-  outline:0;
-  background:#fff1f6;
-  color:#97526e;
-  border-radius:14px;
-  padding:12px 14px;
-  font-weight:800;
-  font-size:14px;
+.rate{
+ font-weight:800;
+ color:var(--dark)
 }
 
-.toggle{
-  width:58px;
-  height:34px;
-  border:0;
-  border-radius:20px;
-  background:#ddd;
-  padding:4px;
-  transition:.2s;
+.earnbox{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:10px
 }
 
-.toggle span{
-  display:block;
-  width:26px;
-  height:26px;
-  border-radius:50%;
-  background:#fff;
-  transition:.2s;
-  box-shadow:0 2px 6px rgba(0,0,0,.1);
+.earn{
+ background:#fff;
+ border:1px solid var(--line);
+ border-radius:20px;
+ padding:15px
 }
 
-.toggle.on{
-  background:var(--pink);
+.earn b{
+ display:block;
+ font-size:24px;
+ color:var(--dark);
+ margin-top:5px
 }
 
-.toggle.on span{
-  transform:translateX(24px);
+/* CALENDAR */
+
+.calendar{
+ display:grid;
+ grid-template-columns:repeat(7,1fr);
+ gap:5px
 }
 
-.colours{
-  display:flex;
-  gap:8px;
+.day{
+ min-height:65px;
+ border:1px solid var(--line);
+ border-radius:10px;
+ background:#fff;
+ padding:7px 2px;
+ text-align:center;
+ font-size:10px
 }
 
-.colour-dot{
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  border:3px solid #fff;
-  outline:1px solid #ddd;
+.day strong{
+ display:block;
+ font-size:13px
 }
 
-.colour-dot.active{
-  outline:2px solid #9f5270;
+.day.has{
+ background:#f8e1eb
 }
 
-.settings-save{
-  width:100%;
-  height:58px;
-  border:0;
-  border-radius:22px;
-  background:var(--pink);
-  color:#fff;
-  font-size:16px;
-  font-weight:800;
-  margin:12px 0 25px;
-  box-shadow:0 8px 22px rgba(197,78,123,.2);
+/* SETTINGS */
+
+.stitle{
+ font-size:13px;
+ letter-spacing:.08em;
+ color:#98617a;
+ font-weight:800;
+ text-transform:uppercase;
+ margin:14px 3px 3px
 }
 
-/* =========================
-   PHOTO SETTINGS
-========================= */
-
-.photo-card{
-  border:1px solid #e9d0db;
-  border-radius:22px;
-  padding:18px;
-  background:#fff;
-  margin-bottom:12px;
+.settings{
+ display:grid;
+ gap:10px
 }
 
-.photo-title{
-  font-size:17px;
-  font-weight:800;
-  color:#8f506b;
+.setting{
+ min-height:78px;
+ background:#fff;
+ border:1px solid var(--line);
+ border-radius:20px;
+ padding:13px;
+ display:flex;
+ align-items:center;
+ gap:13px
 }
 
-.photo-description{
-  color:#969095;
-  font-size:13px;
-  margin-top:5px;
+.si{
+ width:49px;
+ height:49px;
+ border-radius:15px;
+ background:#f9e3ed;
+ display:grid;
+ place-items:center;
+ font-size:23px;
+ flex:none
 }
 
-.photo-preview{
-  margin-top:15px;
-  width:100%;
-  height:190px;
-  border-radius:20px;
-  overflow:hidden;
-  background:#fbe8ef;
-  border:1px solid #efd4df;
+.smain{
+ flex:1;
+ min-width:0
 }
 
-.photo-preview img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+.smain b{
+ display:block
 }
 
-.photo-buttons{
-  display:flex;
-  gap:10px;
-  margin-top:12px;
+.smain span{
+ display:block;
+ color:var(--muted);
+ font-size:12px;
+ margin-top:3px
 }
 
-.photo-buttons button{
-  flex:1;
-  height:48px;
-  border:0;
-  border-radius:15px;
-  background:#fbe5ed;
-  color:#95516d;
-  font-weight:800;
+.switch{
+ width:59px;
+ height:35px;
+ border-radius:20px;
+ background:#ddd;
+ padding:3px;
+ flex:none
 }
 
-/* =========================
-   OTHER PAGES
-========================= */
-
-.page-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  margin-bottom:20px;
+.switch i{
+ display:block;
+ width:29px;
+ height:29px;
+ border-radius:50%;
+ background:#fff;
+ box-shadow:0 1px 4px #0002;
+ transition:.2s
 }
 
-.page-header h2{
-  color:#9d5875;
-  margin:0;
-  font-size:29px;
+.switch.on{
+ background:var(--pink)
 }
 
-.list-card{
-  border:1px solid #ecd4de;
-  border-radius:22px;
-  background:#fff;
-  padding:18px;
-  margin-bottom:12px;
+.switch.on i{
+ transform:translateX(24px)
 }
 
-.client-row,
-.earn-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
+select,
+input[type=text],
+input[type=number]{
+ border:0;
+ background:#fff2f7;
+ color:#955873;
+ border-radius:12px;
+ padding:11px 12px;
+ font-weight:700;
+ max-width:160px
 }
 
-.client-name,
-.earn-name{
-  font-weight:800;
-  font-size:18px;
+.save{
+ width:100%;
+ padding:15px;
+ border-radius:17px;
+ background:var(--pink);
+ color:#fff;
+ font-weight:800
 }
 
-.muted{
-  color:#948d92;
-  font-size:14px;
-  margin-top:5px;
+/* PHOTOS */
+
+.photos{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px
 }
 
-.price{
-  color:#a35373;
-  font-weight:800;
+.photo{
+ background:#fff;
+ border:1px solid var(--line);
+ border-radius:20px;
+ padding:12px
 }
 
-.paid-toggle{
-  border:0;
-  border-radius:14px;
-  padding:11px 15px;
-  font-weight:800;
-  background:#eee;
-  color:#777;
+.photo img{
+ width:100%;
+ height:150px;
+ object-fit:cover;
+ border-radius:15px;
+ background:#fff4f8
 }
 
-.paid-toggle.paid{
-  background:#ddf3e5;
-  color:#367653;
+.photo b{
+ display:block;
+ margin:8px 0 4px
 }
 
-.earnings-summary{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-  margin-bottom:22px;
+.photo span{
+ font-size:11px;
+ color:var(--muted);
+ display:block;
+ margin-bottom:8px
 }
 
-.earn-box{
-  padding:20px;
-  border-radius:22px;
-  background:#fff4f8;
-  border:1px solid #ecd5df;
+.upload{
+ display:block;
+ text-align:center;
+ background:#f7e1eb;
+ color:#945873;
+ padding:10px;
+ border-radius:12px;
+ font-weight:700;
+ font-size:12px
 }
 
-.earn-box strong{
-  display:block;
-  font-size:25px;
-  color:#a15473;
+.upload input{
+ display:none
 }
 
-.earn-box span{
-  color:#90898e;
+.dots{
+ display:flex;
+ gap:9px
 }
 
-/* =========================
-   MODAL
-========================= */
+.dot{
+ width:28px;
+ height:28px;
+ border-radius:50%;
+ border:2px solid #fff;
+ box-shadow:0 0 0 1px #d8c5ce
+}
+
+.dot.active{
+ outline:2px solid var(--dark)
+}
+
+/* MODAL */
+
+.modalback{
+ position:fixed;
+ inset:0;
+ background:#20151f77;
+ z-index:100;
+ display:none;
+ align-items:flex-end
+}
+
+.modalback.show{
+ display:flex
+}
 
 .modal{
-  position:fixed;
-  inset:0;
-  z-index:10000;
-  background:rgba(30,20,25,.4);
-  display:none;
-  align-items:flex-end;
-  justify-content:center;
+ background:#fff;
+ width:min(100%,680px);
+ max-height:92dvh;
+ overflow:auto;
+ border-radius:28px 28px 0 0;
+ padding:20px
 }
 
-.modal.show{
-  display:flex;
+.modal h2{
+ margin:0 0 15px;
+ color:var(--dark)
 }
 
-.modal-box{
-  width:100%;
-  max-width:650px;
-  max-height:90vh;
-  overflow:auto;
-  background:#fff;
-  border-radius:30px 30px 0 0;
-  padding:25px;
+.form{
+ display:grid;
+ gap:10px
 }
 
-.modal-box h3{
-  margin:0 0 20px;
-  color:#9b5471;
-  font-size:24px;
+.form label{
+ font-size:12px;
+ color:#777;
+ font-weight:700
 }
 
-.form-group{
-  margin-bottom:15px;
+.form input,
+.form select,
+.form textarea{
+ width:100%;
+ max-width:none;
+ border:1px solid var(--line);
+ border-radius:13px;
+ padding:12px;
+ background:#fff
 }
 
-.form-group label{
-  display:block;
-  margin-bottom:7px;
-  color:#7f767b;
-  font-size:14px;
-  font-weight:700;
+.row{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea{
-  width:100%;
-  border:1px solid #e5ccd7;
-  background:#fffafc;
-  border-radius:14px;
-  padding:13px;
-  outline:none;
-  font-size:16px;
+.ma{
+ display:flex;
+ gap:8px;
+ margin-top:14px
 }
 
-.modal-actions{
-  display:flex;
-  gap:10px;
-  margin-top:20px;
+.ma>*{
+ flex:1
 }
-
-.modal-actions button{
-  flex:1;
-  height:50px;
-  border:0;
-  border-radius:15px;
-  font-weight:800;
-}
-
-/* =========================
-   TIMER
-========================= */
-
-.timer-panel{
-  position:fixed;
-  left:50%;
-  bottom:calc(var(--nav-h) + 18px);
-  transform:translateX(-50%);
-  z-index:4500;
-  width:min(520px,calc(100% - 30px));
-  background:#fff;
-  border:1px solid #ebced9;
-  border-radius:25px;
-  padding:17px;
-  box-shadow:0 15px 45px rgba(82,41,59,.18);
-  display:none;
-}
-
-.timer-panel.show{
-  display:block;
-}
-
-.timer-time{
-  text-align:center;
-  font-size:30px;
-  font-weight:800;
-  color:#a25372;
-}
-
-/* =========================
-   PDF PREVIEW
-========================= */
-
-.invoice-preview{
-  background:#fff;
-  border:1px solid #ead2dc;
-  border-radius:20px;
-  padding:22px;
-}
-
-.invoice-head{
-  display:flex;
-  justify-content:space-between;
-  border-bottom:1px solid #eee;
-  padding-bottom:15px;
-  margin-bottom:18px;
-}
-
-.invoice-total{
-  text-align:right;
-  color:#a25372;
-  font-size:25px;
-  font-weight:800;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media(max-width:700px){
-
-  .page{
-    padding:
-      18px
-      14px
-      28px;
-  }
-
-  .topbar{
-    padding-left:15px;
-    padding-right:15px;
-  }
-
-  .brand-logo{
-    width:55px;
-    height:55px;
-    flex-basis:55px;
-  }
-
-  .brand-text h1{
-    font-size:27px;
-  }
-
-  .brand-text p{
-    font-size:13px;
-  }
-
-  .header-btn{
-    width:48px;
-    height:48px;
-  }
-
-  .date-banner{
-    min-height:105px;
-    padding:20px;
-  }
-
-  .date-banner h2{
-    font-size:23px;
-  }
-
-  .date-banner p{
-    font-size:15px;
-  }
-
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-  }
-
-  .stat{
-    min-height:125px;
-    padding:17px;
-    border-radius:22px;
-  }
-
-  .stat-value{
-    font-size:23px;
-  }
-
-  .stat-label{
-    font-size:14px;
-  }
-
-  .section-title{
-    font-size:19px;
-  }
-
-  .job-top{
-    flex-direction:column;
-    gap:8px;
-  }
-
-  .job-time{
-    align-self:flex-start;
-  }
-
-  .quick-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .quick{
-    min-height:100px;
-    flex-direction:column;
-    justify-content:center;
-    text-align:center;
-    gap:8px;
-  }
-
-  .quick-icon{
-    font-size:31px;
-  }
-
-  .nav-icon{
-    font-size:27px;
-  }
-
-  .nav-label{
-    font-size:12px;
-  }
-
-  .nav-btn{
-    border-radius:19px;
-  }
-
-  .bottom-nav{
-    --nav-h:96px;
-  }
-
-  .earnings-summary{
-    grid-template-columns:1fr;
-  }
-}
-
-/* =========================
-   UI SCALE
-   IMPORTANT:
-   This scales the actual components, NOT the width of the page.
-   Therefore 150%-200% stays full width instead of creating
-   the narrow half-screen problem.
-========================= */
-
-body.scale-90{
-  --scale:.90;
-}
-
-body.scale-100{
-  --scale:1;
-}
-
-body.scale-110{
-  --scale:1.10;
-}
-
-body.scale-120{
-  --scale:1.20;
-}
-
-body.scale-130{
-  --scale:1.30;
-}
-
-body.scale-150{
-  --scale:1.50;
-}
-
-body.scale-175{
-  --scale:1.75;
-}
-
-body.scale-200{
-  --scale:2;
-}
-
-body.scale-90 .page,
-body.scale-100 .page,
-body.scale-110 .page,
-body.scale-120 .page,
-body.scale-130 .page,
-body.scale-150 .page,
-body.scale-175 .page,
-body.scale-200 .page{
-  padding-left:calc(14px * var(--scale));
-  padding-right:calc(14px * var(--scale));
-}
-
-body.scale-200 .topbar{
-  padding-left:20px;
-  padding-right:20px;
-}
-
-body.scale-200 .brand-logo{
-  width:78px;
-  height:78px;
-  flex-basis:78px;
-}
-
-body.scale-200 .brand-text h1{
-  font-size:40px;
-}
-
-body.scale-200 .brand-text p{
-  font-size:18px;
-}
-
-body.scale-200 .header-btn{
-  width:68px;
-  height:68px;
-  font-size:32px;
-}
-
-body.scale-200 .stat{
-  min-height:175px;
-}
-
-body.scale-200 .stat-value{
-  font-size:31px;
-}
-
-body.scale-200 .stat-label{
-  font-size:18px;
-}
-
-body.scale-200 .nav-icon{
-  font-size:36px;
-}
-
-body.scale-200 .nav-label{
-  font-size:16px;
-}
-
-body.scale-200 .bottom-nav{
-  --nav-h:115px;
-}
-
-body.scale-200 .fab{
-  width:82px;
-  height:82px;
-  font-size:42px;
-}
-
-body.scale-200 .quick{
-  min-height:125px;
-  font-size:20px;
-}
-
-body.scale-200 .setting-card{
-  min-height:110px;
-}
-
-body.scale-200 .setting-icon{
-  width:68px;
-  height:68px;
-  flex-basis:68px;
-  font-size:34px;
-}
-
-body.scale-200 .setting-name{
-  font-size:20px;
-}
-
-body.scale-200 .setting-description{
-  font-size:16px;
-}
-
-body.scale-200 .toggle{
-  width:70px;
-  height:40px;
-}
-
-body.scale-200 .toggle span{
-  width:32px;
-  height:32px;
-}
-
-body.scale-200 .toggle.on span{
-  transform:translateX(30px);
-}
-
-/* Larger text */
-
-body.larger-text{
-  --text-factor:1.15;
-}
-
-body.larger-text,
-body.larger-text button,
-body.larger-text input,
-body.larger-text select{
-  letter-spacing:.1px;
-}
-
-body.larger-text .stat-label,
-body.larger-text .setting-description,
-body.larger-text .muted{
-  font-size:calc(14px * var(--text-factor));
-}
-
-body.larger-text .job-name,
-body.larger-text .client-name,
-body.larger-text .earn-name{
-  font-size:calc(18px * var(--text-factor));
-}
-
-/* Compact layout */
-
-body.compact-layout .page{
-  padding-top:12px;
-  padding-bottom:15px;
-}
-
-body.compact-layout .section-title{
-  margin-top:15px;
-  margin-bottom:10px;
-}
-
-body.compact-layout .stat{
-  min-height:105px;
-}
-
-body.compact-layout .quick{
-  min-height:65px;
-}
-
-body.compact-layout .setting-card{
-  min-height:68px;
-  margin-bottom:7px;
-}
-
-/* High contrast */
-
-body.high-contrast{
-  --text:#111;
-  --muted:#595359;
-  --border:#b77d95;
-}
-
-body.high-contrast .setting-card,
-body.high-contrast .stat,
-body.high-contrast .job-card,
-body.high-contrast .schedule-box,
-body.high-contrast .list-card{
-  border-width:2px;
-}
-
-body.high-contrast .setting-name,
-body.high-contrast .stat-value,
-body.high-contrast .job-name{
-  color:#111;
-}
-
-/* =========================
-   DESKTOP / LARGE SCREEN
-========================= */
-
-@media(min-width:1000px){
-
-  .page{
-    padding-left:50px;
-    padding-right:50px;
-  }
-
-  .quick-grid{
-    grid-template-columns:repeat(3,1fr);
-  }
-
-  .schedule-box{
-    max-width:none;
-  }
-
-  .bottom-nav{
-    padding-left:20%;
-    padding-right:20%;
-  }
-}
-
-/* =========================
-   TOAST
-========================= */
 
 .toast{
-  position:fixed;
-  left:50%;
-  bottom:calc(var(--nav-h) + 25px);
-  transform:translate(-50%,20px);
-  background:#282229;
-  color:#fff;
-  padding:13px 20px;
-  border-radius:15px;
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
-  z-index:20000;
-  font-size:14px;
-  white-space:nowrap;
+ position:fixed;
+ z-index:150;
+ left:50%;
+ bottom:calc(var(--nav) + 18px);
+ transform:translateX(-50%);
+ background:#29252a;
+ color:#fff;
+ padding:11px 16px;
+ border-radius:999px;
+ display:none;
+ font-size:13px
 }
 
 .toast.show{
-  opacity:1;
-  transform:translate(-50%,0);
+ display:block
+}
+
+.empty{
+ padding:30px;
+ text-align:center;
+ background:#fff;
+ border:1px dashed var(--line);
+ border-radius:20px;
+ color:var(--muted)
+}
+
+/* RESPONSIVE */
+
+@media(max-width:600px){
+
+ .top{
+  padding-left:20px;
+  padding-right:20px
+ }
+
+ .profile{
+  width:55px;
+  height:55px
+ }
+
+ .brandname{
+  font-size:32px
+ }
+
+ .topbtn{
+  width:50px;
+  height:50px
+ }
+
+ .page{
+  padding-left:20px;
+  padding-right:20px
+ }
+
+ .stats{
+  gap:9px
+ }
+
+ .stat{
+  min-height:110px;
+  padding:11px
+ }
+
+ .stat b{
+  font-size:21px
+ }
+
+ .stat span{
+  font-size:12px
+ }
+
+ .jobtime{
+  font-size:17px
+ }
+
+ .earnbox{
+  grid-template-columns:1fr 1fr
+ }
+
+ .photos{
+  grid-template-columns:1fr
+ }
+
+ .banner{
+  height:150px
+ }
+
+ .nav label{
+  font-size:11px
+ }
+
+ .ni{
+  font-size:22px
+ }
+}
+
+@media(min-width:900px){
+
+ .page{
+  padding-left:30px;
+  padding-right:30px
+ }
+
+ .banner{
+  height:240px
+ }
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================
-     WELCOME
-========================= -->
+<div class="app">
 
-<section id="welcome">
-  <div class="welcome-inner">
+<header class="top">
+ <div class="topin">
 
-    <div class="welcome-logo">
-      <div class="logo-placeholder">
-        <strong>Pure Shine</strong>
-        <span>CLEANING</span>
-      </div>
-    </div>
+  <div class="brand">
 
-    <div class="welcome-title">Pure Shine</div>
+   <!-- Put your Pure Shine logo image in the same GitHub folder as this HTML and name it logo.jpg -->
+   <img
+    id="profileImg"
+    class="profile"
+    src="logo.jpg"
+    alt="Pure Shine"
+    onerror="this.style.background='#f8dfeb';this.removeAttribute('src')"
+   >
 
-    <div class="welcome-subtitle">
-      Your Cleaning<br>
-      Business, Simplified ♡
-    </div>
-
-    <div class="welcome-actions">
-      <button class="get-started" onclick="enterApp()">
-        Get Started&nbsp; ❯
-      </button>
-
-      <div class="login-link">
-        Already have an account? <u onclick="enterApp()">Log in</u>
-      </div>
-    </div>
+   <div class="brandtext">
+    <div class="brandname">Pure Shine</div>
+    <div class="subtitle">Cleaning Manager ✨</div>
+   </div>
 
   </div>
-</section>
 
+  <div class="topactions">
+   <button class="topbtn" onclick="openReminder()">🔔</button>
+   <button class="topbtn" onclick="startFromHome()">⏱️</button>
+  </div>
 
-<!-- =========================
-     APP
-========================= -->
+ </div>
+</header>
 
-<div id="mainApp" class="app">
+<main class="pages">
 
-  <header class="topbar">
+ <section id="home" class="page active"></section>
 
-    <div class="brand">
+ <section id="schedule" class="page"></section>
 
-      <div class="brand-logo">
-        <div class="brand-placeholder">PS</div>
-      </div>
+ <section id="clients" class="page"></section>
 
-      <div class="brand-text">
-        <h1>Pure Shine</h1>
-        <p>Cleaning Manager ✨</p>
-      </div>
+ <section id="earnings" class="page"></section>
 
-    </div>
+ <section id="settings" class="page"></section>
 
-    <div class="header-actions">
-      <button class="header-btn" onclick="showNotifications()">♧</button>
-      <button class="header-btn" onclick="toggleTimer()">⏱️</button>
-    </div>
+</main>
 
-  </header>
+<button class="fab" onclick="openJob()">＋</button>
 
+<nav class="bottom">
 
-  <!-- =========================
-       HOME
-  ========================= -->
+ <div class="nav">
 
-  <main id="homePage" class="page active">
+  <button id="n-home" class="active" onclick="go('home')">
+   <span class="ni">⌂</span>
+   <label>Home</label>
+  </button>
 
-    <div class="page-inner">
+  <button id="n-schedule" onclick="go('schedule')">
+   <span class="ni">📅</span>
+   <label>Schedule</label>
+  </button>
 
-      <div class="date-banner">
-        <div>
-          <h2 id="dateTitle">Wednesday 7 October</h2>
-          <p>Your cleaning schedule</p>
-        </div>
-        <div class="sparkles">✨</div>
-      </div>
+  <button id="n-clients" onclick="go('clients')">
+   <span class="ni">♧</span>
+   <label>Clients</label>
+  </button>
 
+  <button id="n-earnings" onclick="go('earnings')">
+   <span class="ni">▥</span>
+   <label>Earnings</label>
+  </button>
 
-      <div class="stats">
+  <button id="n-settings" onclick="go('settings')">
+   <span class="ni">⚙️</span>
+   <label>Settings</label>
+  </button>
 
-        <div class="stat">
-          <div class="stat-icon">🧹</div>
-          <div class="stat-value" id="jobsToday">0</div>
-          <div class="stat-label">Jobs today</div>
-        </div>
+ </div>
 
-        <div class="stat">
-          <div class="stat-icon">⏱️</div>
-          <div class="stat-value" id="hoursToday">0h 0m</div>
-          <div class="stat-label">Worked</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-icon">💷</div>
-          <div class="stat-value" id="earnedToday">£0.00</div>
-          <div class="stat-label">Earned</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-icon">🌸</div>
-          <div class="stat-value" id="availableToday">3h 0m</div>
-          <div class="stat-label">Available</div>
-        </div>
-
-      </div>
-
-
-      <div class="section-title">
-        Today's schedule
-      </div>
-
-      <div class="schedule-box" id="todaySchedule"></div>
-
-
-      <div class="section-title">
-        Quick actions
-      </div>
-
-      <div class="quick-grid">
-
-        <button class="quick quick-blue" onclick="openJobModal()">
-          <span class="quick-icon">➕</span>
-          <span>Add Job</span>
-        </button>
-
-        <button class="quick quick-blue" onclick="toggleTimer()">
-          <span class="quick-icon">⏱️</span>
-          <span>Start Timer</span>
-        </button>
-
-        <button class="quick quick-green" onclick="showPage('clients')">
-          <span class="quick-icon">👥</span>
-          <span>Clients</span>
-        </button>
-
-        <button class="quick quick-purple" onclick="showPage('earnings')">
-          <span class="quick-icon">💷</span>
-          <span>Earnings</span>
-        </button>
-
-        <button class="quick quick-pink" onclick="sendPaymentReminder()">
-          <span class="quick-icon">💌</span>
-          <span>Reminder</span>
-        </button>
-
-        <button class="quick quick-peach" onclick="addHoliday()">
-          <span class="quick-icon">🏖️</span>
-          <span>Holiday</span>
-        </button>
-
-      </div>
-
-    </div>
-
-  </main>
-
-
-  <!-- =========================
-       SCHEDULE
-  ========================= -->
-
-  <main id="schedulePage" class="page">
-
-    <div class="page-inner">
-
-      <div class="page-header">
-        <h2>Schedule</h2>
-        <button class="btn btn-primary" onclick="openJobModal()">＋ Add</button>
-      </div>
-
-      <div id="scheduleList"></div>
-
-    </div>
-
-  </main>
-
-
-  <!-- =========================
-       CLIENTS
-  ========================= -->
-
-  <main id="clientsPage" class="page">
-
-    <div class="page-inner">
-
-      <div class="page-header">
-        <h2>Clients</h2>
-        <button class="btn btn-primary" onclick="openClientModal()">＋ Add</button>
-      </div>
-
-      <div id="clientsList"></div>
-
-    </div>
-
-  </main>
-
-
-  <!-- =========================
-       EARNINGS
-  ========================= -->
-
-  <main id="earningsPage" class="page">
-
-    <div class="page-inner">
-
-      <div class="page-header">
-        <h2>Earnings</h2>
-      </div>
-
-      <div class="earnings-summary">
-
-        <div class="earn-box">
-          <strong id="totalEarned">£0.00</strong>
-          <span>Total earned</span>
-        </div>
-
-        <div class="earn-box">
-          <strong id="totalReceived">£0.00</strong>
-          <span>Paid</span>
-        </div>
-
-        <div class="earn-box">
-          <strong id="totalOwed">£0.00</strong>
-          <span>Owed</span>
-        </div>
-
-      </div>
-
-      <div id="earningsList"></div>
-
-    </div>
-
-  </main>
-
-
-  <!-- =========================
-       SETTINGS
-  ========================= -->
-
-  <main id="settingsPage" class="page">
-
-    <div class="page-inner">
-
-      <div class="page-header">
-        <h2>Settings</h2>
-      </div>
-
-
-      <!-- BUSINESS -->
-
-      <section class="settings-section">
-
-        <div class="settings-title">Business</div>
-
-        <div class="setting-card">
-
-          <div class="setting-icon">🏢</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Business name</div>
-            <div class="setting-description">Shown throughout the app</div>
-          </div>
-
-          <div class="setting-control">
-            <input
-              id="businessName"
-              class="setting-select"
-              style="width:150px"
-              value="Pure Shine Cleaning"
-              onchange="updateSetting('businessName',this.value)"
-            >
-          </div>
-
-        </div>
-
-
-        <div class="setting-card">
-
-          <div class="setting-icon">👩🏻</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Owner name</div>
-            <div class="setting-description">Your business owner name</div>
-          </div>
-
-          <div class="setting-control">
-            <input
-              id="ownerName"
-              class="setting-select"
-              style="width:130px"
-              value="Georgiana"
-              onchange="updateSetting('ownerName',this.value)"
-            >
-          </div>
-
-        </div>
-
-
-        <div class="setting-card">
-
-          <div class="setting-icon">💷</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Private hourly rate</div>
-            <div class="setting-description">Default private client rate</div>
-          </div>
-
-          <div class="setting-control">
-            <select class="setting-select" onchange="updateSetting('privateRate',this.value)">
-              <option value="18">£18/hour</option>
-              <option value="20">£20/hour</option>
-              <option value="25">£25/hour</option>
-            </select>
-          </div>
-
-        </div>
-
-
-        <div class="setting-card">
-
-          <div class="setting-icon">🏢</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Agency hourly rate</div>
-            <div class="setting-description">Default agency rate</div>
-          </div>
-
-          <div class="setting-control">
-            <select class="setting-select" onchange="updateSetting('agencyRate',this.value)">
-              <option value="16">£16/hour</option>
-              <option value="18">£18/hour</option>
-              <option value="20">£20/hour</option>
-            </select>
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- REMINDERS -->
-
-      <section class="settings-section">
-
-        <div class="settings-title">Reminders</div>
-
-        <div class="setting-card">
-
-          <div class="setting-icon">🔔</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Job reminders</div>
-            <div class="setting-description">Remind me about tomorrow's cleaning</div>
-          </div>
-
-          <div class="setting-control">
-            <button class="toggle" id="jobRemindersToggle"
-              onclick="toggleSetting('jobReminders')">
-              <span></span>
-            </button>
-          </div>
-
-        </div>
-
-
-        <div class="setting-card">
-
-          <div class="setting-icon">💷</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Payment reminders</div>
-            <div class="setting-description">Remind clients about money owed</div>
-          </div>
-
-          <div class="setting-control">
-            <button class="toggle" id="paymentRemindersToggle"
-              onclick="toggleSetting('paymentReminders')">
-              <span></span>
-            </button>
-          </div>
-
-        </div>
-
-
-        <div class="setting-card">
-
-          <div class="setting-icon">💌</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Reminder message style</div>
-            <div class="setting-description">Choose the default message</div>
-          </div>
-
-          <div class="setting-control">
-            <select class="setting-select"
-              onchange="updateSetting('messageStyle',this.value)">
-              <option>Professional</option>
-              <option>Friendly</option>
-              <option>Warm</option>
-            </select>
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- TIMER -->
-
-      <section class="settings-section">
-
-        <div class="settings-title">Cleaning timer</div>
-
-        <div class="setting-card">
-
-          <div class="setting-icon">⏱️</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Auto-save timer jobs</div>
-            <div class="setting-description">Save a completed timer automatically</div>
-          </div>
-
-          <div class="setting-control">
-            <button class="toggle" id="autoSaveToggle"
-              onclick="toggleSetting('autoSave')">
-              <span></span>
-            </button>
-          </div>
-
-        </div>
-
-
-        <div class="setting-card">
-
-          <div class="setting-icon">🧾</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Offer invoice after timer</div>
-            <div class="setting-description">Show invoice option after stopping</div>
-          </div>
-
-          <div class="setting-control">
-            <button class="toggle" id="offerInvoiceToggle"
-              onclick="toggleSetting('offerInvoice')">
-              <span></span>
-            </button>
-          </div>
-
-        </div>
-
-
-        <div class="setting-card">
-
-          <div class="setting-icon">🔢</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Invoice numbering</div>
-            <div class="setting-description" id="invoiceNumberDisplay">PS-0001</div>
-          </div>
-
-          <div class="setting-control">
-            <button class="btn btn-soft" onclick="editInvoiceNumber()">Edit</button>
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- SCHEDULE -->
-
-      <section class="settings-section">
-
-        <div class="settings-title">Schedule</div>
-
-        <div class="setting-card">
-
-          <div class="setting-icon">📅</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Week starts on</div>
-            <div class="setting-description">Choose your calendar layout</div>
-          </div>
-
-          <div class="setting-control">
-            <select class="setting-select"
-              onchange="updateSetting('weekStart',this.value)">
-              <option>Monday</option>
-              <option>Sunday</option>
-            </select>
-          </div>
-
-        </div>
-
-
-        <div class="setting-card">
-
-          <div class="setting-icon">⏰</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Default working day</div>
-            <div class="setting-description">Used for available-hours calculation</div>
-          </div>
-
-          <div class="setting-control">
-            <select class="setting-select"
-              onchange="updateSetting('workingDay',this.value)">
-              <option value="6">6 hours</option>
-              <option value="7">7 hours</option>
-              <option value="8">8 hours</option>
-              <option value="9">9 hours</option>
-              <option value="10">10 hours</option>
-            </select>
-          </div>
-
-        </div>
-
-
-        <div class="setting-card">
-
-          <div class="setting-icon">🔄</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Fortnightly clients</div>
-            <div class="setting-description">Automatically alternate eligible clients</div>
-          </div>
-
-          <div class="setting-control">
-            <button class="toggle" id="fortnightlyToggle"
-              onclick="toggleSetting('fortnightly')">
-              <span></span>
-            </button>
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- DISPLAY -->
-
-      <section class="settings-section">
-
-        <div class="settings-title">Display</div>
-
-        <div class="setting-card">
-
-          <div class="setting-icon">🔍</div>
-
-          <div class="setting-content">
-            <div class="setting-name">App size</div>
-            <div class="setting-description">Make everything larger or smaller</div>
-          </div>
-
-          <div class="setting-control">
-            <select
-              id="appSize"
-              class="setting-select"
-              onchange="setAppScale(this.value)"
-            >
-              <option value="90">90%</option>
-              <option value="100">100%</option>
-              <option value="110">110%</option>
-              <option value="120">120%</option>
-              <option value="130">130%</option>
-              <option value="150">150%</option>
-              <option value="175">175%</option>
-              <option value="200">200%</option>
-            </select>
-          </div>
-
-        </div>
-
-
-        <div class="setting-card">
-
-          <div class="setting-icon">🔤</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Larger text</div>
-            <div class="setting-description">Increase readability</div>
-          </div>
-
-          <div class="setting-control">
-            <button class="toggle" id="largerTextToggle"
-              onclick="toggleSetting('largerText')">
-              <span></span>
-            </button>
-          </div>
-
-        </div>
-
-
-        <div class="setting-card">
-
-          <div class="setting-icon">↕️</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Compact layout</div>
-            <div class="setting-description">Fit more information on screen</div>
-          </div>
-
-          <div class="setting-control">
-            <button class="toggle" id="compactToggle"
-              onclick="toggleSetting('compact')">
-              <span></span>
-            </button>
-          </div>
-
-        </div>
-
-
-        <div class="setting-card">
-
-          <div class="setting-icon">◐</div>
-
-          <div class="setting-content">
-            <div class="setting-name">High contrast</div>
-            <div class="setting-description">Make text and borders clearer</div>
-          </div>
-
-          <div class="setting-control">
-            <button class="toggle" id="contrastToggle"
-              onclick="toggleSetting('contrast')">
-              <span></span>
-            </button>
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- APPEARANCE -->
-
-      <section class="settings-section">
-
-        <div class="settings-title">Appearance</div>
-
-        <div class="setting-card">
-
-          <div class="setting-icon">🎨</div>
-
-          <div class="setting-content">
-            <div class="setting-name">Accent colour</div>
-            <div class="setting-description">Change the main pink colour</div>
-          </div>
-
-          <div class="setting-control">
-
-            <div class="colours">
-
-              <button class="colour-dot active"
-                style="background:#e47aa2"
-                onclick="setAccent('#e47aa2',this)">
-              </button>
-
-              <button class="colour-dot"
-                style="background:#d989af"
-                onclick="setAccent('#d989af',this)">
-              </button>
-
-              <button class="colour-dot"
-                style="background:#c98aa3"
-                onclick="setAccent('#c98aa3',this)">
-              </button>
-
-              <button class="colour-dot"
-                style="background:#d6a15f"
-                onclick="setAccent('#d6a15f',this)">
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- APP PHOTOS -->
-
-      <section class="settings-section">
-
-        <div class="settings-title">App photos</div>
-
-
-        <div class="photo-card">
-
-          <div class="photo-title">
-            🖼️ App logo
-          </div>
-
-          <div class="photo-description">
-            Choose the logo shown in the app header and welcome screen.
-          </div>
-
-          <div class="photo-preview">
-            <img id="logoPreview" alt="App logo preview">
-          </div>
-
-          <div class="photo-buttons">
-
-            <button onclick="chooseLogo()">
-              Choose photo
-            </button>
-
-            <button onclick="restoreLogo()">
-              Restore
-            </button>
-
-          </div>
-
-          <input
-            type="file"
-            id="logoFile"
-            accept="image/*"
-            hidden
-            onchange="loadLogo(this)"
-          >
-
-        </div>
-
-
-        <div class="photo-card">
-
-          <div class="photo-title">
-            🌸 Home banner
-          </div>
-
-          <div class="photo-description">
-            Choose the large cleaning-business banner used on the Home screen.
-          </div>
-
-          <div class="photo-preview">
-            <img id="bannerPreview" alt="Banner preview">
-          </div>
-
-          <div class="photo-buttons">
-
-            <button onclick="chooseBanner()">
-              Choose photo
-            </button>
-
-            <button onclick="restoreBanner()">
-              Restore
-            </button>
-
-          </div>
-
-          <input
-            type="file"
-            id="bannerFile"
-            accept="image/*"
-            hidden
-            onchange="loadBanner(this)"
-          >
-
-        </div>
-
-      </section>
-
-
-      <button class="settings-save" onclick="saveAllSettings()">
-        💾 Save all settings
-      </button>
-
-
-      <!-- DATA -->
-
-      <section class="settings-section">
-
-        <div class="settings-title">Data & backup</div>
-
-        <div class="setting-card" onclick="backupData()">
-          <div class="setting-icon">💾</div>
-          <div class="setting-content">
-            <div class="setting-name">Backup my data</div>
-            <div class="setting-description">Clients, jobs, holidays and settings</div>
-          </div>
-          <div>›</div>
-        </div>
-
-        <div class="setting-card" onclick="exportCalendar()">
-          <div class="setting-icon">📅</div>
-          <div class="setting-content">
-            <div class="setting-name">Export calendar</div>
-            <div class="setting-description">Create a calendar file from your jobs</div>
-          </div>
-          <div>›</div>
-        </div>
-
-        <div class="setting-card" onclick="resetApplication()">
-          <div class="setting-icon">↻</div>
-          <div class="setting-content">
-            <div class="setting-name">Reset application</div>
-            <div class="setting-description">Restore the default setup</div>
-          </div>
-          <div>›</div>
-        </div>
-
-      </section>
-
-    </div>
-
-  </main>
-
-
-  <!-- =========================
-       BOTTOM NAV
-  ========================= -->
-
-  <nav class="bottom-nav">
-
-    <button class="nav-btn active" data-page="home" onclick="showPage('home')">
-      <span class="nav-icon">⌂</span>
-      <span class="nav-label">Home</span>
-    </button>
-
-    <button class="nav-btn" data-page="schedule" onclick="showPage('schedule')">
-      <span class="nav-icon">📅</span>
-      <span class="nav-label">Schedule</span>
-    </button>
-
-    <button class="nav-btn" data-page="clients" onclick="showPage('clients')">
-      <span class="nav-icon">♧</span>
-      <span class="nav-label">Clients</span>
-    </button>
-
-    <button class="nav-btn" data-page="earnings" onclick="showPage('earnings')">
-      <span class="nav-icon">▥</span>
-      <span class="nav-label">Earnings</span>
-    </button>
-
-    <button class="nav-btn" data-page="settings" onclick="showPage('settings')">
-      <span class="nav-icon">⚙️</span>
-      <span class="nav-label">Settings</span>
-    </button>
-
-  </nav>
-
-
-  <button class="fab" onclick="openJobModal()">＋</button>
+</nav>
 
 </div>
 
-
-<!-- TIMER -->
-
-<div id="timerPanel" class="timer-panel">
-
-  <div class="timer-time" id="timerDisplay">
-    00:00:00
-  </div>
-
-  <div style="display:flex;gap:10px;margin-top:12px">
-
-    <button
-      class="btn btn-primary"
-      style="flex:1"
-      onclick="stopTimer()"
-    >
-      Stop & Save
-    </button>
-
-    <button
-      class="btn btn-soft"
-      onclick="closeTimerPanel()"
-    >
-      Hide
-    </button>
-
-  </div>
-
+<div id="back" class="modalback">
+ <div id="modal" class="modal"></div>
 </div>
-
-
-<!-- =========================
-     JOB MODAL
-========================= -->
-
-<div id="jobModal" class="modal">
-
-  <div class="modal-box">
-
-    <h3>Add cleaning job</h3>
-
-    <div class="form-group">
-      <label>Client</label>
-      <select id="jobClient"></select>
-    </div>
-
-    <div class="form-group">
-      <label>Date</label>
-      <input type="date" id="jobDate">
-    </div>
-
-    <div class="form-group">
-      <label>Start time</label>
-      <input type="time" id="jobStart" value="09:00">
-    </div>
-
-    <div class="form-group">
-      <label>End time</label>
-      <input type="time" id="jobEnd" value="13:00">
-    </div>
-
-    <div class="form-group">
-      <label>Rate per hour</label>
-      <input type="number" id="jobRate" step=".01">
-    </div>
-
-    <div class="modal-actions">
-      <button
-        style="background:#f2e9ed"
-        onclick="closeModal('jobModal')"
-      >
-        Cancel
-      </button>
-
-      <button
-        style="background:var(--pink);color:white"
-        onclick="saveJob()"
-      >
-        Save job
-      </button>
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- CLIENT MODAL -->
-
-<div id="clientModal" class="modal">
-
-  <div class="modal-box">
-
-    <h3>Add client</h3>
-
-    <div class="form-group">
-      <label>Name</label>
-      <input id="clientName" placeholder="Client name">
-    </div>
-
-    <div class="form-group">
-      <label>Type</label>
-      <select id="clientType">
-        <option>Private</option>
-        <option>Agency</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Hourly rate</label>
-      <input id="clientRate" type="number" value="18">
-    </div>
-
-    <div class="form-group">
-      <label>Default hours</label>
-      <input id="clientHours" type="number" step=".25" value="2">
-    </div>
-
-    <div class="modal-actions">
-
-      <button
-        style="background:#f2e9ed"
-        onclick="closeModal('clientModal')"
-      >
-        Cancel
-      </button>
-
-      <button
-        style="background:var(--pink);color:white"
-        onclick="saveClient()"
-      >
-        Save client
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- INVOICE MODAL -->
-
-<div id="invoiceModal" class="modal">
-
-  <div class="modal-box">
-
-    <h3>Invoice</h3>
-
-    <div id="invoiceContent"></div>
-
-    <div class="modal-actions">
-
-      <button
-        style="background:#f7e9ee"
-        onclick="closeModal('invoiceModal')"
-      >
-        Close
-      </button>
-
-      <button
-        style="background:#f5e7cf"
-        onclick="downloadInvoicePDF()"
-      >
-        📄 PDF
-      </button>
-
-      <button
-        style="background:var(--pink);color:#fff"
-        onclick="shareInvoicePDF()"
-      >
-        Share
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
 
 <div id="toast" class="toast"></div>
 
-
 <script>
-/* =========================================================
-   PURE SHINE CLEANING MANAGER
-========================================================= */
 
-const DEFAULT_BANNER =
-  "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1400&q=90";
+const $=id=>document.getElementById(id);
 
-const DEFAULT_LOGO =
-  "data:image/svg+xml;charset=UTF-8," +
-  encodeURIComponent(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
-      <defs>
-        <radialGradient id="g">
-          <stop offset="0" stop-color="#fff8fb"/>
-          <stop offset=".55" stop-color="#f7cadc"/>
-          <stop offset="1" stop-color="#e996b7"/>
-        </radialGradient>
-      </defs>
-      <circle cx="200" cy="200" r="190" fill="url(#g)" stroke="#d8a15e" stroke-width="8"/>
-      <text x="200" y="175" text-anchor="middle"
-        font-family="Georgia" font-size="48"
-        fill="#a45372">PURE SHINE</text>
-      <text x="200" y="225" text-anchor="middle"
-        font-family="cursive" font-size="55"
-        fill="#a45372">Cleaning</text>
-      <text x="200" y="270" text-anchor="middle"
-        font-family="Arial" font-size="17"
-        letter-spacing="5"
-        fill="#9a526e">CLEAN HOME • PURE SHINE</text>
-      <text x="90" y="100" font-size="38">✦</text>
-      <text x="285" y="110" font-size="32">✦</text>
-      <text x="310" y="290" font-size="25">✦</text>
-    </svg>
-  `);
-
-
-/* =========================================================
-   DATA
-========================================================= */
-
-const defaultClients = [
-
-  {
-    id:"lottie",
-    name:"Lottie",
-    type:"Agency",
-    rate:16,
-    hours:2,
-    day:"Monday",
-    start:"13:00",
-    end:"15:00"
-  },
-
-  {
-    id:"christine",
-    name:"Christine",
-    type:"Private",
-    rate:18,
-    hours:3,
-    day:"Tuesday",
-    start:"09:30",
-    end:"12:30",
-    frequency:"fortnightly"
-  },
-
-  {
-    id:"matt",
-    name:"Matt",
-    type:"Agency",
-    rate:16,
-    hours:4,
-    day:"Tuesday",
-    start:"13:00",
-    end:"17:00"
-  },
-
-  {
-    id:"sonia",
-    name:"Sonia",
-    type:"Agency",
-    rate:16,
-    hours:5,
-    day:"Wednesday",
-    start:"09:00",
-    end:"14:00"
-  },
-
-  {
-    id:"gill",
-    name:"Gill",
-    type:"Agency",
-    rate:16,
-    hours:3,
-    day:"Wednesday",
-    start:"15:00",
-    end:"18:00"
-  },
-
-  {
-    id:"laura",
-    name:"Laura",
-    type:"Private",
-    rate:18,
-    hours:4,
-    day:"Thursday",
-    start:"09:00",
-    end:"13:00"
-  },
-
-  {
-    id:"hannah",
-    name:"Hannah",
-    type:"Agency",
-    rate:16,
-    hours:3,
-    day:"Thursday",
-    start:"13:00",
-    end:"16:00"
-  },
-
-  {
-    id:"meghan",
-    name:"Meghan",
-    type:"Private",
-    rate:18,
-    hours:3,
-    day:"Friday",
-    start:"09:00",
-    end:"12:00"
-  },
-
-  {
-    id:"joanna",
-    name:"Joanna",
-    type:"Private",
-    rate:18,
-    hours:2,
-    day:"Friday",
-    start:"13:00",
-    end:"15:00",
-    frequency:"fortnightly"
-  },
-
-  {
-    id:"sindu",
-    name:"Sindu",
-    type:"Agency",
-    rate:16,
-    hours:2,
-    day:"Friday",
-    start:"13:00",
-    end:"15:00",
-    frequency:"fortnightly"
-  },
-
-  {
-    id:"peter",
-    name:"Peter",
-    type:"Private",
-    rate:18,
-    hours:2,
-    frequency:"occasional"
-  },
-
-  {
-    id:"mike",
-    name:"Mike",
-    type:"Private",
-    rate:18,
-    hours:2,
-    frequency:"every3weeks"
-  }
-
+const DAYS=[
+ 'Sunday',
+ 'Monday',
+ 'Tuesday',
+ 'Wednesday',
+ 'Thursday',
+ 'Friday',
+ 'Saturday'
 ];
 
+/*
+ IMPORTANT:
+ Put these two image files beside this HTML file on GitHub:
 
-let state = {
+ logo.jpg
+ banner.jpg
 
-  settings:{
-    businessName:"Pure Shine Cleaning",
-    ownerName:"Georgiana",
-    privateRate:18,
-    agencyRate:16,
+ logo.jpg = your Pure Shine Cleaning logo
+ banner.jpg = your Pure Shine cleaning banner photo
+*/
 
-    jobReminders:true,
-    paymentReminders:true,
-    messageStyle:"Professional",
+const DEFAULT_LOGO='logo.jpg';
+const DEFAULT_BANNER='banner.jpg';
 
-    autoSave:true,
-    offerInvoice:true,
-    invoiceNumber:1,
 
-    weekStart:"Monday",
-    workingDay:8,
-    fortnightly:true,
+/* CLIENTS */
 
-    appSize:100,
-    largerText:false,
-    compact:false,
-    contrast:false,
+const CLIENTS=[
 
-    accent:"#e47aa2",
+ ['Lottie','Agency',16,2,'Monday','weekly'],
 
-    logo:DEFAULT_LOGO,
-    banner:DEFAULT_BANNER
-  },
+ ['Christine','Private',18,3,'Tuesday','fortnightly'],
 
-  clients:JSON.parse(JSON.stringify(defaultClients)),
+ ['Matt','Agency',16,4,'Tuesday','weekly'],
 
-  jobs:[],
+ ['Sonia','Agency',16,5,'Wednesday','weekly'],
 
-  holidays:[],
+ ['Gill','Agency',16,3,'Wednesday','weekly'],
 
-  timer:{
-    running:false,
-    start:null,
-    clientId:null,
-    elapsed:0
-  }
+ ['Laura','Private',18,4,'Thursday','weekly'],
+
+ ['Hannah','Agency',16,3,'Thursday','weekly'],
+
+ ['Meghan','Private',20,2,'Friday','weekly'],
+
+ ['Joanna','Private',18,2,'Friday','fortnightly'],
+
+ ['Sindu','Private',16,2,'Friday','fortnightly'],
+
+ ['Peter','Private',20,2,'Friday','occasional'],
+
+ ['Mike','Private',20,2,'Friday','threeweekly']
+
+].map((x,i)=>({
+
+ id:'c'+i,
+ name:x[0],
+ type:x[1],
+ rate:x[2],
+ hours:x[3],
+ day:x[4],
+ frequency:x[5],
+ active:true
+
+}));
+
+
+/* DEFAULT STATE */
+
+const initial={
+
+ settings:{
+
+  businessName:'Pure Shine Cleaning',
+
+  ownerName:'Georgiana Radu',
+
+  profile:DEFAULT_LOGO,
+
+  banner:DEFAULT_BANNER,
+
+  appSize:1,
+
+  largerText:false,
+
+  compact:false,
+
+  highContrast:false,
+
+  accent:'#d8789e',
+
+  autoSaveTimer:true,
+
+  offerInvoice:true,
+
+  fortnightly:true,
+
+  reminders:true,
+
+  reminderStyle:'Professional',
+
+  weekStart:'Monday',
+
+  workingHours:8,
+
+  invoicePrefix:'PS-0',
+
+  invoiceNext:1
+
+ },
+
+ clients:CLIENTS,
+
+ jobs:[],
+
+ holidays:[]
 
 };
 
 
-function loadState(){
+let state=load();
 
-  try{
+let timer={
+ running:false,
+ start:0,
+ clientId:null,
+ id:null
+};
 
-    const saved =
-      JSON.parse(localStorage.getItem("pureShineManagerState"));
 
-    if(saved){
+/* STORAGE */
 
-      state = {
-        ...state,
-        ...saved,
-        settings:{
-          ...state.settings,
-          ...(saved.settings || {})
-        },
-        clients:
-          saved.clients ||
-          JSON.parse(JSON.stringify(defaultClients)),
+function load(){
 
-        jobs:saved.jobs || [],
-        holidays:saved.holidays || [],
+ try{
 
-        timer:{
-          ...state.timer,
-          ...(saved.timer || {})
-        }
-      };
+  let x=JSON.parse(
+   localStorage.getItem('pureShineState')
+  );
 
-    }
+  if(!x)
+   return structuredClone(initial);
 
-  }catch(e){
+  return {
 
-    console.warn(e);
+   ...structuredClone(initial),
 
+   ...x,
+
+   settings:{
+    ...initial.settings,
+    ...x.settings
+   },
+
+   clients:x.clients||CLIENTS,
+
+   jobs:x.jobs||[],
+
+   holidays:x.holidays||[]
+
+  };
+
+ }catch(e){
+
+  return structuredClone(initial);
+
+ }
+
+}
+
+
+function save(){
+
+ localStorage.setItem(
+  'pureShineState',
+  JSON.stringify(state)
+ );
+
+}
+
+
+/* HELPERS */
+
+function esc(x=''){
+
+ return String(x).replace(
+  /[&<>"']/g,
+  m=>({
+   '&':'&amp;',
+   '<':'&lt;',
+   '>':'&gt;',
+   '"':'&quot;',
+   "'":'&#039;'
+  }[m])
+ );
+
+}
+
+
+function dateKey(d=new Date()){
+
+ return d.toISOString().slice(0,10);
+
+}
+
+
+function money(n){
+
+ return '£'+Number(n||0).toFixed(2);
+
+}
+
+
+function hm(m){
+
+ m=Math.round(m||0);
+
+ return Math.floor(m/60)+'h '+(m%60)+'m';
+
+}
+
+
+function fmtDate(s){
+
+ return new Date(
+  s+'T12:00:00'
+ ).toLocaleDateString(
+  'en-GB',
+  {
+   weekday:'long',
+   day:'numeric',
+   month:'long'
   }
+ );
 
 }
 
 
-function saveState(){
+function minsEnd(start,m){
 
-  localStorage.setItem(
-    "pureShineManagerState",
-    JSON.stringify(state)
+ let [h,mi]=start
+  .split(':')
+  .map(Number);
+
+ let n=h*60+mi+m;
+
+ return String(
+  Math.floor(n/60)%24
+ ).padStart(2,'0')
+ +':'+
+ String(n%60).padStart(2,'0');
+
+}
+
+
+/* FORTNIGHTLY LOGIC */
+
+function isAlt(c,date){
+
+ if(c.frequency==='weekly')
+  return true;
+
+ if(c.frequency==='occasional')
+  return false;
+
+ if(c.frequency==='threeweekly'){
+
+  let a=new Date(
+   '2026-09-18T12:00:00'
+  );
+
+  let b=new Date(
+   date+'T12:00:00'
+  );
+
+  return Math.floor(
+   (b-a)/86400000/7
+  )%3===0;
+
+ }
+
+ if(c.frequency==='fortnightly'){
+
+  let a=new Date(
+   '2026-10-02T12:00:00'
+  );
+
+  let b=new Date(
+   date+'T12:00:00'
+  );
+
+  let w=Math.floor(
+   (b-a)/86400000/7
+  );
+
+  if(c.name==='Joanna')
+   return w%2===0;
+
+  if(c.name==='Sindu')
+   return w%2!==0;
+
+  return w%2===0;
+
+ }
+
+ return true;
+
+}
+
+
+/* RECURRING JOBS */
+
+function recurring(date=dateKey()){
+
+ return state.clients
+
+  .filter(c=>
+
+   c.active&&
+
+   c.day===
+DAYS[
+    new Date(
+     date+'T12:00:00'
+    ).getDay()
+   ]&&
+
+   isAlt(c,date)
+
+  )
+
+  .map(c=>({
+
+   id:'r-'+c.id+'-'+date,
+
+   clientId:c.id,
+
+   name:c.name,
+
+   type:c.type,
+
+   rate:c.rate,
+
+   hours:c.hours,
+
+   minutes:c.hours*60,
+
+   date,
+
+   start:'09:00',
+
+   end:minsEnd(
+    '09:00',
+    c.hours*60
+   ),
+
+   payment:'unpaid',
+
+   recurring:true
+
+  }))
+
+  .filter(j=>
+   !state.holidays.some(
+    h=>date>=h.start&&date<=h.end
+   )
   );
 
 }
 
 
-loadState();
+function jobsFor(date=dateKey()){
 
+ return [
 
-/* =========================================================
-   INITIALISE
-========================================================= */
+  ...recurring(date),
 
-function init(){
+  ...state.jobs.filter(
+   j=>j.date===date&&!j.recurring
+  )
 
-  applyAllSettings();
-
-  renderLogo();
-
-  renderBanner();
-
-  renderHome();
-
-  renderSchedule();
-
-  renderClients();
-
-  renderEarnings();
-
-  populateJobClients();
-
-  updateSettingsUI();
-
-  if(state.timer.running){
-
-    startTimerInterval();
-
-  }
+ ];
 
 }
 
 
-function enterApp(){
+function jobTotal(j){
 
-  document.getElementById("welcome").style.display="none";
-  document.getElementById("mainApp").style.display="block";
-
-  localStorage.setItem("pureShineStarted","1");
-
-  init();
-
-}
-
-
-if(localStorage.getItem("pureShineStarted")){
-
-  document.getElementById("welcome").style.display="none";
-  document.getElementById("mainApp").style.display="block";
-
-  init();
+ return (
+  Number(
+   j.minutes??j.hours*60
+  )/60
+ )*Number(j.rate);
 
 }
 
 
-/* =========================================================
-   PAGE NAVIGATION
-========================================================= */
+function stats(date=dateKey()){
 
-function showPage(page){
+ let js=state.jobs.filter(
+  j=>j.date===date
+ );
 
-  document.querySelectorAll(".page")
-    .forEach(p=>p.classList.remove("active"));
+ let m=js.reduce(
+  (a,j)=>a+
+  Number(j.minutes??j.hours*60),
+  0
+ );
 
-  document.getElementById(page+"Page")
-    .classList.add("active");
+ let e=js.reduce(
+  (a,j)=>a+jobTotal(j),
+  0
+ );
 
-  document.querySelectorAll(".nav-btn")
-    .forEach(btn=>{
-      btn.classList.toggle(
-        "active",
-        btn.dataset.page===page
-      );
-    });
+ return{
 
-  if(page==="home") renderHome();
-  if(page==="schedule") renderSchedule();
-  if(page==="clients") renderClients();
-  if(page==="earnings") renderEarnings();
-  if(page==="settings") updateSettingsUI();
+  count:js.length,
 
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
+  m,
 
-}
+  e,
 
+  available:Math.max(
+   0,
+   Number(state.settings.workingHours)*60-m
+  )
 
-/* =========================================================
-   DATE
-========================================================= */
-
-function localDateString(date=new Date()){
-
-  const y=date.getFullYear();
-  const m=String(date.getMonth()+1).padStart(2,"0");
-  const d=String(date.getDate()).padStart(2,"0");
-
-  return `${y}-${m}-${d}`;
+ };
 
 }
 
 
-function prettyDate(date){
+/* APPLY SETTINGS */
 
-  return new Intl.DateTimeFormat(
-    "en-GB",
-    {
-      weekday:"long",
-      day:"numeric",
-      month:"long"
-    }
-  ).format(date);
+function applyUI(){
 
-}
+ let s=state.settings;
 
+ document.documentElement.style
+  .setProperty('--pink',s.accent);
 
-/* =========================================================
-   SCHEDULE GENERATOR
-========================================================= */
+ document.body.classList.toggle(
+  'high',
+  s.highContrast
+ );
 
-function dayName(date){
+ document.body.classList.toggle(
+  'large',
+  s.largerText
+ );
 
-  return new Intl.DateTimeFormat(
-    "en-GB",
-    {weekday:"long"}
-  ).format(date);
-
-}
-
-
-function recurringJobsForDate(date=new Date()){
-
-  const day=dayName(date);
-
-  const jobs=[];
-
-  state.clients.forEach(client=>{
-
-    if(client.day!==day) return;
-
-    if(client.frequency==="occasional") return;
-
-    if(client.frequency==="every3weeks"){
-
-      return;
-
-    }
-
-    if(client.frequency==="fortnightly" &&
-       state.settings.fortnightly){
-
-      const week=Math.floor(
-        date.getTime()/(7*24*60*60*1000)
-      );
-
-      /*
-        Joanna is the first week.
-        Sindu is the following week.
-      */
-
-      const parity=Math.abs(week)%2;
-
-      if(client.id==="joanna" && parity!==0) return;
-      if(client.id==="sindu" && parity===0) return;
-
-    }
-
-    jobs.push({
-
-      id:"scheduled_"+client.id+"_"+localDateString(date),
-
-      clientId:client.id,
-
-      client:client.name,
-
-      date:localDateString(date),
-
-      start:client.start || "09:00",
-
-      end:client.end ||
-        timeAfter(client.start || "09:00",client.hours),
-
-      rate:Number(client.rate),
-
-      type:client.type,
-
-      hours:Number(client.hours),
-
-      generated:true,
-
-      payment:"unpaid"
-
-    });
-
-  });
-
-  return jobs;
-
-}
-
-
-function timeAfter(start,hours){
-
-  const [h,m]=start.split(":").map(Number);
-
-  const total=h*60+m+hours*60;
-
-  return String(Math.floor(total/60)%24).padStart(2,"0")
-    +":"+String(Math.round(total%60)).padStart(2,"0");
-
-}
-
-
-function jobsForDate(date){
-
-  const recurring=recurringJobsForDate(date);
-
-  const saved=state.jobs.filter(
-    j=>j.date===localDateString(date)
+ document.documentElement.style
+  .setProperty(
+   '--scale',
+   Number(s.appSize||1)
   );
 
-  /*
-    Saved jobs replace matching generated jobs.
-  */
-
-  const result=recurring.map(g=>{
-
-    const existing=saved.find(
-      j=>j.clientId===g.clientId
-    );
-
-    return existing || g;
-
-  });
-
-  saved.forEach(s=>{
-
-    if(!result.some(r=>r.id===s.id)){
-
-      result.push(s);
-
-    }
-
-  });
-
-  return result.sort((a,b)=>
-    String(a.start).localeCompare(String(b.start))
-  );
+ $('profileImg').src=
+  s.profile||DEFAULT_LOGO;
 
 }
 
 
-/* =========================================================
-   HOME
-========================================================= */
+/* RENDER EVERYTHING */
 
-function renderHome(){
+function render(){
 
-  const today=new Date();
+ applyUI();
 
-  document.getElementById("dateTitle")
-    .textContent=prettyDate(today);
+ home();
 
-  const jobs=jobsForDate(today);
+ schedule();
 
-  const worked=jobs.reduce(
-    (sum,j)=>sum+Number(j.hours||0),
-    0
-  );
+ clients();
 
-  const earned=jobs.reduce(
-    (sum,j)=>sum+
-      Number(j.hours||0)*Number(j.rate||0),
-    0
-  );
+ earnings();
 
-  const available=Math.max(
-    0,
-    Number(state.settings.workingDay)-worked
-  );
-
-  document.getElementById("jobsToday")
-    .textContent=jobs.length;
-
-  document.getElementById("hoursToday")
-    .textContent=formatHours(worked);
-
-  document.getElementById("earnedToday")
-    .textContent=money(earned);
-
-  document.getElementById("availableToday")
-    .textContent=formatHours(available);
-
-  const box=document.getElementById("todaySchedule");
-
-  if(!jobs.length){
-
-    box.innerHTML=`
-
-      <div style="
-        text-align:center;
-        padding:35px 15px;
-      ">
-
-        <div style="font-size:46px">
-          💗
-        </div>
-
-        <div style="
-          font-size:18px;
-          font-weight:700;
-          margin-top:10px;
-        ">
-          No cleaning jobs today 🌸
-        </div>
-
-        <div style="
-          color:#999;
-          margin-top:6px;
-        ">
-          Add one with the + button.
-        </div>
-
-        <button
-          class="add-job-wide"
-          onclick="openJobModal()"
-        >
-          ＋ Add cleaning job
-        </button>
-
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  box.innerHTML=jobs.map(job=>jobHTML(job)).join("");
-
-  const add=document.createElement("button");
-
-  add.className="add-job-wide";
-  add.textContent="+ Add cleaning job";
-  add.onclick=openJobModal;
-
-  box.appendChild(add);
+ settings();
 
 }
 
 
-function jobHTML(job){
+/* HOME */
 
-  const amount=
-    Number(job.hours||0)*
-    Number(job.rate||0);
+function home(){
 
-  const paid=job.payment==="paid";
+ let d=dateKey();
 
-  return `
+ let st=stats(d);
 
-    <div class="job-card">
+ let js=jobsFor(d);
 
-      <div class="job-top">
+ $('home').innerHTML=`
 
-        <div>
-          <div class="job-name">
-            ${escapeHtml(job.client)}
-          </div>
+  <div class="date">
 
-          <div class="job-type">
-            ${escapeHtml(job.type || "Private")}
-          </div>
-        </div>
+   <div>
 
-        <div class="job-time">
-          ${job.start} – ${job.end}
-        </div>
+    <h1>${fmtDate(d)}</h1>
 
-      </div>
+    <p>
+     Let's make today productive ✨
+    </p>
+
+   </div>
+
+   <div class="heart">♡</div>
+
+  </div>
 
 
-      <div class="job-details">
+  <div class="stats">
 
-        ${formatHours(job.hours)}
-        ·
-        ${money(amount)}
+   <div class="stat">
+    <span class="ico">🧹</span>
+    <b>${st.count}</b>
+    <span>Jobs</span>
+   </div>
 
-        ·
+   <div class="stat">
+    <span class="ico">◷</span>
+    <b>${hm(st.m)}</b>
+    <span>Hours</span>
+   </div>
 
-        <span style="
-          color:${paid ? "#3a7a55" : "#a35773"};
-          font-weight:800;
-        ">
-          ${paid ? "✓ Paid" : "Not paid"}
-        </span>
+   <div class="stat">
+    <span class="ico">£</span>
+    <b>${money(st.e)}</b>
+    <span>Earned</span>
+   </div>
 
-      </div>
+   <div class="stat">
+    <span class="ico">☼</span>
+    <b>${hm(st.available)}</b>
+    <span>Available</span>
+   </div>
+
+  </div>
 
 
-      <div class="job-actions">
+  <div class="sect">
 
-        <button
-          class="btn btn-primary"
-          onclick="startTimerFor('${job.clientId}')"
-        >
-          ▶ Start
-        </button>
+   Today's schedule
 
-        <button
-          class="btn btn-gold"
-          onclick="openInvoice('${job.id}')"
-        >
-          🧾 PDF
-        </button>
+   <small onclick="go('schedule')">
+    See all
+   </small>
 
-        <button
-          class="btn btn-soft"
-          onclick="editJob('${job.id}')"
-        >
-          Edit
-        </button>
+  </div>
 
-        <button
-          class="paid-toggle ${paid ? "paid":""}"
-          onclick="togglePaid('${job.id}')"
-        >
-          ${paid ? "✓ PAID" : "☐ NOT PAID"}
-        </button>
 
-      </div>
+  <div class="schedule">
+
+   ${
+    js.length
+
+    ?js.map(jobHTML).join('')
+
+    :`
+     <div class="empty">
+      ♡<br>
+      <b>No cleaning jobs today</b><br>
+      Add one with the + button.
+     </div>
+    `
+   }
+
+   <button
+    class="add"
+    onclick="openJob()"
+   >
+    ＋ Add cleaning job
+   </button>
+
+  </div>
+
+
+  <div class="sect">
+   Quick actions
+  </div>
+
+
+  <div class="quickgrid">
+
+   <button
+    class="quick blue"
+    onclick="startFromHome()"
+   >
+    ◷ &nbsp; Start cleaning
+   </button>
+
+   <button
+    class="quick green"
+    onclick="go('clients')"
+   >
+    ♧ &nbsp; Clients
+   </button>
+
+   <button
+    class="quick qpink"
+    onclick="go('schedule')"
+   >
+    ▣ &nbsp; Schedule
+   </button>
+
+   <button
+    class="quick yellow"
+    onclick="findFreeTime()"
+   >
+    ⌕ &nbsp; Find free time
+   </button>
+
+   <button
+    class="quick purple"
+    onclick="go('earnings')"
+   >
+    ▥ &nbsp; Earnings
+   </button>
+
+   <button
+    class="quick peach"
+    onclick="go('schedule');setTimeout(addHoliday,50)"
+   >
+    🏖 &nbsp; Holidays
+   </button>
+
+  </div>
+
+
+  <img
+   class="banner"
+   src="${esc(
+    state.settings.banner||DEFAULT_BANNER
+   )}"
+   onerror="this.src='banner.jpg'"
+  >
+
+ `;
+
+}
+
+
+/* JOB CARD */
+
+function jobHTML(j){
+
+ let paid=j.payment==='paid';
+
+ return `
+
+  <div class="job">
+
+   <div class="jobhead">
+
+    <div>
+
+     <div class="jobname">
+      ${esc(j.name)}
+     </div>
+
+     <div class="meta">
+      ${esc(j.type)}
+     </div>
 
     </div>
 
+    <div class="jobtime">
+     ${esc(j.start||'09:00')}
+     –
+     ${esc(
+      j.end||
+      minsEnd(
+       '09:00',
+       j.minutes||j.hours*60
+      )
+     )}
+    </div>
+
+   </div>
+
+
+   <div class="money">
+
+    ${hm(j.minutes??j.hours*60)}
+    ·
+    ${money(jobTotal(j))}
+    ·
+
+    <strong>
+     ${paid?'✓ Paid':'Not paid'}
+    </strong>
+
+   </div>
+
+
+   <div class="jobactions">
+
+    <button
+     class="btn primary"
+     onclick="startJob('${j.clientId}')"
+    >
+     ▶ Start
+    </button>
+
+    <button
+     class="btn pdf"
+     onclick='invoice(${JSON.stringify(j)})'
+    >
+     📄 PDF
+    </button>
+
+    <button
+     class="btn"
+     onclick='editJob(${JSON.stringify(j)})'
+    >
+     Edit
+    </button>
+
+    <button
+     class="btn ${paid?'paid':'unpaid'}"
+     onclick="togglePaid('${j.id}',${j.recurring})"
+    >
+     ${paid?'✓ PAID':'□ NOT PAID'}
+    </button>
+
+   </div>
+
+  </div>
+
+ `;
+
+}
+
+
+/* SCHEDULE */
+
+function schedule(){
+
+ let d=dateKey();
+
+ let js=jobsFor(d);
+
+ $('schedule').innerHTML=`
+
+  <h2 class="title">
+   Schedule
+  </h2>
+
+
+  <div class="date">
+
+   <div>
+    <h1>${fmtDate(d)}</h1>
+    <p>
+     Weekly schedule & cleaning jobs
+    </p>
+   </div>
+
+   <div class="heart">♡</div>
+
+  </div>
+
+
+  <div
+   class="schedule"
+   style="margin-top:14px"
+  >
+
+   ${
+    js.length
+    ?js.map(jobHTML).join('')
+    :'<div class="empty">No jobs scheduled.</div>'
+   }
+
+   <button
+    class="add"
+    onclick="openJob()"
+   >
+    ＋ Add cleaning job
+   </button>
+
+  </div>
+
+
+  <div class="sect">
+   Calendar
+  </div>
+
+  <div class="calendar">
+   ${calendarDays()}
+  </div>
+
+
+  <div class="sect">
+   Holidays
+  </div>
+
+  ${
+   state.holidays.length
+
+   ?state.holidays.map(
+    (h,i)=>`
+
+     <div class="client">
+
+      <div class="avatar">
+       🏖
+      </div>
+
+      <div class="ci">
+
+       <b>${esc(h.name)}</b>
+
+       <span>
+        ${h.start} → ${h.end}
+       </span>
+
+      </div>
+
+      <button
+       class="btn"
+       onclick="removeHoliday(${i})"
+      >
+       Delete
+      </button>
+
+     </div>
+
+    `
+   ).join('')
+
+   :`
+    <div class="empty">
+     No holidays added.
+    </div>
+   `
+  }
+
+
+  <button
+   class="add"
+   style="margin-top:10px"
+   onclick="addHoliday()"
+  >
+   ＋ Add holiday
+  </button>
+
+ `;
+
+}
+
+
+function calendarDays(){
+
+ let d=new Date();
+
+ let first=new Date(
+  d.getFullYear(),
+  d.getMonth(),
+  1
+ );
+
+ let days=new Date(
+  d.getFullYear(),
+  d.getMonth()+1,
+  0
+ ).getDate();
+
+ let out='';
+
+ for(
+  let i=0;
+  i<first.getDay();
+  i++
+ ){
+
+  out+='<div></div>';
+
+ }
+
+ for(
+  let n=1;
+  n<=days;
+  n++
+ ){
+
+  let k=dateKey(
+   new Date(
+    d.getFullYear(),
+    d.getMonth(),
+    n
+   )
+  );
+
+  let has=jobsFor(k).length;
+
+  out+=`
+
+   <div class="day ${has?'has':''}">
+
+    <strong>${n}</strong>
+
+    ${has?'🧹':''}
+
+   </div>
+
   `;
 
+ }
+
+ return out;
+
 }
 
 
-/* =========================================================
-   SCHEDULE PAGE
-========================================================= */
+/* CLIENTS */
 
-function renderSchedule(){
+function clients(){
 
-  const container=
-    document.getElementById("scheduleList");
+ $('clients').innerHTML=`
 
-  let html="";
+  <h2 class="title">
+   Clients
+  </h2>
 
-  for(let i=0;i<14;i++){
 
-    const date=new Date();
+  <button
+   class="add"
+   onclick="openClient()"
+  >
+   ＋ Add client
+  </button>
 
-    date.setDate(date.getDate()+i);
 
-    const jobs=jobsForDate(date);
+  <div
+   class="list"
+   style="margin-top:12px"
+  >
 
-    if(!jobs.length) continue;
+   ${
+    state.clients
+    .filter(c=>c.active)
+    .map(c=>`
 
-    html+=`
+     <div class="client">
 
-      <div class="section-title">
-        ${prettyDate(date)}
+      <div class="avatar">
+       ${esc(c.name[0])}
       </div>
 
-      ${jobs.map(job=>`
-        <div class="list-card">
-          ${jobHTML(job)}
-        </div>
-      `).join("")}
+      <div class="ci">
 
-    `;
+       <b>
+        ${esc(c.name)}
+       </b>
+
+       <span>
+        ${c.type}
+        ·
+        ${c.frequency}
+        ·
+        ${c.day}
+        ·
+        ${c.hours}h
+       </span>
+
+      </div>
+
+      <div class="rate">
+       ${money(c.rate)}/h
+      </div>
+
+      <button
+       class="btn"
+       onclick='editClient(${JSON.stringify(c)})'
+      >
+       Edit
+      </button>
+
+     </div>
+
+    `)
+    .join('')
+   }
+
+  </div>
+
+ `;
+
+}
+
+
+/* EARNINGS */
+
+function earnings(){
+
+ let jobs=state.jobs
+  .slice()
+  .sort(
+   (a,b)=>b.date.localeCompare(a.date)
+  );
+
+ let total=jobs.reduce(
+  (a,j)=>a+jobTotal(j),
+  0
+ );
+
+ let paid=jobs
+  .filter(j=>j.payment==='paid')
+  .reduce(
+   (a,j)=>a+jobTotal(j),
+   0
+  );
+
+ let mins=jobs.reduce(
+  (a,j)=>a+
+  Number(j.minutes??j.hours*60),
+  0
+ );
+
+ $('earnings').innerHTML=`
+
+  <h2 class="title">
+   Earnings
+  </h2>
+
+
+  <div class="earnbox">
+
+   <div class="earn">
+    Total
+    <b>${money(total)}</b>
+   </div>
+
+   <div class="earn">
+    Paid
+    <b>${money(paid)}</b>
+   </div>
+
+   <div class="earn">
+    Owed
+    <b>${money(total-paid)}</b>
+   </div>
+
+  </div>
+
+
+  <div
+   class="earnbox"
+   style="margin-top:10px"
+  >
+
+   <div class="earn">
+    Hours
+    <b>${hm(mins)}</b>
+   </div>
+
+   <div class="earn">
+    Jobs
+    <b>${jobs.length}</b>
+   </div>
+
+   <div class="earn">
+    Month
+    <b>
+     ${money(
+      jobs
+      .filter(
+       j=>
+       j.date.slice(0,7)===
+       dateKey().slice(0,7)
+      )
+      .reduce(
+       (a,j)=>a+jobTotal(j),
+       0
+      )
+     )}
+    </b>
+   </div>
+
+  </div>
+
+
+  <div class="sect">
+   Job history
+  </div>
+
+
+  <div class="list">
+
+   ${
+    jobs.length
+
+    ?jobs.map(j=>`
+
+     <div class="client">
+
+      <div class="avatar">
+       🧹
+      </div>
+
+      <div class="ci">
+
+       <b>
+        ${esc(j.name)}
+       </b>
+
+       <span>
+        ${j.date}
+        ·
+        ${hm(j.minutes??j.hours*60)}
+        ·
+        ${money(jobTotal(j))}
+       </span>
+
+      </div>
+
+      <button
+       class="btn ${j.payment==='paid'?'paid':'unpaid'}"
+       onclick="togglePaid('${j.id}',false)"
+      >
+       ${j.payment==='paid'
+        ?'✓ PAID'
+        :'□ NOT PAID'}
+      </button>
+
+      <button
+       class="btn"
+       onclick='editJob(${JSON.stringify(j)})'
+      >
+       Edit
+      </button>
+
+     </div>
+
+    `).join('')
+
+    :`
+     <div class="empty">
+      Completed jobs will appear here.
+     </div>
+    `
+   }
+
+  </div>
+
+ `;
+
+}
+
+
+/* SETTINGS */
+
+function settings(){
+
+ let s=state.settings;
+
+ $('settings').innerHTML=`
+
+  <h2 class="title">
+   Settings
+  </h2>
+
+
+  <div class="settings">
+
+
+   <div class="stitle">
+    Business
+   </div>
+
+
+   ${setting(
+    '🏢',
+    'Business name',
+    'Your cleaning business',
+    `<input
+      id="businessName"
+      type="text"
+      value="${esc(s.businessName)}"
+     >`
+   )}
+
+
+   ${setting(
+    '👤',
+    'Owner name',
+    'Name shown on invoices',
+    `<input
+      id="ownerName"
+      type="text"
+      value="${esc(s.ownerName)}"
+     >`
+   )}
+
+
+   <div class="stitle">
+    Payment reminders
+   </div>
+
+
+   ${setting(
+    '💷',
+    'Payment reminders',
+    'Remind clients about money owed',
+    sw('reminders')
+   )}
+
+
+   ${setting(
+    '💌',
+    'Reminder message style',
+    'Choose the default message',
+    `
+     <select
+      onchange="change('reminderStyle',this.value)"
+     >
+      <option
+       ${s.reminderStyle==='Professional'?'selected':''}
+      >
+       Professional
+      </option>
+
+      <option
+       ${s.reminderStyle==='Friendly'?'selected':''}
+      >
+       Friendly
+      </option>
+
+      <option
+       ${s.reminderStyle==='Short'?'selected':''}
+      >
+       Short
+      </option>
+     </select>
+    `
+   )}
+
+
+   <div class="stitle">
+    Cleaning timer
+   </div>
+
+
+   ${setting(
+    '⏱️',
+    'Auto-save timer jobs',
+    'Save a completed timer automatically',
+    sw('autoSaveTimer')
+   )}
+
+
+   ${setting(
+    '🧾',
+    'Offer invoice after timer',
+    'Show invoice option after stopping',
+    sw('offerInvoice')
+   )}
+
+
+   ${setting(
+    '🔢',
+    'Invoice numbering',
+    s.invoicePrefix+
+    String(s.invoiceNext).padStart(5,'0'),
+    `<button
+      class="btn"
+      onclick="editInvoicePrefix()"
+     >
+      Edit
+     </button>`
+   )}
+
+
+   <div class="stitle">
+    Schedule
+   </div>
+
+
+   ${setting(
+    '📅',
+    'Week starts on',
+    'Choose your calendar layout',
+    `
+     <select
+      onchange="change('weekStart',this.value)"
+     >
+      <option>Monday</option>
+      <option>Sunday</option>
+     </select>
+    `
+   )}
+
+
+   ${setting(
+    '⏰',
+    'Default working day',
+    'Used for available-hours calculation',
+    `
+     <select
+      onchange="change('workingHours',this.value)"
+     >
+
+      ${
+       [4,5,6,7,8,9,10,12]
+       .map(n=>`
+
+        <option
+         ${s.workingHours==n?'selected':''}
+        >
+         ${n} hours
+        </option>
+
+       `)
+       .join('')
+      }
+
+     </select>
+    `
+   )}
+
+
+   ${setting(
+    '🔄',
+    'Fortnightly clients',
+    'Automatically alternate eligible clients',
+    sw('fortnightly')
+   )}
+
+
+   <div class="stitle">
+    Display
+   </div>
+
+
+   ${setting(
+    '🔍',
+    'App size',
+    'Make everything larger or smaller',
+    `
+     <select
+      onchange="setSize(this.value)"
+     >
+
+      ${
+       [.9,1,1.1,1.2,1.3,1.5,1.75,2]
+       .map(n=>`
+
+        <option
+         value="${n}"
+         ${s.appSize==n?'selected':''}
+        >
+         ${n*100}%
+        </option>
+
+       `)
+       .join('')
+      }
+
+     </select>
+    `
+   )}
+
+
+   ${setting(
+    '🔤',
+    'Larger text',
+    'Increase readability',
+    sw('largerText')
+   )}
+
+
+   ${setting(
+    '↕️',
+    'Compact layout',
+    'Fit more information on screen',
+    sw('compact')
+   )}
+
+
+   ${setting(
+    '◐',
+    'High contrast',
+    'Make text and borders clearer',
+    sw('highContrast')
+   )}
+
+
+   <div class="stitle">
+    Appearance
+   </div>
+
+
+   <div class="setting">
+
+    <div class="si">
+     🎨
+    </div>
+
+    <div class="smain">
+
+     <b>
+      Accent colour
+     </b>
+
+     <span>
+      Change the main pink colour
+     </span>
+
+    </div>
+
+    <div class="dots">
+
+     ${
+      [
+       '#d8789e',
+       '#d993b3',
+       '#c987a1',
+       '#d8a25e'
+      ]
+      .map(c=>`
+
+       <button
+        class="dot ${s.accent===c?'active':''}"
+        style="background:${c}"
+        onclick="accent('${c}')"
+       ></button>
+
+      `)
+      .join('')
+     }
+
+    </div>
+
+   </div>
+
+
+   <div class="stitle">
+    App photos
+   </div>
+
+
+   <div class="photos">
+
+
+    <div class="photo">
+
+     <img
+      src="${esc(s.profile)}"
+      onerror="this.src='logo.jpg'"
+     >
+
+     <b>
+      Profile / icon
+     </b>
+
+     <span>
+      Used beside Pure Shine
+     </span>
+
+     <label class="upload">
+
+      Choose photo
+
+      <input
+       type="file"
+       accept="image/*"
+       onchange="photo('profile',this)"
+      >
+
+     </label>
+
+    </div>
+
+
+    <div class="photo">
+
+     <img
+      src="${esc(s.banner)}"
+      onerror="this.src='banner.jpg'"
+     >
+
+     <b>
+      Home banner
+     </b>
+
+     <span>
+      Pure Shine cleaning banner
+     </span>
+
+     <label class="upload">
+
+      Choose photo
+
+      <input
+       type="file"
+       accept="image/*"
+       onchange="photo('banner',this)"
+      >
+
+     </label>
+
+    </div>
+
+
+   </div>
+
+
+   <button
+    class="btn"
+    onclick="restorePhotos()"
+   >
+    ↻ Restore Pure Shine photos
+   </button>
+
+
+   <button
+    class="save"
+    onclick="saveBusiness()"
+   >
+    💾 Save all settings
+   </button>
+
+
+   <div class="stitle">
+    Data & backup
+   </div>
+
+
+   ${setting(
+    '💾',
+    'Backup my data',
+    'Clients, jobs, holidays and settings',
+    `<button
+      class="btn"
+      onclick="backup()"
+     >
+      Export
+     </button>`
+   )}
+
+
+   ${setting(
+    '📅',
+    'Export calendar',
+    'Create a calendar file from your jobs',
+    `<button
+      class="btn"
+      onclick="exportCalendar()"
+     >
+      Export
+     </button>`
+   )}
+
+
+   ${setting(
+    '↻',
+    'Reset application',
+    'Restore the default setup',
+    `<button
+      class="btn"
+      onclick="resetApp()"
+     >
+      Reset
+     </button>`
+   )}
+
+
+  </div>
+
+ `;
+
+}
+
+
+function setting(i,t,d,right){
+
+ return `
+
+  <div class="setting">
+
+   <div class="si">
+    ${i}
+   </div>
+
+   <div class="smain">
+
+    <b>${t}</b>
+
+    <span>${d}</span>
+
+   </div>
+
+   ${right}
+
+  </div>
+
+ `;
+
+}
+
+
+function sw(k){
+
+ return `
+
+  <button
+   class="switch ${state.settings[k]?'on':''}"
+   onclick="toggle('${k}')"
+  >
+   <i></i>
+  </button>
+
+ `;
+
+}
+
+
+/* NAVIGATION */
+
+function go(p){
+
+ document
+  .querySelectorAll('.page')
+  .forEach(x=>x.classList.remove('active'));
+
+ $(p).classList.add('active');
+
+ document
+  .querySelectorAll('.nav button')
+  .forEach(x=>x.classList.remove('active'));
+
+ $('n-'+p).classList.add('active');
+
+ scrollTo(0,0);
+
+ render();
+
+}
+
+
+/* SETTINGS ACTIONS */
+
+function toggle(k){
+
+ state.settings[k]=!state.settings[k];
+
+ save();
+
+ render();
+
+ toast('Saved ✓');
+
+}
+
+
+function change(k,v){
+
+ state.settings[k]=v;
+
+ save();
+
+ render();
+
+ toast('Saved ✓');
+
+}
+
+
+function setSize(v){
+
+ state.settings.appSize=Number(v);
+
+ save();
+
+ render();
+
+ toast(
+  'App size '+
+  Math.round(v*100)+
+  '%'
+ );
+
+}
+
+
+function accent(c){
+
+ state.settings.accent=c;
+
+ save();
+
+ render();
+
+ toast('Accent colour saved ✓');
+
+}
+
+
+function saveBusiness(){
+
+ state.settings.businessName=
+  $('businessName').value.trim()
+  ||
+  'Pure Shine Cleaning';
+
+ state.settings.ownerName=
+  $('ownerName').value.trim()
+  ||
+  'Georgiana Radu';
+
+ save();
+
+ render();
+
+ toast('All settings saved ✓');
+
+}
+
+
+/* PHOTO SETTINGS */
+
+function photo(type,input){
+
+ let f=input.files?.[0];
+
+ if(!f)return;
+
+ let r=new FileReader();
+
+ r.onload=()=>{
+
+  state.settings[type]=r.result;
+
+  save();
+
+  render();
+
+  toast('Photo saved ✓');
+
+ };
+
+ r.readAsDataURL(f);
+
+}
+
+
+function restorePhotos(){
+
+ state.settings.profile=DEFAULT_LOGO;
+
+ state.settings.banner=DEFAULT_BANNER;
+
+ save();
+
+ render();
+
+ toast('Photos restored ✓');
+
+}
+
+
+/* JOB MODAL */
+
+function openJob(j=null){
+
+ show(`
+
+  <h2>
+   ${j?'Edit':'Add'} cleaning job
+  </h2>
+
+
+  <div class="form">
+
+
+   <label>
+    Client
+
+    <select id="jc">
+
+     ${
+      state.clients
+      .filter(c=>c.active)
+      .map(c=>`
+
+       <option
+        value="${c.id}"
+        ${j?.clientId===c.id?'selected':''}
+       >
+        ${esc(c.name)}
+       </option>
+
+      `)
+      .join('')
+     }
+
+    </select>
+
+   </label>
+
+
+   <div class="row">
+
+    <label>
+     Date
+     <input
+      id="jd"
+      type="date"
+      value="${j?.date||dateKey()}"
+     >
+    </label>
+
+
+    <label>
+     Hours
+     <input
+      id="jh"
+      type="number"
+      min=".25"
+      step=".25"
+      value="${j?.hours||2}"
+     >
+    </label>
+
+   </div>
+
+
+   <div class="row">
+
+    <label>
+     Start
+     <input
+      id="js"
+      type="time"
+      value="${j?.start||'09:00'}"
+     >
+    </label>
+
+
+    <label>
+     End
+     <input
+      id="je"
+      type="time"
+      value="${j?.end||'11:00'}"
+     >
+    </label>
+
+   </div>
+
+
+   <label>
+    Payment
+
+    <select id="jp">
+
+     <option
+      value="unpaid"
+      ${j?.payment!=='paid'?'selected':''}
+     >
+      Not paid
+     </option>
+
+     <option
+      value="paid"
+      ${j?.payment==='paid'?'selected':''}
+     >
+      Paid
+     </option>
+
+    </select>
+
+   </label>
+
+
+  </div>
+
+
+  <div class="ma">
+
+   <button
+    class="btn"
+    onclick="closeModal()"
+   >
+    Cancel
+   </button>
+
+   <button
+    class="btn primary"
+    onclick='saveJob(${j?JSON.stringify(j):'null'})'
+   >
+    Save job
+   </button>
+
+  </div>
+
+ `);
+
+}
+
+
+function saveJob(old){
+
+ let c=state.clients.find(
+  x=>x.id==$('jc').value
+ );
+
+ let h=Number($('jh').value);
+
+ let o={
+
+  id:old?.id||'j'+Date.now(),
+
+  clientId:c.id,
+
+  name:c.name,
+
+  type:c.type,
+
+  rate:c.rate,
+
+  hours:h,
+
+  minutes:Math.round(h*60),
+
+  date:$('jd').value,
+
+  start:$('js').value,
+
+  end:$('je').value,
+
+  payment:$('jp').value,
+
+  recurring:false
+
+ };
+
+ state.jobs=old
+
+  ?state.jobs.map(
+   x=>x.id===old.id?o:x
+  )
+
+  :[...state.jobs,o];
+
+ save();
+
+ closeModal();
+
+ render();
+
+ toast('Job saved ✓');
+
+}
+
+
+function editJob(j){
+
+ openJob(j);
+
+}
+
+
+/* PAID / NOT PAID */
+
+function togglePaid(id,rec){
+
+ let j=state.jobs.find(
+  x=>x.id===id
+ );
+
+ if(!j&&rec){
+
+  let r=jobsFor(dateKey()).find(
+   x=>x.id===id
+  );
+
+  if(r){
+
+   j={
+    ...r,
+    id:'j'+Date.now(),
+    recurring:false
+   };
+
+   state.jobs.push(j);
 
   }
 
-  container.innerHTML=
-    html ||
-    `<div class="list-card">No jobs scheduled.</div>`;
+ }
 
-}
+ if(j){
 
+  j.payment=
+   j.payment==='paid'
+   ?'unpaid'
+   :'paid';
 
-/* =========================================================
-   CLIENTS
-========================================================= */
+  save();
 
-function renderClients(){
-
-  const container=
-    document.getElementById("clientsList");
-
-  container.innerHTML=
-    state.clients.map(client=>`
-
-      <div class="list-card">
-
-        <div class="client-row">
-
-          <div>
-
-            <div class="client-name">
-              ${escapeHtml(client.name)}
-            </div>
-
-            <div class="muted">
-              ${client.type}
-              ·
-              £${client.rate}/hour
-              ·
-              ${client.hours || 0}h
-            </div>
-
-            ${
-              client.day
-              ?
-              `<div class="muted">
-                ${client.day}
-                ${client.start ? " · "+client.start+"–"+client.end : ""}
-              </div>`
-              :""
-            }
-
-          </div>
-
-          <div style="display:flex;gap:7px">
-
-            <button
-              class="btn btn-soft"
-              onclick="editClient('${client.id}')"
-            >
-              Edit
-            </button>
-
-            <button
-              class="btn"
-              style="background:#fde6ec;color:#a54d6e"
-              onclick="deleteClient('${client.id}')"
-            >
-              Delete
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    `).join("");
-
-}
-
-
-/* =========================================================
-   EARNINGS
-========================================================= */
-
-function renderEarnings(){
-
-  const total=
-    state.jobs.reduce(
-      (sum,j)=>
-        sum+Number(j.hours||0)*Number(j.rate||0),
-      0
-    );
-
-  const received=
-    state.jobs
-      .filter(j=>j.payment==="paid")
-      .reduce(
-        (sum,j)=>
-          sum+Number(j.hours||0)*Number(j.rate||0),
-        0
-      );
-
-  document.getElementById("totalEarned")
-    .textContent=money(total);
-
-  document.getElementById("totalReceived")
-    .textContent=money(received);
-
-  document.getElementById("totalOwed")
-    .textContent=money(total-received);
-
-
-  const list=document.getElementById("earningsList");
-
-  const jobs=[...state.jobs].sort(
-    (a,b)=>
-      String(b.date).localeCompare(String(a.date))
-  );
-
-  list.innerHTML=
-    jobs.length
-    ?
-    jobs.map(job=>{
-
-      const amount=
-        Number(job.hours||0)*
-        Number(job.rate||0);
-
-      const paid=job.payment==="paid";
-
-      return `
-
-        <div class="list-card">
-
-          <div class="earn-row">
-
-            <div>
-
-              <div class="earn-name">
-                ${escapeHtml(job.client)}
-              </div>
-
-              <div class="muted">
-                ${job.date}
-                ·
-                ${formatHours(job.hours)}
-                ·
-                ${job.type}
-              </div>
-
-            </div>
-
-            <div style="text-align:right">
-
-              <div class="price">
-                ${money(amount)}
-              </div>
-
-              <button
-                class="paid-toggle ${paid ? "paid":""}"
-                onclick="togglePaid('${job.id}')"
-              >
-                ${paid ? "✓ PAID" : "☐ NOT PAID"}
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      `;
-
-    }).join("")
-    :
-    `<div class="list-card">
-      No completed jobs yet.
-    </div>`;
-
-}
-
-
-/* =========================================================
-   PAID / UNPAID
-========================================================= */
-
-function findJob(id){
-
-  return state.jobs.find(j=>j.id===id);
-
-}
-
-
-function togglePaid(id){
-
-  const job=findJob(id);
-
-  if(!job) return;
-
-  job.payment=
-    job.payment==="paid"
-    ?"unpaid"
-    :"paid";
-
-  saveState();
-
-  renderHome();
-  renderEarnings();
-  renderSchedule();
+  render();
 
   toast(
-    job.payment==="paid"
-    ? "Payment marked as received ✓"
-    : "Payment marked as unpaid"
+   j.payment==='paid'
+   ?'Marked as paid ✓'
+   :'Marked as not paid'
   );
 
-}
-
-
-/* =========================================================
-   CLIENT MODAL
-========================================================= */
-
-function openClientModal(){
-
-  document.getElementById("clientName").value="";
-  document.getElementById("clientType").value="Private";
-  document.getElementById("clientRate").value=18;
-  document.getElementById("clientHours").value=2;
-
-  document
-    .getElementById("clientModal")
-    .classList.add("show");
+ }
 
 }
 
 
-function saveClient(){
+/* CLIENT MODAL */
 
-  const name=
-    document.getElementById("clientName").value.trim();
+function openClient(c=null){
 
-  if(!name){
+ show(`
 
-    toast("Please enter a client name.");
-    return;
+  <h2>
+   ${c?'Edit':'Add'} client
+  </h2>
 
-  }
 
-  const type=
-    document.getElementById("clientType").value;
+  <div class="form">
 
-  const rate=
-    Number(document.getElementById("clientRate").value);
+   <label>
+    Name
+    <input
+     id="cn"
+     value="${esc(c?.name||'')}"
+    >
+   </label>
 
-  const hours=
-    Number(document.getElementById("clientHours").value);
 
-  state.clients.push({
+   <div class="row">
 
-    id:"client_"+Date.now(),
+    <label>
+     Type
 
-    name,
+     <select id="ct">
 
-    type,
+      <option
+       ${c?.type==='Private'?'selected':''}
+      >
+       Private
+      </option>
 
-    rate,
+      <option
+       ${c?.type==='Agency'?'selected':''}
+      >
+       Agency
+      </option>
 
-    hours
+     </select>
 
-  });
+    </label>
 
-  saveState();
 
-  closeModal("clientModal");
+    <label>
+     Rate £/h
 
-  populateJobClients();
+     <input
+      id="cr"
+      type="number"
+      value="${c?.rate||18}"
+     >
 
-  renderClients();
+    </label>
 
-  toast("Client added ✓");
+   </div>
+
+
+   <div class="row">
+
+    <label>
+     Hours
+
+     <input
+      id="ch"
+      type="number"
+      step=".25"
+      value="${c?.hours||2}"
+     >
+
+    </label>
+
+
+    <label>
+     Day
+
+     <select id="cd">
+
+      ${
+       DAYS.map(x=>`
+
+        <option
+         ${c?.day===x?'selected':''}
+        >
+         ${x}
+        </option>
+
+       `).join('')
+      }
+
+     </select>
+
+    </label>
+
+   </div>
+
+
+   <label>
+    Frequency
+
+    <select id="cf">
+
+     <option
+      ${c?.frequency==='weekly'?'selected':''}
+     >
+      weekly
+     </option>
+
+     <option
+      ${c?.frequency==='fortnightly'?'selected':''}
+     >
+      fortnightly
+     </option>
+
+     <option
+      ${c?.frequency==='threeweekly'?'selected':''}
+     >
+      threeweekly
+     </option>
+
+     <option
+      ${c?.frequency==='occasional'?'selected':''}
+     >
+      occasional
+     </option>
+
+    </select>
+
+   </label>
+
+
+  </div>
+
+
+  <div class="ma">
+
+   <button
+    class="btn"
+    onclick="closeModal()"
+   >
+    Cancel
+   </button>
+
+   <button
+    class="btn primary"
+    onclick='saveClient(${c?JSON.stringify(c):'null'})'
+   >
+    Save
+   </button>
+
+  </div>
+
+ `);
 
 }
 
 
-function editClient(id){
+function saveClient(old){
 
-  const client=
-    state.clients.find(c=>c.id===id);
+ let o={
 
-  if(!client) return;
+  id:old?.id||'c'+Date.now(),
 
-  const name=prompt(
-    "Client name:",
-    client.name
-  );
+  name:$('cn').value.trim(),
 
-  if(name===null) return;
+  type:$('ct').value,
 
-  const rate=prompt(
-    "Hourly rate:",
-    client.rate
-  );
+  rate:Number($('cr').value),
 
-  if(rate===null) return;
+  hours:Number($('ch').value),
 
-  const hours=prompt(
-    "Default hours:",
-    client.hours
-  );
+  day:$('cd').value,
 
-  if(hours===null) return;
+  frequency:$('cf').value,
 
-  client.name=name.trim() || client.name;
-  client.rate=Number(rate)||client.rate;
-  client.hours=Number(hours)||client.hours;
+  active:true
 
-  saveState();
+ };
 
-  renderClients();
+ if(!o.name)return;
 
-  toast("Client updated ✓");
+ state.clients=
 
-}
+  old
 
+  ?state.clients.map(
+   x=>x.id===old.id?o:x
+  )
 
-function deleteClient(id){
+  :[...state.clients,o];
 
-  const client=
-    state.clients.find(c=>c.id===id);
+ save();
 
-  if(!client) return;
+ closeModal();
 
-  if(!confirm(
-    `Delete ${client.name}?`
-  )) return;
+ render();
 
-  state.clients=
-    state.clients.filter(c=>c.id!==id);
-
-  saveState();
-
-  renderClients();
-
-  populateJobClients();
-
-  toast("Client deleted");
+ toast('Client saved ✓');
 
 }
 
 
-/* =========================================================
-   JOB MODAL
-========================================================= */
+function editClient(c){
 
-function populateJobClients(){
-
-  const select=
-    document.getElementById("jobClient");
-
-  select.innerHTML=
-    state.clients.map(c=>
-      `<option value="${c.id}">
-        ${escapeHtml(c.name)}
-      </option>`
-    ).join("");
+ openClient(c);
 
 }
 
 
-function openJobModal(){
+/* TIMER */
 
-  populateJobClients();
+function startFromHome(){
 
-  document.getElementById("jobDate").value=
-    localDateString();
+ let c=state.clients.find(
+  x=>x.active
+ );
 
-  document.getElementById("jobStart").value="09:00";
-  document.getElementById("jobEnd").value="13:00";
-
-  const first=state.clients[0];
-
-  if(first){
-
-    document.getElementById("jobRate").value=
-      first.rate;
-
-  }
-
-  document
-    .getElementById("jobModal")
-    .classList.add("show");
+ if(c)
+  startJob(c.id);
 
 }
 
 
-document.getElementById("jobClient")
-  .addEventListener("change",function(){
+function startJob(id){
 
-    const client=
-      state.clients.find(c=>c.id===this.value);
+ if(timer.running){
 
-    if(client){
+  stopTimer();
 
-      document.getElementById("jobRate").value=
-        client.rate;
+  return;
 
-    }
+ }
 
-  });
+ timer={
 
+  running:true,
 
-function saveJob(){
+  start:Date.now(),
 
-  const client=
-    state.clients.find(
-      c=>c.id===
-        document.getElementById("jobClient").value
-    );
+  clientId:id
 
-  if(!client) return;
+ };
 
-  const date=
-    document.getElementById("jobDate").value;
+ toast('Timer started ✓');
 
-  const start=
-    document.getElementById("jobStart").value;
+ document.title='⏱️ Timer running';
 
-  const end=
-    document.getElementById("jobEnd").value;
+ timer.id=setInterval(()=>{
 
-  const rate=
-    Number(document.getElementById("jobRate").value);
+  document.title=
+   '⏱️ '+
+   hm(
+    Math.floor(
+     (Date.now()-timer.start)/60000
+    )
+   )+
+   ' · Pure Shine';
 
-  const hours=
-    durationHours(start,end);
-
-  const existing=
-    state.jobs.find(
-      j=>
-        j.date===date &&
-        j.clientId===client.id
-    );
-
-  const job={
-
-    id:existing?.id || "job_"+Date.now(),
-
-    clientId:client.id,
-
-    client:client.name,
-
-    date,
-
-    start,
-
-    end,
-
-    hours,
-
-    rate,
-
-    type:client.type,
-
-    payment:existing?.payment || "unpaid"
-
-  };
-
-  if(existing){
-
-    Object.assign(existing,job);
-
-  }else{
-
-    state.jobs.push(job);
-
-  }
-
-  saveState();
-
-  closeModal("jobModal");
-
-  renderHome();
-  renderSchedule();
-  renderEarnings();
-
-  toast("Cleaning job saved ✓");
-
-}
-
-
-function editJob(id){
-
-  const job=
-    state.jobs.find(j=>j.id===id);
-
-  if(!job){
-
-    toast(
-      "This is a recurring job. Add it as a saved job to edit it."
-    );
-
-    return;
-
-  }
-
-  document.getElementById("jobClient").value=
-    job.clientId;
-
-  document.getElementById("jobDate").value=
-    job.date;
-
-  document.getElementById("jobStart").value=
-    job.start;
-
-  document.getElementById("jobEnd").value=
-    job.end;
-
-  document.getElementById("jobRate").value=
-    job.rate;
-
-  document
-    .getElementById("jobModal")
-    .classList.add("show");
-
-}
-
-
-/* =========================================================
-   TIMER
-========================================================= */
-
-let timerInterval=null;
-
-
-function startTimerFor(clientId){
-
-  const client=
-    state.clients.find(c=>c.id===clientId);
-
-  if(!client) return;
-
-  state.timer={
-
-    running:true,
-
-    start:Date.now(),
-
-    clientId,
-
-    elapsed:0
-
-  };
-
-  saveState();
-
-  document
-    .getElementById("timerPanel")
-    .classList.add("show");
-
-  startTimerInterval();
-
-  toast(`Timer started for ${client.name}`);
-
-}
-
-
-function toggleTimer(){
-
-  if(state.timer.running){
-
-    document
-      .getElementById("timerPanel")
-      .classList.add("show");
-
-    return;
-
-  }
-
-  const first=
-    state.clients.find(
-      c=>c.day===dayName(new Date())
-    ) || state.clients[0];
-
-  if(first){
-
-    startTimerFor(first.id);
-
-  }
-
-}
-
-
-function startTimerInterval(){
-
-  clearInterval(timerInterval);
-
-  timerInterval=setInterval(()=>{
-
-    if(!state.timer.running) return;
-
-    const elapsed=
-      Date.now()-state.timer.start;
-
-    state.timer.elapsed=elapsed;
-
-    updateTimerDisplay();
-
-  },1000);
-
-  updateTimerDisplay();
-
-}
-
-
-function updateTimerDisplay(){
-
-  const elapsed=
-    state.timer.running
-    ?
-    Date.now()-state.timer.start
-    :
-    state.timer.elapsed;
-
-  const seconds=
-    Math.floor(elapsed/1000);
-
-  const h=
-    Math.floor(seconds/3600);
-
-  const m=
-    Math.floor((seconds%3600)/60);
-
-  const s=
-    seconds%60;
-
-  document.getElementById("timerDisplay")
-    .textContent=
-      String(h).padStart(2,"0")+":"+
-      String(m).padStart(2,"0")+":"+
-      String(s).padStart(2,"0");
+ },1000);
 
 }
 
 
 function stopTimer(){
 
-  if(!state.timer.running) return;
+ if(!timer.running)return;
 
-  const client=
-    state.clients.find(
-      c=>c.id===state.timer.clientId
-    );
+ clearInterval(timer.id);
 
-  const elapsed=
-    Date.now()-state.timer.start;
+ let c=
+  state.clients.find(
+   x=>x.id===timer.clientId
+  )
+  ||
+  state.clients[0];
 
-  const hours=
-    Math.max(
-      1/60,
-      Math.round(
-        elapsed/60000
-      )/60
-    );
+ let m=Math.max(
+  1,
+  Math.round(
+   (Date.now()-timer.start)/60000
+  )
+ );
 
-  if(client && state.settings.autoSave){
+ timer={
+  running:false,
+  start:0,
+  clientId:null,
+  id:null
+ };
 
-    const job={
+ let j={
 
-      id:"job_"+Date.now(),
+  id:'j'+Date.now(),
 
-      clientId:client.id,
+  clientId:c.id,
 
-      client:client.name,
+  name:c.name,
 
-      date:localDateString(),
+  type:c.type,
 
-      start:new Date(state.timer.start)
-        .toLocaleTimeString(
-          "en-GB",
-          {hour:"2-digit",minute:"2-digit"}
-        ),
+  rate:c.rate,
 
-      end:new Date()
-        .toLocaleTimeString(
-          "en-GB",
-          {hour:"2-digit",minute:"2-digit"}
-        ),
+  hours:m/60,
 
-      hours,
+  minutes:m,
 
-      rate:Number(client.rate),
+  date:dateKey(),
 
-      type:client.type,
+  start:new Date(
+   Date.now()-m*60000
+  ).toTimeString().slice(0,5),
 
-      payment:"unpaid",
+  end:new Date()
+   .toTimeString()
+   .slice(0,5),
 
-      fromTimer:true
+  payment:'unpaid',
 
-    };
+  recurring:false
 
-    state.jobs.push(job);
+ };
 
-    saveState();
+ if(state.settings.autoSaveTimer){
 
-    renderHome();
-    renderEarnings();
-    renderSchedule();
+  state.jobs.push(j);
 
-    if(state.settings.offerInvoice){
+  save();
 
-      openInvoice(job.id);
+  render();
 
-    }
+  toast('Timer job saved ✓');
 
-  }
+  if(state.settings.offerInvoice){
 
-  state.timer.running=false;
-  state.timer.elapsed=elapsed;
-
-  saveState();
-
-  clearInterval(timerInterval);
-
-  toast("Timer stopped and job saved ✓");
-
-}
-
-
-function closeTimerPanel(){
-
-  document
-    .getElementById("timerPanel")
-    .classList.remove("show");
-
-}
-
-
-/* =========================================================
-   INVOICE PDF
-========================================================= */
-
-let currentInvoiceJob=null;
-
-
-function openInvoice(id){
-
-  let job=findJob(id);
-
-  if(!job){
-
-    const generated=
-      jobsForDate(new Date())
-        .find(j=>j.id===id);
-
-    job=generated;
+   setTimeout(
+    ()=>invoice(j),
+    300
+   );
 
   }
 
-  if(!job) return;
+ }else{
 
-  currentInvoiceJob=job;
+  openJob(j);
 
-  const amount=
-    Number(job.hours||0)*
-    Number(job.rate||0);
+ }
 
-  const number=
-    "PS-"+String(
-      state.settings.invoiceNumber
-    ).padStart(4,"0");
-
-  document.getElementById("invoiceContent")
-    .innerHTML=`
-
-      <div class="invoice-preview">
-
-        <div class="invoice-head">
-
-          <div>
-
-            <strong style="
-              font-size:23px;
-              color:#a15372;
-            ">
-              Pure Shine Cleaning
-            </strong>
-
-            <div style="
-              color:#999;
-              margin-top:5px;
-            ">
-              Cleaning service invoice
-            </div>
-
-          </div>
-
-          <div>
-            <strong>${number}</strong>
-          </div>
-
-        </div>
-
-
-        <div style="margin-bottom:20px">
-
-          <strong>Bill to:</strong>
-
-          <div style="margin-top:5px">
-            ${escapeHtml(job.client)}
-          </div>
-
-        </div>
-
-
-        <div style="
-          display:grid;
-          grid-template-columns:1fr 1fr;
-          gap:12px;
-        ">
-
-          <div>
-            <strong>Date</strong>
-            <div>${job.date}</div>
-          </div>
-
-          <div>
-            <strong>Hours</strong>
-            <div>${formatHours(job.hours)}</div>
-          </div>
-
-        </div>
-
-
-        <div style="
-          margin-top:20px;
-          padding-top:15px;
-          border-top:1px solid #eee;
-        ">
-
-          Cleaning service
-
-          <span style="float:right">
-            ${money(amount)}
-          </span>
-
-        </div>
-
-
-        <div class="invoice-total"
-          style="margin-top:25px">
-
-          Total ${money(amount)}
-
-        </div>
-
-      </div>
-
-    `;
-
-  document
-    .getElementById("invoiceModal")
-    .classList.add("show");
+ document.title=
+  'Pure Shine Cleaning Manager';
 
 }
 
 
-function createInvoicePDF(){
+/* PDF INVOICE */
 
-  if(!currentInvoiceJob) return null;
+function invoice(j){
 
-  const {jsPDF}=window.jspdf;
+ let J=window.jspdf?.jsPDF;
 
-  const doc=new jsPDF();
-
-  const job=currentInvoiceJob;
-
-  const amount=
-    Number(job.hours||0)*
-    Number(job.rate||0);
-
-  const number=
-    "PS-"+String(
-      state.settings.invoiceNumber
-    ).padStart(4,"0");
-
-  doc.setFillColor(244,215,227);
-
-  doc.rect(
-    0,
-    0,
-    210,
-    35,
-    "F"
-  );
-
-  doc.setTextColor(160,79,112);
-
-  doc.setFontSize(25);
-
-  doc.text(
-    "Pure Shine Cleaning",
-    20,
-    23
-  );
-
-  doc.setTextColor(50,45,48);
-
-  doc.setFontSize(12);
-
-  doc.text(
-    `Invoice ${number}`,
-    150,
-    23
-  );
-
-  doc.setFontSize(14);
-
-  doc.text(
-    "Cleaning service invoice",
-    20,
-    55
-  );
-
-  doc.setFontSize(11);
-
-  doc.text(
-    `Client: ${job.client}`,
-    20,
-    72
-  );
-
-  doc.text(
-    `Date: ${job.date}`,
-    20,
-    82
-  );
-
-  doc.text(
-    `Service: Cleaning`,
-    20,
-    92
-  );
-
-  doc.text(
-    `Hours: ${formatHours(job.hours)}`,
-    20,
-    102
-  );
-
-  doc.text(
-    `Hourly rate: £${Number(job.rate).toFixed(2)}`,
-    20,
-    112
-  );
-
-  doc.setDrawColor(220,190,202);
-
-  doc.line(
-    20,
-    125,
-    190,
-    125
-  );
-
-  doc.setFontSize(17);
-
-  doc.setTextColor(160,79,112);
-
-  doc.text(
-    `TOTAL: £${amount.toFixed(2)}`,
-    20,
-    143
-  );
-
-  doc.setTextColor(80,75,78);
-
-  doc.setFontSize(10);
-
-  doc.text(
-    "Thank you for choosing Pure Shine Cleaning.",
-    20,
-    165
-  );
-
-  state.settings.invoiceNumber++;
-
-  saveState();
-
-  updateSettingsUI();
-
-  return doc;
-
-}
-
-
-function downloadInvoicePDF(){
-
-  const doc=createInvoicePDF();
-
-  if(!doc) return;
-
-  const number=
-    "PS-"+String(
-      state.settings.invoiceNumber-1
-    ).padStart(4,"0");
-
-  doc.save(
-    `${number}-${currentInvoiceJob.client}.pdf`
-  );
-
-  toast("Invoice PDF created ✓");
-
-}
-
-
-async function shareInvoicePDF(){
-
-  const doc=createInvoicePDF();
-
-  if(!doc) return;
-
-  const number=
-    "PS-"+String(
-      state.settings.invoiceNumber-1
-    ).padStart(4,"0");
-
-  const blob=
-    doc.output("blob");
-
-  const file=new File(
-    [blob],
-    `${number}-${currentInvoiceJob.client}.pdf`,
-    {type:"application/pdf"}
-  );
-
-  if(
-    navigator.share &&
-    navigator.canShare &&
-    navigator.canShare({files:[file]})
-  ){
-
-    try{
-
-      await navigator.share({
-
-        title:`Invoice ${number}`,
-
-        text:
-          `Pure Shine Cleaning invoice for ${currentInvoiceJob.client}`,
-
-        files:[file]
-
-      });
-
-      return;
-
-    }catch(e){
-
-      if(e.name==="AbortError") return;
-
-    }
-
-  }
-
-  doc.save(
-    `${number}-${currentInvoiceJob.client}.pdf`
-  );
+ if(!J){
 
   toast(
-    "PDF downloaded. You can now attach it to WhatsApp or Messages."
+   'PDF library unavailable'
   );
 
+  return;
+
+ }
+
+ let d=new J();
+
+ let total=jobTotal(j);
+
+
+ d.setFillColor(
+  248,223,235
+ );
+
+ d.roundedRect(
+  15,15,180,35,5,5,'F'
+ );
+
+
+ d.setTextColor(
+  154,91,120
+ );
+
+ d.setFontSize(25);
+
+ d.text(
+  'Pure Shine',
+  25,
+  30
+ );
+
+
+ d.setFontSize(10);
+
+ d.text(
+  'Cleaning Manager',
+  25,
+  40
+ );
+
+
+ d.setTextColor(
+  35,33,39
+ );
+
+ d.setFontSize(18);
+
+ d.text(
+  'INVOICE',
+  20,
+  65
+ );
+
+
+ d.setFontSize(11);
+
+ d.text(
+  'Invoice: '+
+  state.settings.invoicePrefix+
+  String(
+   state.settings.invoiceNext
+  ).padStart(5,'0'),
+  20,
+  77
+ );
+
+
+ d.text(
+  'Client: '+j.name,
+  20,
+  87
+ );
+
+
+ d.text(
+  'Date: '+j.date,
+  20,
+  97
+ );
+
+
+ d.text(
+  'Cleaning: '+hm(j.minutes),
+  20,
+  112
+ );
+
+
+ d.text(
+  'Time: '+j.start+' - '+j.end,
+  20,
+  122
+ );
+
+
+ d.setFontSize(19);
+
+ d.text(
+  'Total: '+money(total),
+  20,
+  145
+ );
+
+
+ d.setFontSize(10);
+
+ d.text(
+  'Thank you for choosing Pure Shine Cleaning ✨',
+  20,
+  160
+ );
+
+
+ d.save(
+  'Pure-Shine-Invoice-'+
+  j.name.replace(
+   /[^a-z0-9]+/gi,
+   '-'
+  )+
+  '.pdf'
+ );
+
+
+ state.settings.invoiceNext++;
+
+ save();
+
+ render();
+
+ toast(
+  'Invoice PDF created ✓'
+ );
+
 }
 
 
-/* =========================================================
-   SETTINGS
-========================================================= */
+/* REMINDERS */
 
-function updateSetting(key,value){
+function openReminder(){
 
-  state.settings[key]=
-    value;
+ show(`
 
-  saveState();
+  <h2>
+   Payment reminder
+  </h2>
 
-  applyAllSettings();
 
-  updateSettingsUI();
+  <div class="form">
 
-  toast("Setting saved ✓");
+   <label>
+
+    Message
+
+    <textarea
+     id="msg"
+     rows="6"
+    >Hi, just a friendly reminder that payment for your recent cleaning is still outstanding. Thank you, Georgiana – Pure Shine Cleaning ✨</textarea>
+
+   </label>
+
+  </div>
+
+
+  <div class="ma">
+
+   <button
+    class="btn"
+    onclick="closeModal()"
+   >
+    Close
+   </button>
+
+   <button
+    class="btn primary"
+    onclick="
+     navigator.clipboard?.writeText($('msg').value);
+     toast('Message copied ✓');
+     closeModal()
+    "
+   >
+    Copy message
+   </button>
+
+  </div>
+
+ `);
 
 }
 
 
-function toggleSetting(key){
+/* INVOICE NUMBER */
 
-  state.settings[key]=
-    !state.settings[key];
+function editInvoicePrefix(){
 
-  saveState();
+ let v=prompt(
+  'Invoice prefix',
+  state.settings.invoicePrefix
+ );
 
-  applyAllSettings();
+ if(v!==null){
 
-  updateSettingsUI();
+  state.settings.invoicePrefix=v;
 
-  toast("Setting updated ✓");
+  save();
 
-}
+  render();
 
-
-function setAppScale(value){
-
-  const allowed=[
-    90,100,110,120,130,150,175,200
-  ];
-
-  const num=
-    Number(value);
-
-  if(!allowed.includes(num)) return;
-
-  state.settings.appSize=num;
-
-  document.body.className=
-    document.body.className
-      .replace(/\bscale-\d+\b/g,"");
-
-  document.body.classList.add(
-    "scale-"+num
+  toast(
+   'Invoice numbering saved ✓'
   );
 
-  saveState();
-
-  updateSettingsUI();
-
-  toast(`App size set to ${num}%`);
+ }
 
 }
 
 
-function setAccent(colour,button){
-
-  state.settings.accent=colour;
-
-  document.documentElement
-    .style.setProperty(
-      "--pink",
-      colour
-    );
-
-  document.querySelectorAll(".colour-dot")
-    .forEach(x=>
-      x.classList.remove("active")
-    );
-
-  if(button)
-    button.classList.add("active");
-
-  saveState();
-
-  toast("Accent colour saved ✓");
-
-}
-
-
-function applyAllSettings(){
-
-  const s=state.settings;
-
-  document.documentElement
-    .style.setProperty(
-      "--pink",
-      s.accent || "#e47aa2"
-    );
-
-  document.body.classList.remove(
-    "scale-90",
-    "scale-100",
-    "scale-110",
-    "scale-120",
-    "scale-130",
-    "scale-150",
-    "scale-175",
-    "scale-200"
-  );
-
-  document.body.classList.add(
-    "scale-"+(s.appSize || 100)
-  );
-
-  document.body.classList.toggle(
-    "larger-text",
-    !!s.largerText
-  );
-
-  document.body.classList.toggle(
-    "compact-layout",
-    !!s.compact
-  );
-
-  document.body.classList.toggle(
-    "high-contrast",
-    !!s.contrast
-  );
-
-}
-
-
-function updateSettingsUI(){
-
-  const s=state.settings;
-
-  const business=
-    document.getElementById("businessName");
-
-  if(business)
-    business.value=s.businessName;
-
-  const owner=
-    document.getElementById("ownerName");
-
-  if(owner)
-    owner.value=s.ownerName;
-
-  const size=
-    document.getElementById("appSize");
-
-  if(size)
-    size.value=s.appSize;
-
-
-  setToggleUI(
-    "jobRemindersToggle",
-    s.jobReminders
-  );
-
-  setToggleUI(
-    "paymentRemindersToggle",
-    s.paymentReminders
-  );
-
-  setToggleUI(
-    "autoSaveToggle",
-    s.autoSave
-  );
-
-  setToggleUI(
-    "offerInvoiceToggle",
-    s.offerInvoice
-  );
-
-  setToggleUI(
-    "fortnightlyToggle",
-    s.fortnightly
-  );
-
-  setToggleUI(
-    "largerTextToggle",
-    s.largerText
-  );
-
-  setToggleUI(
-    "compactToggle",
-    s.compact
-  );
-
-  setToggleUI(
-    "contrastToggle",
-    s.contrast
-  );
-
-
-  document.getElementById(
-    "invoiceNumberDisplay"
-  ).textContent=
-    "PS-"+String(
-      s.invoiceNumber
-    ).padStart(4,"0");
-
-
-  document.querySelectorAll(".colour-dot")
-    .forEach(dot=>{
-
-      const bg=
-        getComputedStyle(dot)
-          .backgroundColor;
-
-      dot.classList.remove("active");
-
-    });
-
-
-  renderLogo();
-  renderBanner();
-
-}
-
-
-function setToggleUI(id,on){
-
-  const element=
-    document.getElementById(id);
-
-  if(!element) return;
-
-  element.classList.toggle(
-    "on",
-    !!on
-  );
-
-}
-
-
-function saveAllSettings(){
-
-  saveState();
-
-  applyAllSettings();
-
-  updateSettingsUI();
-
-  toast("All settings saved ✓");
-
-}
-
-
-function editInvoiceNumber(){
-
-  const current=
-    Number(state.settings.invoiceNumber);
-
-  const value=prompt(
-    "Enter the next invoice number:",
-    current
-  );
-
-  if(value===null) return;
-
-  const n=
-    parseInt(value,10);
-
-  if(!Number.isFinite(n)||n<1){
-
-    toast("Please enter a valid number.");
-
-    return;
-
-  }
-
-  state.settings.invoiceNumber=n;
-
-  saveState();
-
-  updateSettingsUI();
-
-  toast("Invoice numbering saved ✓");
-
-}
-
-
-/* =========================================================
-   PHOTO SETTINGS
-========================================================= */
-
-function renderLogo(){
-
-  const logo=
-    state.settings.logo ||
-    DEFAULT_LOGO;
-
-  const preview=
-    document.getElementById("logoPreview");
-
-  if(preview)
-    preview.src=logo;
-
-  document.querySelectorAll(
-    ".brand-logo img, .welcome-logo img"
-  ).forEach(img=>{
-    img.src=logo;
-  });
-
-}
-
-
-function renderBanner(){
-
-  const banner=
-    state.settings.banner ||
-    DEFAULT_BANNER;
-
-  const preview=
-    document.getElementById("bannerPreview");
-
-  if(preview)
-    preview.src=banner;
-
-}
-
-
-function chooseLogo(){
-
-  document
-    .getElementById("logoFile")
-    .click();
-
-}
-
-
-function loadLogo(input){
-
-  const file=input.files?.[0];
-
-  if(!file) return;
-
-  const reader=new FileReader();
-
-  reader.onload=()=>{
-
-    state.settings.logo=
-      reader.result;
-
-    saveState();
-
-    renderLogo();
-
-    toast("App logo changed ✓");
-
-  };
-
-  reader.readAsDataURL(file);
-
-}
-
-
-function restoreLogo(){
-
-  state.settings.logo=
-    DEFAULT_LOGO;
-
-  saveState();
-
-  renderLogo();
-
-  toast("Default logo restored ✓");
-
-}
-
-
-function chooseBanner(){
-
-  document
-    .getElementById("bannerFile")
-    .click();
-
-}
-
-
-function loadBanner(input){
-
-  const file=input.files?.[0];
-
-  if(!file) return;
-
-  const reader=new FileReader();
-
-  reader.onload=()=>{
-
-    state.settings.banner=
-      reader.result;
-
-    saveState();
-
-    renderBanner();
-
-    toast("Banner changed ✓");
-
-  };
-
-  reader.readAsDataURL(file);
-
-}
-
-
-function restoreBanner(){
-
-  state.settings.banner=
-    DEFAULT_BANNER;
-
-  saveState();
-
-  renderBanner();
-
-  toast("Default banner restored ✓");
-
-}
-
-
-/* =========================================================
-   MODALS
-========================================================= */
-
-function closeModal(id){
-
-  document
-    .getElementById(id)
-    .classList.remove("show");
-
-}
-
-
-document.querySelectorAll(".modal")
-  .forEach(modal=>{
-
-    modal.addEventListener(
-      "click",
-      e=>{
-
-        if(e.target===modal){
-
-          modal.classList.remove("show");
-
-        }
-
-      }
-    );
-
-  });
-
-
-/* =========================================================
-   HOLIDAYS / REMINDERS
-========================================================= */
+/* HOLIDAYS */
 
 function addHoliday(){
 
-  const client=prompt(
-    "Client name for holiday:"
-  );
+ let n=prompt(
+  'Holiday name',
+  'Holiday'
+ );
 
-  if(!client) return;
+ if(!n)return;
 
-  const date=prompt(
-    "Holiday date (YYYY-MM-DD):",
-    localDateString()
-  );
+ let s=prompt(
+  'Start date YYYY-MM-DD',
+  dateKey()
+ );
 
-  if(!date) return;
+ let e=prompt(
+  'End date YYYY-MM-DD',
+  s
+ );
+
+ if(s&&e){
 
   state.holidays.push({
-    client,
-    date
+   name:n,
+   start:s,
+   end:e
   });
 
-  saveState();
+  save();
 
-  toast("Holiday saved ✓");
+  render();
 
-}
+  toast(
+   'Holiday saved ✓'
+  );
 
-
-function sendPaymentReminder(){
-
-  const owed=
-    state.jobs.filter(
-      j=>j.payment!=="paid"
-    );
-
-  if(!owed.length){
-
-    toast("You have no unpaid jobs.");
-
-    return;
-
-  }
-
-  const job=owed[0];
-
-  const amount=
-    Number(job.hours||0)*
-    Number(job.rate||0);
-
-  const message=
-    state.settings.messageStyle==="Friendly"
-    ?
-    `Hi ${job.client}, just a little reminder that £${amount.toFixed(2)} is still outstanding for the cleaning. Thank you 💗`
-    :
-    state.settings.messageStyle==="Warm"
-    ?
-    `Hi ${job.client}, I hope you're well. Just a gentle reminder that £${amount.toFixed(2)} is still outstanding for the cleaning service. Thank you 🌸`
-    :
-    `Hello ${job.client}, this is a reminder that £${amount.toFixed(2)} remains outstanding for the cleaning service. Thank you.`;
-
-  if(navigator.share){
-
-    navigator.share({
-      title:"Payment reminder",
-      text:message
-    }).catch(()=>{});
-
-  }else{
-
-    navigator.clipboard?.writeText(message);
-
-    toast("Reminder copied ✓");
-
-  }
+ }
 
 }
 
 
-function showNotifications(){
+function removeHoliday(i){
 
-  const upcoming=
-    jobsForDate(
-      new Date(Date.now()+86400000)
-    );
+ state.holidays.splice(i,1);
 
-  if(upcoming.length){
+ save();
 
-    alert(
-      "Tomorrow:\n\n"+
-      upcoming
-        .map(j=>
-          `${j.client} — ${j.start}–${j.end}`
-        )
-        .join("\n")
-    );
-
-  }else{
-
-    alert("No cleaning jobs tomorrow.");
-
-  }
+ render();
 
 }
 
 
-/* =========================================================
-   BACKUP / CALENDAR
-========================================================= */
+/* FREE TIME */
 
-function backupData(){
+function findFreeTime(){
 
-  const data=
-    JSON.stringify(
-      state,
-      null,
-      2
-    );
-
-  const blob=
-    new Blob(
-      [data],
-      {type:"application/json"}
-    );
-
-  const url=
-    URL.createObjectURL(blob);
-
-  const a=
-    document.createElement("a");
-
-  a.href=url;
-
-  a.download=
-    "pure-shine-cleaning-backup.json";
-
-  a.click();
-
-  URL.revokeObjectURL(url);
-
-  toast("Backup created ✓");
+ alert(
+  'Based on your current schedule, the app will show the next available working time here.'
+ );
 
 }
 
+
+/* BACKUP */
+
+function backup(){
+
+ let a=document.createElement('a');
+
+ a.href=
+  URL.createObjectURL(
+   new Blob(
+    [JSON.stringify(state,null,2)],
+    {type:'application/json'}
+   )
+  );
+
+ a.download=
+  'pure-shine-backup.json';
+
+ a.click();
+
+}
+
+
+/* CALENDAR EXPORT */
 
 function exportCalendar(){
 
-  const jobs=state.jobs;
+ let v=[
 
-  let ics=
-`BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Pure Shine Cleaning//EN
-`;
+  'BEGIN:VCALENDAR',
 
-  jobs.forEach(job=>{
+  'VERSION:2.0',
 
-    const start=
-      job.date.replace(/-/g,"")+
-      "T"+
-      job.start.replace(":","")+
-      "00";
+  'PRODID:-//Pure Shine//EN'
 
-    const end=
-      job.date.replace(/-/g,"")+
-      "T"+
-      job.end.replace(":","")+
-      "00";
+ ];
 
-    ics+=`
-BEGIN:VEVENT
-UID:${job.id}@pureshine
-DTSTART:${start}
-DTEND:${end}
-SUMMARY:Cleaning - ${job.client}
-DESCRIPTION:Pure Shine Cleaning
-END:VEVENT
-`;
+ state.jobs.forEach(j=>{
 
-  });
+  v.push(
 
-  ics+="\nEND:VCALENDAR";
+   'BEGIN:VEVENT',
 
-  const blob=
-    new Blob(
-      [ics],
-      {type:"text/calendar"}
-    );
+   'DTSTART:'+
+   j.date.replaceAll('-','')+
+   'T090000',
 
-  const url=
-    URL.createObjectURL(blob);
+   'DTEND:'+
+   j.date.replaceAll('-','')+
+   'T100000',
 
-  const a=
-    document.createElement("a");
+   'SUMMARY:'+
+   j.name+
+   ' Cleaning',
 
-  a.href=url;
+   'END:VEVENT'
 
-  a.download=
-    "pure-shine-calendar.ics";
-
-  a.click();
-
-  URL.revokeObjectURL(url);
-
-  toast("Calendar exported ✓");
-
-}
-
-
-function resetApplication(){
-
-  if(!confirm(
-    "Reset Pure Shine Cleaning Manager to the default setup?"
-  )) return;
-
-  localStorage.removeItem(
-    "pureShineManagerState"
   );
 
-  location.reload();
+ });
+
+ v.push(
+  'END:VCALENDAR'
+ );
+
+ let a=document.createElement('a');
+
+ a.href=
+  URL.createObjectURL(
+   new Blob(
+    [v.join('\r\n')],
+    {type:'text/calendar'}
+   )
+  );
+
+ a.download=
+  'pure-shine-calendar.ics';
+
+ a.click();
 
 }
 
 
-/* =========================================================
-   UTILITIES
-========================================================= */
+/* RESET */
 
-function durationHours(start,end){
+function resetApp(){
 
-  const [sh,sm]=start.split(":").map(Number);
-  const [eh,em]=end.split(":").map(Number);
+ if(
+  confirm(
+   'Reset the application?'
+  )
+ ){
 
-  let minutes=
-    (eh*60+em)-(sh*60+sm);
+  state=structuredClone(
+   initial
+  );
 
-  if(minutes<0)
-    minutes+=24*60;
+  save();
 
-  return minutes/60;
+  render();
 
-}
+  toast(
+   'Application reset ✓'
+  );
 
-
-function formatHours(hours){
-
-  const totalMinutes=
-    Math.round(
-      Number(hours||0)*60
-    );
-
-  const h=
-    Math.floor(totalMinutes/60);
-
-  const m=
-    totalMinutes%60;
-
-  return `${h}h ${m}m`;
+ }
 
 }
 
 
-function money(value){
+/* MODAL */
 
-  return "£"+
-    Number(value||0)
-      .toFixed(2);
+function show(x){
 
-}
+ $('modal').innerHTML=x;
 
-
-function escapeHtml(value){
-
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+ $('back').classList.add(
+  'show'
+ );
 
 }
 
 
-let toastTimer=null;
+function closeModal(){
 
-function toast(message){
-
-  const el=
-    document.getElementById("toast");
-
-  el.textContent=message;
-
-  el.classList.add("show");
-
-  clearTimeout(toastTimer);
-
-  toastTimer=
-    setTimeout(
-      ()=>el.classList.remove("show"),
-      2200
-    );
+ $('back').classList.remove(
+  'show'
+ );
 
 }
 
 
-/* =========================================================
-   KEEP TIMER ALIVE
-========================================================= */
+function toast(t){
 
-document.addEventListener(
-  "visibilitychange",
-  ()=>{
+ let e=$('toast');
 
-    if(!document.hidden){
+ e.textContent=t;
 
-      if(state.timer.running){
+ e.classList.add('show');
 
-        updateTimerDisplay();
+ clearTimeout(window.tt);
 
-      }
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   SERVICE WORKER-LIKE PERSISTENCE
-========================================================= */
-
-window.addEventListener(
-  "beforeunload",
-  ()=>{
-    saveState();
-  }
-);
-
-
-/* =========================================================
-   FINAL START
-========================================================= */
-
-if(
-  document.getElementById("mainApp").style.display==="block"
-){
-
-  init();
+ window.tt=setTimeout(
+  ()=>e.classList.remove('show'),
+  1800
+ );
 
 }
+
+
+$('back').onclick=e=>{
+
+ if(e.target.id==='back')
+  closeModal();
+
+};
+
+
+/* START */
+
+render();
 
 </script>
 
