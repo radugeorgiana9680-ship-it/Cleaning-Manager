@@ -22,7 +22,7 @@ header small{color:var(--muted)}
 h1{font-size:24px;margin:12px 0 14px}
 h2{font-size:18px;margin:10px 0}
 .modes{display:flex;background:#f7e5ed;padding:4px;border-radius:30px;gap:3px;margin:12px 0}
-.modes button{flex:1;background:transparent;padding:10px 3px;border-radius:25px;color:var(--rose)}
+.modes button{flex:1;background:transparent;padding:10px 3px;border-radius:25px;color:var(--pink)}
 .modes button.active{background:white;color:var(--pink);box-shadow:0 2px 8px #dca6bb55}
 .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .monthnav button{background:white;border:1px solid var(--line);border-radius:12px;padding:8px 13px;color:var(--pink)}
@@ -33,7 +33,7 @@ h2{font-size:18px;margin:10px 0}
 .day.selected{background:var(--pink);color:white}
 .day .dot{display:block;width:5px;height:5px;border-radius:50%;background:var(--gold);margin:2px auto 0}
 .primary{background:var(--pink);color:white;border-radius:13px;padding:11px 14px;box-shadow:0 4px 10px #d96f9a30}
-.secondary{background:white;border:1px solid var(--line);color:var(--rose);border-radius:13px;padding:10px 13px}
+.secondary{background:white;border:1px solid var(--line);color:var(--pink);border-radius:13px;padding:10px 13px}
 .danger{background:#fff0f0;border:1px solid #f1caca;color:#b94343;border-radius:13px;padding:10px 13px}
 .card{background:var(--white);border:1px solid var(--line);border-radius:17px;padding:14px;margin:10px 0;box-shadow:0 4px 15px #c38da014}
 .job{display:flex;align-items:center;gap:11px;cursor:pointer}
@@ -41,14 +41,14 @@ h2{font-size:18px;margin:10px 0}
 .jobmain{flex:1;min-width:0}
 .jobname{font-weight:800;font-size:16px}
 .sub{color:var(--muted);font-size:12px;margin-top:4px}
-.jobtime{font-weight:700;color:var(--rose);margin-top:4px}
+.jobtime{font-weight:700;color:var(--pink);margin-top:4px}
 .nav{position:fixed;z-index:10;bottom:0;left:50%;transform:translateX(-50%);width:min(560px,100%);padding:9px 5px calc(9px + env(safe-area-inset-bottom));background:#fffdfdf2;border-top:1px solid var(--gold);display:grid;grid-template-columns:repeat(5,1fr);backdrop-filter:blur(12px)}
 .nav button{background:transparent;color:var(--gold);font-size:10px;padding:5px 0}
 .nav button span{display:block;font-size:21px;margin-bottom:3px}
 .nav button.active{color:var(--pink);font-weight:800}
 .page{display:none}.page.active{display:block}
 .field{margin:12px 0}
-.field label{display:block;font-size:12px;font-weight:700;color:var(--rose);margin:0 0 6px}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--pink);margin:0 0 6px}
 .field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:white;border-radius:12px;padding:12px;color:var(--ink);outline-color:var(--pink)}
 .field textarea{min-height:70px;resize:vertical}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -56,12 +56,14 @@ h2{font-size:18px;margin:10px 0}
 .actions button{flex:1;min-width:100px}
 .client-row{display:flex;justify-content:space-between;gap:10px;align-items:center}
 .client-row strong{display:block}
-.badge{font-size:11px;background:#f9e6ee;color:var(--rose);border-radius:20px;padding:5px 8px}
+.badge{font-size:11px;background:#f9e6ee;color:var(--pink);border-radius:20px;padding:5px 8px}
 .big-timer{text-align:center;font-size:45px;font-weight:700;color:var(--gold);padding:25px 0}
 .timerbuttons{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.timerbuttons button{background:white;border:1px solid var(--line);border-radius:12px;padding:11px 2px;color:var(--rose)}
+.timerbuttons button{background:white;border:1px solid var(--line);border-radius:12px;padding:11px 2px;color:var(--pink)}
 .timerbuttons button.active{background:var(--pink);color:white}
 .notice{padding:12px;background:#fff8e9;border:1px solid #f0dfb4;border-radius:12px;color:#806632;font-size:12px}
+dialog{color:var(--ink);background:#fff8fb}
+dialog::backdrop{background:#39253280;backdrop-filter:blur(3px)}
 @media(max-width:360px){.app{padding-left:10px;padding-right:10px}.day{height:43px;font-size:12px}.brand{font-size:27px}}
 </style>
 </head>
@@ -201,6 +203,7 @@ h2{font-size:18px;margin:10px 0}
 
 <script>
 const KEY="pureShineManager_v4";
+
 const initialClients=[
 ["Lottie","07788 447015","Private",18,"Luni","weekly","09:00–11:00",""],
 ["Victoria","07923 054040","Agency",16,"Luni","weekly","13:00–15:00","Flexibilitate la ore; orele private se taxează cu £18/oră."],
@@ -219,13 +222,25 @@ const initialClients=[
 const today=new Date();
 let state=loadState();
 let selectedDate=new Date(today.getFullYear(),today.getMonth(),today.getDate());
-let mode="month",timer={duration:7200,remaining:7200,running:false,startedAt:0,label:"",alarm:"on"},timerInterval=null;
+let mode="month";
+let timerDuration=7200,timerRemaining=7200,timerRunning=false,timerEnd=0;
 
 function loadState(){
- try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.clients&&s.jobs)return s;}catch(e){}
+ try{
+  const s=JSON.parse(localStorage.getItem(KEY));
+  if(s&&s.clients&&s.jobs)return s;
+ }catch(e){}
  return {clients:initialClients,jobs:[],settings:{},businessName:"Pure Shine Cleaning"};
 }
-function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){alert("Spațiul de stocare este plin. Exportă o copie de siguranță și folosește imagini mai mici.");}}
+
+function persist(){
+ try{
+  localStorage.setItem(KEY,JSON.stringify(state));
+ }catch(e){
+  alert("Spațiul de stocare este plin. Exportă o copie de siguranță și folosește imagini mai mici.");
+ }
+}
+
 function id(){return "j"+Date.now()+Math.random().toString(36).slice(2,6)}
 function dateISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
 function parseDate(s){const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)}
@@ -233,177 +248,480 @@ function fmtDate(d){return d.toLocaleDateString("en-GB",{weekday:"long",day:"num
 function mins(t){if(!t)return 0;let [h,m]=t.split(":").map(Number);return h*60+m}
 function hoursBetween(a,b){let n=mins(b)-mins(a);if(n<0)n+=1440;return n/60}
 function money(n){return "£"+Number(n||0).toFixed(2)}
-function getClient(id){return state.clients.find(c=>c.id===id)}
+function getClient(clientId){return state.clients.find(c=>c.id===clientId)}
+
+function refreshVisiblePages(){
+ renderCalendar();
+ renderWeek();
+ renderClients();
+ renderEarnings();
+}
+
 function showPage(page){
  document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===page));
  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
- if(page==="home")renderCalendar();if(page==="calendar")renderWeek();if(page==="clients")renderClients();if(page==="earnings")renderEarnings();
+ if(page==="home")renderCalendar();
+ if(page==="calendar")renderWeek();
+ if(page==="clients")renderClients();
+ if(page==="earnings")renderEarnings();
 }
-function setMode(m,btn){mode=m;document.querySelectorAll(".modes button").forEach(b=>b.classList.toggle("active",b===btn));renderCalendar()}
-function shiftMonth(n){selectedDate=new Date(selectedDate.getFullYear(),selectedDate.getMonth()+n,1);renderCalendar()}
-function selectDate(s){selectedDate=parseDate(s);renderCalendar()}
-function jobsFor(s){return state.jobs.filter(j=>j.date===s&&j.status!=="cancelled").sort((a,b)=>a.start.localeCompare(b.start))}
+
+function setMode(m,btn){
+ mode=m;
+ document.querySelectorAll(".modes button").forEach(b=>b.classList.toggle("active",b===btn));
+ renderCalendar();
+}
+
+function shiftMonth(n){
+ selectedDate=new Date(selectedDate.getFullYear(),selectedDate.getMonth()+n,1);
+ renderCalendar();
+}
+
+function selectDate(s){
+ selectedDate=parseDate(s);
+ renderCalendar();
+}
+
+function jobsFor(s){
+ return state.jobs.filter(j=>j.date===s&&j.status!=="cancelled").sort((a,b)=>a.start.localeCompare(b.start));
+}
+
 function renderCalendar(){
- const y=selectedDate.getFullYear(),m=selectedDate.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0);
+ const y=selectedDate.getFullYear(),m=selectedDate.getMonth();
+ const first=new Date(y,m,1),last=new Date(y,m+1,0);
  document.getElementById("monthTitle").textContent=selectedDate.toLocaleDateString("en-GB",{month:"long",year:"numeric"});
  document.getElementById("selectedTitle").textContent=fmtDate(selectedDate);
- const root=document.getElementById("calendarDays");root.innerHTML="";
- let start=(first.getDay()+6)%7;
+ const root=document.getElementById("calendarDays");
+ root.innerHTML="";
+ const start=(first.getDay()+6)%7;
+
  if(mode==="month"){
   for(let i=0;i<start;i++)root.append(document.createElement("div"));
   for(let d=1;d<=last.getDate();d++)root.append(makeDay(new Date(y,m,d)));
  }else if(mode==="week"){
-  let monday=new Date(selectedDate);monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
-  for(let i=0;i<7;i++){let d=new Date(monday);d.setDate(monday.getDate()+i);root.append(makeDay(d))}
- }else root.append(makeDay(selectedDate));
+  const monday=new Date(selectedDate);
+  monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
+  for(let i=0;i<7;i++){
+   const d=new Date(monday);
+   d.setDate(monday.getDate()+i);
+   root.append(makeDay(d));
+  }
+ }else{
+  root.append(makeDay(selectedDate));
+ }
  renderDayJobs();
 }
+
 function makeDay(d){
- const b=document.createElement("button");b.className="day"+(dateISO(d)===dateISO(selectedDate)?" selected":"");
+ const b=document.createElement("button");
+ b.className="day"+(dateISO(d)===dateISO(selectedDate)?" selected":"");
  b.innerHTML=`${d.getDate()}${jobsFor(dateISO(d)).length?'<span class="dot"></span>':""}`;
- b.onclick=()=>selectDate(dateISO(d));return b;
+ b.onclick=()=>selectDate(dateISO(d));
+ return b;
 }
+
 function renderDayJobs(){
- const root=document.getElementById("dayJobs");root.innerHTML="";
+ const root=document.getElementById("dayJobs");
+ root.innerHTML="";
  const jobs=jobsFor(dateISO(selectedDate));
  if(!jobs.length)root.innerHTML='<div class="card sub">Nu există programări pentru această zi.</div>';
  jobs.forEach(j=>root.append(jobCard(j)));
 }
+
 function jobCard(j){
- const c=getClient(j.clientId),el=document.createElement("div");el.className="card job";
- el.innerHTML=`<div class="jobbar"></div><div class="jobmain"><div class="jobname">${esc(c?.name||"Client șters")}</div><div class="jobtime">${esc(j.start)} – ${esc(j.end)}</div><div class="sub">${esc(j.type)} · ${money(j.rate)}/oră · ${esc(j.status==="done"?"Finalizată":"Programată")}</div></div><div>${c?.phone?`<a href="tel:${esc(c.phone)}" onclick="event.stopPropagation()">☎</a>`:""}　›</div>`;
- el.onclick=()=>editJob(j.id);return el;
+ const c=getClient(j.clientId),el=document.createElement("div");
+ el.className="card job";
+ el.innerHTML=`<div class="jobbar"></div>
+ <div class="jobmain">
+ <div class="jobname">${esc(c?.name||"Client șters")}</div>
+ <div class="jobtime">${esc(j.start)} – ${esc(j.end)}</div>
+ <div class="sub">${esc(j.type)} · ${money(j.rate)}/oră · ${esc(j.status==="done"?"Finalizată":"Programată")}</div>
+ </div>
+ <div>${c?.phone?`<a href="tel:${esc(c.phone)}" onclick="event.stopPropagation()">☎</a>`:""}　›</div>`;
+ el.onclick=()=>editJob(j.id);
+ return el;
 }
+
 function newJob(past=false){
- document.getElementById("jobForm").reset();document.getElementById("jobId").value="";
+ document.getElementById("jobForm").reset();
+ document.getElementById("jobId").value="";
  document.getElementById("editorTitle").textContent=past?"Adaugă lucrare trecută":"Adaugă programare";
- const sel=document.getElementById("jobClient");sel.innerHTML="";
- state.clients.forEach(c=>{let o=document.createElement("option");o.value=c.id;o.textContent=c.name;sel.append(o)});
- document.getElementById("jobDate").value=dateISO(past?selectedDate: selectedDate);
- document.getElementById("jobStart").value="09:00";document.getElementById("jobEnd").value="12:00";
- document.getElementById("jobRepeat").value="none";document.getElementById("jobStatus").value=past?"done":"planned";
- syncClientDefaults();updateDuration();document.getElementById("editor").showModal();
+
+ const sel=document.getElementById("jobClient");
+ sel.innerHTML="";
+ state.clients.forEach(c=>{
+  const o=document.createElement("option");
+  o.value=c.id;
+  o.textContent=c.name;
+  sel.append(o);
+ });
+
+ document.getElementById("jobDate").value=dateISO(selectedDate);
+ document.getElementById("jobStart").value="09:00";
+ document.getElementById("jobEnd").value="12:00";
+ document.getElementById("jobRepeat").value="none";
+ document.getElementById("jobStatus").value=past?"done":"planned";
+ syncClientDefaults();
+ updateDuration();
+ document.getElementById("editor").showModal();
 }
+
 function editJob(jobId){
- const j=state.jobs.find(x=>x.id===jobId);if(!j)return;
- newJob(false);document.getElementById("editorTitle").textContent="Editează programarea";
- document.getElementById("jobId").value=j.id;document.getElementById("jobClient").value=j.clientId;
- document.getElementById("jobDate").value=j.date;document.getElementById("jobStart").value=j.start;
- document.getElementById("jobEnd").value=j.end;document.getElementById("jobRepeat").value=j.repeat||"none";
- document.getElementById("jobType").value=j.type;document.getElementById("jobRate").value=j.rate;
- document.getElementById("jobStatus").value=j.status;document.getElementById("jobNotes").value=j.notes||"";updateDuration();
+ const j=state.jobs.find(x=>x.id===jobId);
+ if(!j)return;
+ newJob(false);
+ document.getElementById("editorTitle").textContent="Editează programarea";
+ document.getElementById("jobId").value=j.id;
+ document.getElementById("jobClient").value=j.clientId;
+ document.getElementById("jobDate").value=j.date;
+ document.getElementById("jobStart").value=j.start;
+ document.getElementById("jobEnd").value=j.end;
+ document.getElementById("jobRepeat").value=j.repeat||"none";
+ document.getElementById("jobType").value=j.type;
+ document.getElementById("jobRate").value=j.rate;
+ document.getElementById("jobStatus").value=j.status;
+ document.getElementById("jobNotes").value=j.notes||"";
+ updateDuration();
 }
+
 function syncClientDefaults(){
- const c=getClient(document.getElementById("jobClient").value);if(!c)return;
+ const c=getClient(document.getElementById("jobClient").value);
+ if(!c)return;
  document.getElementById("jobType").value=c.type==="Occasional"?"Occasional":c.type;
  document.getElementById("jobRate").value=c.rate||18;
 }
+
 document.getElementById("jobClient").addEventListener("change",syncClientDefaults);
+
 function updateDuration(){
  const h=hoursBetween(document.getElementById("jobStart").value,document.getElementById("jobEnd").value);
  document.getElementById("jobDuration").value=`${Math.floor(h)} hours ${Math.round((h%1)*60)} minutes`;
 }
+
 function saveJob(e){
  e.preventDefault();
  const oldId=document.getElementById("jobId").value;
- const j={id:oldId||id(),clientId:document.getElementById("jobClient").value,date:document.getElementById("jobDate").value,start:document.getElementById("jobStart").value,end:document.getElementById("jobEnd").value,repeat:document.getElementById("jobRepeat").value,type:document.getElementById("jobType").value,rate:Number(document.getElementById("jobRate").value)||0,status:document.getElementById("jobStatus").value,notes:document.getElementById("jobNotes").value};
- if(oldId){const i=state.jobs.findIndex(x=>x.id===oldId);if(i>=0)state.jobs[i]=j;}else state.jobs.push(j);
- persist();closeEditor();renderCalendar();renderWeek();renderEarnings();
+ const j={
+  id:oldId||id(),
+  clientId:document.getElementById("jobClient").value,
+  date:document.getElementById("jobDate").value,
+  start:document.getElementById("jobStart").value,
+  end:document.getElementById("jobEnd").value,
+  repeat:document.getElementById("jobRepeat").value,
+  type:document.getElementById("jobType").value,
+  rate:Number(document.getElementById("jobRate").value)||0,
+  status:document.getElementById("jobStatus").value,
+  notes:document.getElementById("jobNotes").value
+ };
+
+ if(oldId){
+  const i=state.jobs.findIndex(x=>x.id===oldId);
+  if(i>=0)state.jobs[i]=j;
+ }else{
+  state.jobs.push(j);
+ }
+
+ persist();
+ closeEditor();
+ refreshVisiblePages();
 }
+
 function closeEditor(){document.getElementById("editor").close()}
-function cancelJob(){const j=state.jobs.find(x=>x.id===document.getElementById("jobId").value);if(!j)return alert("Salvează mai întâi programarea.");j.status="cancelled";persist();closeEditor();renderCalendar();renderWeek()}
-function deleteJob(){const jid=document.getElementById("jobId").value;if(!jid)return closeEditor();if(confirm("Ștergi definitiv această programare?")){state.jobs=state.jobs.filter(j=>j.id!==jid);persist();closeEditor();renderCalendar();renderWeek();renderEarnings()}}
-function renderWeek(){
- const root=document.getElementById("weekList");root.innerHTML="";
- const monday=new Date(selectedDate);monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
- for(let i=0;i<7;i++){let d=new Date(monday);d.setDate(monday.getDate()+i);const s=dateISO(d),wrap=document.createElement("div");wrap.className="card";
- wrap.innerHTML=`<div class="row"><h2>${fmtDate(d)}</h2><button class="secondary" onclick="selectDate('${s}');showPage('home')">Deschide</button></div>`;
- const jobs=jobsFor(s);if(!jobs.length)wrap.innerHTML+='<div class="sub">Fără programări</div>';jobs.forEach(j=>wrap.append(jobCard(j)));root.append(wrap)}
+
+function cancelJob(){
+ const j=state.jobs.find(x=>x.id===document.getElementById("jobId").value);
+ if(!j)return alert("Salvează mai întâi programarea.");
+ j.status="cancelled";
+ persist();
+ closeEditor();
+ refreshVisiblePages();
 }
-function newClient(){document.getElementById("clientForm").reset();document.getElementById("clientId").value="";document.getElementById("clientRate").value=18;document.getElementById("clientEditor").showModal()}
+
+function deleteJob(){
+ const jid=document.getElementById("jobId").value;
+ if(!jid)return closeEditor();
+ if(confirm("Ștergi definitiv această programare?")){
+  state.jobs=state.jobs.filter(j=>j.id!==jid);
+  persist();
+  closeEditor();
+  refreshVisiblePages();
+ }
+}
+
+function renderWeek(){
+ const root=document.getElementById("weekList");
+ root.innerHTML="";
+ const monday=new Date(selectedDate);
+ monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
+
+ for(let i=0;i<7;i++){
+  const d=new Date(monday);
+  d.setDate(monday.getDate()+i);
+  const s=dateISO(d),wrap=document.createElement("div");
+  wrap.className="card";
+  wrap.innerHTML=`<div class="row"><h2>${fmtDate(d)}</h2><button class="secondary" onclick="selectDate('${s}');showPage('home')">Deschide</button></div>`;
+  const jobs=jobsFor(s);
+  if(!jobs.length)wrap.innerHTML+='<div class="sub">Fără programări</div>';
+  jobs.forEach(j=>wrap.append(jobCard(j)));
+  root.append(wrap);
+ }
+}
+
+function newClient(){
+ document.getElementById("clientForm").reset();
+ document.getElementById("clientId").value="";
+ document.getElementById("clientRate").value=18;
+ document.getElementById("clientEditor").showModal();
+}
+
 function editClient(cid){
- const c=getClient(cid);if(!c)return;
- newClient();document.getElementById("clientId").value=c.id;document.getElementById("clientName").value=c.name;
- document.getElementById("clientPhone").value=c.phone||"";document.getElementById("clientType").value=c.type;
- document.getElementById("clientRate").value=c.rate;document.getElementById("clientDay").value=c.day;
- document.getElementById("clientRepeat").value=c.repeat;document.getElementById("clientHours").value=c.hours||"";
+ const c=getClient(cid);
+ if(!c)return;
+ newClient();
+ document.getElementById("clientId").value=c.id;
+ document.getElementById("clientName").value=c.name;
+ document.getElementById("clientPhone").value=c.phone||"";
+ document.getElementById("clientType").value=c.type;
+ document.getElementById("clientRate").value=c.rate;
+ document.getElementById("clientDay").value=c.day;
+ document.getElementById("clientRepeat").value=c.repeat;
+ document.getElementById("clientHours").value=c.hours||"";
  document.getElementById("clientNotes").value=(c.notes||"")+(c.holiday?"\nÎn vacanță":"");
 }
+
 function saveClient(e){
- e.preventDefault();const cid=document.getElementById("clientId").value;
- const c={id:cid||"c"+Date.now(),name:document.getElementById("clientName").value.trim(),phone:document.getElementById("clientPhone").value.trim(),type:document.getElementById("clientType").value,rate:Number(document.getElementById("clientRate").value)||0,day:document.getElementById("clientDay").value,repeat:document.getElementById("clientRepeat").value,hours:document.getElementById("clientHours").value,notes:document.getElementById("clientNotes").value,holiday:false};
- if(cid){const i=state.clients.findIndex(x=>x.id===cid);if(i>=0)state.clients[i]=c;}else state.clients.push(c);
- persist();document.getElementById("clientEditor").close();renderClients();
+ e.preventDefault();
+ const cid=document.getElementById("clientId").value;
+ const c={
+  id:cid||"c"+Date.now(),
+  name:document.getElementById("clientName").value.trim(),
+  phone:document.getElementById("clientPhone").value.trim(),
+  type:document.getElementById("clientType").value,
+  rate:Number(document.getElementById("clientRate").value)||0,
+  day:document.getElementById("clientDay").value,
+  repeat:document.getElementById("clientRepeat").value,
+  hours:document.getElementById("clientHours").value,
+  notes:document.getElementById("clientNotes").value,
+  holiday:false
+ };
+
+ if(cid){
+  const i=state.clients.findIndex(x=>x.id===cid);
+  if(i>=0)state.clients[i]=c;
+ }else{
+  state.clients.push(c);
+ }
+
+ persist();
+ document.getElementById("clientEditor").close();
+ refreshVisiblePages();
 }
-function deleteClient(){const cid=document.getElementById("clientId").value;if(!cid)return document.getElementById("clientEditor").close();if(confirm("Ștergi clientul? Programările sale rămân în istoric.")){state.clients=state.clients.filter(c=>c.id!==cid);persist();document.getElementById("clientEditor").close();renderClients()}}
+
+function deleteClient(){
+ const cid=document.getElementById("clientId").value;
+ if(!cid)return document.getElementById("clientEditor").close();
+ if(confirm("Ștergi clientul? Programările sale rămân în istoric.")){
+  state.clients=state.clients.filter(c=>c.id!==cid);
+  persist();
+  document.getElementById("clientEditor").close();
+  refreshVisiblePages();
+ }
+}
+
 function renderClients(){
- const root=document.getElementById("clientList"),q=(document.getElementById("clientSearch")?.value||"").toLowerCase();root.innerHTML="";
+ const root=document.getElementById("clientList");
+ const q=(document.getElementById("clientSearch")?.value||"").toLowerCase();
+ root.innerHTML="";
  state.clients.filter(c=>(c.name+" "+c.phone).toLowerCase().includes(q)).forEach(c=>{
- const el=document.createElement("div");el.className="card client-row";el.innerHTML=`<div><strong>${esc(c.name)}</strong><div class="sub">${esc(c.phone||"Fără telefon")} · ${esc(c.day)} · ${money(c.rate)}/h</div><div class="sub">${esc(c.hours||"Ore flexibile")} · ${esc(c.repeat)}</div></div><button class="secondary">Editează</button>`;
- el.querySelector("button").onclick=()=>editClient(c.id);root.append(el)});
+  const el=document.createElement("div");
+  el.className="card client-row";
+  el.innerHTML=`<div><strong>${esc(c.name)}</strong>
+  <div class="sub">${esc(c.phone||"Fără telefon")} · ${esc(c.day)} · ${money(c.rate)}/h</div>
+  <div class="sub">${esc(c.hours||"Ore flexibile")} · ${esc(c.repeat)}</div></div>
+  <button class="secondary">Editează</button>`;
+  el.querySelector("button").onclick=()=>editClient(c.id);
+  root.append(el);
+ });
 }
+
 function renderEarnings(){
- const done=state.jobs.filter(j=>j.status==="done"),total=done.reduce((a,j)=>a+hoursBetween(j.start,j.end)*j.rate,0);
+ const done=state.jobs.filter(j=>j.status==="done");
+ const total=done.reduce((a,j)=>a+hoursBetween(j.start,j.end)*j.rate,0);
  document.getElementById("totalEarned").textContent=money(total);
- const root=document.getElementById("pastJobs");root.innerHTML="";
- done.sort((a,b)=>b.date.localeCompare(a.date)).forEach(j=>{const c=getClient(j.clientId),el=document.createElement("div");el.className="card";
- el.innerHTML=`<div class="row"><strong>${esc(c?.name||"Client șters")}</strong><span class="badge">${money(hoursBetween(j.start,j.end)*j.rate)}</span></div><div class="sub">${esc(j.date)} · ${esc(j.start)}–${esc(j.end)} · ${money(j.rate)}/h</div><button class="secondary" style="margin-top:8px" onclick="editJob('${j.id}')">Editează</button>`;root.append(el)});
+ const root=document.getElementById("pastJobs");
+ root.innerHTML="";
+ done.sort((a,b)=>b.date.localeCompare(a.date)).forEach(j=>{
+  const c=getClient(j.clientId),el=document.createElement("div");
+  el.className="card";
+  el.innerHTML=`<div class="row"><strong>${esc(c?.name||"Client șters")}</strong><span class="badge">${money(hoursBetween(j.start,j.end)*j.rate)}</span></div>
+  <div class="sub">${esc(j.date)} · ${esc(j.start)}–${esc(j.end)} · ${money(j.rate)}/h</div>
+  <button class="secondary" style="margin-top:8px" onclick="editJob('${j.id}')">Editează</button>`;
+  root.append(el);
+ });
 }
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+function esc(s){
+ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
 function exportData(){
- const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});download(blob,"pure-shine-backup.json");
+ const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+ download(blob,"pure-shine-backup.json");
 }
+
 function importData(input){
- const file=input.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.clients||!s.jobs)throw Error();if(confirm("Înlocuiești datele actuale cu copia importată?")){state=s;persist();location.reload()}}catch(e){alert("Fișierul nu este o copie de siguranță validă.")}};r.readAsText(file)
+ const file=input.files[0];
+ if(!file)return;
+ const r=new FileReader();
+ r.onload=()=>{
+  try{
+   const s=JSON.parse(r.result);
+   if(!s.clients||!s.jobs)throw Error();
+   if(confirm("Înlocuiești datele actuale cu copia importată?")){
+    state=s;
+    persist();
+    location.reload();
+   }
+  }catch(e){
+   alert("Fișierul nu este o copie de siguranță validă.");
+  }
+ };
+ r.readAsText(file);
 }
+
 function exportCSV(){
  const rows=[["Data","Client","Start","Sfârșit","Tip","Tarif","Status","Câștig"]];
  state.jobs.forEach(j=>rows.push([j.date,getClient(j.clientId)?.name||"",j.start,j.end,j.type,j.rate,j.status,(j.status==="done"?hoursBetween(j.start,j.end)*j.rate:0).toFixed(2)]));
  const csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\n");
  download(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}),"pure-shine-lucrari.csv");
 }
-function download(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
-function uploadImage(type,input){
- const f=input.files[0];if(!f)return;const reader=new FileReader();reader.onload=()=>{const im=new Image();im.onload=()=>{
- const scale=Math.min(1,1200/Math.max(im.width,im.height)),canvas=document.createElement("canvas");canvas.width=Math.round(im.width*scale);canvas.height=Math.round(im.height*scale);canvas.getContext("2d").drawImage(im,0,0,canvas.width,canvas.height);
- state.settings[type]=canvas.toDataURL("image/jpeg",.78);persist();applySettings();alert("Imagine salvată.")
- };im.src=reader.result};reader.readAsDataURL(f)
+
+function download(blob,name){
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);
+ a.download=name;
+ a.click();
+ setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
-function saveSettings(){state.businessName=document.getElementById("businessName").value;state.settings.fontSize=document.getElementById("fontSize").value;state.settings.accent=document.getElementById("accent").value;persist();applySettings();alert("Setările au fost salvate.")}
+
+function uploadImage(type,input){
+ const f=input.files[0];
+ if(!f)return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  const im=new Image();
+  im.onload=()=>{
+   const scale=Math.min(1,1200/Math.max(im.width,im.height));
+   const canvas=document.createElement("canvas");
+   canvas.width=Math.round(im.width*scale);
+   canvas.height=Math.round(im.height*scale);
+   canvas.getContext("2d").drawImage(im,0,0,canvas.width,canvas.height);
+   state.settings[type]=canvas.toDataURL("image/jpeg",.78);
+   persist();
+   applySettings();
+   alert("Imagine salvată.");
+  };
+  im.src=reader.result;
+ };
+ reader.readAsDataURL(f);
+}
+
+function saveSettings(){
+ state.businessName=document.getElementById("businessName").value;
+ state.settings.fontSize=document.getElementById("fontSize").value;
+ state.settings.accent=document.getElementById("accent").value;
+ persist();
+ applySettings();
+ alert("Setările au fost salvate.");
+}
+
 function applySettings(){
- const s=state.settings||{};if(s.fontSize)document.body.style.fontSize=s.fontSize;
+ const s=state.settings||{};
+ if(s.fontSize)document.body.style.fontSize=s.fontSize;
  if(s.accent)document.documentElement.style.setProperty("--pink",s.accent);
  if(s.background)document.body.style.background=`linear-gradient(#fff7f9bb,#fff7f9bb),url("${s.background}") center/cover fixed`;
- if(s.banner){const h=document.querySelector("header");h.style.backgroundImage=`url("${s.banner}")`;h.style.backgroundSize="cover";h.style.backgroundPosition="center";h.style.borderRadius="18px"}
- if(s.profile){document.querySelector(".brand").style.backgroundImage=`url("${s.profile}")`;document.querySelector(".brand").style.backgroundSize="contain";document.querySelector(".brand").style.backgroundRepeat="no-repeat"}
+ if(s.banner){
+  const h=document.querySelector("header");
+  h.style.backgroundImage=`url("${s.banner}")`;
+  h.style.backgroundSize="cover";
+  h.style.backgroundPosition="center";
+  h.style.borderRadius="18px";
+ }
+ if(s.profile){
+  document.querySelector(".brand").style.backgroundImage=`url("${s.profile}")`;
+  document.querySelector(".brand").style.backgroundSize="contain";
+  document.querySelector(".brand").style.backgroundRepeat="no-repeat";
+ }
 }
-let timerDuration=7200,timerRemaining=7200,timerRunning=false,timerEnd=0;
-function setTimer(sec,btn){timerDuration=sec;timerRemaining=sec;timerRunning=false;document.querySelectorAll(".timerbuttons button").forEach(b=>b.classList.toggle("active",b===btn));document.getElementById("timerButton").textContent="Start";showTimer()}
+
+function setTimer(sec,btn){
+ timerDuration=sec;
+ timerRemaining=sec;
+ timerRunning=false;
+ document.querySelectorAll(".timerbuttons button").forEach(b=>b.classList.toggle("active",b===btn));
+ document.getElementById("timerButton").textContent="Start";
+ showTimer();
+}
+
 function showTimer(){
  const t=Math.max(0,timerRunning?Math.ceil((timerEnd-Date.now())/1000):timerRemaining);
- timerRemaining=t;const h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;
+ timerRemaining=t;
+ const h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;
  document.getElementById("timerDisplay").textContent=[h,m,s].map(n=>String(n).padStart(2,"0")).join(":");
- if(timerRunning&&t<=0){timerRunning=false;document.getElementById("timerButton").textContent="Start";if(document.getElementById("alarmSetting").value==="on"){try{const ctx=new (window.AudioContext||window.webkitAudioContext)();const osc=ctx.createOscillator();osc.connect(ctx.destination);osc.frequency.value=880;osc.start();osc.stop(ctx.currentTime+1)}catch(e){}}alert("Timer terminat"+(document.getElementById("timerLabel").value?" — "+document.getElementById("timerLabel").value:"")+"!")}
+ if(timerRunning&&t<=0){
+  timerRunning=false;
+  document.getElementById("timerButton").textContent="Start";
+  if(document.getElementById("alarmSetting").value==="on"){
+   try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const osc=ctx.createOscillator();
+    osc.connect(ctx.destination);
+    osc.frequency.value=880;
+    osc.start();
+    osc.stop(ctx.currentTime+1);
+   }catch(e){}
+  }
+  alert("Timer terminat"+(document.getElementById("timerLabel").value?" — "+document.getElementById("timerLabel").value:"")+"!");
+ }
 }
+
 function toggleTimer(){
- if(timerRunning){timerRemaining=Math.max(0,Math.ceil((timerEnd-Date.now())/1000));timerRunning=false;document.getElementById("timerButton").textContent="Continuă"}
- else{timerEnd=Date.now()+timerRemaining*1000;timerRunning=true;document.getElementById("timerButton").textContent="Pause"}
+ if(timerRunning){
+  timerRemaining=Math.max(0,Math.ceil((timerEnd-Date.now())/1000));
+  timerRunning=false;
+  document.getElementById("timerButton").textContent="Continuă";
+ }else{
+  timerEnd=Date.now()+timerRemaining*1000;
+  timerRunning=true;
+  document.getElementById("timerButton").textContent="Pause";
+ }
 }
-function resetTimer(){timerRunning=false;timerRemaining=timerDuration;document.getElementById("timerButton").textContent="Start";showTimer()}
+
+function resetTimer(){
+ timerRunning=false;
+ timerRemaining=timerDuration;
+ document.getElementById("timerButton").textContent="Start";
+ showTimer();
+}
+
 setInterval(()=>{if(timerRunning)showTimer()},250);
+
 function applyStoredSettings(){
  document.getElementById("businessName").value=state.businessName||"Pure Shine Cleaning";
  if(state.settings?.fontSize)document.getElementById("fontSize").value=state.settings.fontSize;
  if(state.settings?.accent)document.getElementById("accent").value=state.settings.accent;
  applySettings();
 }
+
 function seedSchedule(){
  if(state.jobs.length)return;
  const base=new Date(2026,9,19);
  const add=(clientName,offset,start,end,repeat="weekly",status="planned")=>{
- const c=state.clients.find(x=>x.name.toLowerCase()===clientName.toLowerCase());if(!c)return;
- const d=new Date(base);d.setDate(base.getDate()+offset);
- state.jobs.push({id:id(),clientId:c.id,date:dateISO(d),start,end,repeat,type:c.type,rate:c.rate,status,notes:""});
+  const c=state.clients.find(x=>x.name.toLowerCase()===clientName.toLowerCase());
+  if(!c)return;
+  const d=new Date(base);
+  d.setDate(base.getDate()+offset);
+  state.jobs.push({id:id(),clientId:c.id,date:dateISO(d),start,end,repeat,type:c.type,rate:c.rate,status,notes:""});
  };
  add("Lottie",0,"09:00","11:00");
  add("Meghan",0,"17:30","18:30");
@@ -416,9 +734,52 @@ function seedSchedule(){
  add("Joanna",4,"09:30","12:30","fortnightly");
  persist();
 }
+
 seedSchedule();
 applyStoredSettings();
-renderCalendar();renderWeek();renderClients();renderEarnings();showTimer();
+renderCalendar();
+renderWeek();
+renderClients();
+renderEarnings();
+showTimer();
+
+/* Actualizare automată când se publică o versiune nouă pe GitHub Pages.
+   Verifică periodic index.html și reîncarcă numai dacă nu este deschis
+   un formular și timerul nu rulează. */
+(function autoUpdateFromGitHub(){
+ const repoApi="https://api.github.com/repos/radugeorgiana9680-ship-it/Cleaning-Manager/commits?path=index.html&per_page=1";
+ let knownSha=null;
+
+ async function checkVersion(){
+  try{
+   const response=await fetch(repoApi,{
+    cache:"no-store",
+    headers:{"Accept":"application/vnd.github+json"}
+   });
+   if(!response.ok)return;
+   const commits=await response.json();
+   const latest=commits&&commits[0]&&commits[0].sha;
+   if(!latest)return;
+
+   if(knownSha===null){
+    knownSha=latest;
+    return;
+   }
+
+   if(latest!==knownSha){
+    const modalOpen=Array.from(document.querySelectorAll("dialog")).some(d=>d.open);
+    if(!modalOpen&&!timerRunning){
+     location.reload();
+    }
+   }
+  }catch(e){
+   console.log("Actualizarea automată va fi reîncercată.");
+  }
+ }
+
+ checkVersion();
+ setInterval(checkVersion,90000);
+})();
 </script>
 </body>
 </html>
