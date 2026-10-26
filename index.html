@@ -1,1087 +1,425 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="ro">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#f8e8ee">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4c5d6">
 <title>Pure Shine Cleaning Manager</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Parisienne&display=swap');
-
-:root {
-  --pink:#e8b9ca;
-  --pink-light:#fff1f5;
-  --pink-dark:#b66e8b;
-  --gold:#c5a15b;
-  --gold-light:#f7edcf;
-  --cream:#fffaf7;
-  --white:#ffffff;
-  --text:#51444b;
-  --muted:#9b8b93;
-  --green:#8aa994;
-  --blue:#9cb7d1;
-  --lavender:#b5a6ce;
-  --peach:#e9b99d;
-  --border:#f0e1e6;
-  --shadow:0 5px 22px rgba(140,94,113,.09);
-}
-
+:root{--pink:#f4c5d6;--pink2:#fff0f5;--gold:#c6a15b;--lav:#e7def6;--sage:#dceee2;--blue:#dceaf8;--cream:#fff5e6;--ink:#403540;--muted:#817681;--line:#f0e2e9;--shadow:0 8px 25px #6c4a5b12}
 *{box-sizing:border-box}
-html{min-height:100%;background:var(--cream)}
-body{margin:0;background:var(--cream);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.45}
+html,body{margin:0;min-height:100%;background:#fff9fb;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{overflow-x:hidden}
 button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--pink-dark);outline-offset:2px}
-button:disabled{opacity:.5;cursor:not-allowed}
-.app{width:100%;max-width:650px;margin:0 auto;min-height:100dvh;padding-bottom:90px}
-header{background:linear-gradient(135deg,#f8e5ec,#fff9f0);padding:calc(14px + env(safe-area-inset-top)) 17px 17px;border-bottom:1px solid var(--border)}
-.topline{display:flex;align-items:center;gap:12px}
-.brandmark{width:45px;height:45px;flex-shrink:0;border-radius:15px;background:white;display:grid;place-items:center;font-size:24px;box-shadow:var(--shadow)}
-.brandname{font-family:'Parisienne',cursive;font-size:29px;line-height:1.15;color:#9d6680}
-.brand-sub{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-top:3px}
-.header-actions{margin-left:auto;display:flex;gap:7px}
-.icon-btn{width:36px;height:36px;border:1px solid #ecd9df;background:#fffafc;border-radius:12px;color:var(--pink-dark);font-size:17px}
-.banner{margin-top:14px;width:100%;height:105px;border-radius:17px;overflow:hidden;background:linear-gradient(115deg,#e6bdcd,#f8e8d4 55%,#e4d8ee);position:relative}
-.banner img{width:100%;height:100%;object-fit:cover;display:block}
-.banner-empty{height:100%;display:flex;align-items:center;justify-content:center;gap:10px;color:#78586a}
-.banner-empty span:first-child{font-size:31px}
-.banner-empty strong{display:block;font-size:15px}
-.banner-empty small{font-size:11px;color:#856f7a}
-main{padding:17px 15px}
-.page{display:none}
-.page.active{display:block}
-.page-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
-h1{font-size:21px;margin:0;font-weight:700;letter-spacing:-.5px}
-h2{font-size:16px;margin:0 0 12px}
-h3{font-size:14px;margin:0}
-.subtext{font-size:12px;color:var(--muted);margin-top:4px}
-.section{margin-bottom:19px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
-.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
-.stat{background:#fff;border:1px solid var(--border);border-radius:17px;padding:14px;box-shadow:var(--shadow);min-width:0}
-.stat .stat-icon{font-size:21px;margin-bottom:8px}
-.stat .stat-label{font-size:11px;color:var(--muted)}
-.stat .stat-value{font-size:22px;font-weight:700;letter-spacing:-.6px;margin-top:2px;overflow-wrap:anywhere}
-.stat.pink{background:#fff0f5}
-.stat.gold{background:#fff8e8}
-.stat.green{background:#eff7f1}
-.stat.blue{background:#eef5fb}
-.card{background:white;border:1px solid var(--border);border-radius:17px;padding:15px;margin-bottom:12px;box-shadow:var(--shadow)}
-.row{display:flex;align-items:center;gap:10px}
-.row.between{justify-content:space-between}
-.row.wrap{flex-wrap:wrap}
-.grow{flex:1;min-width:0}
-.client-avatar{width:44px;height:44px;flex-shrink:0;border-radius:15px;background:#f8e5ed;color:#a36b84;display:grid;place-items:center;font-size:18px;font-weight:700;overflow:hidden}
-.client-avatar img{width:100%;height:100%;object-fit:cover}
-.pill{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:20px;background:#f8eaf0;color:#a36b84;font-size:10px;font-weight:700}
-.pill.gold{background:#fff4d9;color:#987631}
-.pill.green{background:#eaf5ed;color:#60886c}
-.pill.blue{background:#eaf2fa;color:#6287a7}
-.pill.lavender{background:#f0eafb;color:#8271a5}
-.btn{border:0;border-radius:12px;padding:10px 14px;background:var(--pink);color:#593e4a;font-weight:700;font-size:12px;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:39px}
-.btn.primary{background:var(--pink-dark);color:white}
-.btn.gold{background:var(--gold-light);color:#81652f}
-.btn.soft{background:#fff0f5;color:#9d6680}
-.btn.ghost{background:white;border:1px solid var(--border);color:var(--text)}
-.btn.danger{background:#fff0ef;color:#b85858}
-.btn.green{background:#e8f3eb;color:#547d60}
-.btn.small{min-height:31px;padding:6px 9px;font-size:11px}
-.btn.full{width:100%}
-.fab{position:fixed;right:max(20px,calc((100vw - 650px)/2 + 18px));bottom:calc(82px + env(safe-area-inset-bottom));width:53px;height:53px;border-radius:19px;border:0;background:var(--pink-dark);color:white;font-size:27px;box-shadow:0 7px 20px #b66e8b55;z-index:20}
-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:650px;background:#fffdfd;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(6,minmax(0,1fr));padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:30}
-.nav-btn{border:0;background:transparent;color:#aa9aa2;font-size:9px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:5px 0;min-width:0}
-.nav-btn .nav-icon{font-size:19px;line-height:1.1}
-.nav-btn.active{color:var(--pink-dark);font-weight:700}
-.nav-btn.active .nav-icon{transform:translateY(-1px)}
-.field{margin-bottom:13px}
-label{display:block;font-size:11px;font-weight:700;color:#85727b;margin-bottom:6px}
-input,select,textarea{width:100%;min-height:42px;border:1px solid var(--border);border-radius:11px;background:#fffdfd;padding:10px 11px;color:var(--text);outline:none}
-textarea{resize:vertical;min-height:75px}
-input:focus,select:focus,textarea:focus{border-color:var(--pink-dark)}
-.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.form-grid .field{min-width:0}
-.empty{text-align:center;padding:27px 14px;color:var(--muted)}
-.empty .empty-icon{font-size:35px;margin-bottom:8px}
-.list-item{padding:12px 0;border-bottom:1px solid #f4e9ed}
-.list-item:last-child{border-bottom:0}
-.schedule-time{width:68px;flex-shrink:0;font-size:12px;font-weight:700;color:var(--pink-dark)}
-.day-label{font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin:18px 0 7px}
-.job-line{border-left:3px solid var(--pink);padding:10px 11px;background:#fff9fb;border-radius:0 12px 12px 0;margin-bottom:8px}
-.job-line.done{border-left-color:var(--green);background:#f4faf5}
-.job-line.cancelled{border-left-color:#d5cbd0;opacity:.7}
-.job-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
-.job-actions .btn{min-height:29px;padding:5px 8px;font-size:10px}
-.separator{height:1px;background:var(--border);margin:13px 0}
-.notice{padding:11px 12px;background:#fff7e7;border-radius:12px;font-size:12px;color:#80683a;margin-bottom:13px}
-.progress{height:7px;background:#f4e8ec;border-radius:9px;overflow:hidden;margin-top:9px}
-.progress>div{height:100%;background:linear-gradient(90deg,var(--pink-dark),var(--gold));border-radius:9px}
-.calendar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
-.calendar-dayname{text-align:center;font-size:10px;color:var(--muted);padding:5px 0}
-.calendar-day{border:1px solid #f1e5e9;background:white;border-radius:9px;min-height:47px;padding:5px 2px;text-align:center;font-size:11px;color:var(--text);position:relative}
-.calendar-day.muted{opacity:.35}
-.calendar-day.today{border-color:var(--gold);background:#fff9e9}
-.calendar-day.selected{background:#f8e5ed;border-color:var(--pink-dark)}
-.calendar-day.has-job:after{content:"";position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--pink-dark)}
-.calendar-day.holiday{background:#f0eafb}
-.modal-backdrop{position:fixed;inset:0;background:#34232b70;z-index:60;display:none;align-items:flex-end;justify-content:center}
-.modal-backdrop.open{display:flex}
-.modal{width:100%;max-width:650px;max-height:92dvh;overflow:auto;background:var(--cream);border-radius:23px 23px 0 0;padding:20px 17px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -10px 35px #3d253022}
-.modal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:17px}
-.modal-top h2{margin:0}
-.close-btn{border:0;background:#f6e7ed;border-radius:10px;width:34px;height:34px;font-size:20px;color:#95677c}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(95px + env(safe-area-inset-bottom));background:#594650;color:white;padding:11px 17px;border-radius:12px;font-size:12px;z-index:100;box-shadow:var(--shadow);max-width:90%;display:none}
-.toast.show{display:block}
-.photo-row{display:flex;align-items:center;gap:13px}
-.photo-preview{width:64px;height:64px;object-fit:cover;border-radius:17px;background:#f7e7ed}
-.settings-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
-.settings-row:last-child{border-bottom:0}
-.settings-row small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
-.switch{width:43px;height:25px;position:relative;flex-shrink:0}
-.switch input{opacity:0;width:0;height:0}
-.switch span{position:absolute;inset:0;background:#e3d7dc;border-radius:20px;transition:.2s}
-.switch span:before{content:"";position:absolute;width:19px;height:19px;left:3px;top:3px;background:white;border-radius:50%;transition:.2s}
-.switch input:checked+span{background:var(--pink-dark)}
-.switch input:checked+span:before{transform:translateX(18px)}
-.small-muted{font-size:11px;color:var(--muted)}
-.money{font-weight:700;color:#63866d}
-.invoice-paper{background:white;padding:22px;border:1px solid var(--border);border-radius:10px}
-.invoice-paper h2{font-family:'Parisienne',cursive;font-size:30px;color:#a36b84}
-.invoice-total{font-size:22px;font-weight:700;color:#8b6576}
-@media(min-width:540px){main{padding:22px}.banner{height:135px}.stat{padding:17px}.modal-backdrop{align-items:center}.modal{border-radius:23px;max-width:520px}}
-@media(max-width:360px){main{padding:12px}.grid{gap:8px}.stat{padding:11px}.stat .stat-value{font-size:19px}.nav-btn{font-size:8px}.nav-btn .nav-icon{font-size:17px}.form-grid{gap:7px}}
+button{cursor:pointer;touch-action:manipulation}
+.app{max-width:900px;margin:auto;padding:14px 14px 110px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 0 18px}
+.brand{display:flex;gap:11px;align-items:center}
+.logo{width:52px;height:52px;border-radius:18px;background:linear-gradient(135deg,var(--pink),var(--gold));display:grid;place-items:center;font-size:28px}
+h1{font:700 24px Georgia,serif;margin:0;color:#594653}
+.sub,.muted{font-size:13px;color:var(--muted);line-height:1.5}
+.sub{font-size:12px;margin-top:4px}
+.iconbtn{border:0;background:white;border-radius:16px;width:48px;height:48px;box-shadow:var(--shadow);font-size:24px;color:#ad6685}
+.hero{background:linear-gradient(135deg,#f8dce7,#eee5fa 60%,#fff2dc);border-radius:26px;padding:20px;box-shadow:var(--shadow);margin-bottom:14px}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#8b6e7e;font-weight:800}
+.hero h2{font:700 24px Georgia,serif;margin:8px 0}
+.hero p{margin:0;color:#776875}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:14px 0}
+.stat{border-radius:20px;padding:15px;background:white;box-shadow:var(--shadow);min-width:0}
+.stat:nth-child(1){background:var(--pink2)}.stat:nth-child(2){background:var(--sage)}.stat:nth-child(3){background:var(--lav)}.stat:nth-child(4){background:var(--cream)}
+.stat span{font-size:12px;color:var(--muted);display:block}
+.stat strong{font-size:22px;display:block;margin-top:5px;overflow-wrap:anywhere}
+.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 2px 10px}
+.sectionhead h2{margin:0;font:700 20px Georgia,serif}
+.btn{border:0;border-radius:15px;padding:12px 15px;background:var(--pink);color:#603d4d;font-weight:750}
+.btn.primary{background:linear-gradient(135deg,#edb4c9,#d5b879);color:#fff}
+.btn.soft{background:#f8e7ee}.btn.small{padding:8px 10px;font-size:13px}
+.btn.danger{background:#f8dddd;color:#913f4b}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.card{background:white;border:1px solid var(--line);border-radius:22px;padding:15px;box-shadow:var(--shadow);margin:9px 0}
+.empty{padding:22px 10px;text-align:center;color:var(--muted)}
+.item{padding:13px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.itemtop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.item strong{font-size:16px}
+.pill{display:inline-block;padding:4px 8px;border-radius:10px;font-size:11px;font-weight:800;background:var(--lav);margin:3px 4px 0 0}
+.pill.green{background:var(--sage)}.pill.pink{background:var(--pink2)}.pill.gold{background:var(--cream)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.field{margin:12px 0}
+.field label{display:block;font-weight:750;font-size:13px;margin-bottom:6px}
+.field input,.field select,.field textarea,input,select,textarea{width:100%;min-width:0;border:1.5px solid #e9dce4;background:white;border-radius:13px;padding:12px;color:var(--ink);font-size:16px}
+.field textarea{min-height:80px;resize:vertical}
+.nav{position:fixed;z-index:30;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;padding:7px 5px calc(7px + env(safe-area-inset-bottom));background:#ffffffed;backdrop-filter:blur(18px);border-top:1px solid var(--line);box-shadow:0 -8px 25px #6c4a5b12}
+.nav button{border:0;background:transparent;border-radius:14px;padding:6px 0;color:#8b7d88;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.nav button span{font-size:23px;line-height:1.1}
+.nav button.active{color:#a64f75;background:#fff0f5;font-weight:800}
+.modalback{display:none;position:fixed;inset:0;z-index:60;background:#32253075;align-items:flex-end;justify-content:center}
+.modal{width:100%;max-width:720px;max-height:92dvh;overflow:auto;background:#fffafd;border-radius:27px 27px 0 0;padding:18px 16px calc(24px + env(safe-area-inset-bottom));box-shadow:0 -15px 40px #38233330}
+.modalhead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.modalhead h2{margin:0;font:700 22px Georgia,serif}
+.close{width:40px;height:40px;border:0;border-radius:50%;background:#f7e5ed;color:#9c5471;font-size:25px}
+.tabs{display:flex;gap:7px;overflow:auto;margin:10px 0}
+.tab{border:0;border-radius:12px;padding:9px 12px;background:#f2eaf1;color:#685c68;font-weight:750;white-space:nowrap}
+.tab.active{background:#e9c1d1;color:#75445a}
+.notice{background:#fff5dd;border-radius:14px;padding:12px;font-size:13px;line-height:1.45;margin:10px 0}
+.hidden{display:none!important}.wide{width:100%}
+@media(min-width:700px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}.nav{left:50%;right:auto;transform:translateX(-50%);width:min(900px,100%);border:1px solid var(--line);border-bottom:0;border-radius:20px 20px 0 0}.modalback{align-items:center;padding:20px}.modal{border-radius:26px;max-height:88dvh}}
+@media(max-width:360px){.app{padding-left:10px;padding-right:10px}.hero h2{font-size:21px}.nav button{font-size:10px}.nav button span{font-size:20px}.btn{padding:11px 12px}}
 </style>
 </head>
 <body>
-<div class="app">
+<main class="app">
 <header>
-  <div class="topline">
-    <div class="brandmark">✨</div>
-    <div>
-      <div class="brandname">Pure Shine</div>
-      <div class="brand-sub">Cleaning Manager</div>
-    </div>
-    <div class="header-actions">
-      <button class="icon-btn" id="headerPhotoBtn" title="Schimbă bannerul">▧</button>
-      <button class="icon-btn" id="headerSettingsBtn" title="Setări">⚙</button>
-    </div>
-  </div>
-  <div class="banner" id="banner">
-    <div class="banner-empty" id="bannerEmpty"><span>✧</span><div><strong>A little sparkle every day</strong><small>Your cleaning business, beautifully organised</small></div></div>
-    <img id="bannerImage" alt="Banner Pure Shine" hidden>
-  </div>
+ <div class="brand"><div class="logo">✨</div><div><h1>Pure Shine</h1><div class="sub">Cleaning Manager · Business planner</div></div></div>
+ <button class="iconbtn" onclick="openAddMenu()" aria-label="Adaugă">＋</button>
 </header>
-
-<main>
-<section class="page active" id="page-home">
-  <div class="page-heading">
-    <div><h1 id="welcomeTitle">Bună dimineața! ✨</h1><div class="subtext" id="todayDate"></div></div>
-    <button class="btn soft small" id="homeAddJob">＋ Job</button>
-  </div>
-  <div class="grid">
-    <div class="stat pink"><div class="stat-icon">🧹</div><div class="stat-label">Joburi astăzi</div><div class="stat-value" id="statToday">0</div></div>
-    <div class="stat gold"><div class="stat-icon">💷</div><div class="stat-label">Câștiguri luna aceasta</div><div class="stat-value" id="statMonth">£0.00</div></div>
-    <div class="stat green"><div class="stat-icon">⏱️</div><div class="stat-label">Ore lucrate luna aceasta</div><div class="stat-value" id="statHours">0h</div></div>
-    <div class="stat blue"><div class="stat-icon">👥</div><div class="stat-label">Clienți activi</div><div class="stat-value" id="statClients">0</div></div>
-  </div>
-  <div class="section" style="margin-top:22px">
-    <div class="row between"><h2>Programul de astăzi</h2><button class="btn ghost small" id="homeViewSchedule">Vezi tot →</button></div>
-    <div id="todayJobs"></div>
-  </div>
-  <div class="section">
-    <div class="row between"><h2>Rezumatul lunii</h2><span class="pill gold" id="homeMonthLabel"></span></div>
-    <div class="card">
-      <div class="row between"><span class="small-muted">Venituri din joburi finalizate</span><strong id="homeIncome">£0.00</strong></div>
-      <div class="progress"><div id="incomeProgress" style="width:0%"></div></div>
-      <div class="row between" style="margin-top:8px"><span class="small-muted">Joburi finalizate</span><strong id="homeCompleted">0</strong></div>
-    </div>
-  </div>
-  <div class="section"><h2>Acces rapid</h2>
-    <div class="grid">
-      <button class="card" id="quickClients" style="text-align:left;border:1px solid var(--border)"><div style="font-size:23px">👥</div><strong>Clienți</strong><div class="subtext">Gestionează clienții</div></button>
-      <button class="card" id="quickInvoice" style="text-align:left;border:1px solid var(--border)"><div style="font-size:23px">🧾</div><strong>Factură</strong><div class="subtext">Generează o factură</div></button>
-    </div>
-  </div>
-</section>
-
-<section class="page" id="page-schedule">
-  <div class="page-heading"><div><h1>Program</h1><div class="subtext">Planifică și editează joburile</div></div><button class="btn primary" id="scheduleAdd">＋ Job</button></div>
-  <div class="row wrap" style="margin-bottom:13px">
-    <button class="btn soft small" id="showList">☷ Listă</button>
-    <button class="btn ghost small" id="showCalendar">▦ Calendar</button>
-    <select id="scheduleFilter" style="width:auto;flex:1;min-width:120px;min-height:32px;padding:6px 8px;font-size:11px"><option value="all">Toate joburile</option><option value="planned">Programate</option><option value="completed">Finalizate</option><option value="holiday">Concedii</option></select>
-  </div>
-  <div id="scheduleList"></div>
-  <div id="calendarView" hidden>
-    <div class="card">
-      <div class="calendar-head"><button class="btn ghost small" id="prevMonth">‹</button><strong id="calendarTitle"></strong><button class="btn ghost small" id="nextMonth">›</button></div>
-      <div class="calendar-grid" id="calendarGrid"></div>
-    </div>
-    <div id="calendarDayJobs"></div>
-  </div>
-</section>
-
-<section class="page" id="page-clients">
-  <div class="page-heading"><div><h1>Clienți</h1><div class="subtext">Toate detaliile într-un singur loc</div></div><button class="btn primary" id="addClientBtn">＋ Client</button></div>
-  <div class="field"><input id="clientSearch" placeholder="🔎  Caută client după nume sau telefon..."></div>
-  <div class="grid" style="margin-bottom:12px">
-    <div class="stat pink"><div class="stat-label">Clienți</div><div class="stat-value" id="clientCount">0</div></div>
-    <div class="stat gold"><div class="stat-label">Bani încasați total</div><div class="stat-value" id="clientIncome">£0</div></div>
-  </div>
-  <div id="clientList"></div>
-</section>
-
-<section class="page" id="page-earnings">
-  <div class="page-heading"><div><h1>Câștiguri</h1><div class="subtext">Se calculează doar după finalizarea jobului</div></div></div>
-  <div class="card">
-    <div class="field"><label for="earningsMonth">Luna selectată</label><input type="month" id="earningsMonth"></div>
-    <div class="grid">
-      <div class="stat pink"><div class="stat-label">Venit total</div><div class="stat-value" id="earnTotal">£0.00</div></div>
-      <div class="stat green"><div class="stat-label">Ore finalizate</div><div class="stat-value" id="earnHours">0h</div></div>
-      <div class="stat gold"><div class="stat-label">Joburi finalizate</div><div class="stat-value" id="earnJobs">0</div></div>
-      <div class="stat blue"><div class="stat-label">De încasat</div><div class="stat-value" id="earnOwed">£0.00</div></div>
-    </div>
-  </div>
-  <div class="row between"><h2>Istoric venituri</h2><button class="btn ghost small" id="exportEarnings">Export CSV</button></div>
-  <div id="earningsList"></div>
-</section>
-
-<section class="page" id="page-settings">
-  <div class="page-heading"><div><h1>Setări</h1><div class="subtext">Personalizează aplicația</div></div></div>
-  <div class="card">
-    <h2>Aspectul aplicației</h2>
-    <div class="settings-row"><div><strong>Mărimea textului</strong><small>Schimbă textul și pictogramele, nu dimensiunea paginii</small></div><strong id="zoomLabel">100%</strong></div>
-    <input type="range" id="zoomRange" min="80" max="200" step="10" value="100" aria-label="Mărimea textului">
-    <div class="row between small-muted"><span>80%</span><span>140%</span><span>200%</span></div>
-    <div class="separator"></div>
-    <div class="field"><label for="themeColor">Culoarea principală</label><select id="themeColor"><option value="pink">Roz pudrat & Gold</option><option value="lavender">Lavandă & Gold</option><option value="sage">Verde salvie & Gold</option><option value="blue">Albastru pudrat & Gold</option></select></div>
-    <div class="field"><label for="businessName">Numele afacerii</label><input id="businessName" value="Pure Shine Cleaning"></div>
-    <button class="btn primary full" id="saveSettings">Salvează setările</button>
-  </div>
-  <div class="card">
-    <h2>Fotografii</h2>
-    <div class="settings-row"><div><strong>Banner</strong><small>Fotografia lată din partea de sus</small></div><button class="btn soft small" id="uploadBannerBtn">Alege foto</button></div>
-    <div class="settings-row"><div><strong>Imagine profil aplicație</strong><small>Adaugă un logo sau o fotografie</small></div><button class="btn soft small" id="uploadLogoBtn">Alege foto</button></div>
-    <div class="row wrap" style="margin-top:12px"><button class="btn ghost small" id="removeBanner">Elimină bannerul</button><button class="btn ghost small" id="removeLogo">Elimină fotografia de profil</button></div>
-  </div>
-  <div class="card">
-    <h2>Tarife implicite</h2>
-    <div class="field"><label for="agencyRate">Clienți agency (£/oră)</label><input type="number" min="0" step=".5" id="agencyRate" value="16"></div>
-    <div class="field"><label for="privateRate">Clienți private (£/oră)</label><input type="number" min="0" step=".5" id="privateRate" value="18"></div>
-    <button class="btn primary full" id="saveRates">Salvează tarifele</button>
-  </div>
-  <div class="card">
-    <h2>Date și backup</h2>
-    <p class="subtext">Păstrează o copie a clienților și joburilor. Nu șterge datele din Safari fără backup.</p>
-    <div class="row wrap"><button class="btn soft" id="exportBackup">⬇ Backup JSON</button><button class="btn ghost" id="importBackupBtn">⬆ Importă backup</button></div>
-    <div class="separator"></div>
-    <button class="btn ghost full" id="exportCalendar">Exportă calendar (.ics)</button>
-  </div>
-  <div class="card">
-    <h2>Mementouri</h2>
-    <div class="settings-row"><div><strong>Confirmare înainte de job</strong><small>Mementourile pot necesita permisiunea telefonului</small></div><label class="switch"><input type="checkbox" id="remindersToggle"><span></span></label></div>
-    <button class="btn ghost full" id="testReminder" style="margin-top:12px">Testează mementoul</button>
-  </div>
-  <div class="card"><h2>Despre aplicație</h2><div class="small-muted">Pure Shine Cleaning Manager · Date salvate local pe acest dispozitiv.</div><div class="separator"></div><button class="btn danger full" id="resetApp">Resetează aplicația</button><div class="small-muted" style="margin-top:7px">Această opțiune șterge datele salvate. Folosește-o doar dacă ești sigură.</div></div>
-</section>
-
-<section class="page" id="page-invoice">
-  <div class="page-heading"><div><h1>Factură</h1><div class="subtext">Creează și salvează factura pentru client</div></div></div>
-  <div class="card">
-    <div class="form-grid">
-      <div class="field"><label for="invoiceClient">Client</label><select id="invoiceClient"></select></div>
-      <div class="field"><label for="invoiceNumber">Număr factură</label><input id="invoiceNumber" value="PS-001"></div>
-      <div class="field"><label for="invoiceDate">Data facturii</label><input type="date" id="invoiceDate"></div>
-      <div class="field"><label for="invoiceDue">Scadentă la</label><input type="date" id="invoiceDue"></div>
-    </div>
-    <div class="field"><label for="invoiceNotes">Note</label><textarea id="invoiceNotes" placeholder="Mulțumesc pentru colaborare!"></textarea></div>
-    <button class="btn primary full" id="generateInvoice">Generează factura</button>
-  </div>
-  <div id="invoicePreview"></div>
-  <button class="btn gold full" id="printInvoice" style="display:none;margin-bottom:12px">🖨️ Tipărește / Salvează PDF</button>
-</section>
+<div id="view"></div>
 </main>
-
-<button class="fab" id="fabAdd" aria-label="Adaugă job">＋</button>
-<nav>
-  <button class="nav-btn active" data-page="home"><span class="nav-icon">⌂</span><span>Acasă</span></button>
-  <button class="nav-btn" data-page="schedule"><span class="nav-icon">▦</span><span>Program</span></button>
-  <button class="nav-btn" data-page="clients"><span class="nav-icon">♙</span><span>Clienți</span></button>
-  <button class="nav-btn" data-page="earnings"><span class="nav-icon">£</span><span>Câștiguri</span></button>
-  <button class="nav-btn" data-page="invoice"><span class="nav-icon">▤</span><span>Factură</span></button>
-  <button class="nav-btn" data-page="settings"><span class="nav-icon">⚙</span><span>Setări</span></button>
+<nav class="nav" aria-label="Navigare">
+ <button data-page="home" class="active" onclick="go('home')"><span>⌂</span>Acasă</button>
+ <button data-page="schedule" onclick="go('schedule')"><span>▦</span>Calendar</button>
+ <button data-page="clients" onclick="go('clients')"><span>♙</span>Clienți</button>
+ <button data-page="money" onclick="go('money')"><span>£</span>Financiar</button>
+ <button data-page="more" onclick="go('more')"><span>☷</span>Mai mult</button>
 </nav>
+<div class="modalback" id="modalback" onclick="if(event.target===this)closeModal()">
+ <section class="modal" id="modal" role="dialog" aria-modal="true"></section>
 </div>
-
-<div class="modal-backdrop" id="modalBackdrop">
-  <div class="modal">
-    <div class="modal-top"><h2 id="modalTitle">Adaugă job</h2><button class="close-btn" id="modalClose">×</button></div>
-    <div id="modalContent"></div>
-  </div>
-</div>
-<div class="toast" id="toast"></div>
-<input type="file" id="photoInput" accept="image/*" hidden>
-<input type="file" id="backupInput" accept=".json,application/json" hidden>
-
+<input id="importFile" type="file" accept="application/json,.json" class="hidden" onchange="importBackup(event)">
 <script>
-(function(){
 'use strict';
-
-const $ = id => document.getElementById(id);
-const KEY = 'pureShineCleaningManager3';
-const PREFS_KEY = 'pureShineCleaningPrefs3';
-const PHOTOS_KEY = 'pureShineCleaningPhotos3';
-const TIMER_KEY = 'pureShineCleaningTimer3';
-
-const todayISO = () => {
-  const d = new Date();
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const KEY='pureShineManager_v5';
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const uid=()=>Date.now()+Math.floor(Math.random()*10000);
+const initial={
+ version:5,
+ settings:{zoom:100,reminderTime:'20:00',businessName:'Pure Shine Cleaning',businessEmail:'',businessPhone:'',businessAddress:'',invoicePrefix:'PSC',invoiceNext:1},
+ clients:[],jobs:[],payments:[],invoices:[],expenses:[],holidays:[],history:[],activeTimer:null
 };
-const addDays = (iso,n) => {
-  const d = new Date(iso+'T12:00:00');
-  d.setDate(d.getDate()+n);
-  return dateISO(d);
-};
-const dateISO = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-const monthISO = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
-const parseDate = s => new Date((s||todayISO())+'T12:00:00');
-const money = n => '£'+(Number(n)||0).toFixed(2);
-const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const uid = () => 'id-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);
-const fmtDate = s => s ? parseDate(s).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '—';
-const timeMinutes = s => {
-  if(!s || !/^\d{1,2}:\d{2}$/.test(s)) return 0;
-  const [h,m]=s.split(':').map(Number);
-  return h*60+m;
-};
-const durationMinutes = (start,end) => Math.max(0,timeMinutes(end)-timeMinutes(start));
-const durationText = mins => Math.floor(mins/60)+'h '+String(mins%60).padStart(2,'0')+'m';
-const hoursText = mins => (mins/60).toFixed(1)+'h';
-const defaultPrefs = {
-  zoom:100,theme:'pink',businessName:'Pure Shine Cleaning',
-  agencyRate:16,privateRate:18,reminders:false
-};
-function readJSON(key,fallback){
-  try{
-    const raw=localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : fallback;
-  }catch(e){return fallback;}
+let db=loadDB(),page='home',scheduleDate=today(),scheduleMode='week',clientSearch='',moneyFilter='month';
+function loadDB(){
+ let x=null;
+ try{x=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
+ if(!x){
+  for(const k of ['pureShineManager_v4','pureShineCleaningManager','pureShineManager_v3','pureShineManager_v2','pureShineManager']){
+   try{const old=JSON.parse(localStorage.getItem(k)||'null');if(old&&typeof old==='object'){x=old;break}}catch(e){}
+  }
+ }
+ if(!x)return structuredClone(initial);
+ return {...structuredClone(initial),...x,settings:{...initial.settings,...(x.settings||{})},
+ clients:Array.isArray(x.clients)?x.clients:[],jobs:Array.isArray(x.jobs)?x.jobs:[],
+ payments:Array.isArray(x.payments)?x.payments:[],invoices:Array.isArray(x.invoices)?x.invoices:[],
+ expenses:Array.isArray(x.expenses)?x.expenses:[],holidays:Array.isArray(x.holidays)?x.holidays:[],
+ history:Array.isArray(x.history)?x.history:[]};
 }
-function saveJSON(key,value){
-  try{localStorage.setItem(key,JSON.stringify(value));return true;}
-  catch(e){toast('Spațiul de stocare este plin. Exportă un backup și redu dimensiunea fotografiilor.');return false;}
-}
-let prefs={...defaultPrefs,...readJSON(PREFS_KEY,{})};
-let data=readJSON(KEY,{clients:[],jobs:[],holidays:[]});
-if(!data || typeof data!=='object') data={clients:[],jobs:[],holidays:[]};
-if(!Array.isArray(data.clients))data.clients=[];
-if(!Array.isArray(data.jobs))data.jobs=[];
-if(!Array.isArray(data.holidays))data.holidays=[];
-let photos=readJSON(PHOTOS_KEY,{banner:'',logo:''});
-let timer=readJSON(TIMER_KEY,null);
-let timerInterval=null;
-let scheduleView='list';
-let calendarMonth=new Date();
-let selectedCalendarDate=todayISO();
-let photoTarget='banner';
-let toastTimer=null;
-
-const defaults=[
-  {name:'Lottie',type:'Agency',rate:16,day:1,start:'09:00',end:'11:00',frequency:'weekly',color:'pink'},
-  {name:'Christine',type:'Private',rate:18,day:2,start:'09:30',end:'12:30',frequency:'fortnightly',anchor:'2026-11-03',color:'lavender'},
-  {name:'Matt',type:'Agency',rate:16,day:2,start:'10:00',end:'14:00',frequency:'weekly',color:'blue'},
-  {name:'Sonia',type:'Agency',rate:16,day:3,start:'10:00',end:'15:00',frequency:'weekly',color:'green'},
-  {name:'Laura',type:'Private',rate:18,day:4,start:'09:00',end:'13:00',frequency:'weekly',color:'gold'},
-  {name:'Hannah',type:'Agency',rate:16,day:4,start:'14:00',end:'17:00',frequency:'weekly',color:'blue'},
-  {name:'Meghan',type:'Private',rate:18,day:4,start:'17:30',end:'18:30',frequency:'weekly',color:'lavender'},
-  {name:'Joanna',type:'Private',rate:18,day:5,start:'09:30',end:'12:30',frequency:'fortnightly',anchor:'2026-10-30',color:'pink'},
-  {name:'Sindu',type:'Agency',rate:16,day:5,start:'09:30',end:'12:30',frequency:'fortnightly',anchor:'2026-11-06',color:'green'},
-  {name:'Mike',type:'Private',rate:18,day:0,start:'10:00',end:'12:00',frequency:'every3weeks',anchor:'2026-10-25',color:'gold'},
-  {name:'Peter',type:'Private',rate:18,day:6,start:'10:00',end:'12:00',frequency:'occasional',color:'blue'}
+const PRESETS=[
+ {name:'Lottie',type:'Agency',rate:16,frequency:'Săptămânal',day:'Luni',start:'13:00',end:'15:00'},
+ {name:'Christine',type:'Private',rate:18,frequency:'La 2 săptămâni',day:'Marți',start:'09:30',end:'12:30',anchorDate:'2026-10-13'},
+ {name:'Matt',type:'Agency',rate:16,frequency:'Săptămânal',day:'Marți',start:'09:00',end:'13:00',durationHours:4},
+ {name:'Sonia',type:'Agency',rate:16,frequency:'Săptămânal',day:'Miercuri',start:'09:00',end:'14:00'},
+ {name:'Laura',type:'Private',rate:18,frequency:'Săptămânal',day:'Joi',start:'09:00',end:'13:00'},
+ {name:'Hannah',type:'Agency',rate:16,frequency:'Săptămânal',day:'Joi',start:'13:00',end:'16:00'},
+ {name:'Meghan',type:'Private',rate:null,frequency:'Ocazional',day:'Nesetată',start:'',end:''},
+ {name:'Johanna',type:'Private',rate:null,frequency:'La 2 săptămâni',day:'Vineri',start:'',end:'',week:'A',anchorWeek:'2026-10-05'},
+ {name:'Sindu',type:'Agency',rate:16,frequency:'La 2 săptămâni',day:'Vineri',start:'',end:'',week:'B',anchorWeek:'2026-10-05'},
+ {name:'Peter',type:'Private',rate:null,frequency:'Ocazional',day:'Nesetată',start:'',end:''},
+ {name:'Mike',type:'Private',rate:null,frequency:'La 3 săptămâni',day:'Nesetată',start:'',end:'',durationHours:2}
 ];
-
-function persist(){
-  saveJSON(KEY,data);
-}
-function savePrefs(){
-  saveJSON(PREFS_KEY,prefs);
-}
-function toast(message){
-  const el=$('toast');
-  el.textContent=message;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>el.classList.remove('show'),2600);
-}
-function clientById(id){return data.clients.find(c=>c.id===id);}
-function jobById(id){return data.jobs.find(j=>j.id===id);}
-function getClientName(id){const c=clientById(id);return c?c.name:'Client șters';}
-function activeClients(){return data.clients.filter(c=>!c.archived);}
-function getJobMinutes(j){
-  if(Number.isFinite(Number(j.actualMinutes))&&j.actualMinutes>0)return Number(j.actualMinutes);
-  return durationMinutes(j.start,j.end);
-}
-function jobEarning(j){
-  if(j.status!=='completed')return 0;
-  return (getJobMinutes(j)/60)*(Number(j.rate)||0);
-}
-function sortJobs(list){
-  return list.sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.start||'').localeCompare(b.start||''));
-}
-function currentMonthJobs(){
-  const m=$('earningsMonth')?.value||monthISO(new Date());
-  return data.jobs.filter(j=>(j.date||'').startsWith(m));
-}
-function isDateInHoliday(date,clientId){
-  return data.holidays.some(h=>(!h.clientId||h.clientId===clientId)&&date>=h.start&&date<=h.end);
-}
-function dayMatches(client,date){
-  const d=parseDate(date);
-  if(d.getDay()!==Number(client.day))return false;
-  if(client.frequency==='occasional')return false;
-  if(client.frequency==='weekly')return true;
-  const anchor=client.anchor||date;
-  const diff=Math.round((parseDate(date)-parseDate(anchor))/86400000);
-  if(client.frequency==='fortnightly')return ((Math.floor(diff/7)%2)+2)%2===0;
-  if(client.frequency==='every3weeks')return ((Math.floor(diff/7)%3)+3)%3===0;
-  return true;
-}
-function generateJobs(){
-  const start=addDays(todayISO(),-45);
-  const end=addDays(todayISO(),150);
-  const existing=new Set(data.jobs.filter(j=>j.recurringKey).map(j=>j.recurringKey));
-  let changed=false;
-  for(let date=start;date<=end;date=addDays(date,1)){
-    const d=parseDate(date);
-    for(const c of activeClients()){
-      if(!dayMatches(c,date)||isDateInHoliday(date,c.id))continue;
-      let st=c.start||'09:00',en=c.end||'11:00';
-      if(c.name.toLowerCase()==='matt'&&date.startsWith('2026-')){
-        const christine=activeClients().find(x=>x.name.toLowerCase()==='christine');
-        const isChristineWeek=christine&&dayMatches(christine,date);
-        if(isChristineWeek){st='13:00';en='17:00';}
-        else{st=c.start||'10:00';en=c.end||'14:00';}
-      }
-      const key=c.id+'|'+date;
-      if(existing.has(key))continue;
-      const manuallyAdded=data.jobs.some(j=>j.clientId===c.id&&j.date===date);
-      if(manuallyAdded)continue;
-      data.jobs.push({
-        id:uid(),clientId:c.id,date,start:st,end:en,
-        rate:Number(c.rate)||16,status:'planned',notes:'',
-        recurringKey:key,actualMinutes:0,paid:false
-      });
-      existing.add(key);changed=true;
-    }
+function normName(v){return String(v||'').toLowerCase().replace(/[^a-z]/g,'')}
+function presetFor(c){return PRESETS.find(p=>normName(p.name)===normName(c.name)||(normName(c.name)==='joanna'&&p.name==='Johanna'))}
+function seedClients(){
+ let changed=false;
+ for(const p of PRESETS){
+  let c=db.clients.find(x=>normName(x.name)===normName(p.name)||(p.name==='Johanna'&&normName(x.name)==='joanna'));
+  if(!c){db.clients.push({id:uid(),phone:'',address:'',notes:'',archived:false,...p,schedulePresetVersion:1});changed=true}
+  else if(!c.schedulePresetVersion){
+   for(const k of ['type','rate','frequency','day','start','end','week','anchorDate','anchorWeek','durationHours'])if(p[k]!==undefined)c[k]=p[k];
+   c.schedulePresetVersion=1;changed=true;
   }
-  if(changed)persist();
+ }
+ const gill=db.clients.find(c=>normName(c.name)==='gill');
+ if(gill&&!gill.archived){gill.archived=true;changed=true}
+ if(changed)history('Program standard configurat','Clienții și orele standard au fost configurate; istoricul lucrărilor a fost păstrat.');
+ return changed;
 }
-function seedClientsIfNeeded(){
-  if(data.clients.length)return;
-  data.clients=defaults.map(d=>({...d,id:uid(),phone:'',email:'',address:'',notes:'',archived:false,photo:''}));
-  persist();
+const DAY={'Luni':1,'Marți':2,'Miercuri':3,'Joi':4,'Vineri':5,'Sâmbătă':6,'Duminică':0};
+function iso(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function dateObj(s){return new Date(`${s}T12:00:00`)}
+function monday(s){let d=dateObj(s);d.setDate(d.getDate()-((d.getDay()+6)%7));return d}
+function daysBetween(a,b){return Math.round((dateObj(b)-dateObj(a))/86400000)}
+function minutes(t){if(!t||!t.includes(':'))return 0;const [h,m]=t.split(':').map(Number);return h*60+m}
+function duration(a,b){let n=minutes(b)-minutes(a);if(n<0)n+=1440;return Math.max(0,n)/60}
+function hoursText(h){const n=Math.round((Number(h)||0)*60);return `${Math.floor(n/60)} h ${n%60} min`}
+function money(n){return new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(n)||0)}
+function dateText(s){if(!s)return '';return dateObj(s).toLocaleDateString('ro-RO',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}
+function esc(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function getClient(id){return db.clients.find(c=>String(c.id)===String(id))}
+function jobHours(j){return Number.isFinite(j.actualMinutes)?j.actualMinutes/60:duration(j.start,j.end)}
+function completed(){return db.jobs.filter(j=>j.status==='Finalizat')}
+function realized(){return completed().reduce((s,j)=>s+(Number(j.price)||0),0)}
+function received(){return db.payments.reduce((s,p)=>s+(Number(p.amount)||0),0)}
+function expensesTotal(){return db.expenses.reduce((s,e)=>s+(Number(e.amount)||0),0)}
+function paid(i){return db.payments.filter(p=>String(p.invoiceId)===String(i.id)).reduce((s,p)=>s+(Number(p.amount)||0),0)}
+function balance(i){return Math.max(0,(Number(i.total)||0)-paid(i))}
+function history(action,details=''){db.history.unshift({id:uid(),at:new Date().toISOString(),action,details});db.history=db.history.slice(0,250)}
+function save(action='Date salvate'){try{if(action)history(action);localStorage.setItem(KEY,JSON.stringify(db));return true}catch(e){alert('Nu s-au putut salva datele. Descarcă un backup și încearcă din nou.');return false}}
+function occurs(c,date){
+ if(!c||c.archived||!c.day||c.day==='Nesetată'||DAY[c.day]===undefined||!c.start||!c.end)return false;
+ if(dateObj(date).getDay()!==DAY[c.day]||minutes(c.start)===minutes(c.end))return false;
+ if(c.frequency==='Ocazional')return false;
+ if(c.frequency==='La 2 săptămâni'){
+  if(c.anchorDate){let n=daysBetween(c.anchorDate,date);return n>=0&&n%14===0}
+  const a=monday(c.anchorWeek||'2026-10-05'),b=monday(date),weeks=Math.round((b-a)/604800000);
+  return ((weeks%2)+2)%2===(c.week==='B'?1:0);
+ }
+ if(c.frequency==='La 3 săptămâni')return !!c.anchorDate&&daysBetween(c.anchorDate,date)>=0&&daysBetween(c.anchorDate,date)%21===0;
+ return c.frequency==='Săptămânal';
 }
-function applySettings(){
-  const zoom=Number(prefs.zoom)||100;
-  document.documentElement.style.fontSize=(14*zoom/100)+'px';
-  document.querySelectorAll('.nav-icon').forEach(el=>el.style.fontSize=(19*zoom/100)+'px');
-  $('zoomLabel').textContent=zoom+'%';
-  $('zoomRange').value=zoom;
-  $('themeColor').value=prefs.theme||'pink';
-  $('businessName').value=prefs.businessName||'Pure Shine Cleaning';
-  $('agencyRate').value=prefs.agencyRate??16;
-  $('privateRate').value=prefs.privateRate??18;
-  $('remindersToggle').checked=!!prefs.reminders;
-  const root=document.documentElement;
-  const palettes={
-    pink:['#e8b9ca','#fff1f5','#b66e8b'],
-    lavender:['#d3c6e8','#f4effb','#8b78ac'],
-    sage:['#c0d8c6','#eff7f1','#779b82'],
-    blue:['#c4d9ec','#eef5fb','#799dbd']
-  };
-  const p=palettes[prefs.theme]||palettes.pink;
-  root.style.setProperty('--pink',p[0]);
-  root.style.setProperty('--pink-light',p[1]);
-  root.style.setProperty('--pink-dark',p[2]);
-  document.querySelectorAll('.brandname').forEach(el=>el.textContent=(prefs.businessName||'Pure Shine Cleaning').replace(/ Cleaning$/,''));
-}
-function applyPhotos(){
-  if(photos.banner){
-    $('bannerImage').src=photos.banner;
-    $('bannerImage').hidden=false;
-    $('bannerEmpty').hidden=true;
-  }else{
-    $('bannerImage').removeAttribute('src');
-    $('bannerImage').hidden=true;
-    $('bannerEmpty').hidden=false;
+function generateRecurring(){
+ let changed=false;
+ for(const j of db.jobs){
+  if(!j.autoGenerated||j.status!=='Programat'||j.date<today())continue;
+  const c=getClient(j.clientId);if(!c||!occurs(c,j.date))continue;
+  const rate=Number(c.rate)||0,price=Math.round(duration(c.start,c.end)*rate*100)/100;
+  if(j.start!==c.start||j.end!==c.end||Number(j.rate)!==rate||Number(j.price)!==price){j.start=c.start;j.end=c.end;j.rate=rate;j.price=price;changed=true}
+ }
+ for(let n=0;n<84;n++){
+  const d=dateObj(today());d.setDate(d.getDate()+n);const date=iso(d);
+  for(const c of db.clients){
+   if(!occurs(c,date))continue;
+   if(db.holidays.some(h=>String(h.clientId)===String(c.id)&&date>=h.from&&date<=h.to))continue;
+   if(db.jobs.some(j=>String(j.clientId)===String(c.id)&&j.date===date))continue;
+   const rate=Number(c.rate)||0;
+   db.jobs.push({id:uid(),clientId:c.id,date,start:c.start,end:c.end,rate,price:Math.round(duration(c.start,c.end)*rate*100)/100,status:'Programat',notes:'',autoGenerated:true});
+   changed=true;
   }
-  if(photos.logo){
-    $('headerPhotoBtn').textContent='✓';
-    $('headerPhotoBtn').title='Fotografia profil setată';
-    $('headerPhotoBtn').style.backgroundImage='url("'+photos.logo+'")';
-    $('headerPhotoBtn').style.backgroundSize='cover';
-    $('headerPhotoBtn').style.backgroundPosition='center';
-  }else{
-    $('headerPhotoBtn').textContent='▧';
-    $('headerPhotoBtn').style.backgroundImage='';
-  }
+ }
+ if(changed)db.jobs.sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start));
+ return changed;
 }
-function showPage(page){
-  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
-  const target=$('page-'+page);
-  if(target)target.classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(el=>el.classList.toggle('active',el.dataset.page===page));
-  $('fabAdd').style.display=['home','schedule','clients'].includes(page)?'grid':'none';
-  if(page==='home')renderHome();
-  if(page==='schedule')renderSchedule();
-  if(page==='clients')renderClients();
-  if(page==='earnings')renderEarnings();
-  if(page==='invoice')renderInvoiceOptions();
-}
-function todayJobs(){
-  return sortJobs(data.jobs.filter(j=>j.date===todayISO()&&j.status!=='cancelled'));
+function setView(html){document.getElementById('view').innerHTML=html;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page))}
+function go(p){page=p;render()}
+function render(){if(page==='home')renderHome();else if(page==='schedule')renderSchedule();else if(page==='clients')renderClients();else if(page==='money')renderMoney();else renderMore()}
+function jobCard(j){
+ const c=getClient(j.clientId);
+ return `<div class="item"><div class="itemtop"><div><strong>${esc(c?.name||'Client')}</strong><div class="muted">${dateText(j.date)} · ${esc(j.start||'')}–${esc(j.end||'')} · ${hoursText(jobHours(j))}</div><span class="pill ${j.status==='Finalizat'?'green':j.status==='Anulat'?'pink':'gold'}">${esc(j.status)}</span></div><div style="text-align:right"><strong>${money(j.price)}</strong><div class="muted">${esc(c?.type||'')}</div></div></div><div class="btnrow" style="margin-top:9px"><button class="btn small soft" onclick="jobForm(${j.id})">Editează</button>${j.status!=='Finalizat'&&j.status!=='Anulat'?`<button class="btn small" onclick="startTimer(${j.id})">▶ Timer</button><button class="btn small" onclick="finishJob(${j.id})">Finalizează</button>`:''}<button class="btn small danger" onclick="deleteJob(${j.id})">Șterge</button></div></div>`;
 }
 function renderHome(){
-  const now=new Date();
-  const hour=now.getHours();
-  $('welcomeTitle').textContent=(hour<12?'Bună dimineața':hour<18?'Bună ziua':'Bună seara')+'! ✨';
-  $('todayDate').textContent=now.toLocaleDateString('ro-RO',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  const t=todayJobs();
-  const m=monthISO(now);
-  const completed=data.jobs.filter(j=>j.status==='completed'&&(j.date||'').startsWith(m));
-  $('statToday').textContent=t.length;
-  $('statMonth').textContent=money(completed.reduce((s,j)=>s+jobEarning(j),0));
-  $('statHours').textContent=hoursText(completed.reduce((s,j)=>s+getJobMinutes(j),0));
-  $('statClients').textContent=activeClients().length;
-  $('homeMonthLabel').textContent=now.toLocaleDateString('ro-RO',{month:'long',year:'numeric'});
-  $('homeIncome').textContent=money(completed.reduce((s,j)=>s+jobEarning(j),0));
-  $('homeCompleted').textContent=completed.length;
-  $('incomeProgress').style.width=Math.min(100,completed.length*10)+'%';
-  if(!t.length){
-    $('todayJobs').innerHTML='<div class="card empty"><div class="empty-icon">🌸</div><strong>Nu ai joburi programate astăzi</strong><div class="subtext">Poți adăuga un job cu butonul +.</div></div>';
-  }else{
-    $('todayJobs').innerHTML=t.map(j=>jobCard(j,true)).join('');
-  }
-}
-function jobCard(j,compact=false){
-  const c=clientById(j.clientId);
-  const status=j.status==='completed'?'<span class="pill green">✓ Finalizat</span>':j.status==='cancelled'?'<span class="pill">Anulat</span>':'<span class="pill gold">Programat</span>';
-  const mins=getJobMinutes(j);
-  return '<div class="job-line '+(j.status==='completed'?'done':j.status==='cancelled'?'cancelled':'')+'">'+
-    '<div class="row"><div class="schedule-time">'+esc(j.start||'09:00')+'<br>'+esc(j.end||'11:00')+'</div>'+
-    '<div class="grow"><strong>'+esc(c?c.name:'Client șters')+'</strong><div class="subtext">'+esc(c?c.type:'')+' · '+durationText(mins)+'</div></div>'+status+'</div>'+
-    (j.status==='completed'?'<div class="row between" style="margin-top:8px"><span class="small-muted">'+(j.paid?'✓ Plătit':'De încasat')+'</span><strong class="money">'+money(jobEarning(j))+'</strong></div>':'')+
-    '<div class="job-actions">'+
-      (j.status!=='completed'?'<button class="btn green" data-action="complete-job" data-id="'+j.id+'">✓ Finalizează</button>':'')+
-      '<button class="btn ghost" data-action="edit-job" data-id="'+j.id+'">Editează</button>'+
-      (j.status==='completed'?'<button class="btn gold" data-action="toggle-paid" data-id="'+j.id+'">'+(j.paid?'Marchează neachitat':'Marchează plătit')+'</button>':'')+
-      (j.status!=='cancelled'?'<button class="btn ghost" data-action="timer-job" data-id="'+j.id+'">⏱ Timer</button>':'')+
-      '<button class="btn danger" data-action="delete-job" data-id="'+j.id+'">Șterge</button>'+
-    '</div></div>';
+ const list=db.jobs.filter(j=>j.date===today()&&j.status!=='Anulat').sort((a,b)=>a.start.localeCompare(b.start));
+ const upcoming=db.jobs.filter(j=>j.date>today()&&j.status==='Programat').sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start)).slice(0,3);
+ setView(`<section class="hero"><div class="eyebrow">${dateText(today())}</div><h2>Bună! Hai să organizăm ziua ✨</h2><p>Tot ce ai nevoie pentru Pure Shine Cleaning, într-un singur loc.</p><div class="btnrow" style="margin-top:15px"><button class="btn primary" onclick="jobForm()">＋ Adaugă job</button><button class="btn" onclick="clientForm()">＋ Client nou</button></div></section>
+ <div class="stats"><div class="stat"><span>Venit realizat</span><strong>${money(realized())}</strong></div><div class="stat"><span>Bani încasați</span><strong>${money(received())}</strong></div><div class="stat"><span>De încasat</span><strong>${money(db.invoices.reduce((s,i)=>s+balance(i),0))}</strong></div><div class="stat"><span>Ore finalizate</span><strong>${hoursText(completed().reduce((s,j)=>s+jobHours(j),0))}</strong></div></div>
+ ${db.activeTimer?`<div class="card"><b>⏱️ Cronometru activ</b><p class="muted">${esc(getClient(db.activeTimer.clientId)?.name||'Client')}</p><div id="timerReadout" style="font-size:26px;font-weight:850">${timerElapsed()}</div><div class="btnrow"><button class="btn primary" onclick="timerFinish()">Finalizează jobul</button><button class="btn" onclick="timerPauseResume()">${db.activeTimer.pausedAt?'Continuă':'Pauză'}</button></div></div>`:''}
+ <div class="sectionhead"><h2>Programul de azi</h2><button class="btn small soft" onclick="go('schedule')">Calendar →</button></div><div class="card">${list.length?list.map(jobCard).join(''):'<div class="empty">🌸<br><b>Nu ai joburi programate astăzi.</b></div>'}</div>
+ <div class="sectionhead"><h2>Urmează</h2></div><div class="card">${upcoming.length?upcoming.map(jobCard).join(''):'<div class="empty">Nu există alte joburi programate.</div>'}</div>
+ <div class="sectionhead"><h2>Acces rapid</h2></div><div class="grid2"><button class="btn" onclick="invoiceForm()">🧾 Creează factură</button><button class="btn" onclick="expenseForm()">🛍️ Adaugă cheltuială</button><button class="btn" onclick="openForecast()">📈 Previziuni</button><button class="btn" onclick="exportBackup()">💾 Backup</button></div>`);
+ startReadout();
 }
 function renderSchedule(){
-  $('showList').classList.toggle('soft',scheduleView==='list');
-  $('showList').classList.toggle('ghost',scheduleView!=='list');
-  $('showCalendar').classList.toggle('soft',scheduleView==='calendar');
-  $('showCalendar').classList.toggle('ghost',scheduleView!=='calendar');
-  $('scheduleList').hidden=scheduleView!=='list';
-  $('calendarView').hidden=scheduleView!=='calendar';
-  if(scheduleView==='calendar'){renderCalendar();return;}
-  const filter=$('scheduleFilter').value;
-  let jobs=sortJobs(data.jobs.filter(j=>{
-    if(filter==='planned')return j.status==='planned';
-    if(filter==='completed')return j.status==='completed';
-    if(filter==='holiday')return false;
-    return j.status!=='cancelled';
-  }));
-  if(!jobs.length){
-    $('scheduleList').innerHTML='<div class="card empty"><div class="empty-icon">🗓️</div><strong>Nu există joburi</strong><div class="subtext">Adaugă primul job folosind butonul de mai sus.</div></div>';
-    return;
-  }
-  const grouped={};
-  jobs.forEach(j=>(grouped[j.date]||(grouped[j.date]=[])).push(j));
-  $('scheduleList').innerHTML=Object.keys(grouped).map(date=>'<div class="day-label">'+esc(fmtDate(date))+'</div>'+grouped[date].map(j=>jobCard(j)).join('')).join('');
+ let dates=weekDates(scheduleDate);
+ let jobs=db.jobs.filter(j=>scheduleMode==='all'||(scheduleMode==='day'?j.date===scheduleDate:dates.includes(j.date))).sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start));
+ setView(`<div class="sectionhead"><h2>Calendar & programări</h2><button class="btn primary" onclick="jobForm()">＋ Job</button></div><div class="card"><div class="grid2"><div class="field"><label>Data de referință</label><input type="date" value="${scheduleDate}" onchange="scheduleDate=this.value;renderSchedule()"></div><div class="field"><label>Vizualizare</label><select onchange="scheduleMode=this.value;renderSchedule()"><option value="week" ${scheduleMode==='week'?'selected':''}>Săptămâna</option><option value="day" ${scheduleMode==='day'?'selected':''}>Ziua aleasă</option><option value="all" ${scheduleMode==='all'?'selected':''}>Toate joburile</option></select></div></div><div class="btnrow"><button class="btn small" onclick="scheduleDate=shiftDate(scheduleDate,-7);renderSchedule()">← Săptămâna trecută</button><button class="btn small" onclick="scheduleDate=today();renderSchedule()">Astăzi</button><button class="btn small" onclick="scheduleDate=shiftDate(scheduleDate,7);renderSchedule()">Săptămâna următoare →</button></div></div><div class="card">${jobs.length?jobs.map(jobCard).join(''):'<div class="empty">Nu există joburi în această vizualizare.</div>'}</div>
+ <div class="sectionhead"><h2>Clienți în vacanță</h2><button class="btn small" onclick="holidayForm()">＋ Vacanță</button></div><div class="card">${db.holidays.length?db.holidays.map(h=>`<div class="item"><strong>${esc(getClient(h.clientId)?.name||'Client')}</strong><div class="muted">${dateText(h.from)} – ${dateText(h.to)}</div><button class="btn small danger" onclick="deleteHoliday(${h.id})">Șterge vacanța</button></div>`).join(''):'<div class="empty">Nu ai înregistrat vacanțe.</div>'}</div>`);
 }
-function renderCalendar(){
-  const y=calendarMonth.getFullYear(),m=calendarMonth.getMonth();
-  $('calendarTitle').textContent=calendarMonth.toLocaleDateString('ro-RO',{month:'long',year:'numeric'});
-  const first=new Date(y,m,1);
-  const mondayOffset=(first.getDay()+6)%7;
-  const days=new Date(y,m+1,0).getDate();
-  const prevDays=new Date(y,m,0).getDate();
-  const names=['Lu','Ma','Mi','Jo','Vi','Sâ','Du'];
-  let html=names.map(n=>'<div class="calendar-dayname">'+n+'</div>').join('');
-  for(let i=0;i<42;i++){
-    let day,month=m,year=y,muted=false;
-    if(i<mondayOffset){day=prevDays-mondayOffset+i+1;month=m-1;muted=true;}
-    else if(i>=mondayOffset+days){day=i-(mondayOffset+days)+1;month=m+1;muted=true;}
-    else day=i-mondayOffset+1;
-    const date=dateISO(new Date(year,month,day,12));
-    const has=data.jobs.some(j=>j.date===date&&j.status!=='cancelled');
-    const holiday=data.holidays.some(h=>date>=h.start&&date<=h.end);
-    html+='<button class="calendar-day '+(muted?'muted ':'')+(date===todayISO()?'today ':'')+(date===selectedCalendarDate?'selected ':'')+(has?'has-job ':'')+(holiday?'holiday':'')+'" data-action="select-day" data-date="'+date+'">'+day+'</button>';
-  }
-  $('calendarGrid').innerHTML=html;
-  renderCalendarDayJobs();
-}
-function renderCalendarDayJobs(){
-  const jobs=sortJobs(data.jobs.filter(j=>j.date===selectedCalendarDate&&j.status!=='cancelled'));
-  const holidays=data.holidays.filter(h=>selectedCalendarDate>=h.start&&selectedCalendarDate<=h.end);
-  $('calendarDayJobs').innerHTML='<div class="row between" style="margin:15px 0 10px"><h2>'+esc(fmtDate(selectedCalendarDate))+'</h2><button class="btn primary small" data-action="add-date-job" data-date="'+selectedCalendarDate+'">＋ Job</button></div>'+
-    holidays.map(h=>'<div class="notice">🏖️ Concediu: '+esc(h.clientId?getClientName(h.clientId):'Toți clienții')+'</div>').join('')+
-    (jobs.length?jobs.map(j=>jobCard(j)).join(''):'<div class="card empty"><div class="empty-icon">🌷</div>Nu există joburi în această zi.</div>');
-}
+function weekDates(s){let d=dateObj(s);d.setDate(d.getDate()-((d.getDay()+6)%7));return Array.from({length:7},(_,i)=>{let x=new Date(d);x.setDate(x.getDate()+i);return iso(x)})}
+function shiftDate(s,n){let d=dateObj(s);d.setDate(d.getDate()+n);return iso(d)}
 function renderClients(){
-  const query=($('clientSearch').value||'').toLowerCase().trim();
-  const clients=activeClients().filter(c=>(c.name+' '+(c.phone||'')+' '+(c.email||'')).toLowerCase().includes(query)).sort((a,b)=>a.name.localeCompare(b.name));
-  $('clientCount').textContent=activeClients().length;
-  $('clientIncome').textContent=money(data.jobs.filter(j=>j.status==='completed').reduce((sum,j)=>sum+jobEarning(j),0));
-  if(!clients.length){
-    $('clientList').innerHTML='<div class="card empty"><div class="empty-icon">👥</div><strong>Niciun client găsit</strong><div class="subtext">Adaugă un client nou.</div></div>';
-    return;
-  }
-  $('clientList').innerHTML=clients.map(c=>{
-    const jobs=data.jobs.filter(j=>j.clientId===c.id);
-    const done=jobs.filter(j=>j.status==='completed');
-    const income=done.reduce((s,j)=>s+jobEarning(j),0);
-    const photo=c.photo?'<img src="'+c.photo+'" alt="">':esc((c.name||'?').slice(0,1).toUpperCase());
-    return '<div class="card"><div class="row"><div class="client-avatar">'+photo+'</div><div class="grow"><strong>'+esc(c.name)+'</strong><div class="subtext">'+esc(c.type||'Private')+' · '+money(c.rate||0)+'/oră</div><div class="row wrap" style="margin-top:5px"><span class="pill '+(c.frequency==='occasional'?'blue':'')+'">'+esc(frequencyLabel(c.frequency))+'</span><span class="pill green">'+done.length+' finalizate</span></div></div><button class="btn ghost small" data-action="edit-client" data-id="'+c.id+'">Editează</button></div>'+
-    (c.phone?'<div class="subtext" style="margin-top:10px">☎ '+esc(c.phone)+'</div>':'')+
-    (c.notes?'<div class="subtext" style="margin-top:5px">'+esc(c.notes)+'</div>':'')+
-    '<div class="separator"></div><div class="row between"><div><div class="small-muted">Câștiguri totale</div><strong class="money">'+money(income)+'</strong></div><div class="row wrap"><button class="btn soft small" data-action="client-job" data-id="'+c.id+'">＋ Job</button><button class="btn ghost small" data-action="client-holiday" data-id="'+c.id+'">🏖 Concediu</button><button class="btn danger small" data-action="delete-client" data-id="'+c.id+'">Șterge</button></div></div></div>';
-  }).join('');
+ let list=db.clients.filter(c=>!c.archived&&(c.name+' '+(c.phone||'')+' '+(c.address||'')).toLowerCase().includes(clientSearch.toLowerCase()));
+ setView(`<div class="sectionhead"><h2>Clienții tăi</h2><button class="btn primary" onclick="clientForm()">＋ Client</button></div><div class="field"><input placeholder="Caută după nume, telefon sau adresă…" value="${esc(clientSearch)}" oninput="clientSearch=this.value;renderClients()"></div><div class="card">${list.length?list.map(c=>`<div class="item"><div class="itemtop"><div><strong>${esc(c.name)}</strong><div><span class="pill ${c.type==='Private'?'pink':'green'}">${esc(c.type||'Private')}</span><span class="pill">${esc(c.frequency||'Săptămânal')}</span></div><div class="muted">${esc(c.day||'Zi nesetată')} · ${esc(c.start||'--:--')}–${esc(c.end||'--:--')} · ${c.rate==null?'Tarif de completat':money(c.rate)+'/oră'}</div>${c.phone?`<div class="muted">☎ ${esc(c.phone)}</div>`:''}${c.address?`<div class="muted">📍 ${esc(c.address)}</div>`:''}</div><strong>${money(db.jobs.filter(j=>String(j.clientId)===String(c.id)&&j.status==='Finalizat').reduce((s,j)=>s+(Number(j.price)||0),0))}</strong></div><div class="btnrow" style="margin-top:9px"><button class="btn small soft" onclick="clientForm(${c.id})">Editează</button><button class="btn small" onclick="jobForm(null,${c.id})">＋ Job</button><button class="btn small" onclick="holidayForm(${c.id})">🏖️ Vacanță</button>${c.address?`<button class="btn small" onclick="openRoute(${c.id})">🗺️ Traseu</button>`:''}<button class="btn small danger" onclick="archiveClient(${c.id})">Arhivează</button></div></div>`).join(''):'<div class="empty">Nu există clienți.</div>'}</div>`);
 }
-function frequencyLabel(f){
-  return ({weekly:'Săptămânal',fortnightly:'La 2 săptămâni',every3weeks:'La 3 săptămâni',occasional:'Ocazional'})[f]||'Săptămânal';
+function renderMoney(){
+ const jobs=completed().filter(j=>moneyFilter==='all'||j.date.startsWith(today().slice(0,7)));
+ const exp=db.expenses.filter(e=>moneyFilter==='all'||e.date.startsWith(today().slice(0,7))).reduce((s,e)=>s+(Number(e.amount)||0),0);
+ const income=jobs.reduce((s,j)=>s+(Number(j.price)||0),0);
+ setView(`<div class="sectionhead"><h2>Financiar</h2><button class="btn primary" onclick="invoiceForm()">＋ Factură</button></div><div class="tabs"><button class="tab ${moneyFilter==='month'?'active':''}" onclick="moneyFilter='month';renderMoney()">Luna curentă</button><button class="tab ${moneyFilter==='all'?'active':''}" onclick="moneyFilter='all';renderMoney()">Tot istoricul</button></div>
+ <div class="stats"><div class="stat"><span>Venit realizat</span><strong>${money(income)}</strong></div><div class="stat"><span>Încasări</span><strong>${money(received())}</strong></div><div class="stat"><span>Restant facturi</span><strong>${money(db.invoices.reduce((s,i)=>s+balance(i),0))}</strong></div><div class="stat"><span>Cheltuieli</span><strong>${money(exp)}</strong></div></div><div class="card"><div class="itemtop"><div><strong>Profit operațional estimat</strong><div class="muted">Venit realizat minus cheltuieli.</div></div><strong>${money(income-exp)}</strong></div></div>
+ <div class="sectionhead"><h2>Facturi</h2><button class="btn small" onclick="invoiceForm()">＋ Adaugă</button></div><div class="card">${db.invoices.length?db.invoices.slice().reverse().map(i=>`<div class="item"><div class="itemtop"><div><strong>${esc(i.number)}</strong><div class="muted">${esc(getClient(i.clientId)?.name||i.clientName||'Client')} · ${dateText(i.date)}</div><span class="pill ${balance(i)===0?'green':paid(i)>0?'gold':'pink'}">${balance(i)===0?'Plătită':paid(i)>0?'Parțial plătită':'Neplătită'}</span></div><div style="text-align:right"><strong>${money(i.total)}</strong><div class="muted">Restant ${money(balance(i))}</div></div></div><div class="btnrow"><button class="btn small" onclick="printInvoice(${i.id})">PDF / Print</button><button class="btn small" onclick="paymentForm(${i.id})">＋ Plată</button></div></div>`).join(''):'<div class="empty">Nu există facturi.</div>'}</div>
+ <div class="sectionhead"><h2>Cheltuieli</h2><button class="btn small" onclick="expenseForm()">＋ Cheltuială</button></div><div class="card">${db.expenses.length?db.expenses.slice().reverse().map(e=>`<div class="item"><div class="itemtop"><div><strong>${esc(e.category)}</strong><div class="muted">${dateText(e.date)} · ${esc(e.note||'')}</div></div><strong>${money(e.amount)}</strong></div><button class="btn small danger" onclick="deleteExpense(${e.id})">Șterge</button></div>`).join(''):'<div class="empty">Nu ai înregistrat cheltuieli.</div>'}</div>`);
 }
-function renderEarnings(){
-  if(!$('earningsMonth').value)$('earningsMonth').value=monthISO(new Date());
-  const jobs=currentMonthJobs().filter(j=>j.status==='completed');
-  const total=jobs.reduce((s,j)=>s+jobEarning(j),0);
-  const mins=jobs.reduce((s,j)=>s+getJobMinutes(j),0);
-  const owed=jobs.filter(j=>!j.paid).reduce((s,j)=>s+jobEarning(j),0);
-  $('earnTotal').textContent=money(total);
-  $('earnHours').textContent=hoursText(mins);
-  $('earnJobs').textContent=jobs.length;
-  $('earnOwed').textContent=money(owed);
-  const sorted=[...jobs].sort((a,b)=>b.date.localeCompare(a.date));
-  $('earningsList').innerHTML=sorted.length?sorted.map(j=>'<div class="card"><div class="row between"><div><strong>'+esc(getClientName(j.clientId))+'</strong><div class="subtext">'+esc(fmtDate(j.date))+' · '+durationText(getJobMinutes(j))+'</div></div><div style="text-align:right"><strong class="money">'+money(jobEarning(j))+'</strong><div class="small-muted">'+(j.paid?'Plătit':'De încasat')+'</div></div></div><div class="row wrap" style="margin-top:9px"><button class="btn ghost small" data-action="edit-job" data-id="'+j.id+'">Editează</button><button class="btn '+(j.paid?'ghost':'gold')+' small" data-action="toggle-paid" data-id="'+j.id+'">'+(j.paid?'Marchează neachitat':'Marchează plătit')+'</button></div></div>').join(''):'<div class="card empty"><div class="empty-icon">💷</div><strong>Încă nu ai venituri în această lună</strong><div class="subtext">Finalizează un job pentru a calcula câștigul.</div></div>';
+function renderMore(){
+ setView(`<div class="sectionhead"><h2>Mai mult</h2></div><div class="card"><button class="btn wide" onclick="openSettings()">⚙️ Setări și mărime text</button><div class="bottomspace"></div><button class="btn wide" onclick="openForecast()">📈 Previziuni venituri</button><div class="bottomspace"></div><button class="btn wide" onclick="openHistory()">📜 Istoric modificări</button><div class="bottomspace"></div><button class="btn wide" onclick="exportCSV('jobs')">📄 Export joburi CSV</button><div class="bottomspace"></div><button class="btn wide" onclick="exportCSV('clients')">👥 Export clienți CSV</button><div class="bottomspace"></div><button class="btn wide" onclick="exportCSV('invoices')">🧾 Export facturi CSV</button><div class="bottomspace"></div><button class="btn wide" onclick="exportBackup()">💾 Backup complet</button><div class="bottomspace"></div><button class="btn wide" onclick="document.getElementById('importFile').click()">↩️ Restaurează backup</button><div class="notice">Datele sunt păstrate local în browser. Descarcă periodic un backup JSON pentru a evita pierderea datelor. Sincronizarea cloud și notificările automate în fundal necesită configurare suplimentară.</div></div>`);
 }
-function renderInvoiceOptions(){
-  const current=$('invoiceClient').value;
-  $('invoiceClient').innerHTML='<option value="">Alege clientul</option>'+activeClients().map(c=>'<option value="'+c.id+'">'+esc(c.name)+'</option>').join('');
-  if(current) $('invoiceClient').value=current;
-  if(!$('invoiceDate').value)$('invoiceDate').value=todayISO();
-  if(!$('invoiceDue').value)$('invoiceDue').value=addDays(todayISO(),14);
+function show(html){document.getElementById('modal').innerHTML=html;document.getElementById('modalback').style.display='flex'}
+function closeModal(){document.getElementById('modalback').style.display='none'}
+function openAddMenu(){show(`<div class="modalhead"><h2>Adaugă</h2><button class="close" onclick="closeModal()">×</button></div><div class="btnrow"><button class="btn primary" onclick="closeModal();jobForm()">＋ Job</button><button class="btn" onclick="closeModal();clientForm()">＋ Client</button><button class="btn" onclick="closeModal();invoiceForm()">＋ Factură</button><button class="btn" onclick="closeModal();expenseForm()">＋ Cheltuială</button></div>`)}
+function clientForm(id){
+ const c=id?getClient(id):null;
+ const v=k=>esc(c?.[k]??'');
+ show(`<div class="modalhead"><h2>${c?'Editează client':'Client nou'}</h2><button class="close" onclick="closeModal()">×</button></div>
+ <form onsubmit="saveClient(event,${id||'null'})">
+ <div class="field"><label>Nume client *</label><input name="name" value="${v('name')}" required></div>
+ <div class="grid2"><div class="field"><label>Telefon</label><input name="phone" value="${v('phone')}" type="tel"></div><div class="field"><label>Tarif £/oră</label><input name="rate" value="${c?.rate??''}" type="number" min="0" step=".5"></div></div>
+ <div class="field"><label>Adresă</label><input name="address" value="${v('address')}"></div>
+ <div class="grid2"><div class="field"><label>Tip client</label><select name="type"><option value="Private" ${c?.type==='Private'?'selected':''}>Privat</option><option value="Agency" ${c?.type==='Agency'?'selected':''}>Agenție</option></select></div><div class="field"><label>Frecvență</label><select name="frequency">${['Săptămânal','La 2 săptămâni','La 3 săptămâni','Ocazional'].map(x=>`<option ${c?.frequency===x?'selected':''}>${x}</option>`).join('')}</select></div></div>
+ <div class="grid2"><div class="field"><label>Zi</label><select name="day">${['Nesetată','Luni','Marți','Miercuri','Joi','Vineri','Sâmbătă','Duminică'].map(x=>`<option ${((c?.day||'Nesetată')===x)?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>Săptămână alternativă</label><select name="week"><option value="A" ${c?.week==='A'?'selected':''}>A — Johanna</option><option value="B" ${c?.week==='B'?'selected':''}>B — Sindu</option><option value="Both" ${c?.week==='Both'?'selected':''}>Ambele săptămâni</option></select></div></div>
+ <div class="grid2"><div class="field"><label>Ora de început</label><input name="start" type="time" value="${v('start')}"></div><div class="field"><label>Ora de terminare</label><input name="end" type="time" value="${v('end')}"></div></div>
+ <div class="field"><label>Notițe</label><textarea name="notes">${v('notes')}</textarea></div>
+ <button class="btn primary wide">Salvează clientul</button></form>`);
 }
-function renderAll(){
-  renderHome();renderSchedule();renderClients();renderEarnings();renderInvoiceOptions();
+function saveClient(e,id){
+ e.preventDefault();const f=new FormData(e.target),old=id?getClient(id):null;
+ const c={...(old||{}),id:old?.id||uid(),name:f.get('name').trim(),phone:f.get('phone'),rate:f.get('rate')===''?null:Number(f.get('rate')),address:f.get('address'),type:f.get('type'),frequency:f.get('frequency'),day:f.get('day'),week:f.get('week'),start:f.get('start'),end:f.get('end'),notes:f.get('notes'),archived:false};
+ if(c.frequency==='La 2 săptămâni'&&!c.anchorDate&&!c.anchorWeek)c.anchorWeek=today();
+ if(c.frequency==='La 3 săptămâni'&&!c.anchorDate)c.anchorDate=today();
+ if(old){
+  const scheduleChanged=['day','start','end','rate','frequency','week','anchorDate','anchorWeek'].some(k=>old[k]!==c[k]);
+  Object.assign(old,c);
+  if(scheduleChanged)db.jobs=db.jobs.filter(j=>!(j.autoGenerated&&j.status==='Programat'&&j.date>=today()&&String(j.clientId)===String(old.id)));
+ }else db.clients.push(c);
+ save(old?'Client actualizat':'Client adăugat');generateRecurring();localStorage.setItem(KEY,JSON.stringify(db));closeModal();render();
 }
-function openModal(title,html){
-  $('modalTitle').textContent=title;
-  $('modalContent').innerHTML=html;
-  $('modalBackdrop').classList.add('open');
-  $('modalBackdrop').scrollTop=0;
+function archiveClient(id){if(!confirm('Arhivezi clientul? Istoricul și lucrările vor fi păstrate.'))return;const c=getClient(id);if(c)c.archived=true;save('Client arhivat');render()}
+function jobForm(id,clientId){
+ const j=id?db.jobs.find(x=>String(x.id)===String(id)):null;
+ const v=k=>esc(j?.[k]??'');
+ show(`<div class="modalhead"><h2>${j?'Editează job':'Programare nouă'}</h2><button class="close" onclick="closeModal()">×</button></div>
+ <form onsubmit="saveJob(event,${id||'null'})">
+ <div class="field"><label>Client *</label><select name="clientId" required><option value="">Alege clientul</option>${db.clients.filter(c=>!c.archived).map(c=>`<option value="${c.id}" ${(String(j?.clientId??clientId??'')===String(c.id))?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
+ <div class="field"><label>Data *</label><input type="date" name="date" value="${v('date')||scheduleDate||today()}" required></div>
+ <div class="grid2"><div class="field"><label>Început</label><input type="time" name="start" value="${v('start')}" required></div><div class="field"><label>Terminare</label><input type="time" name="end" value="${v('end')}" required></div></div>
+ <div class="grid2"><div class="field"><label>Tarif £/oră</label><input type="number" name="rate" min="0" step=".5" value="${j?.rate??''}" required></div><div class="field"><label>Status</label><select name="status">${['Programat','Finalizat','Anulat'].map(s=>`<option ${j?.status===s?'selected':''}>${s}</option>`).join('')}</select></div></div>
+ <div class="field"><label>Notițe</label><textarea name="notes">${v('notes')}</textarea></div>
+ <div class="notice">Programarea editată rămâne separată de programul standard al clientului.</div><button class="btn primary wide">Salvează programarea</button></form>`);
 }
-function closeModal(){$('modalBackdrop').classList.remove('open');}
-function clientOptions(selected){
-  return '<option value="">Alege clientul</option>'+activeClients().map(c=>'<option value="'+c.id+'" '+(c.id===selected?'selected':'')+'>'+esc(c.name)+'</option>').join('');
+function saveJob(e,id){
+ e.preventDefault();const f=new FormData(e.target),old=id?db.jobs.find(x=>String(x.id)===String(id)):null;
+ const start=f.get('start'),end=f.get('end'),rate=Number(f.get('rate')),hours=duration(start,end);
+ if(hours<=0){alert('Verifică orele introduse.');return}
+ const j={...(old||{}),id:old?.id||uid(),clientId:f.get('clientId'),date:f.get('date'),start,end,rate,price:Math.round(hours*rate*100)/100,status:f.get('status'),notes:f.get('notes'),autoGenerated:false};
+ if(old)Object.assign(old,j);else db.jobs.push(j);
+ save(old?'Programare editată':'Programare adăugată');generateRecurring();localStorage.setItem(KEY,JSON.stringify(db));closeModal();render();
 }
-function jobFormHtml(j){
-  const edit=!!j;
-  j=j||{clientId:'',date:todayISO(),start:'09:00',end:'11:00',rate:16,status:'planned',notes:'',actualMinutes:0,paid:false};
-  return '<form id="jobForm">'+
-    '<input type="hidden" id="jobId" value="'+esc(j.id||'')+'">'+
-    '<div class="field"><label for="jobClient">Client *</label><select id="jobClient" required>'+clientOptions(j.clientId)+'</select></div>'+
-    '<div class="field"><label for="jobDate">Data *</label><input type="date" id="jobDate" value="'+esc(j.date)+'" required></div>'+
-    '<div class="form-grid"><div class="field"><label for="jobStart">Ora de început</label><input type="time" id="jobStart" value="'+esc(j.start||'09:00')+'" required></div><div class="field"><label for="jobEnd">Ora de sfârșit</label><input type="time" id="jobEnd" value="'+esc(j.end||'11:00')+'" required></div></div>'+
-    '<div class="form-grid"><div class="field"><label for="jobRate">Tarif £/oră</label><input type="number" id="jobRate" value="'+Number(j.rate||16)+'" min="0" step=".5" required></div><div class="field"><label for="jobStatus">Status</label><select id="jobStatus"><option value="planned" '+(j.status==='planned'?'selected':'')+'>Programat</option><option value="completed" '+(j.status==='completed'?'selected':'')+'>Finalizat</option><option value="cancelled" '+(j.status==='cancelled'?'selected':'')+'>Anulat</option></select></div></div>'+
-    '<div class="field"><label for="jobActual">Durata reală (minute, opțional)</label><input type="number" id="jobActual" min="0" step="1" value="'+(j.actualMinutes||'')+'" placeholder="Lasă gol pentru durata programată"></div>'+
-    '<div class="field"><label for="jobNotes">Note</label><textarea id="jobNotes">'+esc(j.notes||'')+'</textarea></div>'+
-    '<label class="row" style="margin-bottom:15px"><input type="checkbox" id="jobPaid" style="width:18px;min-height:18px" '+(j.paid?'checked':'')+'> <span>Jobul a fost plătit</span></label>'+
-    '<div class="notice" id="jobEstimate">Estimare: —</div>'+
-    '<button class="btn primary full" type="submit">'+(edit?'Salvează modificările':'Adaugă job')+'</button>'+
-    (edit?'<button class="btn danger full" type="button" id="jobDeleteInForm" style="margin-top:8px">Șterge jobul</button>':'')+
-    '</form>';
+function deleteJob(id){if(!confirm('Ștergi această programare?'))return;db.jobs=db.jobs.filter(j=>String(j.id)!==String(id));save('Programare ștearsă');render()}
+function finishJob(id){
+ const j=db.jobs.find(x=>String(x.id)===String(id));if(!j)return;
+ const raw=prompt('Durata reală în minute:',String(Math.round(duration(j.start,j.end)*60)));
+ if(raw===null)return;const mins=Number(raw);if(!Number.isFinite(mins)||mins<=0){alert('Introdu durata în minute.');return}
+ j.actualMinutes=Math.round(mins);j.price=Math.round(mins/60*Number(j.rate)*100)/100;j.status='Finalizat';
+ save('Job finalizat',getClient(j.clientId)?.name||'');render();
 }
-function updateJobEstimate(){
-  const mins=Number($('jobActual').value)>0?Number($('jobActual').value):durationMinutes($('jobStart').value,$('jobEnd').value);
-  const rate=Number($('jobRate').value)||0;
-  const status=$('jobStatus').value;
-  $('jobEstimate').textContent='Durată: '+durationText(mins)+' · '+(status==='completed'?'Câștig: ':'Câștig după finalizare: ')+money(mins/60*rate);
+function startTimer(id){
+ const j=db.jobs.find(x=>String(x.id)===String(id));if(!j)return;
+ if(db.activeTimer&&!confirm('Există deja un timer activ. Îl înlocuiești?'))return;
+ db.activeTimer={jobId:j.id,clientId:j.clientId,startedAt:new Date().toISOString(),pausedAt:null,pausedMs:0};
+ save('Timer pornit');closeModal();render();
 }
-function openJobForm(id,clientId,date){
-  const j=id?jobById(id):null;
-  const initial=j?{...j}:{clientId:clientId||'',date:date||todayISO(),start:'09:00',end:'11:00',rate:Number(prefs.privateRate)||18,status:'planned',notes:'',actualMinutes:0,paid:false};
-  openModal(j?'Editează job':'Adaugă job',jobFormHtml(j||initial));
-  $('jobClient').addEventListener('change',()=>{
-    const c=clientById($('jobClient').value);
-    if(c){
-      $('jobRate').value=c.rate||16;
-      if(!$('jobStart').value)$('jobStart').value=c.start||'09:00';
-      if(!$('jobEnd').value)$('jobEnd').value=c.end||'11:00';
-    }
-    updateJobEstimate();
-  });
-  ['jobStart','jobEnd','jobRate','jobActual','jobStatus'].forEach(id=>$(id).addEventListener('input',updateJobEstimate));
-  updateJobEstimate();
-  $('jobForm').addEventListener('submit',e=>{
-    e.preventDefault();
-    const c=clientById($('jobClient').value);
-    if(!c){toast('Alege un client.');return;}
-    const job={
-      id:$('jobId').value||uid(),clientId:c.id,date:$('jobDate').value,
-      start:$('jobStart').value,end:$('jobEnd').value,rate:Number($('jobRate').value)||0,
-      status:$('jobStatus').value,notes:$('jobNotes').value,
-      actualMinutes:Number($('jobActual').value)||0,paid:$('jobPaid').checked,
-      recurringKey:''
-    };
-    if(!job.date){toast('Alege data jobului.');return;}
-    if(timeMinutes(job.end)<=timeMinutes(job.start)&&!job.actualMinutes){toast('Ora de sfârșit trebuie să fie după ora de început.');return;}
-    if(j){
-      const idx=data.jobs.findIndex(x=>x.id===j.id);
-      if(idx>=0)data.jobs[idx]={...data.jobs[idx],...job};
-    }else data.jobs.push(job);
-    persist();closeModal();renderAll();toast('Jobul a fost salvat.');
-  });
-  if(j)$('jobDeleteInForm').addEventListener('click',()=>{if(confirm('Ștergi acest job?')){data.jobs=data.jobs.filter(x=>x.id!==j.id);persist();closeModal();renderAll();toast('Job șters.');}});
+function timerElapsed(){
+ const t=db.activeTimer;if(!t)return '00:00:00';
+ const end=t.pausedAt?new Date(t.pausedAt).getTime():Date.now();
+ const sec=Math.max(0,Math.floor((end-new Date(t.startedAt).getTime()-(t.pausedMs||0))/1000));
+ return [Math.floor(sec/3600),Math.floor(sec%3600/60),sec%60].map(n=>String(n).padStart(2,'0')).join(':');
 }
-function clientFormHtml(c){
-  c=c||{name:'',phone:'',email:'',address:'',type:'Private',rate:Number(prefs.privateRate)||18,day:1,start:'09:00',end:'11:00',frequency:'weekly',anchor:todayISO(),notes:'',photo:''};
-  return '<form id="clientForm"><input type="hidden" id="clientId" value="'+esc(c.id||'')+'">'+
-    '<div class="field"><label for="clientName">Nume client *</label><input id="clientName" value="'+esc(c.name)+'" required></div>'+
-    '<div class="form-grid"><div class="field"><label for="clientPhone">Telefon</label><input type="tel" id="clientPhone" value="'+esc(c.phone||'')+'"></div><div class="field"><label for="clientEmail">Email</label><input type="email" id="clientEmail" value="'+esc(c.email||'')+'"></div></div>'+
-    '<div class="field"><label for="clientAddress">Adresă</label><input id="clientAddress" value="'+esc(c.address||'')+'"></div>'+
-    '<div class="form-grid"><div class="field"><label for="clientType">Tip client</label><select id="clientType"><option value="Private" '+(c.type==='Private'?'selected':'')+'>Private</option><option value="Agency" '+(c.type==='Agency'?'selected':'')+'>Agency</option></select></div><div class="field"><label for="clientRate">Tarif £/oră</label><input type="number" id="clientRate" min="0" step=".5" value="'+Number(c.rate||16)+'" required></div></div>'+
-    '<div class="field"><label for="clientFrequency">Frecvență</label><select id="clientFrequency"><option value="weekly" '+(c.frequency==='weekly'?'selected':'')+'>Săptămânal</option><option value="fortnightly" '+(c.frequency==='fortnightly'?'selected':'')+'>La 2 săptămâni</option><option value="every3weeks" '+(c.frequency==='every3weeks'?'selected':'')+'>La 3 săptămâni</option><option value="occasional" '+(c.frequency==='occasional'?'selected':'')+'>Ocazional</option></select></div>'+
-    '<div class="field"><label for="clientDay">Ziua obișnuită</label><select id="clientDay">'+['Duminică','Luni','Marți','Miercuri','Joi','Vineri','Sâmbătă'].map((n,i)=>'<option value="'+i+'" '+(Number(c.day)===i?'selected':'')+'>'+n+'</option>').join('')+'</select></div>'+
-    '<div class="form-grid"><div class="field"><label for="clientStart">Ora de început</label><input type="time" id="clientStart" value="'+esc(c.start||'09:00')+'"></div><div class="field"><label for="clientEnd">Ora de sfârșit</label><input type="time" id="clientEnd" value="'+esc(c.end||'11:00')+'"></div></div>'+
-    '<div class="field"><label for="clientAnchor">Prima dată din ciclul repetitiv</label><input type="date" id="clientAnchor" value="'+esc(c.anchor||todayISO())+'"><div class="subtext">Pentru clienții la 2 sau 3 săptămâni, această dată stabilește săptămâna de început.</div></div>'+
-    '<div class="field"><label for="clientNotes">Note</label><textarea id="clientNotes">'+esc(c.notes||'')+'</textarea></div>'+
-    '<button class="btn primary full" type="submit">'+(c.id?'Salvează clientul':'Adaugă client')+'</button>'+
-    '</form>';
+function startReadout(){if(!db.activeTimer)return;const el=document.getElementById('timerReadout');if(!el)return;el.textContent=timerElapsed();setTimeout(startReadout,1000)}
+function timerPauseResume(){
+ const t=db.activeTimer;if(!t)return;
+ if(t.pausedAt){t.pausedMs=(t.pausedMs||0)+(Date.now()-new Date(t.pausedAt).getTime());t.pausedAt=null}
+ else t.pausedAt=new Date().toISOString();
+ save(t.pausedAt?'Timer pus pe pauză':'Timer reluat');render();
 }
-function openClientForm(id){
-  const c=id?clientById(id):null;
-  openModal(c?'Editează client':'Client nou',clientFormHtml(c));
-  $('clientType').addEventListener('change',()=>{
-    $('clientRate').value=$('clientType').value==='Agency'?prefs.agencyRate:prefs.privateRate;
-  });
-  $('clientForm').addEventListener('submit',e=>{
-    e.preventDefault();
-    const name=$('clientName').value.trim();
-    if(!name){toast('Scrie numele clientului.');return;}
-    const item={
-      id:$('clientId').value||uid(),name,phone:$('clientPhone').value.trim(),
-      email:$('clientEmail').value.trim(),address:$('clientAddress').value.trim(),
-      type:$('clientType').value,rate:Number($('clientRate').value)||0,
-      day:Number($('clientDay').value),start:$('clientStart').value||'09:00',
-      end:$('clientEnd').value||'11:00',frequency:$('clientFrequency').value,
-      anchor:$('clientAnchor').value||todayISO(),notes:$('clientNotes').value.trim(),
-      photo:c?.photo||'',archived:false
-    };
-    if(c){
-      const idx=data.clients.findIndex(x=>x.id===c.id);
-      if(idx>=0)data.clients[idx]={...data.clients[idx],...item};
-    }else data.clients.push(item);
-    persist();generateJobs();closeModal();renderAll();toast('Clientul a fost salvat.');
-  });
+function timerFinish(){
+ const t=db.activeTimer;if(!t)return;const j=db.jobs.find(x=>String(x.id)===String(t.jobId));
+ if(!j){db.activeTimer=null;save('Timer închis');render();return}
+ const elapsed=Math.max(1,Math.round((Date.now()-new Date(t.startedAt).getTime()-(t.pausedMs||0))/60000));
+ const mins=t.pausedAt?Math.max(1,Math.round((new Date(t.pausedAt).getTime()-new Date(t.startedAt).getTime()-(t.pausedMs||0))/60000)):elapsed;
+ j.actualMinutes=mins;j.price=Math.round(mins/60*Number(j.rate)*100)/100;j.status='Finalizat';db.activeTimer=null;
+ save('Job finalizat din timer');render();
 }
-function openHolidayForm(clientId){
-  openModal('Concediu client','<form id="holidayForm"><div class="field"><label for="holidayClient">Client</label><select id="holidayClient"><option value="">Toți clienții</option>'+activeClients().map(c=>'<option value="'+c.id+'" '+(c.id===clientId?'selected':'')+'>'+esc(c.name)+'</option>').join('')+'</select></div><div class="form-grid"><div class="field"><label for="holidayStart">De la</label><input type="date" id="holidayStart" value="'+todayISO()+'" required></div><div class="field"><label for="holidayEnd">Până la</label><input type="date" id="holidayEnd" value="'+todayISO()+'" required></div></div><button class="btn primary full" type="submit">Salvează concediul</button></form>');
-  $('holidayForm').addEventListener('submit',e=>{
-    e.preventDefault();
-    const start=$('holidayStart').value,end=$('holidayEnd').value;
-    if(end<start){toast('Data de sfârșit trebuie să fie după data de început.');return;}
-    const cid=$('holidayClient').value;
-    data.holidays.push({id:uid(),clientId:cid,start,end});
-    data.jobs=data.jobs.filter(j=>!(j.status==='planned'&&(!cid||j.clientId===cid)&&j.date>=start&&j.date<=end));
-    persist();generateJobs();closeModal();renderAll();toast('Concediul a fost salvat.');
-  });
+function holidayForm(clientId){
+ show(`<div class="modalhead"><h2>Vacanță client</h2><button class="close" onclick="closeModal()">×</button></div><form onsubmit="saveHoliday(event)"><div class="field"><label>Client</label><select name="clientId" required>${db.clients.filter(c=>!c.archived).map(c=>`<option value="${c.id}" ${String(clientId||'')===String(c.id)?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div><div class="grid2"><div class="field"><label>De la</label><input type="date" name="from" required value="${today()}"></div><div class="field"><label>Până la</label><input type="date" name="to" required value="${today()}"></div></div><button class="btn primary wide">Salvează vacanța</button></form>`);
 }
-function startTimerForJob(id){
-  if(timer&&timer.startedAt){
-    if(timer.jobId===id){toast('Timerul pentru acest job este deja pornit.');return;}
-    if(!confirm('Oprești timerul curent și pornești altul?'))return;
-    stopTimer(false);
-  }
-  const j=jobById(id);
-  if(!j)return;
-  timer={jobId:id,startedAt:Date.now(),accumulated:0};
-  saveJSON(TIMER_KEY,timer);
-  openTimerModal();
-  startTimerTicker();
+function saveHoliday(e){
+ e.preventDefault();const f=new FormData(e.target),h={id:uid(),clientId:f.get('clientId'),from:f.get('from'),to:f.get('to')};
+ if(h.to<h.from){alert('Data de final trebuie să fie după data de început.');return}
+ db.holidays.push(h);
+ db.jobs=db.jobs.filter(j=>!(j.autoGenerated&&j.status==='Programat'&&String(j.clientId)===String(h.clientId)&&j.date>=h.from&&j.date<=h.to));
+ save('Vacanță adăugată');generateRecurring();localStorage.setItem(KEY,JSON.stringify(db));closeModal();render();
 }
-function startTimerTicker(){
-  if(timerInterval)clearInterval(timerInterval);
-  timerInterval=setInterval(updateTimerDisplay,1000);
+function deleteHoliday(id){if(!confirm('Ștergi această perioadă de vacanță?'))return;db.holidays=db.holidays.filter(h=>String(h.id)!==String(id));save('Vacanță ștearsă');generateRecurring();localStorage.setItem(KEY,JSON.stringify(db));render()}
+function invoiceForm(){
+ show(`<div class="modalhead"><h2>Factură nouă</h2><button class="close" onclick="closeModal()">×</button></div><form onsubmit="saveInvoice(event)"><div class="field"><label>Client</label><select name="clientId" required>${db.clients.filter(c=>!c.archived).map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select></div><div class="grid2"><div class="field"><label>Data</label><input type="date" name="date" value="${today()}" required></div><div class="field"><label>Scadență</label><input type="date" name="due" value="${today()}" required></div></div><div class="field"><label>Sumă £</label><input type="number" name="total" min="0.01" step=".01" required></div><div class="field"><label>Descriere</label><input name="description" value="Cleaning services"></div><button class="btn primary wide">Creează factura</button></form>`);
 }
-function stopTimer(save=true){
-  if(!timer)return;
-  const j=jobById(timer.jobId);
-  const mins=Math.max(0,Math.round((Date.now()-timer.startedAt)/60000)+(timer.accumulated||0));
-  if(j&&save){
-    j.actualMinutes=mins;
-    j.status='completed';
-    persist();
-  }
-  timer=null;saveJSON(TIMER_KEY,null);
-  if(timerInterval)clearInterval(timerInterval);
-  timerInterval=null;
-  if(save){closeModal();renderAll();toast('Timer oprit. Durata a fost salvată.');}
+function saveInvoice(e){
+ e.preventDefault();const f=new FormData(e.target),c=getClient(f.get('clientId'));
+ db.invoices.push({id:uid(),number:`${db.settings.invoicePrefix}-${String(db.settings.invoiceNext++).padStart(4,'0')}`,clientId:c?.id,clientName:c?.name,date:f.get('date'),due:f.get('due'),total:Number(f.get('total')),description:f.get('description')});
+ save('Factură creată');closeModal();render();
 }
-function updateTimerDisplay(){
-  const el=$('timerLive');
-  if(!el||!timer)return;
-  const mins=Math.max(0,Math.floor((Date.now()-timer.startedAt)/60000)+(timer.accumulated||0));
-  el.textContent=durationText(mins);
+function printInvoice(id){
+ const i=db.invoices.find(x=>String(x.id)===String(id));if(!i)return;
+ const c=getClient(i.clientId),w=window.open('','_blank');if(!w){alert('Permite ferestrele pop-up pentru a crea PDF-ul.');return}
+ w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${esc(i.number)}</title><style>body{font:16px Arial;margin:40px;color:#403540}h1{color:#b56d8b}hr{border:0;border-top:1px solid #eadde4;margin:25px 0}.total{font-size:24px;font-weight:bold}small{color:#777}</style></head><body><h1>${esc(db.settings.businessName)}</h1><p>${esc(db.settings.businessAddress)}<br>${esc(db.settings.businessPhone)} ${esc(db.settings.businessEmail)}</p><hr><h2>INVOICE ${esc(i.number)}</h2><p><b>Client:</b> ${esc(c?.name||i.clientName)}<br><b>Date:</b> ${esc(i.date)}<br><b>Due:</b> ${esc(i.due)}</p><hr><p>${esc(i.description||'Cleaning services')}</p><p class="total">Total: ${money(i.total)}</p><p>Paid: ${money(paid(i))}<br>Balance: ${money(balance(i))}</p><small>Thank you for your business.</small><script>window.onload=()=>setTimeout(()=>window.print(),200)<\/script></body></html>`);
+ w.document.close();
 }
-function openTimerModal(){
-  if(!timer)return;
-  const j=jobById(timer.jobId);
-  openModal('Timer job', '<div class="card" style="text-align:center"><div style="font-size:32px">⏱️</div><div class="subtext">'+esc(j?getClientName(j.clientId):'Job')+'</div><div id="timerLive" style="font-size:35px;font-weight:700;color:var(--pink-dark);padding:16px 0">00h 00m</div><div class="subtext">Timerul continuă și când schimbi pagina.</div></div><button class="btn primary full" id="timerStop">✓ Oprește și finalizează jobul</button><button class="btn ghost full" id="timerClose" style="margin-top:8px">Închide (timerul continuă)</button>');
-  $('timerStop').addEventListener('click',()=>stopTimer(true));
-  $('timerClose').addEventListener('click',closeModal);
-  updateTimerDisplay();
+function paymentForm(id){
+ const i=db.invoices.find(x=>String(x.id)===String(id));if(!i)return;
+ show(`<div class="modalhead"><h2>Înregistrează plata</h2><button class="close" onclick="closeModal()">×</button></div><div class="notice">Restant: <b>${money(balance(i))}</b></div><form onsubmit="savePayment(event,${i.id})"><div class="field"><label>Sumă £</label><input name="amount" type="number" min=".01" max="${balance(i)}" step=".01" required></div><div class="grid2"><div class="field"><label>Data</label><input name="date" type="date" value="${today()}" required></div><div class="field"><label>Metodă</label><select name="method"><option>Bank transfer</option><option>Cash</option><option>Card</option><option>Other</option></select></div></div><div class="field"><label>Notă</label><input name="note"></div><button class="btn primary wide">Salvează plata</button></form>`);
 }
-function handleAction(action,id,extra){
-  const j=jobById(id);
-  if(action==='edit-job'){openJobForm(id);return;}
-  if(action==='delete-job'){
-    if(confirm('Ștergi acest job?')){data.jobs=data.jobs.filter(x=>x.id!==id);persist();renderAll();toast('Job șters.');}
-    return;
-  }
-  if(action==='complete-job'){
-    if(!j)return;
-    const mins=getJobMinutes(j);
-    j.actualMinutes=mins;j.status='completed';persist();renderAll();toast('Job finalizat. Câștig: '+money(jobEarning(j)));return;
-  }
-  if(action==='toggle-paid'){
-    if(!j)return;
-    j.paid=!j.paid;persist();renderAll();toast(j.paid?'Plată înregistrată.':'Job marcat neachitat.');return;
-  }
-  if(action==='timer-job'){startTimerForJob(id);return;}
-  if(action==='select-day'){selectedCalendarDate=extra;renderCalendar();return;}
-  if(action==='add-date-job'){openJobForm(null,null,extra);return;}
-  if(action==='edit-client'){openClientForm(id);return;}
-  if(action==='client-job'){openJobForm(null,id);return;}
-  if(action==='client-holiday'){openHolidayForm(id);return;}
-  if(action==='delete-client'){
-    const c=clientById(id);
-    if(!c)return;
-    if(confirm('Ștergi clientul '+c.name+'? Istoricul joburilor va fi păstrat.')){
-      c.archived=true;persist();renderAll();toast('Client arhivat.');}
-    return;
-  }
+function savePayment(e,id){
+ e.preventDefault();const f=new FormData(e.target),amount=Number(f.get('amount')),i=db.invoices.find(x=>String(x.id)===String(id));
+ if(!i||amount<=0||amount>balance(i)+.001){alert('Verifică suma plății.');return}
+ db.payments.push({id:uid(),invoiceId:i.id,amount,date:f.get('date'),method:f.get('method'),note:f.get('note')});
+ save('Plată înregistrată');closeModal();render();
 }
-function downloadFile(name,content,type){
-  const blob=new Blob([content],{type:type||'text/plain;charset=utf-8'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),1500);
+function expenseForm(){
+ show(`<div class="modalhead"><h2>Cheltuială nouă</h2><button class="close" onclick="closeModal()">×</button></div><form onsubmit="saveExpense(event)"><div class="grid2"><div class="field"><label>Data</label><input type="date" name="date" value="${today()}" required></div><div class="field"><label>Sumă £</label><input type="number" name="amount" min=".01" step=".01" required></div></div><div class="field"><label>Categorie</label><select name="category"><option>Cleaning products</option><option>Travel / Fuel</option><option>Equipment</option><option>Insurance</option><option>Phone / Internet</option><option>Other</option></select></div><div class="field"><label>Notă</label><input name="note"></div><button class="btn primary wide">Salvează cheltuiala</button></form>`);
+}
+function saveExpense(e){e.preventDefault();const f=new FormData(e.target);db.expenses.push({id:uid(),date:f.get('date'),amount:Number(f.get('amount')),category:f.get('category'),note:f.get('note')});save('Cheltuială adăugată');closeModal();render()}
+function deleteExpense(id){if(!confirm('Ștergi cheltuiala?'))return;db.expenses=db.expenses.filter(e=>String(e.id)!==String(id));save('Cheltuială ștearsă');render()}
+function openRoute(id){const c=getClient(id);if(c?.address)window.open('https://maps.apple.com/?q='+encodeURIComponent(c.address),'_blank')}
+function openForecast(){
+ const upcoming=db.jobs.filter(j=>j.date>=today()&&j.status==='Programat');
+ const total=upcoming.reduce((s,j)=>s+(Number(j.price)||0),0);
+ show(`<div class="modalhead"><h2>Previziuni</h2><button class="close" onclick="closeModal()">×</button></div><div class="stats"><div class="stat"><span>Programări viitoare</span><strong>${upcoming.length}</strong></div><div class="stat"><span>Venit estimat</span><strong>${money(total)}</strong></div><div class="stat"><span>Venit realizat</span><strong>${money(realized())}</strong></div><div class="stat"><span>Cheltuieli</span><strong>${money(expensesTotal())}</strong></div></div><div class="notice">Previziunea folosește programările viitoare existente. Lucrările anulate sau ocazionale care nu au fost programate nu sunt incluse.</div>`);
+}
+function openHistory(){
+ show(`<div class="modalhead"><h2>Istoric modificări</h2><button class="close" onclick="closeModal()">×</button></div>${db.history.slice(0,100).map(h=>`<div class="item"><strong>${esc(h.action)}</strong><div class="muted">${new Date(h.at).toLocaleString('ro-GB')} ${esc(h.details||'')}</div></div>`).join('')||'<div class="empty">Nu există încă modificări înregistrate.</div>'}`);
+}
+function openSettings(){
+ show(`<div class="modalhead"><h2>Setări</h2><button class="close" onclick="closeModal()">×</button></div><form onsubmit="saveSettings(event)"><div class="field"><label>Numele firmei</label><input name="businessName" value="${esc(db.settings.businessName)}"></div><div class="grid2"><div class="field"><label>Telefon</label><input name="businessPhone" value="${esc(db.settings.businessPhone)}"></div><div class="field"><label>E-mail</label><input name="businessEmail" type="email" value="${esc(db.settings.businessEmail)}"></div></div><div class="field"><label>Adresă firmă</label><input name="businessAddress" value="${esc(db.settings.businessAddress)}"></div><div class="grid2"><div class="field"><label>Prefix factură</label><input name="invoicePrefix" value="${esc(db.settings.invoicePrefix)}"></div><div class="field"><label>Reminder programări</label><input name="reminderTime" type="time" value="${esc(db.settings.reminderTime)}"></div></div><div class="field"><label>Mărimea textului</label><input type="range" name="zoom" min="100" max="200" step="5" value="${db.settings.zoom}" oninput="this.nextElementSibling.textContent=this.value+'%'" style="padding:0"><div class="muted">${db.settings.zoom}%</div></div><button class="btn primary wide">Salvează setările</button></form><div class="notice">Datele sunt salvate local în Safari. Exportă un backup periodic pentru siguranță.</div>`);
+}
+function saveSettings(e){
+ e.preventDefault();const f=new FormData(e.target);
+ for(const k of ['businessName','businessPhone','businessEmail','businessAddress','invoicePrefix','reminderTime'])db.settings[k]=f.get(k);
+ db.settings.zoom=Number(f.get('zoom'));document.documentElement.style.fontSize=(16*db.settings.zoom/100)+'px';
+ save('Setări actualizate');closeModal();render();
 }
 function exportBackup(){
-  const backup={version:3,exportedAt:new Date().toISOString(),data,prefs,photos};
-  downloadFile('pure-shine-backup-'+todayISO()+'.json',JSON.stringify(backup,null,2),'application/json');
-  toast('Backup pregătit.');
+ localStorage.setItem(KEY,JSON.stringify(db));
+ const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download=`pure-shine-backup-${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
-function importBackup(file){
-  const reader=new FileReader();
-  reader.onload=()=>{
-    try{
-      const incoming=JSON.parse(reader.result);
-      const next=incoming.data||incoming;
-      if(!Array.isArray(next.clients)||!Array.isArray(next.jobs))throw new Error('Format invalid');
-      if(!confirm('Importul va înlocui datele curente. Ai făcut un backup al datelor actuale?'))return;
-      data={clients:next.clients,jobs:next.jobs,holidays:Array.isArray(next.holidays)?next.holidays:[]};
-      if(incoming.prefs)prefs={...defaultPrefs,...incoming.prefs};
-      if(incoming.photos)photos={...photos,...incoming.photos};
-      persist();savePrefs();saveJSON(PHOTOS_KEY,photos);applySettings();applyPhotos();generateJobs();renderAll();toast('Backup importat cu succes.');
-    }catch(e){toast('Fișierul nu este un backup valid.');}
-  };
-  reader.readAsText(file);
+function importBackup(e){
+ const file=e.target.files?.[0];if(!file)return;const reader=new FileReader();
+ reader.onload=()=>{try{
+  const x=JSON.parse(reader.result);
+  if(!x||!Array.isArray(x.clients)||!Array.isArray(x.jobs))throw new Error('invalid');
+  if(!confirm('Importul va înlocui datele actuale. Continui?'))return;
+  db={...structuredClone(initial),...x,settings:{...initial.settings,...x.settings}};
+  localStorage.setItem(KEY,JSON.stringify(db));alert('Backup restaurat.');closeModal();render();
+ }catch(err){alert('Fișierul nu pare să fie un backup Pure Shine valid.')}finally{e.target.value=''}};
+ reader.readAsText(file);
 }
-function exportCSV(){
-  const jobs=currentMonthJobs().filter(j=>j.status==='completed');
-  const rows=[['Data','Client','Început','Sfârșit','Minute','Tarif','Câștig','Plătit','Note']];
-  jobs.forEach(j=>rows.push([j.date,getClientName(j.clientId),j.start,j.end,getJobMinutes(j),j.rate,jobEarning(j).toFixed(2),j.paid?'Da':'Nu',j.notes||'']));
-  const csv=rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
-  downloadFile('pure-shine-castiguri-'+($('earningsMonth').value||monthISO(new Date()))+'.csv','\ufeff'+csv,'text/csv;charset=utf-8');
+function csvDownload(filename,rows){
+ const csv=rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
-function exportCalendar(){
-  const events=data.jobs.filter(j=>j.status!=='cancelled').sort((a,b)=>a.date.localeCompare(b.date));
-  const fmt=s=>String(s||'').replace(/-/g,'');
-  const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Pure Shine Cleaning Manager//EN'];
-  events.forEach(j=>{
-    lines.push('BEGIN:VEVENT','UID:'+j.id+'@pureshine','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''),
-      'DTSTART:'+fmt(j.date)+'T'+(j.start||'09:00').replace(':','')+'00',
-      'DTEND:'+fmt(j.date)+'T'+(j.end||'11:00').replace(':','')+'00',
-      'SUMMARY:'+getClientName(j.clientId).replace(/[,;\\]/g,' '),
-      'DESCRIPTION:'+('Status: '+j.status+'; Tarif: £'+j.rate).replace(/[,;\\]/g,' '),
-      'END:VEVENT');
-  });
-  lines.push('END:VCALENDAR');
-  downloadFile('pure-shine-calendar.ics',lines.join('\r\n'),'text/calendar;charset=utf-8');
-  toast('Calendar exportat.');
+function exportCSV(type){
+ let rows=[];
+ if(type==='jobs')rows=[['Data','Client','Început','Final','Minute','Tarif','Sumă','Status','Notițe'],...db.jobs.map(j=>[j.date,getClient(j.clientId)?.name,j.start,j.end,Math.round(jobHours(j)*60),j.rate,j.price,j.status,j.notes])];
+ if(type==='clients')rows=[['Nume','Telefon','Tip','Adresă','Tarif','Frecvență','Zi'],...db.clients.map(c=>[c.name,c.phone,c.type,c.address,c.rate,c.frequency,c.day])];
+ if(type==='invoices')rows=[['Număr','Client','Data','Scadență','Total','Plătit','Restant'],...db.invoices.map(i=>[i.number,getClient(i.clientId)?.name||i.clientName,i.date,i.due,i.total,paid(i),balance(i)])];
+ csvDownload(`pure-shine-${type}-${today()}.csv`,rows);
 }
-function buildInvoice(){
-  const client=clientById($('invoiceClient').value);
-  if(!client){toast('Alege un client.');return;}
-  const from=$('invoiceDate').value||todayISO();
-  const jobs=data.jobs.filter(j=>j.clientId===client.id&&j.status==='completed'&&!j.invoiced&&(j.date<=from));
-  const total=jobs.reduce((s,j)=>s+jobEarning(j),0);
-  const invoiceNo=$('invoiceNumber').value||'PS-001';
-  const due=$('invoiceDue').value;
-  const notes=$('invoiceNotes').value;
-  $('invoicePreview').innerHTML='<div class="invoice-paper" id="invoicePaper"><div class="row between"><div><h2>'+esc(prefs.businessName||'Pure Shine Cleaning')+'</h2><div class="small-muted">Professional Cleaning Services</div></div><div style="text-align:right"><strong>FACTURĂ</strong><div class="small-muted">'+esc(invoiceNo)+'</div></div></div><div class="separator"></div><div class="form-grid"><div><div class="small-muted">FACTURAT CĂTRE</div><strong>'+esc(client.name)+'</strong><div class="small-muted">'+esc(client.address||'')+'</div><div class="small-muted">'+esc(client.email||client.phone||'')+'</div></div><div><div class="small-muted">DATA FACTURII</div><strong>'+esc(fmtDate(from))+'</strong><div class="small-muted" style="margin-top:8px">SCADENTĂ</div><strong>'+esc(fmtDate(due))+'</strong></div></div><div class="separator"></div><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="text-align:left;border-bottom:1px solid var(--border)"><th style="padding:9px 3px">Data / serviciu</th><th style="padding:9px 3px">Durată</th><th style="padding:9px 3px">Tarif</th><th style="padding:9px 3px;text-align:right">Total</th></tr></thead><tbody>'+(jobs.length?jobs.map(j=>'<tr style="border-bottom:1px solid #f5eaee"><td style="padding:9px 3px">'+esc(fmtDate(j.date))+'<br><span class="small-muted">Curățenie</span></td><td style="padding:9px 3px">'+durationText(getJobMinutes(j))+'</td><td style="padding:9px 3px">'+money(j.rate)+'</td><td style="padding:9px 3px;text-align:right">'+money(jobEarning(j))+'</td></tr>').join(''):'<tr><td colspan="4" style="padding:16px 3px;text-align:center">Nu există joburi finalizate nefacturate pentru acest client.</td></tr>')+'</tbody></table><div style="display:flex;justify-content:flex-end;margin-top:18px"><div><div class="small-muted">TOTAL DE PLATĂ</div><div class="invoice-total">'+money(total)+'</div></div></div>'+(notes?'<div class="separator"></div><div class="small-muted">NOTE</div><div>'+esc(notes)+'</div>':'')+'<div class="separator"></div><div class="small-muted">Vă mulțumim pentru colaborare! ✨</div></div>';
-  $('printInvoice').style.display='block';
-  $('printInvoice').onclick=()=>window.print();
-  $('invoicePreview').dataset.jobIds=jobs.map(j=>j.id).join(',');
+function seedAndRun(){
+ seedClients();generateRecurring();
+ try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}
+ if(db.settings.zoom)document.documentElement.style.fontSize=(16*db.settings.zoom/100)+'px';
+ render();
 }
-function setPhoto(which){
-  photoTarget=which;
-  $('photoInput').click();
-}
-function loadPhoto(file){
-  if(!file)return;
-  if(!file.type.startsWith('image/')){toast('Alege un fișier imagine.');return;}
-  if(file.size>12*1024*1024){toast('Imaginea este prea mare. Alege o fotografie sub 12 MB.');return;}
-  const reader=new FileReader();
-  reader.onload=()=>{
-    const img=new Image();
-    img.onload=()=>{
-      const max=1400,scale=Math.min(1,max/Math.max(img.width,img.height));
-      const canvas=document.createElement('canvas');
-      canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);
-      const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,canvas.width,canvas.height);
-      const dataUrl=canvas.toDataURL('image/jpeg',.82);
-      photos[photoTarget]=dataUrl;
-      if(saveJSON(PHOTOS_KEY,photos)){applyPhotos();toast('Fotografia a fost salvată.');}
-    };
-    img.onerror=()=>toast('Nu am putut citi fotografia.');
-    img.src=reader.result;
-  };
-  reader.onerror=()=>toast('Nu am putut încărca fotografia.');
-  reader.readAsDataURL(file);
-}
-function saveSettings(){
-  prefs.zoom=Number($('zoomRange').value)||100;
-  prefs.theme=$('themeColor').value;
-  prefs.businessName=$('businessName').value.trim()||'Pure Shine Cleaning';
-  prefs.agencyRate=Number($('agencyRate').value)||16;
-  prefs.privateRate=Number($('privateRate').value)||18;
-  prefs.reminders=$('remindersToggle').checked;
-  savePrefs();applySettings();toast('Setările au fost salvate.');
-}
-function requestReminder(){
-  if(!('Notification' in window)){toast('Notificările nu sunt disponibile în acest browser.');return;}
-  Notification.requestPermission().then(permission=>{
-    if(permission==='granted'){
-      new Notification('Pure Shine Cleaning',{body:'Mementourile sunt activate pe acest dispozitiv.'});
-      toast('Permisiunea pentru notificări a fost acordată.');
-    }else toast('Permisiunea pentru notificări nu a fost acordată.');
-  }).catch(()=>toast('Nu am putut solicita notificările.'));
-}
-function bindEvents(){
-  document.querySelectorAll('.nav-btn').forEach(btn=>btn.addEventListener('click',()=>showPage(btn.dataset.page)));
-  $('headerSettingsBtn').addEventListener('click',()=>showPage('settings'));
-  $('headerPhotoBtn').addEventListener('click',()=>setPhoto('logo'));
-  $('homeAddJob').addEventListener('click',()=>openJobForm());
-  $('scheduleAdd').addEventListener('click',()=>openJobForm());
-  $('fabAdd').addEventListener('click',()=>{
-    if($('page-clients').classList.contains('active'))openClientForm();
-    else openJobForm();
-  });
-  $('homeViewSchedule').addEventListener('click',()=>showPage('schedule'));
-  $('quickClients').addEventListener('click',()=>showPage('clients'));
-  $('quickInvoice').addEventListener('click',()=>showPage('invoice'));
-  $('addClientBtn').addEventListener('click',()=>openClientForm());
-  $('clientSearch').addEventListener('input',renderClients);
-  $('showList').addEventListener('click',()=>{scheduleView='list';renderSchedule();});
-  $('showCalendar').addEventListener('click',()=>{scheduleView='calendar';renderSchedule();});
-  $('scheduleFilter').addEventListener('change',renderSchedule);
-  $('prevMonth').addEventListener('click',()=>{calendarMonth.setMonth(calendarMonth.getMonth()-1);renderCalendar();});
-  $('nextMonth').addEventListener('click',()=>{calendarMonth.setMonth(calendarMonth.getMonth()+1);renderCalendar();});
-  $('earningsMonth').addEventListener('change',renderEarnings);
-  $('exportEarnings').addEventListener('click',exportCSV);
-  $('zoomRange').addEventListener('input',()=>{
-    prefs.zoom=Number($('zoomRange').value);
-    applySettings();
-  });
-  $('saveSettings').addEventListener('click',saveSettings);
-  $('saveRates').addEventListener('click',()=>{
-    prefs.agencyRate=Number($('agencyRate').value)||16;
-    prefs.privateRate=Number($('privateRate').value)||18;
-    savePrefs();toast('Tarifele implicite au fost salvate.');
-  });
-  $('uploadBannerBtn').addEventListener('click',()=>setPhoto('banner'));
-  $('uploadLogoBtn').addEventListener('click',()=>setPhoto('logo'));
-  $('removeBanner').addEventListener('click',()=>{photos.banner='';saveJSON(PHOTOS_KEY,photos);applyPhotos();toast('Banner eliminat.');});
-  $('removeLogo').addEventListener('click',()=>{photos.logo='';saveJSON(PHOTOS_KEY,photos);applyPhotos();toast('Fotografia de profil eliminată.');});
-  $('photoInput').addEventListener('change',e=>{loadPhoto(e.target.files[0]);e.target.value='';});
-  $('exportBackup').addEventListener('click',exportBackup);
-  $('importBackupBtn').addEventListener('click',()=>$('backupInput').click());
-  $('backupInput').addEventListener('change',e=>{if(e.target.files[0])importBackup(e.target.files[0]);e.target.value='';});
-  $('exportCalendar').addEventListener('click',exportCalendar);
-  $('remindersToggle').addEventListener('change',()=>{
-    if($('remindersToggle').checked)requestReminder();
-    prefs.reminders=$('remindersToggle').checked;savePrefs();
-  });
-  $('testReminder').addEventListener('click',requestReminder);
-  $('resetApp').addEventListener('click',()=>{
-    if(confirm('Sigur vrei să ștergi TOȚI clienții, joburile și concediile salvate? Recomand să faci backup înainte.')){
-      if(confirm('Ultima confirmare: această acțiune nu poate fi anulată. Continui?')){
-        data={clients:[],jobs:[],holidays:[]};persist();seedClientsIfNeeded();generateJobs();renderAll();toast('Datele au fost resetate.');
-      }
-    }
-  });
-  $('modalClose').addEventListener('click',closeModal);
-  $('modalBackdrop').addEventListener('click',e=>{if(e.target===$('modalBackdrop'))closeModal();});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
-  document.addEventListener('click',e=>{
-    const btn=e.target.closest('[data-action]');
-    if(!btn)return;
-    handleAction(btn.dataset.action,btn.dataset.id,btn.dataset.date);
-  });
-  $('generateInvoice').addEventListener('click',buildInvoice);
-  $('printInvoice').addEventListener('click',()=>window.print());
-}
-function init(){
-  seedClientsIfNeeded();
-  applySettings();
-  applyPhotos();
-  $('earningsMonth').value=monthISO(new Date());
-  generateJobs();
-  bindEvents();
-  renderAll();
-  if(timer&&timer.startedAt&&jobById(timer.jobId)){
-    startTimerTicker();
-  }else if(timer){
-    timer=null;saveJSON(TIMER_KEY,null);
-  }
-}
-try{
-  init();
-}catch(error){
-  console.error('Pure Shine init error:',error);
-  toast('A apărut o eroare la pornire. Reîncarcă aplicația.');
-}
-})();
+seedAndRun();
+setInterval(()=>{if(db.activeTimer&&page==='home')startReadout()},1000);
+window.addEventListener('pageshow',()=>{db=loadDB();generateRecurring();render()});
 </script>
-<style>
-@media print{
-  body{background:white!important}
-  header,nav,.fab,main>.page:not(#page-invoice),#page-invoice>.page-heading,#page-invoice>.card,#printInvoice,.toast{display:none!important}
-  #page-invoice{display:block!important}
-  #invoicePreview{display:block!important}
-  #invoicePaper{border:0!important;box-shadow:none!important;padding:0!important}
-  .app{max-width:none;padding:0}
-  main{padding:0}
-  .invoice-paper{color:#222!important}
-  .small-muted{color:#555!important}
-  @page{margin:15mm}
-}
-</style>
 </body>
 </html>
