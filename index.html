@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -8,8 +9,8 @@
 <style>
 :root{--pink:#efc3d4;--pale:#fff0f5;--gold:#c5a15b;--ink:#493b47;--muted:#867986;--line:#f0e2e9;--lav:#eee7f8;--sage:#e3f0e6;--cream:#fff4df;--app-scale:1}
 *{box-sizing:border-box}
-html{font-size:16px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{margin:0;min-height:100%;background:#fff9fb;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:1rem;overflow-x:hidden}
+html{font-size:calc(16px * var(--app-scale));-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;min-height:100%;background:#fff9fb;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden;font-size:1rem}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer;touch-action:manipulation}
 .app{width:100%;max-width:850px;margin:auto;padding:12px 13px calc(100px + env(safe-area-inset-bottom))}
@@ -20,7 +21,7 @@ header{display:flex;align-items:center;gap:11px;margin:5px 0 13px}
 .brand{flex:1;min-width:0}
 .brand h1{font:700 1.5rem Georgia,serif;margin:0}
 .brand small{display:block;color:var(--muted);font-size:.75rem;margin-top:3px}
-.topbtn{width:45px;height:45px;border:0;border-radius:15px;background:white;color:#a45d7b;font-size:1.6rem;box-shadow:0 4px 16px #7555680c}
+.topbtn{width:45px;height:45px;border:0;border-radius:15px;background:white;color:#a45d7b;font-size:1.55rem;box-shadow:0 4px 16px #7555680c}
 .banner{height:145px;position:relative;overflow:hidden;border-radius:21px;margin-bottom:16px;background:linear-gradient(125deg,#f4cbd9,#f9e8ef 55%,#e9def6);box-shadow:0 5px 20px #7555680b}
 .banner img{width:100%;height:100%;object-fit:cover;display:block}
 .banner-edit{position:absolute;right:9px;top:9px;border:0;border-radius:11px;background:#ffffffdf;padding:8px 10px;font-size:.75rem;font-weight:750;color:#674d5d}
@@ -80,7 +81,6 @@ p{line-height:1.5}
 .settings-row .btn{flex-shrink:0}
 .settings-savebar{position:sticky;bottom:-18px;background:#fffafd;padding:12px 0 max(8px,env(safe-area-inset-bottom));margin-top:12px}
 #toast{display:none;position:fixed;z-index:100;left:14px;right:14px;bottom:94px;padding:13px 16px;border-radius:14px;background:#51414f;color:white;font-size:.875rem;box-shadow:0 5px 25px #0002}
-#zoomPreview{font-size:calc(1rem * var(--app-scale));line-height:1.5}
 @media(min-width:650px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}.nav{max-width:850px;left:50%;right:auto;transform:translateX(-50%);width:100%;border-radius:18px 18px 0 0}.modalback{align-items:center;padding:20px}.modal{border-radius:25px;max-height:88dvh}}
 @media(max-width:360px){.banner{height:115px}.profile{width:52px;height:52px}.brand h1{font-size:1.3125rem}.app{padding-left:9px;padding-right:9px}.btn{padding:10px 11px}}
 </style>
@@ -192,7 +192,7 @@ function generate(){
 }
 function renderImages(){
  const p=db.images?.profile,b=db.images?.banner;
- $('profileBox').innerHTML=(p?`<img src="${p}" alt="Poză de profil">`:'<span style="font-size:1.6875rem">✨</span>')+'<button class="editphoto" onclick="$(\\'profileFile\\').click()">✎</button>';
+ $('profileBox').innerHTML=(p?`<img src="${p}" alt="Poză de profil">`:'<span style="font-size:27px">✨</span>')+'<button class="editphoto" onclick="$(\\'profileFile\\').click()">✎</button>';
  $('bannerBox').innerHTML=(b?`<img src="${b}" alt="Banner">`:'<div class="banner-empty">✨</div>')+'<button class="banner-edit" onclick="$(\\'bannerFile\\').click()">'+(b?'📷 Schimbă bannerul':'📷 Adaugă banner')+'</button>';
 }
 function go(p){page=p;render()}
@@ -207,7 +207,7 @@ function home(){
  const next=db.jobs.filter(j=>j.date>today()&&j.status==='Programat').sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start)).slice(0,3);
  setView(`<div class="hero"><div class="muted">${dateText(today())}</div><h2>Bună! ✨</h2><p class="muted">Organizează-ți ziua și urmărește fiecare lucrare.</p><div class="btnrow"><button class="btn primary" onclick="jobForm()">＋ Adaugă job</button><button class="btn" onclick="clientForm()">＋ Client nou</button></div></div>
  <div class="stats"><div class="stat"><span>Venit realizat</span><strong>${cash(revenue())}</strong></div><div class="stat"><span>Cheltuieli</span><strong>${cash(totalExpenses())}</strong></div><div class="stat"><span>Facturi restante</span><strong>${cash(db.invoices.reduce((s,i)=>s+balance(i),0))}</strong></div><div class="stat"><span>Ore finalizate</span><strong>${durationText(doneJobs().reduce((s,j)=>s+jobHours(j),0))}</strong></div></div>
- ${db.activeTimer?`<div class="card"><h3>⏱ Timer activ · ${esc(getClient(db.activeTimer.clientId)?.name||'Client')}</h3><strong id="timerDisplay" style="font-size:1.5rem">${timerElapsed()}</strong><div class="btnrow"><button class="btn primary" onclick="stopTimer()">Finalizează</button><button class="btn" onclick="pauseTimer()">${db.activeTimer.pausedAt?'Continuă':'Pauză'}</button></div></div>`:''}
+ ${db.activeTimer?`<div class="card"><h3>⏱ Timer activ · ${esc(getClient(db.activeTimer.clientId)?.name||'Client')}</h3><strong id="timerDisplay" style="font-size:24px">${timerElapsed()}</strong><div class="btnrow"><button class="btn primary" onclick="stopTimer()">Finalizează</button><button class="btn" onclick="pauseTimer()">${db.activeTimer.pausedAt?'Continuă':'Pauză'}</button></div></div>`:''}
  <div class="sectionhead"><h2>Programul de azi</h2><button class="btn small soft" onclick="go('schedule')">Calendar →</button></div><div class="card">${list.length?list.map(jobCard).join(''):'<div class="empty">🌸 Nu ai joburi programate astăzi.</div>'}</div>
  <div class="sectionhead"><h2>Urmează</h2></div><div class="card">${next.length?next.map(jobCard).join(''):'<div class="empty">Nu există alte programări.</div>'}</div>`);
  if(db.activeTimer)tick();
@@ -314,27 +314,21 @@ function settingsForm(){
 async function saveSettings(e){e.preventDefault();const f=new FormData(e.target);for(const k of ['businessName','phone','email','address','invoicePrefix'])db.settings[k]=String(f.get(k)||'').trim();await save('Setări firmă actualizate');closeModal();render()}
 function appearanceForm(){
  const zoom=Math.min(160,Math.max(100,Number(db.settings.zoom)||100));
- showModal(`<div class="modalhead"><h2>Aspect și text</h2><button class="close" onclick="closeModal()">×</button></div><div class="card"><div class="settings-row"><div class="row-icon">🔎</div><div class="row-copy"><strong>Mărimea textului</strong><small>Reglează textul din aplicație pentru a-l citi mai ușor.</small></div><span class="muted" id="zoomValue">${zoom}%</span></div><div class="field"><input id="zoomSlider" type="range" min="100" max="160" step="5" value="${zoom}" oninput="previewZoom(this.value)" style="width:100%;padding:0;accent-color:#c5a15b"></div><div class="btnrow"><button type="button" class="btn small" onclick="previewZoom(100)">Standard</button><button type="button" class="btn small" onclick="previewZoom(120)">Mai mare</button><button type="button" class="btn small" onclick="previewZoom(140)">Foarte mare</button><button type="button" class="btn small" onclick="previewZoom(160)">Maxim</button></div></div><div class="card"><h3>Previzualizare</h3><p id="zoomPreview">Pure Shine Cleaning ✨<br>Textul aplicației va fi mai ușor de citit.</p></div><div class="settings-savebar"><button class="btn primary wide" onclick="saveAppearance()">Salvează aspectul</button></div>`);
- previewZoom(zoom);
+ showModal(`<div class="modalhead"><h2>Aspect și text</h2><button class="close" onclick="closeModal()">×</button></div><div class="card"><div class="settings-row"><div class="row-icon">🔎</div><div class="row-copy"><strong>Mărimea textului</strong><small>Reglează textul pentru a-l citi mai ușor.</small></div><span class="muted" id="zoomValue">${zoom}%</span></div><div class="field"><input id="zoomSlider" type="range" min="100" max="160" step="5" value="${zoom}" oninput="previewZoom(this.value)" style="width:100%;padding:0;accent-color:#c5a15b"></div><div class="btnrow"><button type="button" class="btn small" onclick="previewZoom(100)">Standard</button><button type="button" class="btn small" onclick="previewZoom(120)">Mai mare</button><button type="button" class="btn small" onclick="previewZoom(140)">Foarte mare</button></div></div><div class="card"><h3>Previzualizare</h3><p id="zoomPreview" style="font-size:1rem;line-height:1.5">Pure Shine Cleaning ✨<br>Textul aplicației va fi mai ușor de citit.</p></div><div class="settings-savebar"><button class="btn primary wide" onclick="saveAppearance()">Salvează aspectul</button></div>`);
 }
 function applySavedZoom(){
- const zoom=Math.min(160,Math.max(100,Number(db.settings.zoom)||100));
- db.settings.zoom=zoom;
- document.documentElement.style.setProperty('--app-scale',String(zoom/100));
- document.documentElement.style.fontSize=(16*zoom/100)+'px';
- document.body.style.zoom=String(zoom/100);
+ const n=Math.min(1.6,Math.max(1,Number(db.settings.zoom||100)/100));
+ document.documentElement.style.setProperty('--app-scale',String(n));
 }
 function previewZoom(v){
  const n=Math.min(160,Math.max(100,Number(v)||100));
  $('zoomValue').textContent=n+'%';
  $('zoomSlider').value=n;
- $('zoomPreview').style.fontSize=(16*n/100)+'px';
+ $('zoomPreview').style.fontSize=(n/100)+'rem';
  document.documentElement.style.setProperty('--app-scale',String(n/100));
- document.documentElement.style.fontSize=(16*n/100)+'px';
- document.body.style.zoom=String(n/100);
 }
 async function saveAppearance(){
- db.settings.zoom=Math.min(160,Math.max(100,Number($('zoomSlider').value)||100));
+ db.settings.zoom=Number($('zoomSlider').value)||100;
  applySavedZoom();
  await save('Aspect actualizat');
  closeModal();
