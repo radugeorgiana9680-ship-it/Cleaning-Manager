@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -122,7 +123,7 @@ function durationText(h){const n=Math.round((Number(h)||0)*60);return `${Math.fl
 function getClient(id){return db.clients.find(c=>String(c.id)===String(id))}
 function getJob(id){return db.jobs.find(j=>String(j.id)===String(id))}
 function doneJobs(){return db.jobs.filter(j=>j.status==='Finalizat')}
-function actualHours(j){return Number.isFinite(j.actualMinutes)?j.actualMinutes/60:hours(j.start,j.end)}
+function actualHours(j){return Number.isFinite(Number(j.actualMinutes))&&j.actualMinutes!==null&&j.actualMinutes!==''?Number(j.actualMinutes)/60:hours(j.start,j.end)}
 function revenue(){return doneJobs().reduce((s,j)=>s+(Number(j.price)||0),0)}
 function totalExpenses(){return db.expenses.reduce((s,e)=>s+(Number(e.amount)||0),0)}
 function paid(inv){return db.payments.filter(p=>String(p.invoiceId)===String(inv.id)).reduce((s,p)=>s+Number(p.amount||0),0)}
@@ -179,25 +180,10 @@ function generate(){
  if(changed)db.jobs.sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start));
  return changed;
 }
-
-/* Funcție corectată: butoanele deschid selectorul de fișiere fără ghilimele escapate greșit. */
 function renderImages(){
- const p=db.images?.profile;
- const b=db.images?.banner;
-
- $('profileBox').innerHTML =
-  (p ? `<img src="${p}" alt="Poză de profil">`
-     : '<span style="font-size:1.7rem">✨</span>') +
-  `<button type="button" class="editphoto"
-    onclick="document.getElementById('profileFile').click()">✎</button>`;
-
- $('bannerBox').innerHTML =
-  (b ? `<img src="${b}" alt="Banner">`
-     : '<div class="banner-empty">✨</div>') +
-  `<button type="button" class="banner-edit"
-    onclick="document.getElementById('bannerFile').click()">
-    📷 ${b ? 'Schimbă bannerul' : 'Adaugă banner'}
-  </button>`;
+ const p=db.images?.profile,b=db.images?.banner;
+ $('profileBox').innerHTML=(p?`<img src="${p}" alt="Poză de profil">`:'<span style="font-size:1.7rem">✨</span>')+`<button type="button" class="editphoto" onclick="document.getElementById('profileFile').click()">✎</button>`;
+ $('bannerBox').innerHTML=(b?`<img src="${b}" alt="Banner">`:'<div class="banner-empty">✨</div>')+`<button type="button" class="banner-edit" onclick="document.getElementById('bannerFile').click()">📷 ${b?'Schimbă bannerul':'Adaugă banner'}</button>`;
 }
 function go(p){page=p;render()}
 function setView(s){$('view').innerHTML=s}
@@ -208,14 +194,14 @@ function render(){
 }
 function jobCard(j){
  const c=getClient(j.clientId);
- return `<div class="item"><div class="itemtop"><div><strong>${esc(c?.name||'Client')}</strong><div class="muted">${dateText(j.date)} · ${esc(j.start)}–${esc(j.end)} · ${durationText(actualHours(j))}</div><span class="pill ${j.status==='Finalizat'?'green':j.status==='Anulat'?'pink':'gold'}">${esc(j.status)}</span></div><strong>${cash(j.price)}</strong></div><div class="btnrow"><button class="btn small soft" onclick="jobForm(${j.id})">Editează</button>${j.status==='Programat'?`<button class="btn small" onclick="startTimer(${j.id})">▶ Timer</button><button class="btn small" onclick="finishJob(${j.id})">Finalizează</button>`:''}<button class="btn small danger" onclick="deleteJob(${j.id})">Șterge</button></div></div>`;
+ return `<div class="item"><div class="itemtop"><div><strong>${esc(c?.name||'Client')}</strong><div class="muted">${dateText(j.date)} · ${esc(j.start)}–${esc(j.end)} · ${durationText(actualHours(j))}</div>${j.actualMinutes!=null?`<div class="muted">Durată efectivă: ${durationText(Number(j.actualMinutes)/60)}</div>`:''}<span class="pill ${j.status==='Finalizat'?'green':j.status==='Anulat'?'pink':'gold'}">${esc(j.status)}</span></div><strong>${cash(j.price)}</strong></div><div class="btnrow"><button class="btn small soft" onclick="jobForm(${j.id})">Editează</button>${j.status==='Programat'?`<button class="btn small" onclick="startTimer(${j.id})">▶ Timer</button><button class="btn small" onclick="finishJob(${j.id})">Finalizează</button>`:''}${j.status==='Finalizat'?`<button class="btn small" onclick="invoiceForm(${j.id})">🧾 Facturează</button>`:''}<button class="btn small danger" onclick="deleteJob(${j.id})">Șterge</button></div></div>`;
 }
 function home(){
  const list=db.jobs.filter(j=>j.date===today()&&j.status!=='Anulat').sort((a,b)=>a.start.localeCompare(b.start));
  const next=db.jobs.filter(j=>j.date>today()&&j.status==='Programat').sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start)).slice(0,3);
  setView(`<div class="hero"><div class="muted">${dateText(today())}</div><h2>Bună! ✨</h2><p class="muted">Organizează-ți ziua și urmărește fiecare lucrare.</p><div class="btnrow"><button class="btn primary" onclick="jobForm()">＋ Adaugă job</button><button class="btn" onclick="clientForm()">＋ Client nou</button></div></div>
  <div class="stats"><div class="stat"><span>Venit realizat</span><strong>${cash(revenue())}</strong></div><div class="stat"><span>Cheltuieli</span><strong>${cash(totalExpenses())}</strong></div><div class="stat"><span>Facturi restante</span><strong>${cash(db.invoices.reduce((s,i)=>s+balance(i),0))}</strong></div><div class="stat"><span>Ore finalizate</span><strong>${durationText(doneJobs().reduce((s,j)=>s+actualHours(j),0))}</strong></div></div>
- ${db.activeTimer?`<div class="card"><h3>⏱ Timer activ · ${esc(getClient(db.activeTimer.clientId)?.name||'Client')}</h3><strong id="timerDisplay" style="font-size:1.5rem">${timerElapsed()}</strong><div class="btnrow"><button class="btn primary" onclick="stopTimer()">Finalizează</button><button class="btn" onclick="pauseTimer()">${db.activeTimer.pausedAt?'Continuă':'Pauză'}</button></div></div>`:''}
+ ${db.activeTimer?`<div class="card"><h3>⏱ Timer activ · ${esc(getClient(db.activeTimer.clientId)?.name||'Client')}</h3><strong id="timerDisplay" style="font-size:1.5rem">${timerElapsed()}</strong><div class="btnrow"><button class="btn primary" onclick="stopTimer()">Oprește și salvează</button><button class="btn" onclick="pauseTimer()">${db.activeTimer.pausedAt?'Continuă':'Pauză'}</button></div><p class="muted">Timpul se calculează după ora de pornire și se salvează când oprești timerul.</p></div>`:''}
  <div class="sectionhead"><h2>Programul de azi</h2><button class="btn small soft" onclick="go('schedule')">Calendar →</button></div><div class="card">${list.length?list.map(jobCard).join(''):'<div class="empty">🌸 Nu ai joburi programate astăzi.</div>'}</div>
  <div class="sectionhead"><h2>Urmează</h2></div><div class="card">${next.length?next.map(jobCard).join(''):'<div class="empty">Nu există alte programări.</div>'}</div>`);
  if(db.activeTimer)tick();
@@ -273,28 +259,177 @@ async function saveClient(e,id){
 async function archiveClient(id){if(!confirm('Arhivezi clientul? Istoricul va fi păstrat.'))return;const c=getClient(id);if(c)c.archived=true;await save('Client arhivat');render()}
 function jobForm(id,clientId){
  const j=id?getJob(id):null,v=k=>esc(j?.[k]??'');
- showModal(`<div class="modalhead"><h2>${j?'Editează job':'Job nou'}</h2><button class="close" onclick="closeModal()">×</button></div><form onsubmit="saveJob(event,${id||'null'})"><div class="field"><label>Client</label><select name="clientId" required><option value="">Alege client</option>${db.clients.filter(c=>!c.archived).map(c=>`<option value="${c.id}" ${String(j?.clientId??clientId??'')===String(c.id)?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div><div class="field"><label>Data</label><input type="date" name="date" value="${v('date')||selectedDate}" required></div><div class="grid2"><div class="field"><label>Început</label><input type="time" name="start" value="${v('start')}" required></div><div class="field"><label>Terminare</label><input type="time" name="end" value="${v('end')}" required></div></div><div class="grid2"><div class="field"><label>Tarif £/oră</label><input type="number" name="rate" min="0" step=".5" value="${j?.rate??getClient(clientId)?.rate??''}" required></div><div class="field"><label>Status</label><select name="status">${['Programat','Finalizat','Anulat'].map(x=>`<option ${j?.status===x?'selected':''}>${x}</option>`).join('')}</select></div></div><div class="field"><label>Notițe</label><textarea name="notes">${v('notes')}</textarea></div><div class="notice">Modificarea acestei programări nu schimbă programul standard al clientului.</div><button class="btn primary wide">Salvează jobul</button></form>`);
+ showModal(`<div class="modalhead"><h2>${j?'Editează job':'Job nou'}</h2><button class="close" onclick="closeModal()">×</button></div><form onsubmit="saveJob(event,${id||'null'})"><div class="field"><label>Client</label><select name="clientId" required><option value="">Alege client</option>${db.clients.filter(c=>!c.archived).map(c=>`<option value="${c.id}" ${String(j?.clientId??clientId??'')===String(c.id)?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div><div class="field"><label>Data</label><input type="date" name="date" value="${v('date')||selectedDate}" required></div><div class="grid2"><div class="field"><label>Început</label><input type="time" name="start" value="${v('start')}" required></div><div class="field"><label>Terminare</label><input type="time" name="end" value="${v('end')}" required></div></div><div class="grid2"><div class="field"><label>Tarif £/oră</label><input type="number" name="rate" min="0" step=".5" value="${j?.rate??getClient(clientId)?.rate??''}" required></div><div class="field"><label>Status</label><select name="status">${['Programat','Finalizat','Anulat'].map(x=>`<option ${j?.status===x?'selected':''}>${x}</option>`).join('')}</select></div></div><div class="field"><label>Notițe</label><textarea name="notes">${v('notes')}</textarea></div><div class="notice">Durata și suma se calculează automat din orele introduse. Dacă folosești timerul, timpul măsurat va fi păstrat separat.</div><button class="btn primary wide">Salvează jobul</button></form>`);
 }
 async function saveJob(e,id){
  e.preventDefault();const f=new FormData(e.target),old=id?getJob(id):null,start=f.get('start'),end=f.get('end'),rate=Number(f.get('rate')),h=hours(start,end);
  if(h<=0){toast('Verifică orele introduse.');return}
- const j={...(old||{}),id:old?.id||uid(),clientId:f.get('clientId'),date:f.get('date'),start,end,rate,price:Math.round(h*rate*100)/100,status:f.get('status'),notes:f.get('notes'),autoGenerated:false};
+ const status=f.get('status');
+ const j={...(old||{}),id:old?.id||uid(),clientId:f.get('clientId'),date:f.get('date'),start,end,rate,price:Math.round((old?.actualMinutes!=null&&status==='Finalizat'?Number(old.actualMinutes)/60:h)*rate*100)/100,status,notes:f.get('notes'),autoGenerated:false};
+ if(status!=='Finalizat'&&!old?.actualMinutes)delete j.actualMinutes;
  if(old)Object.assign(old,j);else db.jobs.push(j);
  generate();await save(old?'Job actualizat':'Job adăugat');closeModal();render();
 }
-async function deleteJob(id){if(!confirm('Ștergi acest job?'))return;db.jobs=db.jobs.filter(j=>String(j.id)!==String(id));await save('Job șters');render()}
-async function finishJob(id){const j=getJob(id);if(!j)return;const raw=prompt('Durata reală în minute:',String(Math.round(hours(j.start,j.end)*60)));if(raw===null)return;const n=Number(raw);if(!Number.isFinite(n)||n<=0){toast('Introdu durata în minute.');return}j.actualMinutes=Math.round(n);j.price=Math.round(n/60*Number(j.rate)*100)/100;j.status='Finalizat';await save('Job finalizat',getClient(j.clientId)?.name||'');render()}
-async function startTimer(id){const j=getJob(id);if(!j)return;if(db.activeTimer&&!confirm('Înlocuiești timerul activ?'))return;db.activeTimer={jobId:j.id,clientId:j.clientId,startedAt:Date.now(),pausedAt:null,pausedMs:0};await save('Timer pornit');render()}
-function timerElapsed(){const t=db.activeTimer;if(!t)return '00:00:00';const end=t.pausedAt||Date.now(),s=Math.max(0,Math.floor((end-t.startedAt-(t.pausedMs||0))/1000));return [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(x=>String(x).padStart(2,'0')).join(':')}
-function tick(){clearTimeout(timerHandle);if(!db.activeTimer)return;const el=$('timerDisplay');if(el)el.textContent=timerElapsed();timerHandle=setTimeout(tick,1000)}
-async function pauseTimer(){const t=db.activeTimer;if(!t)return;if(t.pausedAt){t.pausedMs+=(Date.now()-t.pausedAt);t.pausedAt=null}else t.pausedAt=Date.now();await save('Timer actualizat');render()}
-async function stopTimer(){const t=db.activeTimer;if(!t)return;const j=getJob(t.jobId);if(j){const n=Math.max(1,Math.round(((t.pausedAt||Date.now())-t.startedAt-(t.pausedMs||0))/60000));j.actualMinutes=n;j.price=Math.round(n/60*Number(j.rate)*100)/100;j.status='Finalizat'}db.activeTimer=null;await save('Job finalizat din timer');render()}
-function holidayForm(clientId){showModal(`<div class="modalhead"><h2>Vacanță client</h2><button class="close" onclick="closeModal()">×</button></div><form onsubmit="saveHoliday(event)"><div class="field"><label>Client</label><select name="clientId">${db.clients.filter(c=>!c.archived).map(c=>`<option value="${c.id}" ${String(clientId||'')===String(c.id)?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div><div class="grid2"><div class="field"><label>De la</label><input type="date" name="from" value="${today()}" required></div><div class="field"><label>Până la</label><input type="date" name="to" value="${today()}" required></div></div><button class="btn primary wide">Salvează</button></form>`)}
-async function saveHoliday(e){e.preventDefault();const f=new FormData(e.target),h={id:uid(),clientId:f.get('clientId'),from:f.get('from'),to:f.get('to')};if(h.to<h.from){toast('Verifică perioada.');return}db.holidays.push(h);db.jobs=db.jobs.filter(j=>!(j.autoGenerated&&j.status==='Programat'&&String(j.clientId)===String(h.clientId)&&j.date>=h.from&&j.date<=h.to));generate();await save('Vacanță adăugată');closeModal();render()}
-async function deleteHoliday(id){if(!confirm('Ștergi vacanța?'))return;db.holidays=db.holidays.filter(h=>String(h.id)!==String(id));generate();await save('Vacanță ștearsă');render()}
-function invoiceForm(){showModal(`<div class="modalhead"><h2>Factură nouă</h2><button class="close" onclick="closeModal()">×</button></div><form onsubmit="saveInvoice(event)"><div class="field"><label>Client</label><select name="clientId" required>${db.clients.filter(c=>!c.archived).map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select></div><div class="grid2"><div class="field"><label>Data</label><input type="date" name="date" value="${today()}" required></div><div class="field"><label>Scadență</label><input type="date" name="due" value="${today()}" required></div></div><div class="field"><label>Total £</label><input type="number" name="total" min=".01" step=".01" required></div><div class="field"><label>Descriere</label><input name="description" value="Cleaning services"></div><button class="btn primary wide">Creează factura</button></form>`)}
-async function saveInvoice(e){e.preventDefault();const f=new FormData(e.target),c=getClient(f.get('clientId'));if(!c)return;db.invoices.push({id:uid(),number:`${db.settings.invoicePrefix}-${String(db.settings.invoiceNext++).padStart(4,'0')}`,clientId:c.id,clientName:c.name,date:f.get('date'),due:f.get('due'),total:Number(f.get('total')),description:f.get('description')});await save('Factură creată');closeModal();render()}
-function printInvoice(id){const i=db.invoices.find(x=>String(x.id)===String(id));if(!i)return;const c=getClient(i.clientId),w=window.open('','_blank');if(!w){toast('Permite ferestrele pop-up pentru PDF.');return}w.document.write(`<!doctype html><html><meta charset="utf-8"><title>${esc(i.number)}</title><style>body{font:16px Arial;margin:40px;color:#463844}h1{color:#b56d8b}.total{font-size:25px;font-weight:bold}</style><body><h1>${esc(db.settings.businessName)}</h1><p>${esc(db.settings.address)}<br>${esc(db.settings.phone)} · ${esc(db.settings.email)}</p><hr><h2>INVOICE ${esc(i.number)}</h2><p>Client: ${esc(c?.name||i.clientName)}<br>Date: ${esc(i.date)}<br>Due: ${esc(i.due)}</p><p>${esc(i.description)}</p><p class="total">Total: ${cash(i.total)}</p><p>Paid: ${cash(paid(i))}<br>Balance: ${cash(balance(i))}</p><script>onload=()=>setTimeout(()=>print(),200)<\/script></body></html>`);w.document.close()}
+async function deleteJob(id){if(!confirm('Ștergi acest job?'))return;if(db.activeTimer&&String(db.activeTimer.jobId)===String(id)){db.activeTimer=null;clearTimeout(timerHandle)}db.jobs=db.jobs.filter(j=>String(j.id)!==String(id));await save('Job șters');render()}
+async function finishJob(id){
+ const j=getJob(id);if(!j)return;
+ const raw=prompt('Durata reală în minute:',String(Math.round(hours(j.start,j.end)*60)));
+ if(raw===null)return;
+ const n=Number(raw);
+ if(!Number.isFinite(n)||n<=0){toast('Introdu durata în minute.');return}
+ j.actualMinutes=Math.round(n);
+ j.price=Math.round(n/60*Number(j.rate)*100)/100;
+ j.status='Finalizat';
+ j.actualEnd=new Date().toISOString();
+ await save('Job finalizat',getClient(j.clientId)?.name||'');
+ render();
+}
+
+/* Timer persistent: pornește, continuă după ce aplicația este în fundal,
+   păstrează pauzele și salvează durata efectivă la oprire. */
+async function startTimer(id){
+ const j=getJob(id);if(!j)return;
+ if(j.status!=='Programat'){toast('Timerul poate porni doar pentru un job programat.');return}
+ if(db.activeTimer&&String(db.activeTimer.jobId)!==String(id)){
+  if(!confirm('Există deja un timer activ. Îl oprești și pornești timerul pentru acest job?'))return;
+  await stopTimer(false);
+ }
+ if(db.activeTimer&&String(db.activeTimer.jobId)===String(id)){
+  toast('Timerul pentru acest job este deja activ.');
+  return;
+ }
+ db.activeTimer={jobId:j.id,clientId:j.clientId,startedAt:Date.now(),pausedAt:null,pausedMs:0};
+ await save('Timer pornit',getClient(j.clientId)?.name||'');
+ render();
+ tick();
+}
+function timerElapsedSeconds(){
+ const t=db.activeTimer;if(!t)return 0;
+ const end=t.pausedAt||Date.now();
+ return Math.max(0,Math.floor((end-Number(t.startedAt||Date.now())-Number(t.pausedMs||0))/1000));
+}
+function timerElapsed(){
+ if(!db.activeTimer)return '00:00:00';
+ const s=timerElapsedSeconds();
+ return [Math.floor(s/3600),Math.floor((s%3600)/60),s%60].map(x=>String(x).padStart(2,'0')).join(':');
+}
+function tick(){
+ clearTimeout(timerHandle);
+ if(!db.activeTimer)return;
+ const el=$('timerDisplay');
+ if(el)el.textContent=timerElapsed();
+ timerHandle=setTimeout(tick,1000);
+}
+async function pauseTimer(){
+ const t=db.activeTimer;if(!t)return;
+ if(t.pausedAt){
+  t.pausedMs=Number(t.pausedMs||0)+(Date.now()-t.pausedAt);
+  t.pausedAt=null;
+  await save('Timer continuat',getClient(t.clientId)?.name||'');
+  toast('Timerul continuă.');
+ }else{
+  t.pausedAt=Date.now();
+  await save('Timer pus pe pauză',getClient(t.clientId)?.name||'');
+  toast('Timer pus pe pauză.');
+ }
+ render();
+}
+async function stopTimer(shouldRender=true){
+ const t=db.activeTimer;if(!t)return;
+ clearTimeout(timerHandle);
+ const j=getJob(t.jobId);
+ if(j){
+  const end=t.pausedAt||Date.now();
+  const elapsedMs=Math.max(0,end-Number(t.startedAt||end)-Number(t.pausedMs||0));
+  const n=Math.max(1,Math.round(elapsedMs/60000));
+  const startDate=new Date(Number(t.startedAt||Date.now()));
+  const endDate=new Date(end);
+  j.actualMinutes=n;
+  j.price=Math.round((n/60)*Number(j.rate||0)*100)/100;
+  j.status='Finalizat';
+  j.actualStart=startDate.toISOString();
+  j.actualEnd=endDate.toISOString();
+  j.timerSavedAt=new Date().toISOString();
+ }
+ db.activeTimer=null;
+ const ok=await save('Timpul jobului salvat',getClient(j?.clientId)?.name||'');
+ if(ok)toast(j?`Timp salvat: ${durationText(j.actualMinutes/60)} · ${cash(j.price)}`:'Timer oprit.');
+ if(shouldRender)render();
+}
+
+/* Facturi: alegi un job finalizat, iar totalul se calculează automat
+   din durata efectivă salvată și tariful jobului. */
+function invoiceForm(jobId=null){
+ const chosen=jobId?getJob(jobId):null;
+ const eligible=doneJobs().filter(j=>!j.invoiced);
+ const initialClient=chosen?.clientId??eligible[0]?.clientId??db.clients.find(c=>!c.archived)?.id??'';
+ const initialJob=chosen?.id??eligible.find(j=>String(j.clientId)===String(initialClient))?.id??'';
+ const clientOptions=db.clients.filter(c=>!c.archived).map(c=>`<option value="${c.id}" ${String(c.id)===String(initialClient)?'selected':''}>${esc(c.name)}</option>`).join('');
+ showModal(`<div class="modalhead"><h2>Factură nouă</h2><button class="close" onclick="closeModal()">×</button></div>
+ <form id="invoiceFormElement" onsubmit="saveInvoice(event)">
+ <div class="field"><label>Client</label><select name="clientId" id="invoiceClient" onchange="updateInvoiceJobs()" required>${clientOptions}</select></div>
+ <div class="field"><label>Job finalizat de facturat</label><select name="jobId" id="invoiceJob" onchange="updateInvoiceTotal()"><option value="">Alege un job finalizat</option>${eligible.filter(j=>String(j.clientId)===String(initialClient)).map(j=>`<option value="${j.id}" ${String(j.id)===String(initialJob)?'selected':''}>${dateText(j.date)} · ${esc(j.start)}–${esc(j.end)} · ${durationText(actualHours(j))} · ${cash(j.price)}</option>`).join('')}</select><div class="muted">Sunt afișate joburile finalizate care nu au fost deja facturate. Poți crea și o factură fără un job selectat.</div></div>
+ <div class="grid2"><div class="field"><label>Data facturii</label><input type="date" name="date" value="${today()}" required></div><div class="field"><label>Scadență</label><input type="date" name="due" value="${shiftDate(today(),14)}" required></div></div>
+ <div class="field"><label>Total calculat automat (£)</label><input type="number" name="total" id="invoiceTotal" min=".01" step=".01" value="${chosen?Number(chosen.price||0).toFixed(2):''}" required><div class="muted" id="invoiceCalculation">${chosen?`${durationText(actualHours(chosen))} × ${cash(chosen.rate)}/oră = ${cash(chosen.price)}`:'Selectează un job finalizat pentru calcul automat. Poți modifica suma dacă este necesar.'}</div></div>
+ <div class="field"><label>Descriere</label><input name="description" id="invoiceDescription" value="${chosen?'Cleaning services — '+dateText(chosen.date):'Cleaning services'}"></div>
+ <button class="btn primary wide">Creează factura</button></form>`);
+}
+function updateInvoiceJobs(){
+ const clientId=$('invoiceClient')?.value,select=$('invoiceJob');
+ if(!select)return;
+ const eligible=doneJobs().filter(j=>!j.invoiced&&String(j.clientId)===String(clientId));
+ select.innerHTML='<option value="">Alege un job finalizat</option>'+eligible.map(j=>`<option value="${j.id}">${dateText(j.date)} · ${esc(j.start)}–${esc(j.end)} · ${durationText(actualHours(j))} · ${cash(j.price)}</option>`).join('');
+ updateInvoiceTotal();
+}
+function updateInvoiceTotal(){
+ const select=$('invoiceJob'),total=$('invoiceTotal'),description=$('invoiceDescription'),calculation=$('invoiceCalculation');
+ if(!select||!total)return;
+ const j=select.value?getJob(select.value):null;
+ if(j){
+  if(String(j.clientId)!==String($('invoiceClient').value)){select.value='';total.value='';calculation.textContent='Alege un job al clientului selectat.';return}
+  total.value=Number(j.price||0).toFixed(2);
+  calculation.textContent=`${durationText(actualHours(j))} × ${cash(j.rate)}/oră = ${cash(j.price)}. Suma poate fi ajustată manual.`;
+  if(description)description.value=`Cleaning services — ${dateText(j.date)}`;
+ }else{
+  total.value='';
+  calculation.textContent='Nu ai selectat un job. Introdu suma facturii manual.';
+  if(description)description.value='Cleaning services';
+ }
+}
+async function saveInvoice(e){
+ e.preventDefault();
+ const f=new FormData(e.target),c=getClient(f.get('clientId')),jobId=f.get('jobId'),j=jobId?getJob(jobId):null,total=Number(f.get('total'));
+ if(!c){toast('Alege un client.');return}
+ if(!Number.isFinite(total)||total<=0){toast('Totalul facturii trebuie să fie mai mare decât zero.');return}
+ if(j&&String(j.clientId)!==String(c.id)){toast('Jobul selectat nu aparține clientului ales.');return}
+ if(j&&j.status!=='Finalizat'){toast('Poți factura doar joburi finalizate.');return}
+ if(j&&j.invoiced){toast('Acest job a fost deja facturat.');return}
+ const invoice={
+  id:uid(),
+  number:`${db.settings.invoicePrefix}-${String(db.settings.invoiceNext++).padStart(4,'0')}`,
+  clientId:c.id,
+  clientName:c.name,
+  date:f.get('date'),
+  due:f.get('due'),
+  total:Math.round(total*100)/100,
+  description:f.get('description'),
+  jobId:j?.id??null,
+  jobIds:j?[j.id]:[],
+  hours:j?actualHours(j):null,
+  rate:j?Number(j.rate||0):null
+ };
+ db.invoices.push(invoice);
+ if(j){j.invoiced=true;j.invoiceId=invoice.id}
+ await save('Factură creată',`${invoice.number} · ${c.name} · ${cash(invoice.total)}`);
+ closeModal();render();
+}
+function printInvoice(id){
+ const i=db.invoices.find(x=>String(x.id)===String(id));if(!i)return;
+ const c=getClient(i.clientId),w=window.open('','_blank');
+ if(!w){toast('Permite ferestrele pop-up pentru PDF.');return}
+ w.document.write(`<!doctype html><html><meta charset="utf-8"><title>${esc(i.number)}</title><style>body{font:16px Arial;margin:40px;color:#463844}h1{color:#b56d8b}.total{font-size:25px;font-weight:bold}table{border-collapse:collapse;width:100%;margin-top:25px}td,th{padding:12px;border-bottom:1px solid #eee;text-align:left}</style><body><h1>${esc(db.settings.businessName)}</h1><p>${esc(db.settings.address)}<br>${esc(db.settings.phone)} · ${esc(db.settings.email)}</p><hr><h2>INVOICE ${esc(i.number)}</h2><p>Client: ${esc(c?.name||i.clientName)}<br>Date: ${esc(i.date)}<br>Due: ${esc(i.due)}</p><table><thead><tr><th>Description</th><th>Duration</th><th>Rate</th><th>Total</th></tr></thead><tbody><tr><td>${esc(i.description||'Cleaning services')}</td><td>${i.hours!=null?esc(durationText(i.hours)):'—'}</td><td>${i.rate!=null?cash(i.rate)+'/hour':'—'}</td><td>${cash(i.total)}</td></tr></tbody></table><p class="total">Total: ${cash(i.total)}</p><p>Paid: ${cash(paid(i))}<br>Balance: ${cash(balance(i))}</p><script>onload=()=>setTimeout(()=>print(),200)<\/script></body></html>`);
+ w.document.close();
+}
 function paymentForm(id){const i=db.invoices.find(x=>String(x.id)===String(id));if(!i)return;showModal(`<div class="modalhead"><h2>Înregistrează plata</h2><button class="close" onclick="closeModal()">×</button></div><div class="notice">Restant: ${cash(balance(i))}</div><form onsubmit="savePayment(event,${i.id})"><div class="field"><label>Sumă £</label><input type="number" name="amount" min=".01" max="${balance(i)}" step=".01" required></div><div class="grid2"><div class="field"><label>Data</label><input type="date" name="date" value="${today()}"></div><div class="field"><label>Metodă</label><select name="method"><option>Bank transfer</option><option>Cash</option><option>Card</option><option>Other</option></select></div></div><button class="btn primary wide">Salvează plata</button></form>`)}
 async function savePayment(e,id){e.preventDefault();const f=new FormData(e.target),i=db.invoices.find(x=>String(x.id)===String(id)),amount=Number(f.get('amount'));if(!i||amount<=0||amount>balance(i)+.001){toast('Verifică suma.');return}db.payments.push({id:uid(),invoiceId:i.id,amount,date:f.get('date'),method:f.get('method')});await save('Plată înregistrată');closeModal();render()}
 function expenseForm(){showModal(`<div class="modalhead"><h2>Cheltuială</h2><button class="close" onclick="closeModal()">×</button></div><form onsubmit="saveExpense(event)"><div class="grid2"><div class="field"><label>Data</label><input type="date" name="date" value="${today()}"></div><div class="field"><label>Sumă £</label><input type="number" name="amount" min=".01" step=".01" required></div></div><div class="field"><label>Categorie</label><select name="category"><option>Cleaning products</option><option>Travel / Fuel</option><option>Equipment</option><option>Insurance</option><option>Other</option></select></div><div class="field"><label>Notă</label><input name="note"></div><button class="btn primary wide">Salvează</button></form>`)}
@@ -328,6 +463,7 @@ async function boot(){
   }
   if(old)db={...blank(),...old,settings:{...blank().settings,...old.settings},images:old.images||{},clients:Array.isArray(old.clients)?old.clients:[],jobs:Array.isArray(old.jobs)?old.jobs:[],invoices:Array.isArray(old.invoices)?old.invoices:[],payments:Array.isArray(old.payments)?old.payments:[],expenses:Array.isArray(old.expenses)?old.expenses:[],holidays:Array.isArray(old.holidays)?old.holidays:[],history:Array.isArray(old.history)?old.history:[]};
   seedClients();generate();applyZoom();$('brandTitle').textContent=db.settings.businessName||'Pure Shine';await persist();render();
+  if(db.activeTimer){tick()}
  }catch(err){
   console.error(err);
   $('view').innerHTML='<div class="card"><h3>Aplicația nu a putut porni.</h3><p class="muted">Reîncarcă pagina. Dacă problema persistă, încearcă să deschizi aplicația în Safari și verifică stocarea browserului.</p><button class="btn primary" onclick="location.reload()">Reîncarcă</button></div>';
@@ -335,7 +471,8 @@ async function boot(){
  }
 }
 window.addEventListener('error',e=>{console.error(e.error)});
-window.addEventListener('pageshow',()=>{if(db.activeTimer&&page==='home')tick()});
+window.addEventListener('pageshow',()=>{if(db.activeTimer){tick();if(page==='home')render()}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&db.activeTimer){tick()}});
 boot();
 </script>
 </body>
