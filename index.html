@@ -1,138 +1,281 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#f7e5ed">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f8e8ef">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Pure Shine">
 <title>Pure Shine Cleaning Manager</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Parisienne&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-:root{--pink:#d58aaa;--pink-dark:#a85e7d;--pale:#f9e8ef;--gold:#c5a15b;--bg:#fffafd;--ink:#39343a;--muted:#91858d;--line:#f0e3e9;--card:#fff;--green:#e8f3ed;--red:#fae8e8;--shadow:0 5px 20px #5b354010;--scale:1}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:calc(14px * var(--scale));padding-bottom:95px}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{max-width:570px;margin:auto;min-height:100vh;background:var(--bg)}
-header{padding:19px 18px 12px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:11px}.logo{width:51px;height:51px;border-radius:17px;background:linear-gradient(145deg,#f5dce7,#fff3df);display:grid;place-items:center;font-size:27px;overflow:hidden}.logo img{width:100%;height:100%;object-fit:cover}.brand-name{font:35px Parisienne,cursive;color:var(--pink-dark);line-height:1}.brand-sub{font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:4px}.header-date{text-align:right;color:var(--muted);font-size:11px}
-.page{display:none;padding:12px 17px 30px}.page.active{display:block}h2{font-size:21px;margin:8px 0 15px}h3{font-size:16px;margin:0 0 12px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin-bottom:13px;box-shadow:var(--shadow)}.welcome{background:linear-gradient(120deg,#f8e4ec,#fff4e7);border:0;padding:21px}.welcome h2{font:30px Parisienne,cursive;color:var(--pink-dark);margin:0 0 5px}.welcome p{margin:0;color:#806d76;font-size:12px}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:13px 0}.stat{background:#fff;border:1px solid var(--line);border-radius:17px;padding:13px;box-shadow:var(--shadow)}.stat small{display:block;color:var(--muted);font-size:11px;margin-bottom:7px}.stat strong{font-size:21px;color:var(--pink-dark)}.section-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:17px 0 10px}.section-row h2,.section-row h3{margin:0}
-.job{border:1px solid var(--line);border-radius:17px;padding:13px;margin:9px 0;background:#fff}.job-top{display:flex;justify-content:space-between;gap:10px}.job-name{font-weight:800;font-size:15px}.job-time{color:var(--muted);font-size:12px;margin-top:4px}.job-meta{font-size:11px;color:var(--muted);margin-top:8px}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.btn{background:var(--pale);color:#985b76;padding:10px 12px;border-radius:11px;font-size:12px;font-weight:700}.btn.gold{background:#f6efdf;color:#92743b}.btn.dark{background:var(--pink-dark);color:white}.btn.green{background:var(--green);color:#527a61}.btn.grey{background:#f1eef0;color:#746b71}.btn.red{background:var(--red);color:#a44f4f}.full{width:100%}.empty{text-align:center;padding:23px;color:var(--muted);font-size:13px}.pill{display:inline-block;padding:5px 8px;border-radius:20px;background:#f8e8ef;color:#9d6280;font-size:10px;font-weight:700}
-.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(570px,100%);height:76px;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:center;z-index:10;padding-bottom:env(safe-area-inset-bottom)}.nav button{background:none;color:#a69aa1;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:50px}.nav button span{font-size:22px}.nav button.active{color:var(--pink-dark);font-weight:800}.fab{position:fixed;right:max(20px,calc((100vw - 530px)/2));bottom:91px;width:55px;height:55px;border-radius:50%;background:var(--pink-dark);color:white;font-size:28px;box-shadow:0 7px 20px #b66b8b55;z-index:9}
-label{display:block;font-size:12px;font-weight:700;color:#776a72;margin:11px 0 5px}input,select,textarea{width:100%;padding:11px;border:1px solid #eadde4;border-radius:11px;background:#fff;color:var(--ink);outline:none}input:focus,select:focus,textarea:focus{border-color:var(--pink)}input[type=checkbox]{width:auto}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.modal-bg{position:fixed;inset:0;background:#21151d88;z-index:30;display:none;align-items:flex-end;justify-content:center}.modal-bg.show{display:flex}.modal{background:var(--bg);width:min(570px,100%);max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:20px 18px 35px}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{background:#f5e8ee;border-radius:50%;width:35px;height:35px;font-size:20px}.client-row{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--line)}.avatar{width:47px;height:47px;border-radius:15px;background:#f7e4ec;display:grid;place-items:center;color:#a35f7e;font-weight:800;overflow:hidden;flex-shrink:0}.avatar img{width:100%;height:100%;object-fit:cover}.client-info{flex:1;min-width:0}.client-info strong{display:block}.client-info small{color:var(--muted);font-size:11px;display:block}.note{font-size:11px;color:var(--muted);line-height:1.5}.photo-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.photo-preview img{width:85px;height:85px;object-fit:cover;border-radius:12px;border:1px solid var(--line)}.photo-tile{position:relative}.photo-tile button{position:absolute;top:3px;right:3px;border-radius:50%;background:#fff;color:#a44f4f;width:23px;height:23px}.photo-upload{border:1px dashed #d9a2b8;border-radius:13px;padding:13px;background:#fff8fb}.photo-upload input{border:0;padding:5px 0}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}.calendar div{background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 1px;font-size:11px}.calendar .weekday{background:#f8e9ef;color:#9b607b;font-weight:800}.calendar .has{background:#f6e4ec;border-color:#d99ab4}.timer-box{background:#fbf0f4;border-radius:16px;padding:13px;text-align:center}.timer-clock{font-size:26px;font-weight:800;letter-spacing:2px;color:var(--pink-dark)}.setting-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.switch{width:45px;height:26px;border-radius:20px;background:#ddd;position:relative;flex-shrink:0}.switch:after{content:"";position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;left:3px;transition:.2s}.switch.on{background:var(--pink)}.switch.on:after{left:22px}.settings-tabs{display:flex;gap:6px;overflow-x:auto;padding:4px 0 12px}.settings-tabs button{white-space:nowrap}.settings-panel{display:none}.settings-panel.active{display:block}.divider{height:1px;background:var(--line);margin:13px 0}.gallery{display:flex;gap:8px;overflow:auto;margin-top:8px}.gallery img{width:100px;height:100px;object-fit:cover;border-radius:12px;flex-shrink:0}.hidden{display:none!important}
-body.compact .card{padding:11px;margin-bottom:9px}body.compact .job{padding:9px;margin:6px 0}body.high-contrast{--ink:#171217;--muted:#514650;--line:#cdbbc4}body.high-contrast .card,body.high-contrast .job{border-color:#a98a9a}
-@media(min-width:600px){body{background:#f5eef2}.app{box-shadow:0 0 40px #3b233010}}
+:root{--pink:#d58aaa;--dark:#a85e7d;--pale:#f9e8ef;--gold:#c5a15b;--bg:#fffafd;--ink:#39343a;--muted:#91858d;--line:#f0e3e9;--scale:1}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--ink);font-size:calc(14px * var(--scale))}
+body{min-height:100dvh;padding:0 0 calc(78px + env(safe-area-inset-bottom));}
+button,input,select,textarea{font:inherit}
+button{border:0;cursor:pointer}
+.app{width:100%;max-width:100%;min-height:100dvh;margin:0;background:var(--bg);display:flex;flex-direction:column}
+header{padding:calc(14px + env(safe-area-inset-top)) 17px 12px;display:flex;align-items:center;justify-content:space-between;background:#fff;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:48px;height:48px;border-radius:16px;background:#f8e6ed;display:grid;place-items:center;overflow:hidden;font-size:25px}
+.logo img{width:100%;height:100%;object-fit:cover}
+.brand-name{font:34px Parisienne,cursive;color:var(--dark);line-height:1}
+.brand-sub{font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:3px}
+.header-date{font-size:11px;color:var(--muted);text-align:right}
+main{flex:1;width:100%}
+.page{display:none;width:100%;min-height:calc(100dvh - 150px);padding:15px 16px 25px}
+.page.active{display:flex;flex-direction:column}
+h2{font-size:21px;margin:7px 0 15px}
+h3{font-size:16px;margin:0 0 11px}
+.card{background:#fff;border:1px solid var(--line);border-radius:19px;padding:15px;margin-bottom:12px;box-shadow:0 4px 16px #5b35400b}
+.welcome{background:linear-gradient(120deg,#f8e4ec,#fff4e7);border:0;padding:19px}
+.welcome h2{font:29px Parisienne,cursive;color:var(--dark);margin:0 0 5px}
+.welcome p{font-size:12px;color:#806d76;margin:0}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}
+.stat small{display:block;font-size:11px;color:var(--muted);margin-bottom:7px}
+.stat strong{font-size:20px;color:var(--dark)}
+.section-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:15px 0 10px}
+.job{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px;margin:9px 0}
+.job-top{display:flex;justify-content:space-between;gap:8px}
+.job-name{font-weight:800;font-size:14px}
+.job-time,.job-meta{font-size:11px;color:var(--muted);margin-top:5px}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.btn{background:var(--pale);color:#985b76;padding:10px 12px;border-radius:11px;font-size:12px;font-weight:700}
+.btn.dark{background:var(--dark);color:white}
+.btn.gold{background:#f6efdf;color:#92743b}
+.btn.green{background:#e8f3ed;color:#527a61}
+.btn.red{background:#fae8e8;color:#a44f4f}
+.btn.grey{background:#f1eef0;color:#746b71}
+.full{width:100%}
+.pill{display:inline-block;padding:4px 8px;border-radius:20px;background:var(--pale);color:#9d6280;font-size:10px;font-weight:700}
+.empty{text-align:center;padding:23px;color:var(--muted);font-size:13px}
+label{display:block;font-size:12px;font-weight:700;color:#776a72;margin:11px 0 5px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #eadde4;border-radius:11px;background:#fff;color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--pink)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.nav{position:fixed;bottom:0;left:0;width:100%;height:calc(70px + env(safe-area-inset-bottom));padding:5px 2px env(safe-area-inset-bottom);background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:center;z-index:10}
+.nav button{background:none;color:#a69aa1;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:50px}
+.nav button span{font-size:22px}
+.nav button.active{color:var(--dark);font-weight:800}
+.fab{position:fixed;right:18px;bottom:calc(85px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;background:var(--dark);color:white;font-size:28px;box-shadow:0 7px 20px #b66b8b55;z-index:9}
+.modal-bg{position:fixed;inset:0;background:#21151d88;z-index:30;display:none;align-items:flex-end;justify-content:center}
+.modal-bg.show{display:flex}
+.modal{background:var(--bg);width:100%;max-width:570px;max-height:93dvh;overflow:auto;border-radius:24px 24px 0 0;padding:20px 18px calc(30px + env(safe-area-inset-bottom))}
+.modal-head{display:flex;justify-content:space-between;align-items:center}
+.close{background:#f5e8ee;border-radius:50%;width:35px;height:35px;font-size:20px}
+.client-row{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--line)}
+.avatar{width:45px;height:45px;border-radius:15px;background:#f7e4ec;display:grid;place-items:center;color:#a35f7e;font-weight:800;overflow:hidden;flex-shrink:0}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.client-info{flex:1;min-width:0}
+.client-info strong{display:block}
+.client-info small{color:var(--muted);font-size:11px;display:block}
+.note{font-size:11px;color:var(--muted);line-height:1.5}
+.photo-box{border:1px dashed #d9a2b8;border-radius:15px;padding:12px;background:#fff8fb;margin-top:7px}
+.photo-preview{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.photo-preview img{width:95px;height:95px;object-fit:cover;border-radius:13px;border:1px solid var(--line)}
+.profile-preview{width:105px!important;height:105px!important;border-radius:50%!important}
+.banner-preview{width:100%!important;height:100px!important;object-fit:cover!important;border-radius:12px!important}
+.photo-controls{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}
+.calendar div{background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 1px;font-size:11px}
+.calendar .weekday{background:#f8e9ef;color:#9b607b;font-weight:800}
+.calendar .has{background:#f6e4ec;border-color:#d99ab4}
+.timer-box{background:#fbf0f4;border-radius:16px;padding:13px;text-align:center}
+.timer-clock{font-size:25px;font-weight:800;color:var(--dark)}
+.switch{width:45px;height:26px;border-radius:20px;background:#ddd;position:relative;flex-shrink:0}
+.switch:after{content:"";position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;left:3px;transition:.2s}
+.switch.on{background:var(--pink)}
+.switch.on:after{left:22px}
+.setting-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.settings-tabs{display:flex;gap:6px;overflow-x:auto;padding:4px 0 12px}
+.settings-tabs button{white-space:nowrap}
+.settings-panel{display:none}
+.settings-panel.active{display:block}
+.home-banner{width:100%;margin-top:auto;padding-top:20px}
+.home-banner img{width:100%;height:145px;object-fit:cover;display:block;border-radius:18px}
+.banner-placeholder{width:100%;height:110px;border-radius:18px;background:linear-gradient(120deg,#f7e2eb,#fff1dc);display:flex;align-items:center;justify-content:center;color:#a85e7d;font:27px Parisienne,cursive}
+.gallery{display:flex;gap:8px;overflow:auto;margin-top:8px}
+.gallery img{width:90px;height:90px;object-fit:cover;border-radius:12px;flex-shrink:0}
+@media(min-width:700px){.app{max-width:100%}.page{padding-left:max(18px,calc((100vw - 900px)/2));padding-right:max(18px,calc((100vw - 900px)/2))}.nav{max-width:100%}}
 </style>
 </head>
 <body>
 <div class="app">
 <header>
- <div class="brand"><div class="logo" id="headerLogo">✨</div><div><div class="brand-name" id="headerBusiness">Pure Shine</div><div class="brand-sub">CLEANING MANAGER</div></div></div>
+ <div class="brand">
+  <div class="logo" id="headerLogo">✨</div>
+  <div><div class="brand-name" id="headerBusiness">Pure Shine</div><div class="brand-sub">CLEANING MANAGER</div></div>
+ </div>
  <div class="header-date" id="headerDate"></div>
 </header>
+
 <main>
 <section class="page active" id="home">
- <div class="card welcome"><h2 id="welcomeName">Hello, Georgiana ♡</h2><p>Your cleaning business, beautifully organised.</p></div>
+ <div class="card welcome">
+  <div style="display:flex;align-items:center;gap:12px">
+   <div class="avatar" id="homeProfile" style="width:58px;height:58px;border-radius:50%;font-size:20px">G</div>
+   <div><h2 id="welcomeName">Hello, Georgiana ♡</h2><p>Your cleaning business, beautifully organised.</p></div>
+  </div>
+ </div>
  <div class="stats">
   <div class="stat"><small>Today's jobs</small><strong id="todayCount">0</strong></div>
   <div class="stat"><small>Today's hours</small><strong id="todayHours">0h</strong></div>
   <div class="stat"><small>Today's earnings</small><strong id="todayMoney">£0.00</strong></div>
   <div class="stat"><small>Money owed</small><strong id="owedMoney">£0.00</strong></div>
  </div>
- <div class="section-row"><h3>Today's schedule</h3><span class="pill" id="todayLabel"></span></div><div id="todayJobs"></div>
+ <div class="section-row"><h3>Today's schedule</h3><span class="pill" id="todayLabel"></span></div>
+ <div id="todayJobs"></div>
  <div class="card"><h3>Active timer</h3><div id="homeTimer" class="note">No timer running.</div></div>
  <div class="card"><h3>Monthly overview</h3><div class="stats"><div class="stat"><small>Completed jobs</small><strong id="monthJobs">0</strong></div><div class="stat"><small>Earned this month</small><strong id="monthMoney">£0.00</strong></div></div></div>
+
+ <!-- Banner-ul este păstrat la baza paginii -->
+ <div class="home-banner" id="homeBanner">
+  <div class="banner-placeholder">Pure Shine Cleaning ✨</div>
+ </div>
 </section>
 
 <section class="page" id="schedule">
  <h2>My schedule ♡</h2>
  <div class="card"><div class="section-row"><button class="btn" onclick="changeMonth(-1)">‹ Previous</button><strong id="monthTitle"></strong><button class="btn" onclick="changeMonth(1)">Next ›</button></div><div class="calendar" id="calendar"></div></div>
- <div class="section-row"><h3>Cleaning jobs</h3><button class="btn" onclick="openJob()">＋ Add job</button></div><div id="allJobs"></div>
- <div class="card"><h3>Free time finder</h3><p class="note">Find gaps between your scheduled jobs.</p><label>Date</label><input type="date" id="freeDate"><button class="btn full" onclick="findFreeTime()">Find available time</button><div id="freeResults" class="note" style="margin-top:12px"></div></div>
- <div class="card"><h3>Client holidays</h3><button class="btn full" onclick="openHoliday()">＋ Add holiday / unavailable dates</button><div id="holidayList"></div></div>
+ <div class="section-row"><h3>Cleaning jobs</h3><button class="btn" onclick="openJob()">＋ Add job</button></div>
+ <div id="allJobs"></div>
+ <div class="card"><h3>Free time finder</h3><label>Date</label><input type="date" id="freeDate"><button class="btn full" onclick="findFreeTime()">Find available time</button><div id="freeResults" class="note" style="margin-top:10px"></div></div>
+ <div class="card"><h3>Client holidays</h3><button class="btn full" onclick="openHoliday()">＋ Add holiday</button><div id="holidayList"></div></div>
 </section>
 
 <section class="page" id="clients">
- <div class="section-row"><h2>My clients ♡</h2><button class="btn dark" onclick="openClient()">＋ Add</button></div><div id="clientList"></div>
+ <div class="section-row"><h2>My clients ♡</h2><button class="btn dark" onclick="openClient()">＋ Add</button></div>
+ <div id="clientList"></div>
 </section>
 
 <section class="page" id="earnings">
  <h2>Earnings & payments</h2>
- <div class="stats"><div class="stat"><small>Total earned</small><strong id="earnTotal">£0.00</strong></div><div class="stat"><small>Paid</small><strong id="earnPaid">£0.00</strong></div><div class="stat"><small>Outstanding</small><strong id="earnOwed">£0.00</strong></div><div class="stat"><small>This month</small><strong id="earnMonth">£0.00</strong></div></div>
- <div class="section-row"><h3>Completed jobs</h3><button class="btn" onclick="openJob(true)">＋ Past job</button></div><div id="earnList"></div>
+ <div class="stats">
+  <div class="stat"><small>Total earned</small><strong id="earnTotal">£0.00</strong></div>
+  <div class="stat"><small>Paid</small><strong id="earnPaid">£0.00</strong></div>
+  <div class="stat"><small>Outstanding</small><strong id="earnOwed">£0.00</strong></div>
+  <div class="stat"><small>This month</small><strong id="earnMonth">£0.00</strong></div>
+ </div>
+ <div class="section-row"><h3>Completed jobs</h3><button class="btn" onclick="openJob(true)">＋ Past job</button></div>
+ <div id="earnList"></div>
  <div class="card"><h3>Monthly report</h3><label>Select month</label><input type="month" id="reportMonth"><button class="btn full" onclick="monthlyReport()">Show report</button><div id="reportResult" class="note" style="margin-top:10px"></div></div>
 </section>
 
 <section class="page" id="settings">
  <h2>Settings ⚙️</h2>
  <div class="settings-tabs">
-  <button class="btn dark" onclick="settingsTab('business',this)">Business</button>
+  <button class="btn dark" onclick="settingsTab('profileSettings',this)">Profile & banner</button>
+  <button class="btn" onclick="settingsTab('businessSettings',this)">Business</button>
   <button class="btn" onclick="settingsTab('invoiceSettings',this)">Invoices</button>
   <button class="btn" onclick="settingsTab('scheduleSettings',this)">Schedule</button>
-  <button class="btn" onclick="settingsTab('appearance',this)">Appearance</button>
-  <button class="btn" onclick="settingsTab('notifications',this)">Reminders</button>
+  <button class="btn" onclick="settingsTab('appearanceSettings',this)">Appearance</button>
   <button class="btn" onclick="settingsTab('dataSettings',this)">Data</button>
  </div>
- <div class="settings-panel active" id="business">
-  <div class="card"><h3>Business information</h3>
-   <label>Business name</label><input id="sBusinessName" placeholder="Pure Shine Cleaning">
+
+ <div class="settings-panel active" id="profileSettings">
+  <div class="card">
+   <h3>Profile photo</h3>
+   <p class="note">Choose a profile picture. You can replace or remove it whenever you want.</p>
+   <div class="photo-preview" id="profilePreview"></div>
+   <label>Upload profile photo</label>
+   <div class="photo-box"><input type="file" accept="image/*" id="profileUpload" onchange="uploadProfile(this)"></div>
+   <div class="photo-controls"><button class="btn grey" onclick="removeProfile()">Remove profile photo</button></div>
+   <div class="divider"></div>
+   <h3>Home page banner</h3>
+   <p class="note">Choose a banner image. It will be displayed at the bottom of your Home page.</p>
+   <div class="photo-preview" id="bannerPreview"></div>
+   <label>Upload banner image</label>
+   <div class="photo-box"><input type="file" accept="image/*" id="bannerUpload" onchange="uploadBanner(this)"></div>
+   <div class="photo-controls">
+    <button class="btn grey" onclick="removeBanner()">Remove banner</button>
+    <button class="btn" onclick="showBannerPosition()">Banner display settings</button>
+   </div>
+   <div class="divider"></div>
+   <h3>Business logo</h3>
+   <div class="photo-preview" id="logoPreview"></div>
+   <label>Upload logo</label>
+   <div class="photo-box"><input type="file" accept="image/*" id="logoUpload" onchange="uploadLogo(this)"></div>
+   <button class="btn grey" style="margin-top:8px" onclick="removeLogo()">Remove logo</button>
+   <button class="btn dark full" style="margin-top:15px" onclick="saveProfileSettings()">Save profile and images</button>
+  </div>
+ </div>
+
+ <div class="settings-panel" id="businessSettings">
+  <div class="card">
+   <h3>Business information</h3>
+   <label>Business name</label><input id="sBusinessName">
    <label>Your full name</label><input id="sOwnerName">
    <label>Business phone</label><input id="sPhone" type="tel">
    <label>Business email</label><input id="sEmail" type="email">
    <label>Business address</label><textarea id="sAddress" rows="2"></textarea>
    <label>Postcode</label><input id="sPostcode">
    <label>Website / social media</label><input id="sWebsite">
-   <label>Business logo</label><div class="photo-upload"><input type="file" accept="image/*" id="logoUpload" onchange="uploadLogo(this)"><div id="logoPreview" class="photo-preview"></div></div>
-   <button class="btn dark full" onclick="saveBusinessSettings()">Save business details</button>
+   <label>Agency hourly rate (£)</label><input id="sAgencyRate" type="number" min="0" step=".5">
+   <label>Default private hourly rate (£)</label><input id="sPrivateRate" type="number" min="0" step=".5">
+   <button class="btn dark full" onclick="saveBusiness()">Save business details</button>
   </div>
-  <div class="card"><h3>Default hourly rates</h3><label>Agency rate (£/hour)</label><input id="sAgencyRate" type="number" min="0" step=".5"><label>Default private rate (£/hour)</label><input id="sPrivateRate" type="number" min="0" step=".5"><p class="note">These are defaults for new clients. Existing client rates remain individually editable.</p><button class="btn dark full" onclick="saveRates()">Save rates</button></div>
  </div>
+
  <div class="settings-panel" id="invoiceSettings">
-  <div class="card"><h3>Invoice settings</h3>
-   <label>Invoice prefix</label><input id="sInvoicePrefix" placeholder="PS-">
+  <div class="card">
+   <h3>Invoice settings</h3>
+   <label>Invoice prefix</label><input id="sInvoicePrefix">
    <label>Next invoice number</label><input id="sInvoiceNext" type="number" min="1">
-   <label>Payment terms</label><select id="sPaymentTerms"><option value="Due on receipt">Due on receipt</option><option value="7 days">7 days</option><option value="14 days">14 days</option><option value="30 days">30 days</option></select>
-   <label>Payment details / bank details</label><textarea id="sPaymentDetails" rows="3" placeholder="Add your preferred payment details"></textarea>
-   <label>Invoice footer message</label><textarea id="sInvoiceFooter" rows="2" placeholder="Thank you for choosing Pure Shine Cleaning"></textarea>
-   <label>VAT number (if applicable)</label><input id="sVatNumber">
+   <label>Payment terms</label><select id="sPaymentTerms"><option>Due on receipt</option><option>7 days</option><option>14 days</option><option>30 days</option></select>
+   <label>Payment details</label><textarea id="sPaymentDetails" rows="3"></textarea>
+   <label>Invoice footer</label><textarea id="sInvoiceFooter" rows="2"></textarea>
+   <label>VAT number</label><input id="sVatNumber">
    <button class="btn dark full" onclick="saveInvoiceSettings()">Save invoice settings</button>
   </div>
  </div>
+
  <div class="settings-panel" id="scheduleSettings">
-  <div class="card"><h3>Working hours</h3>
-   <div class="form-row"><div><label>Start of working day</label><input id="sWorkStart" type="time"></div><div><label>End of working day</label><input id="sWorkEnd" type="time"></div></div>
-   <label>Default working hours per day</label><input id="sWorkingHours" type="number" min="1" max="16">
-   <label>Default job duration (hours)</label><input id="sDefaultHours" type="number" min=".25" step=".25">
-   <div class="setting-row"><div><b>Fortnightly clients</b><div class="note">Alternate fortnightly appointments</div></div><button class="switch" id="fortnightly" onclick="toggleSetting('fortnightly')"></button></div>
-   <label>Fortnightly cycle anchor date</label><input id="sFortnightAnchor" type="date">
-   <label>Weekly reminder time</label><input id="sReminderTime" type="time">
+  <div class="card">
+   <h3>Working hours and reminders</h3>
+   <div class="form-row"><div><label>Start of day</label><input id="sWorkStart" type="time"></div><div><label>End of day</label><input id="sWorkEnd" type="time"></div></div>
+   <label>Working hours per day</label><input id="sWorkingHours" type="number" min="1" max="16">
+   <label>Default job duration</label><input id="sDefaultHours" type="number" min=".25" step=".25">
+   <label>Fortnightly cycle anchor</label><input id="sFortnightAnchor" type="date">
+   <label>Reminder time</label><input id="sReminderTime" type="time">
+   <div class="setting-row"><b>Fortnightly clients</b><button class="switch" id="fortnightly" onclick="toggleSetting('fortnightly')"></button></div>
+   <div class="setting-row"><b>Appointment reminders</b><button class="switch" id="appointmentReminders" onclick="toggleSetting('appointmentReminders')"></button></div>
+   <div class="setting-row"><b>Payment reminders</b><button class="switch" id="paymentReminders" onclick="toggleSetting('paymentReminders')"></button></div>
    <button class="btn dark full" onclick="saveScheduleSettings()">Save schedule settings</button>
+   <button class="btn full" style="margin-top:8px" onclick="requestNotifications()">Allow notifications</button>
   </div>
  </div>
- <div class="settings-panel" id="appearance">
-  <div class="card"><h3>App appearance</h3>
+
+ <div class="settings-panel" id="appearanceSettings">
+  <div class="card">
+   <h3>Appearance</h3>
    <label>App zoom</label><select id="sZoom" onchange="setZoom(this.value)"><option value="1">100%</option><option value="1.1">110%</option><option value="1.2">120%</option><option value="1.3">130%</option><option value="1.5">150%</option><option value="1.75">175%</option><option value="2">200%</option></select>
-   <div class="setting-row"><div><b>Compact layout</b><div class="note">Show more information on screen</div></div><button class="switch" id="compact" onclick="toggleSetting('compact')"></button></div>
-   <div class="setting-row"><div><b>High contrast</b><div class="note">Increase text and border contrast</div></div><button class="switch" id="contrast" onclick="toggleSetting('contrast')"></button></div>
-   <label>Accent colour</label><select id="sAccent" onchange="changeAccent(this.value)"><option value="pink">Blush pink & gold</option><option value="lavender">Lavender</option><option value="sage">Sage green</option><option value="blue">Soft blue</option></select>
+   <label>Accent colour</label><select id="sAccent"><option value="pink">Blush pink & gold</option><option value="lavender">Lavender</option><option value="sage">Sage green</option><option value="blue">Soft blue</option></select>
+   <div class="setting-row"><b>Compact layout</b><button class="switch" id="compact" onclick="toggleSetting('compact')"></button></div>
+   <div class="setting-row"><b>High contrast</b><button class="switch" id="contrast" onclick="toggleSetting('contrast')"></button></div>
    <button class="btn dark full" onclick="saveAppearance()">Save appearance</button>
   </div>
  </div>
- <div class="settings-panel" id="notifications">
-  <div class="card"><h3>Reminders & notifications</h3>
-   <div class="setting-row"><div><b>Payment reminders</b><div class="note">Highlight unpaid completed jobs</div></div><button class="switch" id="paymentReminders" onclick="toggleSetting('paymentReminders')"></button></div>
-   <div class="setting-row"><div><b>Appointment reminders</b><div class="note">Reminder the evening before a job</div></div><button class="switch" id="appointmentReminders" onclick="toggleSetting('appointmentReminders')"></button></div>
-   <label>Reminder time</label><input id="sReminderTime2" type="time">
-   <button class="btn dark full" onclick="saveReminderSettings()">Save reminder settings</button>
-   <button class="btn full" style="margin-top:8px" onclick="requestNotifications()">Allow browser notifications</button>
-   <p class="note">Browser notifications are checked while the app is open. Reliable reminders while the browser is fully closed require a push-notification service.</p>
-  </div>
- </div>
+
  <div class="settings-panel" id="dataSettings">
-  <div class="card"><h3>Backup & restore</h3><p class="note">Download a backup regularly to keep your client records, photos, jobs and settings safe.</p><button class="btn dark full" onclick="backupData()">Download full backup</button><label>Restore a backup file</label><input type="file" accept="application/json" onchange="restoreData(event)"></div>
-  <div class="card"><h3>Calendar</h3><p class="note">Export scheduled jobs to Apple Calendar or Google Calendar.</p><button class="btn full" onclick="exportCalendar()">Export calendar (.ics)</button></div>
-  <div class="card"><h3>Storage information</h3><p class="note" id="storageInfo"></p><button class="btn red full" onclick="resetData()">Reset all app data</button></div>
+  <div class="card">
+   <h3>Backup and restore</h3>
+   <p class="note">Download a backup regularly to keep your clients, jobs, profile images, banner and settings safe.</p>
+   <button class="btn dark full" onclick="backupData()">Download full backup</button>
+   <label>Restore backup</label><input type="file" accept="application/json" onchange="restoreData(event)">
+   <div class="divider"></div>
+   <button class="btn full" onclick="exportCalendar()">Export calendar (.ics)</button>
+   <p class="note" id="storageInfo"></p>
+   <button class="btn red full" onclick="resetData()">Reset all app data</button>
+  </div>
  </div>
 </section>
 </main>
-<button class="fab" onclick="openJob()" aria-label="Add job">＋</button>
+
+<button class="fab" onclick="openJob()">＋</button>
 <nav class="nav">
  <button class="active" data-page="home" onclick="go('home')"><span>⌂</span>Home</button>
  <button data-page="schedule" onclick="go('schedule')"><span>▦</span>Schedule</button>
@@ -141,123 +284,98 @@ body.compact .card{padding:11px;margin-bottom:9px}body.compact .job{padding:9px;
  <button data-page="settings" onclick="go('settings')"><span>⚙</span>Settings</button>
 </nav>
 </div>
-<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modal-head"><h2 id="modalTitle">Details</h2><button class="close" onclick="closeModal()">×</button></div><div id="modalContent"></div></div></div>
+
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
+ <div class="modal"><div class="modal-head"><h2 id="modalTitle">Details</h2><button class="close" onclick="closeModal()">×</button></div><div id="modalContent"></div></div>
+</div>
 
 <script>
 'use strict';
-const $=id=>document.getElementById(id),DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const $=id=>document.getElementById(id);
+const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const money=n=>'£'+Number(n||0).toFixed(2);
-const dateKey=d=>{const x=d instanceof Date?d:new Date(d+'T12:00:00');return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')};
+const dateKey=d=>{let x=d instanceof Date?d:new Date(d+'T12:00:00');return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const durationText=n=>{n=Math.max(0,Math.round(n));return Math.floor(n/60)+'h '+String(n%60).padStart(2,'0')+'m'};
-const timeM=t=>{let [h,m]=String(t||'09:00').split(':').map(Number);return h*60+m};
+const timeM=t=>{let[h,m]=String(t||'09:00').split(':').map(Number);return h*60+m};
 const timeS=n=>{n=(n+1440)%1440;return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')};
 const mins=j=>Number(j.minutes)||Math.round(Number(j.hours||0)*60);
 const amount=j=>mins(j)/60*Number(j.rate||0);
-const DEFAULTS={businessName:'Pure Shine Cleaning',ownerName:'Georgiana Radu',phone:'',email:'',address:'',postcode:'',website:'',logo:'',agencyRate:16,privateRate:18,invoicePrefix:'PS-',invoiceNext:1,paymentTerms:'Due on receipt',paymentDetails:'',invoiceFooter:'Thank you for choosing Pure Shine Cleaning',vatNumber:'',workingHours:8,workStart:'09:00',workEnd:'17:00',defaultHours:2,fortnightly:true,fortnightAnchor:'2026-10-30',reminderTime:'20:00',appointmentReminders:true,paymentReminders:true,zoom:1,compact:false,contrast:false,accent:'pink'};
-const CLIENTS=[['Lottie','Agency',16,2,'Monday','weekly','13:00'],['Christine','Private',18,3,'Tuesday','fortnightly','09:30'],['Matt','Agency',16,4,'Tuesday','weekly','09:00'],['Sonia','Agency',16,5,'Wednesday','weekly','09:00'],['Laura','Private',18,4,'Thursday','weekly','09:00'],['Hannah','Agency',16,3,'Thursday','weekly','13:00'],['Meghan','Private',20,2,'Friday','weekly','09:00'],['Joanna','Private',18,2,'Friday','fortnightly','09:00'],['Sindu','Agency',16,2,'Friday','fortnightly','12:00'],['Peter','Private',20,2,'Friday','occasional','09:00'],['Mike','Private',25,2,'Friday','threeweekly','09:00']];
-function initialState(){return{settings:{...DEFAULTS},clients:CLIENTS.map((x,i)=>({id:'c'+i,name:x[0],type:x[1],rate:x[2],hours:x[3],day:x[4],frequency:x[5],start:x[6],active:true,phone:'',photo:''})),jobs:[],holidays:[],timer:null}}
+const durationText=n=>Math.floor(Math.max(0,n)/60)+'h '+String(Math.max(0,Math.round(n))%60).padStart(2,'0')+'m';
+
+const DEFAULTS={businessName:'Pure Shine Cleaning',ownerName:'Georgiana Radu',phone:'',email:'',address:'',postcode:'',website:'',profilePhoto:'',bannerPhoto:'',logo:'',agencyRate:16,privateRate:18,invoicePrefix:'PS-',invoiceNext:1,paymentTerms:'Due on receipt',paymentDetails:'',invoiceFooter:'Thank you for choosing Pure Shine Cleaning',vatNumber:'',workingHours:8,workStart:'09:00',workEnd:'17:00',defaultHours:2,fortnightly:true,fortnightAnchor:'2026-10-30',reminderTime:'20:00',appointmentReminders:true,paymentReminders:true,zoom:1,compact:false,contrast:false,accent:'pink'};
+const SEED=[['Lottie','Agency',16,2,'Monday','weekly','13:00'],['Christine','Private',18,3,'Tuesday','fortnightly','09:30'],['Matt','Agency',16,4,'Tuesday','weekly','09:00'],['Sonia','Agency',16,5,'Wednesday','weekly','09:00'],['Laura','Private',18,4,'Thursday','weekly','09:00'],['Hannah','Agency',16,3,'Thursday','weekly','13:00'],['Meghan','Private',20,2,'Friday','weekly','09:00'],['Joanna','Private',18,2,'Friday','fortnightly','09:00'],['Sindu','Agency',16,2,'Friday','fortnightly','12:00'],['Peter','Private',20,2,'Friday','occasional','09:00'],['Mike','Private',25,2,'Friday','threeweekly','09:00']];
+function initialState(){return{settings:{...DEFAULTS},clients:SEED.map((x,i)=>({id:'c'+i,name:x[0],type:x[1],rate:x[2],hours:x[3],day:x[4],frequency:x[5],start:x[6],active:true,phone:'',photo:''})),jobs:[],holidays:[],timer:null}}
 function loadState(){try{let s=JSON.parse(localStorage.getItem('pureShineStateV3'));if(s)return{...initialState(),...s,settings:{...DEFAULTS,...s.settings}}}catch(e){}return initialState()}
-let state=loadState(),monthCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1),timerInterval=null,reminderCheck=null;
-function save(){try{localStorage.setItem('pureShineStateV3',JSON.stringify(state))}catch(e){alert('Your browser storage is full. Please download a backup and reduce the number or size of photos.')}} 
+let state=loadState(),monthCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1),timerInterval=null,pendingClientPhoto='',pendingJobPhotos=[];
+function save(){try{localStorage.setItem('pureShineStateV3',JSON.stringify(state))}catch(e){alert('Browser storage is full. Download a backup and reduce photo sizes.');}}
 function client(id){return state.clients.find(c=>String(c.id)===String(id))}
 function dateLabel(d){return new Date(d+'T12:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+function compressImage(file,max=1200,quality=.78){return new Promise((resolve,reject)=>{if(!file?.type?.startsWith('image/'))return reject(Error('Invalid image'));let r=new FileReader();r.onload=()=>{let im=new Image();im.onload=()=>{let k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);resolve(c.toDataURL('image/jpeg',quality))};im.onerror=reject;im.src=r.result};r.onerror=reject;r.readAsDataURL(file)})}
+async function setImageSetting(key,input,max){if(!input.files?.[0])return;try{state.settings[key]=await compressImage(input.files[0],max,.78);save();render();populateSettings();}catch(e){alert('The image could not be loaded. Please try another photo.')}input.value=''}
+async function uploadProfile(input){await setImageSetting('profilePhoto',input,800)}
+async function uploadBanner(input){await setImageSetting('bannerPhoto',input,1800)}
+async function uploadLogo(input){await setImageSetting('logo',input,700)}
+function removeProfile(){if(!confirm('Remove your profile photo?'))return;state.settings.profilePhoto='';save();render();populateSettings()}
+function removeBanner(){if(!confirm('Remove the home page banner?'))return;state.settings.bannerPhoto='';save();render();populateSettings()}
+function removeLogo(){if(!confirm('Remove the business logo?'))return;state.settings.logo='';save();render();populateSettings()}
+function showBannerPosition(){openModal('Banner display settings',`<p class="note">The banner is positioned at the bottom of the Home page. Its image fills the available width and is cropped neatly to fit the banner area.</p><label>Banner height</label><select id="bannerHeight"><option value="110">Small</option><option value="145" selected>Medium</option><option value="190">Large</option><option value="230">Extra large</option></select><button class="btn dark full" style="margin-top:12px" onclick="saveBannerHeight()">Save banner layout</button>`);$('bannerHeight').value=state.settings.bannerHeight||145}
+function saveBannerHeight(){state.settings.bannerHeight=Number($('bannerHeight').value)||145;save();render();closeModal()}
+function populateSettings(){let s=state.settings,map={sBusinessName:'businessName',sOwnerName:'ownerName',sPhone:'phone',sEmail:'email',sAddress:'address',sPostcode:'postcode',sWebsite:'website',sAgencyRate:'agencyRate',sPrivateRate:'privateRate',sInvoicePrefix:'invoicePrefix',sInvoiceNext:'invoiceNext',sPaymentTerms:'paymentTerms',sPaymentDetails:'paymentDetails',sInvoiceFooter:'invoiceFooter',sVatNumber:'vatNumber',sWorkingHours:'workingHours',sWorkStart:'workStart',sWorkEnd:'workEnd',sDefaultHours:'defaultHours',sFortnightAnchor:'fortnightAnchor',sReminderTime:'reminderTime',sZoom:'zoom',sAccent:'accent'};Object.entries(map).forEach(([id,k])=>{if($(id))$(id).value=s[k]??''});$('profilePreview').innerHTML=s.profilePhoto?`<img class="profile-preview" src="${s.profilePhoto}" alt="Profile photo">`:'<div class="avatar" style="width:105px;height:105px;border-radius:50%;font-size:30px">G</div>';$('bannerPreview').innerHTML=s.bannerPhoto?`<img class="banner-preview" src="${s.bannerPhoto}" alt="Banner">`:'<div class="banner-placeholder">Pure Shine Cleaning ✨</div>';$('logoPreview').innerHTML=s.logo?`<img src="${s.logo}" alt="Logo">`:'<div class="logo">✨</div>'}
+function applySettings(){let s=state.settings;document.documentElement.style.setProperty('--scale',s.zoom||1);document.body.classList.toggle('compact',!!s.compact);document.body.classList.toggle('high-contrast',!!s.contrast);let colors={pink:['#d58aaa','#a85e7d','#f9e8ef'],lavender:['#b4a0d1','#776294','#f0eafa'],sage:['#a7bda9','#607e65','#eaf2eb'],blue:['#9bb8d0','#547b9a','#eaf2f8']},c=colors[s.accent]||colors.pink;document.documentElement.style.setProperty('--pink',c[0]);document.documentElement.style.setProperty('--dark',c[1]);document.documentElement.style.setProperty('--pale',c[2]);['fortnightly','appointmentReminders','paymentReminders','compact','contrast'].forEach(k=>{if($(k))$(k).classList.toggle('on',!!s[k])})}
+function render(){let now=new Date(),today=dateKey(now),list=scheduledJobs(today),done=doneJobs(),owed=done.filter(j=>j.payment!=='paid').reduce((a,j)=>a+amount(j),0),month=done.filter(j=>j.date.startsWith(today.slice(0,7)));$('headerDate').textContent=now.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});$('headerBusiness').textContent=state.settings.businessName;$('welcomeName').textContent='Hello, '+(state.settings.ownerName||'Georgiana')+' ♡';$('todayLabel').textContent=now.toLocaleDateString('en-GB',{day:'numeric',month:'short'});$('todayCount').textContent=list.length;$('todayHours').textContent=durationText(list.reduce((a,j)=>a+(j.completed?mins(j):Number(j.hours||0)*60),0));$('todayMoney').textContent=money(list.filter(j=>j.completed).reduce((a,j)=>a+amount(j),0));$('owedMoney').textContent=money(owed);$('monthJobs').textContent=month.length;$('monthMoney').textContent=money(month.reduce((a,j)=>a+amount(j),0));$('todayJobs').innerHTML=list.length?list.map(jobCard).join(''):'<div class="card empty">♡<br>No cleaning jobs scheduled today.</div>';$('allJobs').innerHTML=state.jobs.slice().sort((a,b)=>(b.date+b.start).localeCompare(a.date+a.start)).map(jobCard).join('')||'<div class="empty">No saved jobs yet.</div>';renderClients();renderEarnings();renderCalendar();renderTimer();renderHolidays();populateSettings();applySettings();$('homeProfile').innerHTML=state.settings.profilePhoto?`<img src="${state.settings.profilePhoto}" style="width:100%;height:100%;object-fit:cover">`:'G';$('headerLogo').innerHTML=state.settings.logo?`<img src="${state.settings.logo}" alt="Logo">`:'✨';$('homeBanner').innerHTML=state.settings.bannerPhoto?`<img src="${state.settings.bannerPhoto}" style="height:${state.settings.bannerHeight||145}px" alt="Pure Shine banner">`:'<div class="banner-placeholder">Pure Shine Cleaning ✨</div>';$('storageInfo').textContent='Clients: '+state.clients.length+' · Jobs: '+state.jobs.length+' · Profile photo and banner are saved in this browser.'}
+function fortnightActive(c,d){if(!state.settings.fortnightly||!['fortnightly','threeweekly'].includes(c.frequency))return true;let diff=Math.floor((new Date(d+'T12:00:00')-new Date(state.settings.fortnightAnchor+'T12:00:00'))/86400000),cycle=c.frequency==='threeweekly'?21:14;return((diff%cycle)+cycle)%cycle===0}
 function isHoliday(c,d){return state.holidays.some(h=>String(h.clientId)===String(c.id)&&d>=h.start&&d<=h.end)}
-function fortnightActive(c,d){if(!state.settings.fortnightly)return true;let freq=c.frequency;if(freq!=='fortnightly'&&freq!=='threeweekly')return true;let anchor=c.anchor||state.settings.fortnightAnchor;let diff=Math.floor((new Date(d+'T12:00:00')-new Date(anchor+'T12:00:00'))/86400000),cycle=freq==='threeweekly'?21:14;return((diff%cycle)+cycle)%cycle===0}
-function scheduledJobs(d){let saved=state.jobs.filter(j=>j.date===d),seen=new Set(saved.map(j=>String(j.clientId))),weekday=DAYS[new Date(d+'T12:00:00').getDay()];let recurring=state.clients.filter(c=>c.active&&c.day===weekday&&!['occasional','oneoff'].includes(c.frequency)&&fortnightActive(c,d)&&!isHoliday(c,d)&&!seen.has(String(c.id))).map(c=>({id:'rec-'+c.id+'-'+d,clientId:c.id,name:c.name,type:c.type,rate:c.rate,hours:c.hours,date:d,start:c.start||'09:00',end:timeS(timeM(c.start||'09:00')+Number(c.hours)*60),payment:'unpaid',completed:false,recurring:true,photo:c.photo}));return[...saved,...recurring].sort((a,b)=>String(a.start).localeCompare(String(b.start)))}
+function scheduledJobs(d){let saved=state.jobs.filter(j=>j.date===d),seen=new Set(saved.map(j=>String(j.clientId))),day=DAYS[new Date(d+'T12:00:00').getDay()],rec=state.clients.filter(c=>c.active&&c.day===day&&!['occasional','oneoff'].includes(c.frequency)&&fortnightActive(c,d)&&!isHoliday(c,d)&&!seen.has(String(c.id))).map(c=>({id:'rec-'+c.id+'-'+d,clientId:c.id,name:c.name,type:c.type,rate:c.rate,hours:c.hours,date:d,start:c.start||'09:00',end:timeS(timeM(c.start||'09:00')+c.hours*60),payment:'unpaid',completed:false,recurring:true}));return[...saved,...rec].sort((a,b)=>String(a.start).localeCompare(b.start))}
 function doneJobs(){return state.jobs.filter(j=>j.completed)}
-function render(){
- let now=new Date(),today=dateKey(now),list=scheduledJobs(today),done=doneJobs(),owed=done.filter(j=>j.payment!=='paid').reduce((s,j)=>s+amount(j),0),month=done.filter(j=>j.date.startsWith(today.slice(0,7)));
- $('headerDate').textContent=now.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});$('headerBusiness').textContent=state.settings.businessName||'Pure Shine';$('welcomeName').textContent='Hello, '+(state.settings.ownerName||'Georgiana')+' ♡';$('todayLabel').textContent=now.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
- $('todayCount').textContent=list.length;$('todayHours').textContent=durationText(list.reduce((s,j)=>s+(j.completed?mins(j):Number(j.hours||0)*60),0));$('todayMoney').textContent=money(list.filter(j=>j.completed).reduce((s,j)=>s+amount(j),0));$('owedMoney').textContent=money(owed);
- $('monthJobs').textContent=month.length;$('monthMoney').textContent=money(month.reduce((s,j)=>s+amount(j),0));
- $('todayJobs').innerHTML=list.length?list.map(jobCard).join(''):'<div class="card empty">♡<br>No cleaning jobs scheduled today.</div>';
- $('allJobs').innerHTML=state.jobs.slice().sort((a,b)=>(b.date+b.start).localeCompare(a.date+a.start)).map(jobCard).join('')||'<div class="empty">No saved jobs yet.</div>';
- renderClients();renderEarnings();renderCalendar();renderTimer();renderHolidays();applySettings();populateSettings();
- $('storageInfo').textContent='Saved clients: '+state.clients.length+' · Saved jobs: '+state.jobs.length+' · Saved photos: '+state.clients.filter(c=>c.photo).length+' client profile photos and '+state.jobs.reduce((n,j)=>n+(j.photos||[]).length,0)+' job photos.';
-}
-function jobCard(j){let completed=!!j.completed;return`<div class="job"><div class="job-top"><div><div class="job-name">${esc(j.name)} ${completed?'<span class="pill">Completed</span>':'<span class="pill">Scheduled</span>'}</div><div class="job-time">${dateLabel(j.date)} · ${esc(j.start||'09:00')}–${esc(j.end||'')}</div></div><b>${money(completed?amount(j):0)}</b></div><div class="job-meta">${esc(j.type||'Private')} · ${durationText(completed?mins(j):Number(j.hours||0)*60)} · ${money(j.rate)}/hour · ${j.payment==='paid'?'Paid':'Unpaid'}</div>${j.photos?.length?`<div class="gallery">${j.photos.map(p=>`<img src="${p}" alt="Job photo" onclick="viewPhoto('${p}')">`).join('')}</div>`:''}<div class="actions">${completed?'':`<button class="btn green" onclick="completeJob('${j.id}')">✓ Complete</button><button class="btn gold" onclick="timerButton('${j.clientId}')">Start timer</button>`}<button class="btn" onclick="editJob('${j.id}')">Edit</button>${completed?`<button class="btn gold" onclick="invoice('${j.id}')">Invoice PDF</button><button class="btn ${j.payment==='paid'?'green':'grey'}" onclick="togglePaid('${j.id}')">${j.payment==='paid'?'Mark unpaid':'Mark paid'}</button><button class="btn" onclick="paymentReminder('${j.id}')">Payment reminder</button>`:''}<button class="btn red" onclick="deleteJob('${j.id}')">Delete</button></div></div>`}
-function renderClients(){$('clientList').innerHTML=state.clients.filter(c=>c.active).map(c=>`<div class="client-row"><div class="avatar">${c.photo?`<img src="${c.photo}" alt="">`:esc(c.name[0].toUpperCase())}</div><div class="client-info"><strong>${esc(c.name)}</strong><small>${esc(c.type)} · ${esc(c.frequency)} · ${esc(c.day)} · ${c.hours}h</small><small>${money(c.rate)}/hour</small></div><button class="btn" onclick="openClient('${c.id}')">Edit</button></div>`).join('')||'<div class="empty">No clients added yet.</div>'}
-function renderEarnings(){let jobs=doneJobs(),total=jobs.reduce((s,j)=>s+amount(j),0),paid=jobs.filter(j=>j.payment==='paid').reduce((s,j)=>s+amount(j),0),month=dateKey().slice(0,7);$('earnTotal').textContent=money(total);$('earnPaid').textContent=money(paid);$('earnOwed').textContent=money(total-paid);$('earnMonth').textContent=money(jobs.filter(j=>j.date.startsWith(month)).reduce((s,j)=>s+amount(j),0));$('earnList').innerHTML=jobs.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(jobCard).join('')||'<div class="empty">Completed jobs and earnings will appear here.</div>'}
-function renderCalendar(){let y=monthCursor.getFullYear(),m=monthCursor.getMonth(),first=new Date(y,m,1).getDay(),count=new Date(y,m+1,0).getDate();$('monthTitle').textContent=monthCursor.toLocaleDateString('en-GB',{month:'long',year:'numeric'});let html=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="weekday">${x}</div>`).join('');for(let i=0;i<first;i++)html+='<div></div>';for(let d=1;d<=count;d++){let k=dateKey(new Date(y,m,d)),n=scheduledJobs(k).length;html+=`<div class="${n?'has':''}" onclick="selectCalendarDate('${k}')">${d}${n?`<br><b>${n}</b>`:''}</div>`}$('calendar').innerHTML=html}
+function jobCard(j){let complete=!!j.completed;return`<div class="job"><div class="job-top"><div><div class="job-name">${esc(j.name)} ${complete?'<span class="pill">Completed</span>':'<span class="pill">Scheduled</span>'}</div><div class="job-time">${dateLabel(j.date)} · ${esc(j.start||'09:00')}–${esc(j.end||'')}</div></div><b>${money(complete?amount(j):0)}</b></div><div class="job-meta">${esc(j.type)} · ${durationText(complete?mins(j):j.hours*60)} · ${money(j.rate)}/hour · ${j.payment==='paid'?'Paid':'Unpaid'}</div>${j.photos?.length?`<div class="gallery">${j.photos.map(p=>`<img src="${p}" onclick="viewPhoto('${p}')">`).join('')}</div>`:''}<div class="actions">${complete?'':`<button class="btn green" onclick="completeJob('${j.id}')">✓ Complete</button><button class="btn gold" onclick="startTimer('${j.clientId}')">Start timer</button>`}<button class="btn" onclick="editJob('${j.id}')">Edit</button>${complete?`<button class="btn gold" onclick="invoice('${j.id}')">Invoice PDF</button><button class="btn green" onclick="togglePaid('${j.id}')">${j.payment==='paid'?'Mark unpaid':'Mark paid'}</button><button class="btn" onclick="paymentReminder('${j.id}')">Payment reminder</button>`:''}<button class="btn red" onclick="deleteJob('${j.id}')">Delete</button></div></div>`}
+function renderClients(){$('clientList').innerHTML=state.clients.filter(c=>c.active).map(c=>`<div class="client-row"><div class="avatar">${c.photo?`<img src="${c.photo}">`:esc(c.name[0])}</div><div class="client-info"><strong>${esc(c.name)}</strong><small>${esc(c.type)} · ${esc(c.frequency)} · ${esc(c.day)} · ${c.hours}h</small><small>${money(c.rate)}/hour</small></div><button class="btn" onclick="openClient('${c.id}')">Edit</button></div>`).join('')||'<div class="empty">No clients added.</div>'}
+function renderEarnings(){let jobs=doneJobs(),total=jobs.reduce((a,j)=>a+amount(j),0),paid=jobs.filter(j=>j.payment==='paid').reduce((a,j)=>a+amount(j),0),month=dateKey().slice(0,7);$('earnTotal').textContent=money(total);$('earnPaid').textContent=money(paid);$('earnOwed').textContent=money(total-paid);$('earnMonth').textContent=money(jobs.filter(j=>j.date.startsWith(month)).reduce((a,j)=>a+amount(j),0));$('earnList').innerHTML=jobs.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(jobCard).join('')||'<div class="empty">Completed jobs will appear here.</div>'}
+function renderCalendar(){let y=monthCursor.getFullYear(),m=monthCursor.getMonth(),first=new Date(y,m,1).getDay(),count=new Date(y,m+1,0).getDate();$('monthTitle').textContent=monthCursor.toLocaleDateString('en-GB',{month:'long',year:'numeric'});let h=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="weekday">${x}</div>`).join('');for(let i=0;i<first;i++)h+='<div></div>';for(let d=1;d<=count;d++){let k=dateKey(new Date(y,m,d)),n=scheduledJobs(k).length;h+=`<div class="${n?'has':''}" onclick="selectCalendarDate('${k}')">${d}${n?'<br><b>'+n+'</b>':''}</div>`}$('calendar').innerHTML=h}
 function changeMonth(n){monthCursor.setMonth(monthCursor.getMonth()+n);renderCalendar()}
-function selectCalendarDate(k){$('freeDate').value=k;$('freeResults').textContent='Selected '+dateLabel(k)+'.'}
-function renderHolidays(){$('holidayList').innerHTML=state.holidays.map(h=>`<div class="setting-row"><div><b>${esc(client(h.clientId)?.name||'Client')}</b><div class="note">${h.start} – ${h.end}</div></div><button class="btn red" onclick="deleteHoliday('${h.id}')">Remove</button></div>`).join('')||'<p class="note">No holiday dates added.</p>'}
+function selectCalendarDate(d){$('freeDate').value=d;$('freeResults').textContent='Selected '+dateLabel(d)}
+function renderHolidays(){$('holidayList').innerHTML=state.holidays.map(h=>`<div class="setting-row"><div><b>${esc(client(h.clientId)?.name||'Client')}</b><div class="note">${h.start} – ${h.end}</div></div><button class="btn red" onclick="deleteHoliday('${h.id}')">Remove</button></div>`).join('')||'<p class="note">No holidays added.</p>'}
 function go(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(p).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===p));window.scrollTo(0,0);render()}
 function openModal(title,html){$('modalTitle').textContent=title;$('modalContent').innerHTML=html;$('modalBg').classList.add('show')}
 function closeModal(){$('modalBg').classList.remove('show')}
-function openJob(past=false,id=null){let j=id?state.jobs.find(x=>x.id===id):null,opts=state.clients.filter(c=>c.active).map(c=>`<option value="${c.id}" ${j&&String(j.clientId)===String(c.id)?'selected':''}>${esc(c.name)}</option>`).join('');openModal(j?'Edit job':past?'Add past job':'Add cleaning job',`
-<label>Client</label><select id="jobClient" onchange="jobClientChanged()">${opts}</select>
-<div class="form-row"><div><label>Date</label><input id="jobDate" type="date" value="${j?.date||dateKey()}"></div><div><label>Hours</label><input id="jobHours" type="number" min=".25" step=".25" value="${j?.hours||2}"></div></div>
-<div class="form-row"><div><label>Start time</label><input id="jobStart" type="time" value="${j?.start||'09:00'}"></div><div><label>End time</label><input id="jobEnd" type="time" value="${j?.end||'11:00'}"></div></div>
-<label>Hourly rate (£)</label><input id="jobRate" type="number" min="0" step=".5" value="${j?.rate??client(state.clients[0]?.id)?.rate??16}">
-<label>Job notes</label><textarea id="jobNotes" rows="2">${esc(j?.notes||'')}</textarea>
-<label>Job photos</label><div class="photo-upload"><input type="file" id="jobPhotos" accept="image/*" multiple onchange="previewJobPhotos(this)"><p class="note">Add before/after photos or photos related to this cleaning job.</p><div id="jobPhotoPreview" class="photo-preview">${(j?.photos||[]).map((p,i)=>`<div class="photo-tile"><img src="${p}"><button onclick="removePendingPhoto(${i})">×</button></div>`).join('')}</div></div>
-<div class="actions"><button class="btn dark full" onclick="saveJob('${j?.id||''}',${past})">Save job</button><button class="btn full" onclick="closeModal()">Cancel</button></div>`);
- pendingJobPhotos=j?.photos?[...j.photos]:[];jobPhotoFiles=[];jobPhotoExisting=!!j;}
-let pendingJobPhotos=[],jobPhotoFiles=[],jobPhotoExisting=false;
-function jobClientChanged(){let c=client($('jobClient').value);if(!c)return;$('jobRate').value=c.rate;$('jobHours').value=c.hours;$('jobStart').value=c.start||'09:00';$('jobEnd').value=timeS(timeM(c.start||'09:00')+Number(c.hours)*60)}
-function previewJobPhotos(input){jobPhotoFiles=[...input.files];$('jobPhotoPreview').innerHTML=pendingJobPhotos.map((p,i)=>`<div class="photo-tile"><img src="${p}"><button onclick="removePendingPhoto(${i})">×</button></div>`).join('')+jobPhotoFiles.map((f,i)=>`<div class="photo-tile"><img id="newPhoto${i}"><button onclick="removeNewPhoto(${i})">×</button></div>`).join('');jobPhotoFiles.forEach((f,i)=>compressImage(f,1200,.75).then(data=>{let el=$('newPhoto'+i);if(el)el.src=data}))}
-function removePendingPhoto(i){pendingJobPhotos.splice(i,1);refreshPhotoPreview()}
-function removeNewPhoto(i){jobPhotoFiles.splice(i,1);previewJobPhotos({files:jobPhotoFiles})}
-function refreshPhotoPreview(){$('jobPhotoPreview').innerHTML=pendingJobPhotos.map((p,i)=>`<div class="photo-tile"><img src="${p}"><button onclick="removePendingPhoto(${i})">×</button></div>`).join('')}
-async function saveJob(id,past){let c=client($('jobClient').value);if(!c)return alert('Please choose a client.');let date=$('jobDate').value,hours=Number($('jobHours').value),rate=Number($('jobRate').value);if(!date||hours<=0||rate<0)return alert('Please check the date, hours and hourly rate.');let photos=[...pendingJobPhotos];for(let f of jobPhotoFiles){try{photos.push(await compressImage(f,1200,.75))}catch(e){}}let j=id?state.jobs.find(x=>x.id===id):null,data={id:j?.id||'j'+Date.now(),clientId:c.id,name:c.name,phone:c.phone||'',type:c.type,rate,date,hours,start:$('jobStart').value,end:$('jobEnd').value,notes:$('jobNotes').value,payment:j?.payment||'unpaid',completed:past||!!j?.completed,photos};if(data.completed)data.minutes=Math.round(hours*60);if(j)Object.assign(j,data);else state.jobs.push(data);save();closeModal();render()}
+function settingsTab(id,btn){document.querySelectorAll('.settings-panel').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.settings-tabs button').forEach(x=>x.classList.remove('dark'));btn.classList.add('dark')}
+function openJob(past=false,id=null){let j=id?state.jobs.find(x=>x.id===id):null,opts=state.clients.filter(c=>c.active).map(c=>`<option value="${c.id}" ${j&&j.clientId===c.id?'selected':''}>${esc(c.name)}</option>`).join('');openModal(j?'Edit job':past?'Add past job':'Add cleaning job',`<label>Client</label><select id="jobClient">${opts}</select><div class="form-row"><div><label>Date</label><input type="date" id="jobDate" value="${j?.date||dateKey(new Date())}"></div><div><label>Hours</label><input type="number" id="jobHours" min=".25" step=".25" value="${j?.hours||2}"></div></div><div class="form-row"><div><label>Start</label><input type="time" id="jobStart" value="${j?.start||'09:00'}"></div><div><label>End</label><input type="time" id="jobEnd" value="${j?.end||'11:00'}"></div></div><label>Hourly rate (£)</label><input id="jobRate" type="number" min="0" step=".5" value="${j?.rate??16}"><label>Notes</label><textarea id="jobNotes">${esc(j?.notes||'')}</textarea><label>Job photos</label><div class="photo-box"><input type="file" id="jobPhotos" accept="image/*" multiple onchange="previewJobPhotos(this)"><div id="jobPhotoPreview" class="photo-preview"></div></div><button class="btn dark full" style="margin-top:12px" onclick="saveJob('${j?.id||''}',${past})">Save job</button>`);pendingJobPhotos=j?.photos?[...j.photos]:[];renderJobPhotoPreview()}
+function renderJobPhotoPreview(){$('jobPhotoPreview').innerHTML=pendingJobPhotos.map((p,i)=>`<div style="position:relative"><img src="${p}"><button class="btn red" style="position:absolute;top:0;right:0;padding:3px" onclick="pendingJobPhotos.splice(${i},1);renderJobPhotoPreview()">×</button></div>`).join('')}
+async function previewJobPhotos(input){for(let f of input.files){try{pendingJobPhotos.push(await compressImage(f,1200,.75))}catch(e){}}renderJobPhotoPreview()}
+async function saveJob(id,past){let c=client($('jobClient').value),date=$('jobDate').value,h=Number($('jobHours').value),rate=Number($('jobRate').value);if(!c||!date||h<=0||rate<0)return alert('Check client, date, hours and rate.');let j=id?state.jobs.find(x=>x.id===id):null,data={id:j?.id||'j'+Date.now(),clientId:c.id,name:c.name,type:c.type,rate,date,hours:h,start:$('jobStart').value,end:$('jobEnd').value,notes:$('jobNotes').value,photos:[...pendingJobPhotos],payment:j?.payment||'unpaid',completed:past||!!j?.completed};if(data.completed)data.minutes=Math.round(h*60);if(j)Object.assign(j,data);else state.jobs.push(data);save();closeModal();render()}
 function editJob(id){openJob(false,id)}
-function completeJob(id){let j=state.jobs.find(x=>x.id===id);if(!j)return;openModal('Complete cleaning',`<p>Enter the actual time worked for <b>${esc(j.name)}</b>.</p><label>Hours worked</label><input id="actualHours" type="number" min=".1" step=".01" value="${j.hours||2}"><label>Payment status</label><select id="actualPayment"><option value="unpaid">Unpaid</option><option value="paid">Paid</option></select><button class="btn dark full" style="margin-top:15px" onclick="saveCompletion('${id}')">Confirm completed job</button>`)}
+function completeJob(id){let j=state.jobs.find(x=>x.id===id);openModal('Complete cleaning',`<label>Actual hours worked</label><input id="actualHours" type="number" step=".01" value="${j.hours}"><label>Payment status</label><select id="actualPayment"><option value="unpaid">Unpaid</option><option value="paid">Paid</option></select><button class="btn dark full" onclick="saveCompletion('${id}')">Confirm completed job</button>`)}
 function saveCompletion(id){let j=state.jobs.find(x=>x.id===id),h=Number($('actualHours').value);if(!j||h<=0)return alert('Enter the hours worked.');j.hours=h;j.minutes=Math.round(h*60);j.completed=true;j.payment=$('actualPayment').value;save();closeModal();render()}
-function togglePaid(id){let j=state.jobs.find(x=>x.id===id);if(!j)return;j.payment=j.payment==='paid'?'unpaid':'paid';save();render()}
-function deleteJob(id){if(!confirm('Delete this cleaning job?'))return;state.jobs=state.jobs.filter(j=>j.id!==id);save();render()}
-function openClient(id=null){let c=id?client(id):null;openModal(c?'Edit client':'Add new client',`
-<label>Client name</label><input id="cName" value="${esc(c?.name||'')}">
-<div class="form-row"><div><label>Client type</label><select id="cType"><option ${c?.type==='Private'?'selected':''}>Private</option><option ${c?.type==='Agency'?'selected':''}>Agency</option></select></div><div><label>Hourly rate (£)</label><input id="cRate" type="number" min="0" step=".5" value="${c?.rate??state.settings.privateRate}"></div></div>
-<div class="form-row"><div><label>Usual hours</label><input id="cHours" type="number" min=".25" step=".25" value="${c?.hours??2}"></div><div><label>Usual day</label><select id="cDay">${DAYS.map(d=>`<option ${c?.day===d?'selected':''}>${d}</option>`).join('')}</select></div></div>
-<label>Appointment frequency</label><select id="cFrequency">${[['weekly','Weekly'],['fortnightly','Fortnightly'],['threeweekly','Every 3 weeks'],['occasional','Occasional'],['oneoff','One-off']].map(x=>`<option value="${x[0]}" ${c?.frequency===x[0]?'selected':''}>${x[1]}</option>`).join('')}</select>
-<div class="form-row"><div><label>Usual start time</label><input id="cStart" type="time" value="${c?.start||'09:00'}"></div><div><label>Phone number</label><input id="cPhone" type="tel" value="${esc(c?.phone||'')}"></div></div>
-<label>Client profile photo</label><div class="photo-upload"><input type="file" accept="image/*" id="clientPhoto" onchange="previewClientPhoto(this)"><div id="clientPhotoPreview" class="photo-preview">${c?.photo?`<img src="${c.photo}" alt="Client photo">`:''}</div><button class="btn grey" type="button" onclick="clearClientPhoto()">Remove photo</button></div>
-<div class="actions"><button class="btn dark full" onclick="saveClient('${id||''}')">Save client</button>${c?`<button class="btn red" onclick="removeClient('${id}')">Delete client</button>`:''}</div>`);
-pendingClientPhoto=c?.photo||''}
-let pendingClientPhoto='';
-async function previewClientPhoto(input){if(!input.files[0])return;pendingClientPhoto=await compressImage(input.files[0],800,.75);$('clientPhotoPreview').innerHTML=`<img src="${pendingClientPhoto}" alt="Client photo">`}
-function clearClientPhoto(){pendingClientPhoto='';$('clientPhotoPreview').innerHTML='';$('clientPhoto').value=''}
-async function saveClient(id){let name=$('cName').value.trim();if(!name)return alert('Enter the client name.');let data={name,type:$('cType').value,rate:Number($('cRate').value),hours:Number($('cHours').value),day:$('cDay').value,frequency:$('cFrequency').value,start:$('cStart').value,phone:$('cPhone').value,photo:pendingClientPhoto,active:true};if(data.rate<0||data.hours<=0)return alert('Please check the rate and hours.');if(id){Object.assign(client(id),data);state.jobs.filter(j=>String(j.clientId)===String(id)&&!j.completed).forEach(j=>{j.name=name;j.rate=data.rate;j.type=data.type})}else state.clients.push({...data,id:'c'+Date.now()});save();closeModal();render()}
-function removeClient(id){if(!confirm('Remove this client? Their job history will be kept.'))return;let c=client(id);if(c)c.active=false;save();closeModal();render()}
-function openHoliday(){let opts=state.clients.filter(c=>c.active).map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');openModal('Client holiday / unavailable dates',`<label>Client</label><select id="holidayClient">${opts}</select><div class="form-row"><div><label>From</label><input type="date" id="holidayStart"></div><div><label>Until</label><input type="date" id="holidayEnd"></div></div><button class="btn dark full" style="margin-top:14px" onclick="saveHoliday()">Save holiday</button>`)}
-function saveHoliday(){let clientId=$('holidayClient').value,start=$('holidayStart').value,end=$('holidayEnd').value;if(!start||!end||end<start)return alert('Please choose valid dates.');state.holidays.push({id:'h'+Date.now(),clientId,start,end});save();closeModal();render()}
+function togglePaid(id){let j=state.jobs.find(x=>x.id===id);j.payment=j.payment==='paid'?'unpaid':'paid';save();render()}
+function deleteJob(id){if(confirm('Delete this job?')){state.jobs=state.jobs.filter(j=>j.id!==id);save();render()}}
+function openClient(id=null){let c=id?client(id):null;openModal(c?'Edit client':'Add client',`<label>Name</label><input id="cName" value="${esc(c?.name||'')}"><div class="form-row"><div><label>Type</label><select id="cType"><option ${c?.type==='Private'?'selected':''}>Private</option><option ${c?.type==='Agency'?'selected':''}>Agency</option></select></div><div><label>Rate (£/hour)</label><input id="cRate" type="number" value="${c?.rate??18}"></div></div><div class="form-row"><div><label>Usual hours</label><input id="cHours" type="number" step=".25" value="${c?.hours??2}"></div><div><label>Usual day</label><select id="cDay">${DAYS.map(d=>`<option ${c?.day===d?'selected':''}>${d}</option>`).join('')}</select></div></div><label>Frequency</label><select id="cFrequency">${[['weekly','Weekly'],['fortnightly','Fortnightly'],['threeweekly','Every 3 weeks'],['occasional','Occasional'],['oneoff','One-off']].map(x=>`<option value="${x[0]}" ${c?.frequency===x[0]?'selected':''}>${x[1]}</option>`).join('')}</select><label>Start time</label><input id="cStart" type="time" value="${c?.start||'09:00'}"><label>Phone</label><input id="cPhone" value="${esc(c?.phone||'')}"><label>Client photo</label><div class="photo-box"><input type="file" id="cPhoto" accept="image/*" onchange="previewClientPhoto(this)"><div id="cPhotoPreview" class="photo-preview">${c?.photo?`<img src="${c.photo}">`:''}</div></div><button class="btn dark full" style="margin-top:12px" onclick="saveClient('${id||''}')">Save client</button>${c?`<button class="btn red full" style="margin-top:8px" onclick="removeClient('${id}')">Delete client</button>`:''}`);pendingClientPhoto=c?.photo||''}
+async function previewClientPhoto(input){if(input.files[0])pendingClientPhoto=await compressImage(input.files[0],800,.75);$('cPhotoPreview').innerHTML=pendingClientPhoto?`<img src="${pendingClientPhoto}">`:''}
+function saveClient(id){let name=$('cName').value.trim();if(!name)return alert('Enter client name.');let d={name,type:$('cType').value,rate:Number($('cRate').value),hours:Number($('cHours').value),day:$('cDay').value,frequency:$('cFrequency').value,start:$('cStart').value,phone:$('cPhone').value,photo:pendingClientPhoto,active:true};if(d.hours<=0||d.rate<0)return alert('Check rate and hours.');if(id)Object.assign(client(id),d);else state.clients.push({...d,id:'c'+Date.now()});save();closeModal();render()}
+function removeClient(id){if(!confirm('Remove this client?'))return;client(id).active=false;save();closeModal();render()}
+function openHoliday(){let opts=state.clients.filter(c=>c.active).map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');openModal('Client holiday',`<label>Client</label><select id="hClient">${opts}</select><div class="form-row"><div><label>From</label><input type="date" id="hStart"></div><div><label>Until</label><input type="date" id="hEnd"></div></div><button class="btn dark full" onclick="saveHoliday()">Save holiday</button>`)}
+function saveHoliday(){let start=$('hStart').value,end=$('hEnd').value;if(!start||!end||end<start)return alert('Choose valid dates.');state.holidays.push({id:'h'+Date.now(),clientId:$('hClient').value,start,end});save();closeModal();render()}
 function deleteHoliday(id){state.holidays=state.holidays.filter(h=>h.id!==id);save();render()}
-function timerButton(id){let c=client(id);if(!c)return;openModal('Cleaning timer',`<p>Start a timer for <b>${esc(c.name)}</b>. The timer uses the saved start time and continues when you switch apps.</p><button class="btn dark full" onclick="closeModal();startTimer('${id}')">Start timer</button>`)}
-function startTimer(id){if(state.timer?.running&&!confirm('A timer is already running. Replace it?'))return;state.timer={running:true,start:Date.now(),clientId:id};save();renderTimer();if(timerInterval)clearInterval(timerInterval);timerInterval=setInterval(renderTimer,1000)}
-function stopTimer(cancel=false){let t=state.timer;if(!t?.running)return;let c=client(t.clientId),elapsed=Math.max(1,Math.round((Date.now()-t.start)/60000));state.timer=null;clearInterval(timerInterval);if(!cancel&&c)state.jobs.push({id:'j'+Date.now(),clientId:c.id,name:c.name,phone:c.phone||'',type:c.type,rate:c.rate,date:dateKey(),hours:elapsed/60,minutes:elapsed,start:'',end:'',payment:'unpaid',completed:true,notes:'Timer-recorded cleaning',photos:[]});save();render();if(!cancel)alert('Cleaning time saved: '+durationText(elapsed))}
-function renderTimer(){let t=state.timer;if(!t?.running){$('homeTimer').textContent='No timer running.';return}let elapsed=Math.max(0,Math.floor((Date.now()-t.start)/1000)),txt=[Math.floor(elapsed/3600),Math.floor(elapsed%3600/60),elapsed%60].map(x=>String(x).padStart(2,'0')).join(':');$('homeTimer').innerHTML=`<div class="timer-box"><div class="timer-clock">${txt}</div><div>${esc(client(t.clientId)?.name||'Cleaning job')}</div><div class="actions"><button class="btn dark" onclick="stopTimer()">Finish timer</button><button class="btn" onclick="stopTimer(true)">Cancel</button></div></div>`}
-function invoice(id){let j=state.jobs.find(x=>x.id===id);if(!j)return;if(!window.jspdf?.jsPDF)return alert('PDF service is unavailable. Check your internet connection.');let {jsPDF}=window.jspdf,doc=new jsPDF(),s=state.settings,num=s.invoicePrefix+String(s.invoiceNext++).padStart(5,'0');save();doc.setFillColor(249,230,238);doc.rect(0,0,210,39,'F');doc.setTextColor(164,94,126);doc.setFontSize(26);doc.text(s.businessName||'Pure Shine Cleaning',18,19);doc.setFontSize(9);doc.text('CLEANING SERVICES',18,28);doc.setTextColor(50,45,50);doc.setFontSize(18);doc.text('INVOICE',145,20);doc.setFontSize(10);doc.text(num,145,29);let y=52;doc.text('From: '+(s.ownerName||''),18,y);y+=7;if(s.address)doc.text(String(s.address).slice(0,90),18,y);y+=7;if(s.phone)doc.text('Phone: '+s.phone,18,y);y+=7;if(s.email)doc.text('Email: '+s.email,18,y);y+=10;doc.text('Bill to: '+j.name,18,y);y+=7;doc.text('Invoice date: '+dateKey(),18,y);y+=7;doc.text('Service date: '+j.date,18,y);y+=14;doc.text('Cleaning service',18,y);doc.text(durationText(mins(j))+' × '+money(j.rate)+'/hour',18,y+9);doc.text('TOTAL',145,y+9);doc.setFontSize(17);doc.text(money(amount(j)),145,y+19);doc.setFontSize(10);y+=38;doc.text('Payment terms: '+s.paymentTerms,18,y);y+=8;doc.text('Payment status: '+(j.payment==='paid'?'PAID':'OUTSTANDING'),18,y);y+=10;if(s.paymentDetails){doc.text('Payment details:',18,y);y+=7;doc.text(doc.splitTextToSize(s.paymentDetails,170),18,y);y+=16}if(s.vatNumber)doc.text('VAT number: '+s.vatNumber,18,y);if(s.invoiceFooter)doc.text(doc.splitTextToSize(s.invoiceFooter,170),18,270);doc.save(num+'-'+j.name.replace(/[^a-z0-9]/gi,'-')+'.pdf')}
-function paymentReminder(id){let j=state.jobs.find(x=>x.id===id);if(!j)return;let msg=`Hello ${j.name}, just a friendly reminder that the payment of ${money(amount(j))} for the cleaning service on ${j.date} is still outstanding. Thank you.`;if(navigator.share)navigator.share({text:msg}).catch(()=>copyText(msg));else copyText(msg)}
-function copyText(t){if(navigator.clipboard?.writeText)navigator.clipboard.writeText(t).then(()=>alert('Reminder copied.')).catch(()=>alert(t));else alert(t)}
-function findFreeTime(){let d=$('freeDate').value;if(!d)return alert('Choose a date.');let jobs=scheduledJobs(d).sort((a,b)=>a.start.localeCompare(b.start)),cursor=timeM(state.settings.workStart),endDay=timeM(state.settings.workEnd),out=[];jobs.forEach(j=>{let s=timeM(j.start),e=timeM(j.end);if(s>cursor)out.push(`${timeS(cursor)}–${timeS(s)} available`);cursor=Math.max(cursor,e)});if(cursor<endDay)out.push(`${timeS(cursor)}–${timeS(endDay)} available`);$('freeResults').textContent=out.length?out.join(' · '):'No free gaps found during your working hours.'}
-function monthlyReport(){let m=$('reportMonth').value;if(!m)return alert('Choose a month.');let j=doneJobs().filter(x=>x.date.startsWith(m)),total=j.reduce((s,x)=>s+amount(x),0),paid=j.filter(x=>x.payment==='paid').reduce((s,x)=>s+amount(x),0),hours=j.reduce((s,x)=>s+mins(x),0);$('reportResult').innerHTML=`Completed jobs: <b>${j.length}</b><br>Total hours: <b>${durationText(hours)}</b><br>Total earnings: <b>${money(total)}</b><br>Paid: <b>${money(paid)}</b><br>Outstanding: <b>${money(total-paid)}</b>`}
-function settingsTab(id,btn){document.querySelectorAll('.settings-panel').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.settings-tabs button').forEach(b=>b.classList.remove('dark'));btn.classList.add('dark')}
-function populateSettings(){let s=state.settings;const fields={sBusinessName:'businessName',sOwnerName:'ownerName',sPhone:'phone',sEmail:'email',sAddress:'address',sPostcode:'postcode',sWebsite:'website',sAgencyRate:'agencyRate',sPrivateRate:'privateRate',sInvoicePrefix:'invoicePrefix',sInvoiceNext:'invoiceNext',sPaymentTerms:'paymentTerms',sPaymentDetails:'paymentDetails',sInvoiceFooter:'invoiceFooter',sVatNumber:'vatNumber',sWorkingHours:'workingHours',sWorkStart:'workStart',sWorkEnd:'workEnd',sDefaultHours:'defaultHours',sFortnightAnchor:'fortnightAnchor',sReminderTime:'reminderTime',sReminderTime2:'reminderTime',sZoom:'zoom',sAccent:'accent'};Object.entries(fields).forEach(([id,key])=>{if($(id))$(id).value=s[key]??''});$('logoPreview').innerHTML=s.logo?`<img src="${s.logo}" alt="Business logo">`:''}
-function saveBusinessSettings(){let s=state.settings;s.businessName=$('sBusinessName').value.trim()||'Pure Shine Cleaning';s.ownerName=$('sOwnerName').value.trim();s.phone=$('sPhone').value.trim();s.email=$('sEmail').value.trim();s.address=$('sAddress').value.trim();s.postcode=$('sPostcode').value.trim();s.website=$('sWebsite').value.trim();save();render();alert('Business details saved.')}
-function saveRates(){state.settings.agencyRate=Number($('sAgencyRate').value)||16;state.settings.privateRate=Number($('sPrivateRate').value)||18;save();alert('Default rates saved.')}
+function startTimer(id){if(state.timer?.running&&!confirm('Replace the active timer?'))return;state.timer={running:true,start:Date.now(),clientId:id};save();renderTimer();if(timerInterval)clearInterval(timerInterval);timerInterval=setInterval(renderTimer,1000)}
+function stopTimer(cancel=false){let t=state.timer;if(!t)return;let c=client(t.clientId),n=Math.max(1,Math.round((Date.now()-t.start)/60000));state.timer=null;clearInterval(timerInterval);if(!cancel&&c)state.jobs.push({id:'j'+Date.now(),clientId:c.id,name:c.name,type:c.type,rate:c.rate,date:dateKey(new Date()),hours:n/60,minutes:n,completed:true,payment:'unpaid',photos:[]});save();render()}
+function renderTimer(){let t=state.timer;if(!t?.running){$('homeTimer').textContent='No timer running.';return}let n=Math.floor((Date.now()-t.start)/1000),v=[Math.floor(n/3600),Math.floor(n%3600/60),n%60].map(x=>String(x).padStart(2,'0')).join(':');$('homeTimer').innerHTML=`<div class="timer-box"><div class="timer-clock">${v}</div>${esc(client(t.clientId)?.name||'Cleaning')}<div class="actions"><button class="btn dark" onclick="stopTimer()">Finish timer</button><button class="btn" onclick="stopTimer(true)">Cancel</button></div></div>`}
+function invoice(id){let j=state.jobs.find(x=>x.id===id);if(!window.jspdf?.jsPDF)return alert('PDF service unavailable.');let {jsPDF}=window.jspdf,s=state.settings,doc=new jsPDF(),num=s.invoicePrefix+String(s.invoiceNext++).padStart(5,'0');save();doc.setFillColor(249,230,238);doc.rect(0,0,210,38,'F');doc.setTextColor(164,94,126);doc.setFontSize(25);doc.text(s.businessName,18,20);doc.setTextColor(40,40,40);doc.setFontSize(18);doc.text('INVOICE',145,20);doc.setFontSize(10);doc.text(num,145,29);let y=53;doc.text('From: '+s.ownerName,18,y);y+=8;doc.text('Bill to: '+j.name,18,y);y+=8;doc.text('Service date: '+j.date,18,y);y+=15;doc.text('Cleaning service',18,y);doc.text(durationText(mins(j))+' × '+money(j.rate)+'/hour',18,y+9);doc.text('TOTAL: '+money(amount(j)),145,y+9);y+=35;doc.text('Payment terms: '+s.paymentTerms,18,y);y+=8;doc.text('Payment status: '+j.payment,18,y);y+=10;if(s.paymentDetails)doc.text(doc.splitTextToSize(s.paymentDetails,170),18,y);if(s.invoiceFooter)doc.text(doc.splitTextToSize(s.invoiceFooter,170),18,275);doc.save(num+'.pdf')}
+function paymentReminder(id){let j=state.jobs.find(x=>x.id===id),msg=`Hello ${j.name}, a friendly reminder that ${money(amount(j))} for your cleaning service on ${j.date} is outstanding. Thank you.`;if(navigator.share)navigator.share({text:msg}).catch(()=>alert(msg));else if(navigator.clipboard)navigator.clipboard.writeText(msg).then(()=>alert('Reminder copied.'));else alert(msg)}
+function viewPhoto(src){openModal('Photo',`<img src="${src}" style="width:100%;border-radius:14px">`)}
+function findFreeTime(){let d=$('freeDate').value;if(!d)return alert('Choose a date.');let jobs=scheduledJobs(d).sort((a,b)=>a.start.localeCompare(b.start)),cursor=timeM(state.settings.workStart),end=timeM(state.settings.workEnd),out=[];jobs.forEach(j=>{let s=timeM(j.start),e=timeM(j.end);if(s>cursor)out.push(timeS(cursor)+'–'+timeS(s));cursor=Math.max(cursor,e)});if(cursor<end)out.push(timeS(cursor)+'–'+timeS(end));$('freeResults').textContent=out.length?out.join(' · ')+' available':'No free gaps found.'}
+function monthlyReport(){let m=$('reportMonth').value;if(!m)return;let j=doneJobs().filter(x=>x.date.startsWith(m)),total=j.reduce((a,x)=>a+amount(x),0),paid=j.filter(x=>x.payment==='paid').reduce((a,x)=>a+amount(x),0);$('reportResult').innerHTML=`Jobs: <b>${j.length}</b><br>Hours: <b>${durationText(j.reduce((a,x)=>a+mins(x),0))}</b><br>Total: <b>${money(total)}</b><br>Paid: <b>${money(paid)}</b><br>Outstanding: <b>${money(total-paid)}</b>`}
+function saveBusiness(){let s=state.settings;s.businessName=$('sBusinessName').value.trim()||'Pure Shine Cleaning';s.ownerName=$('sOwnerName').value;s.phone=$('sPhone').value;s.email=$('sEmail').value;s.address=$('sAddress').value;s.postcode=$('sPostcode').value;s.website=$('sWebsite').value;s.agencyRate=Number($('sAgencyRate').value)||16;s.privateRate=Number($('sPrivateRate').value)||18;save();render();alert('Business details saved.')}
+function saveProfileSettings(){save();render();alert('Profile photo, banner and logo saved.')}
 function saveInvoiceSettings(){let s=state.settings;s.invoicePrefix=$('sInvoicePrefix').value||'PS-';s.invoiceNext=Math.max(1,Number($('sInvoiceNext').value)||1);s.paymentTerms=$('sPaymentTerms').value;s.paymentDetails=$('sPaymentDetails').value;s.invoiceFooter=$('sInvoiceFooter').value;s.vatNumber=$('sVatNumber').value;save();alert('Invoice settings saved.')}
-function saveScheduleSettings(){let s=state.settings;s.workStart=$('sWorkStart').value||'09:00';s.workEnd=$('sWorkEnd').value||'17:00';s.workingHours=Math.max(1,Number($('sWorkingHours').value)||8);s.defaultHours=Number($('sDefaultHours').value)||2;s.fortnightAnchor=$('sFortnightAnchor').value||'2026-10-30';s.reminderTime=$('sReminderTime').value||'20:00';save();render();alert('Schedule settings saved.')}
-function saveReminderSettings(){state.settings.reminderTime=$('sReminderTime2').value||'20:00';save();alert('Reminder settings saved.')}
+function saveScheduleSettings(){let s=state.settings;s.workStart=$('sWorkStart').value;s.workEnd=$('sWorkEnd').value;s.workingHours=Number($('sWorkingHours').value)||8;s.defaultHours=Number($('sDefaultHours').value)||2;s.fortnightAnchor=$('sFortnightAnchor').value||'2026-10-30';s.reminderTime=$('sReminderTime').value||'20:00';save();render();alert('Schedule settings saved.')}
 function saveAppearance(){state.settings.zoom=Number($('sZoom').value)||1;state.settings.accent=$('sAccent').value;save();applySettings();alert('Appearance saved.')}
-function setZoom(v){state.settings.zoom=Math.max(1,Math.min(2,Number(v)||1));save();applySettings()}
-function changeAccent(v){state.settings.accent=v;applySettings()}
-function applySettings(){let s=state.settings;document.documentElement.style.setProperty('--scale',s.zoom||1);document.body.classList.toggle('compact',!!s.compact);document.body.classList.toggle('high-contrast',!!s.contrast);let colors={pink:['#d58aaa','#a85e7d','#f9e8ef'],lavender:['#b4a0d1','#776294','#f0eafa'],sage:['#a7bda9','#607e65','#eaf2eb'],blue:['#9bb8d0','#547b9a','#eaf2f8']};let c=colors[s.accent]||colors.pink;document.documentElement.style.setProperty('--pink',c[0]);document.documentElement.style.setProperty('--pink-dark',c[1]);document.documentElement.style.setProperty('--pale',c[2]);$('headerLogo').innerHTML=s.logo?`<img src="${s.logo}" alt="Logo">`:'✨';['fortnightly','paymentReminders','appointmentReminders','compact','contrast'].forEach(k=>{if($(k))$(k).classList.toggle('on',!!s[k])})}
+function setZoom(v){state.settings.zoom=Math.min(2,Math.max(1,Number(v)||1));save();applySettings()}
 function toggleSetting(k){state.settings[k]=!state.settings[k];save();applySettings()}
-async function uploadLogo(input){if(!input.files[0])return;state.settings.logo=await compressImage(input.files[0],700,.75);save();render()}
-function compressImage(file,max=1200,quality=.78){return new Promise((resolve,reject)=>{if(!file.type.startsWith('image/'))return reject(Error('Not an image'));let reader=new FileReader();reader.onload=()=>{let img=new Image();img.onload=()=>{let scale=Math.min(1,max/Math.max(img.width,img.height)),canvas=document.createElement('canvas');canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL('image/jpeg',quality))};img.onerror=reject;img.src=reader.result};reader.onerror=reject;reader.readAsDataURL(file)})}
-function viewPhoto(src){openModal('Photo',`<img src="${src}" style="width:100%;border-radius:14px;max-height:65vh;object-fit:contain">`)}
-function exportCalendar(){let jobs=state.jobs.slice();for(let i=0;i<90;i++){let d=new Date();d.setDate(d.getDate()+i);jobs.push(...scheduledJobs(dateKey(d)).filter(j=>j.recurring))}let lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Pure Shine//Cleaning Manager//EN'];jobs.forEach(j=>{let dt=j.date.replace(/-/g,''),start=(j.start||'09:00').replace(':','')+'00',end=(j.end||'11:00').replace(':','')+'00';lines.push('BEGIN:VEVENT','UID:'+j.id+'@pureshine','DTSTART:'+dt+'T'+start,'DTEND:'+dt+'T'+end,'SUMMARY:'+j.name.replace(/[,;]/g,' '),'END:VEVENT')});lines.push('END:VCALENDAR');downloadFile('pure-shine-calendar.ics',lines.join('\r\n'),'text/calendar')}
-function downloadFile(name,content,type){let a=document.createElement('a'),url=URL.createObjectURL(new Blob([content],{type}));a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 function backupData(){downloadFile('pure-shine-backup.json',JSON.stringify(state),'application/json')}
-function restoreData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.clients||!x.jobs||!x.settings)throw Error();state={...initialState(),...x,settings:{...DEFAULTS,...x.settings}};save();render();alert('Backup restored successfully.')}catch(err){alert('This backup file is not valid.')}};r.readAsText(f)}
-function resetData(){if(!confirm('This will permanently erase all clients, jobs, photos and settings saved in this browser. Continue?'))return;if(!confirm('Are you absolutely sure?'))return;state=initialState();save();render()}
-function requestNotifications(){if(!('Notification'in window))return alert('Notifications are not supported in this browser.');Notification.requestPermission().then(p=>alert(p==='granted'?'Notifications enabled.':'Notification permission was not granted.'))}
-function checkReminders(){if(!('Notification'in window)||Notification.permission!=='granted'||!state.settings.appointmentReminders)return;let now=new Date(),tomorrow=new Date(now);tomorrow.setDate(tomorrow.getDate()+1);let target=state.settings.reminderTime||'20:00';if(now.getHours()!==Number(target.split(':')[0])||now.getMinutes()!==Number(target.split(':')[1]))return;let key=dateKey(tomorrow);if(localStorage.getItem('psReminder-'+key))return;let jobs=scheduledJobs(key);if(jobs.length){new Notification('Pure Shine – Tomorrow’s jobs',{body:jobs.map(j=>j.name+' '+j.start).join(', ')});localStorage.setItem('psReminder-'+key,'1')}}
-function copySettingsForBackup(){}
-$('freeDate').value=dateKey();$('reportMonth').value=dateKey().slice(0,7);render();if(state.timer?.running)timerInterval=setInterval(renderTimer,1000);reminderCheck=setInterval(checkReminders,30000);
-document.addEventListener('visibilitychange',()=>{if(state.timer?.running)renderTimer()});window.addEventListener('focus',()=>{if(state.timer?.running)renderTimer()});
+function restoreData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.clients||!x.jobs||!x.settings)throw Error();state={...initialState(),...x,settings:{...DEFAULTS,...x.settings}};save();render();alert('Backup restored.')}catch(e){alert('Invalid backup file.')}};r.readAsText(f)}
+function resetData(){if(!confirm('Erase all app data, clients, jobs and photos?'))return;if(!confirm('Are you sure?'))return;state=initialState();save();render()}
+function downloadFile(name,content,type){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([content],{type}));a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+function exportCalendar(){let jobs=state.jobs.slice();for(let i=0;i<90;i++){let d=new Date();d.setDate(d.getDate()+i);jobs.push(...scheduledJobs(dateKey(d)).filter(j=>j.recurring))}let lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Pure Shine//Cleaning Manager//EN'];jobs.forEach(j=>{let d=j.date.replace(/-/g,''),s=(j.start||'09:00').replace(':','')+'00',e=(j.end||'11:00').replace(':','')+'00';lines.push('BEGIN:VEVENT','UID:'+j.id+'@pureshine','DTSTART:'+d+'T'+s,'DTEND:'+d+'T'+e,'SUMMARY:'+j.name,'END:VEVENT')});lines.push('END:VCALENDAR');downloadFile('pure-shine-calendar.ics',lines.join('\r\n'),'text/calendar')}
+function requestNotifications(){if(!('Notification'in window))return alert('Notifications not supported.');Notification.requestPermission().then(p=>alert(p==='granted'?'Notifications enabled.':'Permission not granted.'))}
+$('freeDate').value=dateKey(new Date());$('reportMonth').value=dateKey(new Date()).slice(0,7);render();if(state.timer?.running)timerInterval=setInterval(renderTimer,1000);document.addEventListener('visibilitychange',()=>{if(state.timer?.running)renderTimer()});
 </script>
 </body>
 </html>
