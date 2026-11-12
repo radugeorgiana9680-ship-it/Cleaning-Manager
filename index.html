@@ -7,133 +7,163 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Pure Shine">
 <title>Pure Shine Cleaning Manager</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Parisienne&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-:root{--pink:#d58eaa;--gold:#b99a62;--sage:#a8bda9;--lav:#b9acd0;--blue:#a9c5d8;--peach:#e8bda9;--cream:#e8d9b8;--ink:#443b45;--muted:#8d828d;--line:#eee3e9;--paper:#fffdfd;--bg:#faf6f8;--scale:1}
-*{box-sizing:border-box}
-html{font-size:14px;scroll-behavior:auto}
-body{margin:0;height:100dvh;min-height:100dvh;overflow:hidden;color:var(--ink);font-family:"DM Sans",sans-serif;background:linear-gradient(145deg,#fbf5f8 0%,#f4f5f1 48%,#f7f2ea 100%)}
-button,input,select,textarea{font:inherit;max-width:100%}
-button{cursor:pointer;border:0}
-.app{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden;padding:max(env(safe-area-inset-top),5px) 10px 0;margin:0 auto;width:100%;max-width:760px}
-header{flex:0 0 auto;padding:5px 48px 7px 5px;margin:0 0 4px;min-height:54px;text-align:left;display:flex;align-items:center;gap:7px;flex-wrap:wrap;position:relative}
-.brand{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.48rem;font-weight:700;color:#a98b70;letter-spacing:.15px;white-space:nowrap}
-.brand-sub{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.2rem;font-weight:700;color:var(--pink);margin:0;white-space:nowrap}
-header small{font-size:.66rem;color:var(--muted);white-space:nowrap}
-.bell{position:absolute;top:5px;right:4px;width:35px;height:35px;background:white;border:1px solid var(--line);border-radius:50%}
-h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;letter-spacing:.15px}
-h1{font-size:1.35rem;font-weight:700;margin:7px 0}
-h2{font-size:1.12rem;font-weight:700;margin:4px 0}
-h3{font-size:.9rem}
-.row{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:10px;margin:7px 0;box-shadow:0 2px 9px #92798a0a;min-width:0}
-.welcome{padding:10px 12px;background:linear-gradient(115deg,#f8e7ef 0%,#f3edf7 38%,#edf3ed 70%,#f8f0df 100%);border:1px solid #f0e4e9}
-.welcome h1{font-size:1.65rem;font-weight:700;color:#c47f9d;margin:0}
-.sub{font-size:.72rem;color:var(--muted);line-height:1.35;margin-top:3px}
-.primary,.secondary,.danger,.soft,.green{padding:8px 10px;border-radius:9px;font-size:.78rem}
-.primary{background:linear-gradient(135deg,#d58eaa,#c77f9e);color:white;box-shadow:0 3px 9px #d58eaa30}
-.secondary{background:#fffdfd;border:1px solid #eadfe7;color:#a97891}
-.danger{background:#fff0f0;border:1px solid #f1cccc;color:#b24e58}
-.soft{background:linear-gradient(135deg,#f3edf8,#edf3f8);color:#8875a5}
-.green{background:#edf5ed;color:#648b6b}
-.badge{background:#f7eaf0;color:#b47791;border-radius:20px;padding:4px 7px;font-size:.65rem;white-space:nowrap}
-.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:6px}
-.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:0}
-.stat small{display:block;color:var(--muted);font-size:.64rem;margin-bottom:3px}
-.stat strong{color:#c47f9d;font-size:1.02rem;overflow-wrap:anywhere}
-.stat:nth-child(1){background:linear-gradient(135deg,#fff,#fbedf2);border-color:#f0dce5}
-.stat:nth-child(2){background:linear-gradient(135deg,#fff,#f2eef8);border-color:#e7deef}
-.stat:nth-child(2) strong{color:#9785b4}
-.page{display:none;min-height:0}
-.page.active{display:block;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 1px 205px;scrollbar-width:thin}
-.job{display:flex;gap:7px;align-items:stretch}
-.bar{width:3px;border-radius:5px;background:var(--pink);flex-shrink:0}
-.bar.agency{background:var(--cream)}
-.bar.done{background:var(--sage)}
-.jobbody{flex:1;min-width:0}
-.jobname{font-weight:800;font-size:.88rem}
-.jobtime{font-weight:800;color:var(--pink);font-size:.91rem;margin:3px 0}
-.jobactions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:7px}
-.jobactions button{padding:7px 3px;font-size:.7rem;line-height:1.15}
-.jobbody>.actions{gap:5px;margin-top:6px}
-.jobbody>.actions button{font-size:.66rem;padding:6px 4px;min-width:0}
-.empty{text-align:center;padding:14px;color:var(--muted);font-size:.8rem}
-.field{margin:8px 0}
-.field label{display:block;color:#a97891;font-weight:700;font-size:.7rem;margin-bottom:4px}
-.field input,.field select,.field textarea,input.search{width:100%;padding:8px 9px;border:1px solid var(--line);border-radius:9px;background:white;color:var(--ink);min-height:37px;font-size:.82rem}
-.field textarea{min-height:58px}
-.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
-.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
-.actions button{flex:1;min-width:80px}
-.calendar{background:white;border:1px solid var(--line);border-radius:12px;padding:7px}
-.weekdays,.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));text-align:center}
-.weekdays{font-size:.65rem;color:var(--muted);font-weight:700;padding:4px 0}
-.day{background:transparent;min-height:43px;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px 0;color:var(--ink);font-size:.72rem}
-.day.selected{background:#faedf2}
-.day.today .num{border:1px solid var(--pink)}
-.num{width:23px;height:23px;border-radius:50%;display:grid;place-items:center}
-.day.selected .num{background:var(--pink);color:white}
-.dots{display:flex;gap:3px}
-.dots i{width:4px;height:4px;border-radius:50%;background:var(--pink)}
-.dots i.agency{background:#c6ad78}
-.dots i.done{background:var(--sage)}
-.timer-dock{position:fixed;z-index:25;bottom:calc(108px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(740px,calc(100% - 14px));background:linear-gradient(110deg,#fffafc 0%,#fbf7ef 55%,#f5f1fa 100%);border:1px solid #e9dce3;border-radius:11px;box-shadow:0 5px 22px #58425320;padding:6px 9px;display:flex;align-items:center;gap:7px;backdrop-filter:blur(12px)}
-.timer-dock .clock{font-weight:700;color:#aa8950;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.55rem;letter-spacing:.5px;font-variant-numeric:tabular-nums}
-.timer-dock .timerinfo{flex:1;min-width:0}
-.timer-dock .timername{font-size:.73rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.timer-dock button{font-size:.68rem;padding:6px 8px}
-.bigclock{text-align:center;font-size:2rem;font-weight:800;color:#b4935d;font-variant-numeric:tabular-nums;padding:9px 0}
-.timerinputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.timerinputs input{text-align:center;font-size:1.2rem;font-weight:700}
-.tabs{display:flex;gap:6px;overflow:auto;padding:5px 0 10px}
-.tabs button{white-space:nowrap}
-.moneyrow{display:flex;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid var(--line)}
-.nav{position:fixed;z-index:30;bottom:0;left:50%;transform:translateX(-50%);width:min(760px,100%);padding:5px 4px calc(5px + env(safe-area-inset-bottom));min-height:55px;background:#fffdfdf5;border-top:1px solid #e8d9df;display:grid;grid-template-columns:repeat(5,1fr);backdrop-filter:blur(12px)}
-.nav button{background:none;color:#a99a83;font-size:.61rem;padding:2px}
-.nav button span{display:block;font-size:1.12rem;margin-bottom:1px}
-.nav button.active{color:var(--pink);font-weight:800}
-dialog{width:min(94%,520px);max-height:86dvh;overflow:auto;border:1px solid var(--line);border-radius:14px;background:#fffafc;color:var(--ink);padding:13px}
-dialog::backdrop{background:#30263077;backdrop-filter:blur(3px)}
-.toast{position:fixed;z-index:60;bottom:125px;left:50%;transform:translateX(-50%);background:#403943;color:white;padding:9px 12px;border-radius:12px;display:none;max-width:90%;font-size:.75rem}
-#home>.card:not(.welcome){background:linear-gradient(110deg,#fffdfd,#f5f8f4);border-color:#e5eee5}
-.job:nth-child(4n+1) .bar{background:var(--pink)}
-.job:nth-child(4n+2) .bar{background:var(--sage)}
-.job:nth-child(4n+3) .bar{background:var(--lav)}
-.job:nth-child(4n) .bar{background:var(--blue)}
-#timer.page.active{position:fixed;z-index:22;inset:calc(env(safe-area-inset-top) + 52px) 0 calc(58px + env(safe-area-inset-bottom));width:100%;max-width:none;margin:0;padding:8px 10px 95px;background:linear-gradient(145deg,#fbf6f8,#f1f5f0);overflow-y:auto}
-@media(max-width:440px){.app{padding-left:8px;padding-right:8px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.jobactions{grid-template-columns:repeat(3,minmax(0,1fr))}.jobactions button{font-size:.68rem;padding:7px 2px}.brand{font-size:1.05rem}.brand-sub{font-size:1.05rem}.timer-dock{gap:5px}.timer-dock button{padding:6px 6px}}
+:root{--pink:#d58eaa;--gold:#b99a62;--sage:#a8bda9;--lav:#b9acd0;--blue:#a9c5d8;--peach:#e8bda9;--ink:#443b45;--muted:#8d828d;--line:#eee3e9;--paper:#fffdfd;--bg:#faf6f8}
+*{box-sizing:border-box}body{margin:0;height:100dvh;overflow:hidden;font:14px "DM Sans",sans-serif;color:var(--ink);background:linear-gradient(145deg,#fbf5f8,#f4f5f1,#f7f2ea)}
+button,input,select,textarea{font:inherit;max-width:100%}button{cursor:pointer;border:0}
+.app{height:100dvh;display:flex;flex-direction:column;max-width:760px;margin:auto;padding:env(safe-area-inset-top) 9px 0}
+header{padding:9px 5px;display:flex;align-items:center;gap:7px;flex-shrink:0}
+.brand{font:700 1.5rem Georgia;color:#a98b70}.brand-sub{font:1.3rem Georgia;color:var(--pink)}
+h1,h2,h3{font-family:Georgia,serif}h1{font-size:1.5rem}h2{font-size:1.2rem}
+.row{display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:12px;margin:8px 0;box-shadow:0 2px 9px #92798a0a}
+.welcome{background:linear-gradient(115deg,#f8e7ef,#f3edf7,#edf3ed,#f8f0df)}
+.welcome h1{color:#c47f9d}.sub{font-size:.75rem;color:var(--muted);line-height:1.5}
+.primary,.secondary,.danger,.soft,.green{padding:9px 11px;border-radius:9px;font-size:.78rem}
+.primary{background:linear-gradient(135deg,#d58eaa,#c77f9e);color:white}.secondary{background:white;border:1px solid var(--line);color:#a97891}.danger{background:#fff0f0;color:#b24e58}.soft{background:#f3edf8;color:#8875a5}.green{background:#edf5ed;color:#648b6b}
+.page{display:none;min-height:0}.page.active{display:block;flex:1;overflow-y:auto;padding:0 2px 180px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.stat{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px}.stat small{display:block;color:var(--muted)}.stat strong{font-size:1.15rem;color:var(--pink)}
+.field{margin:9px 0}.field label{display:block;color:#a97891;font-weight:700;font-size:.75rem;margin-bottom:4px}.field input,.field select,.field textarea,.search{width:100%;padding:9px;border:1px solid var(--line);border-radius:9px;background:white;color:var(--ink)}.field textarea{min-height:60px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.actions button{flex:1}
+.job{background:white;border:1px solid var(--line);border-left:4px solid var(--pink);border-radius:11px;padding:11px;margin:8px 0}.job.done{border-left-color:var(--sage)}.jobname{font-weight:800}.jobtime{color:var(--pink);font-weight:700;margin:5px 0}
+.nav{position:fixed;z-index:30;bottom:0;left:50%;transform:translateX(-50%);width:min(760px,100%);padding:6px 4px calc(6px + env(safe-area-inset-bottom));background:#fffdfdf5;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr)}
+.nav button{background:none;color:#a99a83;font-size:.65rem;padding:4px}.nav button span{display:block;font-size:1.2rem}.nav button.active{color:var(--pink);font-weight:800}
+.timer-dock{position:fixed;z-index:25;bottom:calc(65px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(740px,calc(100% - 14px));background:#fffafc;border:1px solid var(--line);border-radius:11px;padding:7px;display:flex;align-items:center;gap:8px;box-shadow:0 5px 20px #58425320}
+.timerinfo{flex:1}.clock{font:700 1.5rem Georgia;color:var(--gold);font-variant-numeric:tabular-nums}
+dialog{width:min(94%,520px);max-height:86dvh;overflow:auto;border:1px solid var(--line);border-radius:14px;background:#fffafc;color:var(--ink);padding:14px}dialog::backdrop{background:#30263088}
+.empty{text-align:center;padding:18px;color:var(--muted)}
+@media(max-width:440px){.app{padding-left:7px;padding-right:7px}.brand{font-size:1.2rem}}
 </style>
 </head>
 <body>
 <div class="app">
-<header><button class="bell" onclick="page('settings')" aria-label="Settings">⚙</button><div class="brand" id="brand">✧ Pure Shine ✧</div><div class="brand-sub">Cleaning</div><small>Cleaning Manager</small></header>
+<header><div class="brand">✧ Pure Shine ✧</div><div class="brand-sub">Cleaning</div></header>
+
 <section id="home" class="page active">
- <div class="card welcome"><div class="row"><div><h1>Welcome ♡</h1><div class="sub">Your cleaning business, beautifully organised.</div><div class="sub" id="todayDate"></div></div><div style="font-size:2rem">✨</div></div></div>
- <div class="row"><div><h2>Today's jobs</h2><div class="sub" id="todaySummary"></div></div><button class="primary" onclick="openJob()">＋ Add job</button></div>
- <div class="stats"><div class="stat"><small>Jobs today</small><strong id="statJobs">0</strong></div><div class="stat"><small>Scheduled hours</small><strong id="statHours">0h 0m</strong></div></div>
- <div id="todayJobs"></div>
- <div class="card"><div class="row"><b>Today's earnings</b><strong id="todayEarn" style="color:var(--pink)">£0.00</strong></div><div class="sub">Calculated from completed jobs only.</div></div>
+<div class="card welcome"><h1>Bine ai venit ♡</h1><div class="sub">Afacererea ta de curățenie, organizată frumos.</div><div class="sub" id="todayDate"></div></div>
+<div class="row"><h2>Programul de astăzi</h2><button class="primary" onclick="openJob()">＋ Adaugă</button></div>
+<div class="stats"><div class="stat"><small>Joburi astăzi</small><strong id="statJobs">0</strong></div><div class="stat"><small>Ore programate</small><strong id="statHours">0h 0m</strong></div></div>
+<div id="todayJobs"></div>
+<div class="card row"><b>Câștiguri astăzi</b><strong id="todayEarn">£0.00</strong></div>
 </section>
+
 <section id="schedule" class="page">
- <h1>Schedule & Calendar</h1><div class="row"><button class="secondary" onclick="moveMonth(-1)">‹ Previous</button><b id="monthLabel"></b><button class="secondary" onclick="moveMonth(1)">Next ›</button></div>
- <div class="calendar" style="margin-top:10px"><div class="weekdays"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div><div class="days" id="calendarDays"></div></div>
- <div class="row" style="margin-top:14px"><div><h2 id="selectedLabel"></h2><div class="sub">Appointments for selected date</div></div><button class="primary" onclick="openJob(selectedDate)">＋ Job</button></div><div id="selectedJobs"></div>
+<h1>Calendar & Programări</h1>
+<div class="row"><button class="secondary" onclick="changeDate(-1)">‹ Ziua anterioară</button><b id="dateLabel"></b><button class="secondary" onclick="changeDate(1)">Ziua următoare ›</button></div>
+<div class="row"><h2 id="selectedLabel"></h2><button class="primary" onclick="openJob()">＋ Job</button></div>
+<div id="selectedJobs"></div>
 </section>
-<section id="clients" class="page"><div class="row"><h1>My clients ♡</h1><button class="primary" onclick="openClient()">＋ Add</button></div><input class="search" id="clientSearch" placeholder="Search clients..." oninput="renderClients()"><div id="clientList"></div></section>
-<section id="earnings" class="page"><h1>Earnings & Job History</h1><div class="stats"><div class="stat"><small>Total earned</small><strong id="earnedTotal">£0.00</strong></div><div class="stat"><small>Paid</small><strong id="paidTotal">£0.00</strong></div><div class="stat"><small>Pending</small><strong id="pendingTotal">£0.00</strong></div><div class="stat"><small>Owed</small><strong id="owedTotal">£0.00</strong></div></div><div class="tabs"><button class="secondary" onclick="setFilter('all')">All</button><button class="secondary" onclick="setFilter('paid')">Paid</button><button class="secondary" onclick="setFilter('pending')">Pending</button><button class="secondary" onclick="setFilter('debt')">Debt</button></div><div id="history"></div></section>
-<section id="settings" class="page"><h1>Settings ⚙️</h1>
- <div class="card"><h2>Business details & invoice</h2><div class="field"><label>Business name</label><input id="businessName"></div><div class="field"><label>Owner name</label><input id="ownerName"></div><div class="field"><label>Phone</label><input id="businessPhone"></div><div class="field"><label>Email</label><input id="businessEmail"></div><div class="field"><label>Business address</label><textarea id="businessAddress"></textarea></div><div class="field"><label>Invoice payment details</label><textarea id="paymentDetails"></textarea></div><div class="field"><label>Invoice footer</label><textarea id="invoiceFooter"></textarea></div><div class="field"><label>Invoice prefix</label><input id="invoicePrefix"></div><div class="field"><label>Next invoice number</label><input id="invoiceNext" type="number"></div><div class="field"><label>Logo for invoices</label><input type="file" accept="image/*" onchange="uploadLogo(this)"><div id="logoPreview" class="sub"></div></div><button class="primary" onclick="saveSettings()">Save settings</button></div>
- <div class="card"><h2>Appearance</h2><div class="field"><label>Pastel colour theme</label><select id="theme" onchange="applyTheme()"><option value="pink">Blush pink</option><option value="sage">Sage green</option><option value="lavender">Lavender</option><option value="blue">Powder blue</option><option value="peach">Soft peach</option><option value="mixed">Pastel mix</option></select></div><div class="field"><label>App zoom</label><select id="zoom"><option value="1">100%</option><option value="1.1">110%</option><option value="1.2">120%</option><option value="1.3">130%</option><option value="1.5">150%</option><option value="1.75">175%</option><option value="2">200%</option></select></div><button class="primary" onclick="saveSettings()">Save appearance</button></div>
- <div class="card"><h2>Messages & reminders</h2><div class="field"><label>Appointment reminder template</label><textarea id="reminderTemplate"></textarea></div><div class="field"><label>Thank-you template</label><textarea id="thanksTemplate"></textarea></div><div class="field"><label>On-my-way template</label><textarea id="wayTemplate"></textarea></div><div class="sub">Available placeholders: {Client}, {Date}, {Time}, {Business}. Templates are saved and can be edited.</div><button class="primary" onclick="saveSettings()">Save message templates</button></div>
- <div class="card"><h2>Backup & restore</h2><div class="actions"><button class="secondary" onclick="backup()">Export backup</button><label class="secondary" style="display:inline-flex;align-items:center">Restore backup<input type="file" accept="application/json" style="display:none" onchange="restore(this)"></label></div><button class="danger" style="margin-top:10px" onclick="resetApp()">Reset app data</button></div>
+
+<section id="clients" class="page">
+<div class="row"><h1>Clienții mei ♡</h1><button class="primary" onclick="openClient()">＋ Client</button></div>
+<input class="search" id="clientSearch" placeholder="Caută client..." oninput="renderClients()">
+<div id="clientList"></div>
 </section>
-<nav class="nav"><button class="active" data-page="home" onclick="page('home')"><span>⌂</span>Home</button><button data-page="schedule" onclick="page('schedule')"><span>▦</span>Schedule</button><button data-page="clients" onclick="page('clients')"><span>♙</span>Clients</button><button data-page="earnings" onclick="page('earnings')"><span>£</span>Earnings</button><button data-page="settings" onclick="page('settings')"><span>⚙</span>Settings</button></nav>
+
+<section id="earnings" class="page">
+<h1>Câștiguri & Istoric</h1>
+<div class="stats">
+<div class="stat"><small>Total câștigat</small><strong id="earnedTotal">£0.00</strong></div>
+<div class="stat"><small>Achitat</small><strong id="paidTotal">£0.00</strong></div>
+<div class="stat"><small>În așteptare</small><strong id="pendingTotal">£0.00</strong></div>
+<div class="stat"><small>Datorat</small><strong id="owedTotal">£0.00</strong></div>
 </div>
-<div class="timer-dock"><div class="timerinfo"><div class="timername" id="dockName">◷ No active timer</div><div class="clock" id="dockClock">00:00:00</div></div><button class="secondary" id="dockControl" onclick="toggleTimer()">Start</button><button class="soft" onclick="page('timer')">Open</button></div>
-<section id="timer" class="page"><div class="row"><button class="secondary" onclick="page('home')">‹ Back</button><h1>Cleaning timer</h1></div><div class="card"><div class="bigclock" id="timerClock">00:00:00</div><div class="field"><label>Client</label><select id="timerClient"></select></div><div class="field"><label>Timer label</label><input id="timerLabel" placeholder="Cleaning job"></div><div class="timerinputs"><div class="field"><label>Hours</label><input type="number" min="0" max="999" id="timerHours" value="2"></div><div class="field"><label>Minutes</label><input type="number" min="0" max="59" id="timerMinutes" value="0"></div></div><div class="field"><label>Alarm</label><select id="timerAlarm"><option value="on">Sound on</option><option value="off">Silent</option></select></div><div class="actions"><button class="secondary" onclick="resetTimer()">Reset</button><button class="primary" id="timerMain" onclick="toggleTimer()">Start timer</button></div><div class="sub">The timer uses an end timestamp, so it keeps accurate time when you change pages, switch apps or lock your phone. Browser background alarms are not guaranteed while the app is fully closed.</div></div></section>
-<dialog id="jobDialog"><form id="jobForm" onsubmit="saveJob(event)"><div class="row"><h2 id="jobDialogTitle">Add job</h2><button type="button" class="secondary" onclick="jobDialog.close()">✕</button></div><input type="hidden" id="jobId"><div class="field"><label>Client</label><select id="jobClient" required></select></div><div class="field"><label>Date</label><input type="date" id="jobDate" required></div><div class="grid2"><div class="field"><label>Start</label><input type="time" id="jobStart" required oninput="updateJobCalc()"></div><div class="field"><label>Finish</label><input type="time" id="jobEnd" required oninput="updateJobCalc()"></div></div><div class="grid2"><div class="field"><label>Hourly rate (£)</label><input type="number" id="jobRate" min="0" step=".01" required oninput="updateJobCalc()"></div><div class="field"><label>Duration</label><input id="jobDuration" readonly></div></div><div class="card" style="background:linear-gradient(110deg,#f9edf2,#edf4ed,#f7f1e5)"><div class="row"><b>Calculated total</b><strong id="jobTotal" style="color:var(--pink);font-size:1.3rem">£0.00</strong></div><div class="sub">Calculated precisely by each minute.</div></div><div class="grid2"><div class="field"><label>Type</label><select id="jobType"><option>Private</option><option>Agency</option><option>Occasional</option></select></div><div class="field"><label>Status</label><select id="jobStatus"><option value="planned">Scheduled</option><option value="done">Completed</option><option value="cancelled">Cancelled</option></select></div></div><div class="field"><label>Payment</label><select id="jobPayment"><option value="pending">Pending</option><option value="paid">Paid</option><option value="debt">Debt / Owed</option></select></div><div class="field"><label>Repeat</label><select id="jobRepeat"><option value="none">No repeat</option><option value="weekly">Weekly</option><option value="fortnightly">Every 2 weeks</option><option value="3weekly">Every 3 weeks</option><option value="monthly">Monthly</option></select></div><div class="field"><label>Notes</label><textarea id="jobNotes"></textarea></div><div class="actions"><button class="primary" type="submit">Save job</button><button class="secondary" type="button" onclick="jobDialog.close()">Close</button><button class="danger" type="button" onclick="deleteJobFromEditor()">Delete</button></div></form></dialog>
-<dialog id="clientDialog"><form onsubmit="saveClient(event)"><div class="row"><h2>Client details</h2><button type="button" class="secondary" onclick="clientDialog.close()">✕</button></div><input type="hidden" id="clientId"><div class="field"><label>Name</label><input id="clientName" required></div><div class="field"><label>Phone (with country code for WhatsApp)</label><input id="clientPhone"></div><div class="grid2"><div class="field"><label>Type</label><select id="clientType"><option>Private</option><option>Agency</option><option>Occasional</option></select></div><div class="field"><label>Hourly rate (£)</label><input type="number" id="clientRate" step=".01" value="18"></div></div><div class="field"><label>Usual day</label><select id="clientDay"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option><option>Flexible</option></select></div><div class="field"><label>Frequency</label><select id="clientRepeat"><option value="weekly">Weekly</option><option value="fortnightly">Every 2 weeks</option><option value="3weekly">Every 3 weeks</option><option value="monthly">Monthly</option><option value="occasional">Occasional</option><option value="oneoff">One-off</option></select></div><div class="grid2"><div class="field"><label>Usual start</label><input type="time" id="clientStart"></div><div class="field"><label>Usual finish</label><input type="time" id="clientEnd"></div></div><div class="field"><label>Notes</label><textarea id="clientNotes"></textarea></div><div class="actions"><button class="primary" type="submit">Save client</button><button class="danger" type="button" onclick="deleteClient()">Delete client</button></div></form></dialog>
-<dialog id="messageDialog"><div class="row"><h2 id="messageTitle">Client message</h2><button class="secondary" onclick="messageDialog.close()">✕</button></div><div class="field"><label>Message (you can edit before sending)</label><textarea id="messageText" rows="7"></textarea></div><div class="actions"><button class="primary" onclick="sendWhatsApp()">WhatsApp</button><button class="secondary" onclick="sendSMS()">SMS</button><button class="soft" onclick="copyMessage()">Copy</button></div><div class="sub">Your phone opens the selected app with the message ready. You confirm sending there.</div></dialog>
-<div class="toast" id="toast"></div>
+<div id="history"></div>
+</section>
+
+<section id="settings" class="page">
+<h1>Setări ⚙️</h1>
+<div class="card">
+<div class="field"><label>Numele afacerii</label><input id="businessName" value="Pure Shine Cleaning"></div>
+<div class="field"><label>Numele proprietarului</label><input id="ownerName"></div>
+<div class="field"><label>Telefon</label><input id="businessPhone"></div>
+<div class="field"><label>Adresă</label><textarea id="businessAddress"></textarea></div>
+<div class="field"><label>Zoom aplicație</label><select id="zoom"><option value="1">100%</option><option value="1.2">120%</option><option value="1.3">130%</option><option value="1.5">150%</option><option value="2">200%</option></select></div>
+<button class="primary" onclick="saveSettings()">Salvează setările</button>
+</div>
+<div class="card"><h2>Backup & Restaurare</h2><button class="secondary" onclick="backup()">Exportă backup</button><div class="field"><label>Restaurare backup</label><input type="file" accept="application/json" onchange="restore(this)"></div></div>
+</section>
+
+<nav class="nav">
+<button class="active" onclick="page('home',this)"><span>⌂</span>Acasă</button>
+<button onclick="page('schedule',this)"><span>▦</span>Program</button>
+<button onclick="page('clients',this)"><span>♙</span>Clienți</button>
+<button onclick="page('earnings',this)"><span>£</span>Câștiguri</button>
+<button onclick="page('settings',this)"><span>⚙</span>Setări</button>
+</nav>
+</div>
+
+<div class="timer-dock">
+<div class="timerinfo"><div class="sub" id="timerName">◷ Niciun timer activ</div><div class="clock" id="timerClock">00:00:00</div></div>
+<button class="secondary" id="timerButton" onclick="toggleTimer()">Start</button>
+</div>
+
+<dialog id="jobDialog">
+<form onsubmit="saveJob(event)">
+<div class="row"><h2>Programare job</h2><button type="button" class="secondary" onclick="jobDialog.close()">✕</button></div>
+<input type="hidden" id="jobId">
+<div class="field"><label>Client</label><select id="jobClient" required></select></div>
+<div class="field"><label>Data</label><input type="date" id="jobDate" required></div>
+<div class="grid2"><div class="field"><label>Început</label><input type="time" id="jobStart" required></div><div class="field"><label>Sfârșit</label><input type="time" id="jobEnd" required></div></div>
+<div class="field"><label>Tarif pe oră (£)</label><input type="number" id="jobRate" step=".01" value="18" required></div>
+<div class="grid2"><div class="field"><label>Tip</label><select id="jobType"><option>Private</option><option>Agency</option><option>Occasional</option></select></div><div class="field"><label>Stare</label><select id="jobStatus"><option value="planned">Programat</option><option value="done">Finalizat</option></select></div></div>
+<div class="field"><label>Plată</label><select id="jobPayment"><option value="pending">În așteptare</option><option value="paid">Achitat</option><option value="debt">Datorat</option></select></div>
+<div class="field"><label>Note</label><textarea id="jobNotes"></textarea></div>
+<button class="primary" type="submit">Salvează jobul</button>
+</form>
+</dialog>
+
+<dialog id="clientDialog">
+<form onsubmit="saveClient(event)">
+<div class="row"><h2>Detalii client</h2><button type="button" class="secondary" onclick="clientDialog.close()">✕</button></div>
+<input type="hidden" id="clientId">
+<div class="field"><label>Nume</label><input id="clientName" required></div>
+<div class="field"><label>Telefon</label><input id="clientPhone"></div>
+<div class="grid2"><div class="field"><label>Tip client</label><select id="clientType"><option>Private</option><option>Agency</option><option>Occasional</option></select></div><div class="field"><label>Tarif £/oră</label><input id="clientRate" type="number" value="18" step=".01"></div></div>
+<div class="field"><label>Frecvență</label><select id="clientRepeat"><option>Săptămânal</option><option>La două săptămâni</option><option>La trei săptămâni</option><option>Ocazional</option></select></div>
+<div class="field"><label>Note</label><textarea id="clientNotes"></textarea></div>
+<button class="primary" type="submit">Salvează clientul</button>
+</form>
+</dialog>
+
+<script>
+const KEY="pureShineManager_v5";
+let data={clients:[],jobs:[],settings:{}};
+let activeTimer=null,timerInterval=null,selectedDate=new Date().toISOString().slice(0,10);
+
+function load(){try{let x=JSON.parse(localStorage.getItem(KEY));if(x)data={...data,...x}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){alert("Spațiul de stocare este plin. Exportă un backup și elimină fotografiile mari.")}}
+function money(n){return "£"+Number(n||0).toFixed(2)}
+function duration(a,b){if(!a||!b)return 0;let [h,m]=a.split(":").map(Number),[h2,m2]=b.split(":").map(Number);let n=h2*60+m2-h*60-m;return n<0?n+1440:n}
+function fmt(n){return Math.floor(n/60)+"h "+n%60+"m"}
+function page(id,btn){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");render()}
+function render(){renderHome();renderSchedule();renderClients();renderEarnings();updateTimer()}
+function renderHome(){let d=new Date().toISOString().slice(0,10),jobs=data.jobs.filter(x=>x.date===d&&x.status!=="cancelled");todayDate.textContent=new Date().toLocaleDateString("ro-RO",{weekday:"long",day:"numeric",month:"long",year:"numeric"});statJobs.textContent=jobs.length;statHours.textContent=fmt(jobs.reduce((s,j)=>s+duration(j.start,j.end),0));todayJobs.innerHTML=jobs.map(jobHTML).join("")||'<div class="empty">Nu ai joburi programate astăzi ♡</div>';todayEarn.textContent=money(jobs.filter(j=>j.status==="done").reduce((s,j)=>s+duration(j.start,j.end)*j.rate/60,0))}
+function jobHTML(j){let c=data.clients.find(x=>x.id===j.clientId);return `<div class="job ${j.status==="done"?"done":""}"><div class="jobname">${esc(c?.name||"Client șters")}</div><div class="jobtime">${j.start} – ${j.end} · ${fmt(duration(j.start,j.end))}</div><div class="sub">${money(duration(j.start,j.end)*j.rate/60)} · ${j.status==="done"?"Finalizat":"Programat"} · ${j.payment}</div><div class="actions"><button class="secondary" onclick="editJob('${j.id}')">Editează</button><button class="green" onclick="completeJob('${j.id}')">Finalizat</button><button class="danger" onclick="deleteJob('${j.id}')">Șterge</button></div></div>`}
+function renderSchedule(){dateLabel.textContent=new Date(selectedDate+"T12:00:00").toLocaleDateString("ro-RO");selectedLabel.textContent=selectedDate;selectedJobs.innerHTML=data.jobs.filter(j=>j.date===selectedDate).map(jobHTML).join("")||'<div class="empty">Nicio programare în această zi.</div>'}
+function changeDate(n){let d=new Date(selectedDate+"T12:00:00");d.setDate(d.getDate()+n);selectedDate=d.toISOString().slice(0,10);renderSchedule()}
+function openJob(){jobFormReset();jobDate.value=selectedDate;jobClient.innerHTML=data.clients.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");if(!data.clients.length){alert("Adaugă mai întâi un client.");return}jobRate.value=data.clients[0].rate;jobDialog.showModal()}
+function jobFormReset(){document.querySelector("#jobDialog form").reset();jobId.value=""}
+function saveJob(e){e.preventDefault();let j={id:jobId.value||crypto.randomUUID(),clientId:jobClient.value,date:jobDate.value,start:jobStart.value,end:jobEnd.value,rate:+jobRate.value,type:jobType.value,status:jobStatus.value,payment:jobPayment.value,notes:jobNotes.value};let i=data.jobs.findIndex(x=>x.id===j.id);if(i<0)data.jobs.push(j);else data.jobs[i]=j;save();jobDialog.close();render()}
+function editJob(id){let j=data.jobs.find(x=>x.id===id);if(!j)return;openJob();jobId.value=j.id;jobClient.value=j.clientId;jobDate.value=j.date;jobStart.value=j.start;jobEnd.value=j.end;jobRate.value=j.rate;jobType.value=j.type;jobStatus.value=j.status;jobPayment.value=j.payment;jobNotes.value=j.notes||""}
+function deleteJob(id){if(confirm("Ștergi acest job?")){data.jobs=data.jobs.filter(x=>x.id!==id);save();render()}}
+function completeJob(id){let j=data.jobs.find(x=>x.id===id);if(j){j.status="done";save();render()}}
+function openClient(){clientDialog.querySelector("form").reset();clientId.value="";clientDialog.showModal()}
+function saveClient(e){e.preventDefault();let c={id:clientId.value||crypto.randomUUID(),name:clientName.value,phone:clientPhone.value,type:clientType.value,rate:+clientRate.value,repeat:clientRepeat.value,notes:clientNotes.value};let i=data.clients.findIndex(x=>x.id===c.id);if(i<0)data.clients.push(c);else data.clients[i]=c;save();clientDialog.close();render()}
+function renderClients(){let q=(clientSearch.value||"").toLowerCase();clientList.innerHTML=data.clients.filter(c=>c.name.toLowerCase().includes(q)).map(c=>`<div class="card"><div class="row"><b>${esc(c.name)}</b><span class="sub">${c.type} · ${money(c.rate)}/oră</span></div><div class="sub">${esc(c.phone||"")} · ${esc(c.repeat||"")}</div><div class="actions"><button class="secondary" onclick="editClient('${c.id}')">Editează</button><button class="danger" onclick="removeClient('${c.id}')">Șterge</button></div></div>`).join("")||'<div class="empty">Nu există clienți.</div>'}
+function editClient(id){let c=data.clients.find(x=>x.id===id);if(!c)return;openClient();clientId.value=c.id;clientName.value=c.name;clientPhone.value=c.phone||"";clientType.value=c.type;clientRate.value=c.rate;clientRepeat.value=c.repeat;clientNotes.value=c.notes||""}
+function removeClient(id){if(confirm("Ștergi clientul? Joburile istorice vor rămâne salvate.")){data.clients=data.clients.filter(c=>c.id!==id);save();render()}}
+function renderEarnings(){let jobs=data.jobs.filter(j=>j.status==="done"),total=jobs.reduce((s,j)=>s+duration(j.start,j.end)*j.rate/60,0),paid=jobs.filter(j=>j.payment==="paid").reduce((s,j)=>s+duration(j.start,j.end)*j.rate/60,0),debt=jobs.filter(j=>j.payment==="debt").reduce((s,j)=>s+duration(j.start,j.end)*j.rate/60,0);earnedTotal.textContent=money(total);paidTotal.textContent=money(paid);pendingTotal.textContent=money(total-paid-debt);owedTotal.textContent=money(debt);history.innerHTML=jobs.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(j=>`<div class="card">${jobHTML(j)}<div class="actions"><button class="secondary" onclick="markPaid('${j.id}')">Marchează achitat</button></div></div>`).join("")||'<div class="empty">Nu există joburi finalizate.</div>'}
+function markPaid(id){let j=data.jobs.find(x=>x.id===id);if(j){j.payment="paid";save();render()}}
+function saveSettings(){data.settings.businessName=businessName.value;data.settings.ownerName=ownerName.value;data.settings.phone=businessPhone.value;data.settings.address=businessAddress.value;document.documentElement.style.fontSize=(14*zoom.value)+"px";save();alert("Setările au fost salvate.")}
+function backup(){let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="Pure-Shine-Backup.json";a.click();URL.revokeObjectURL(a.href)}
+function restore(input){let f=input.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{data=JSON.parse(r.result);save();render();alert("Backup restaurat.")}catch(e){alert("Fișier invalid.")}};r.readAsText(f)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function toggleTimer(){if(activeTimer){activeTimer=null;clearInterval(timerInterval);timerInterval=null;timerButton.textContent="Start"}else{activeTimer=Date.now();timerButton.textContent="Stop";timerInterval=setInterval(updateTimer,1000)}updateTimer()}
+function updateTimer(){if(!activeTimer)return;let s=Math.floor((Date.now()-activeTimer)/1000),h=String(Math.floor(s/3600)).padStart(2,"0"),m=String(Math.floor(s%3600/60)).padStart(2,"0"),sec=String(s%60).padStart(2,"0");timerClock.textContent=`${h}:${m}:${sec}`}
+function init(){load();todayDate.textContent=new Date().toLocaleDateString("ro-RO");if(data.settings){businessName.value=data.settings.businessName||"Pure Shine Cleaning";ownerName.value=data.settings.ownerName||"";businessPhone.value=data.settings.phone||"";businessAddress.value=data.settings.address||""}render();setInterval(()=>{if(activeTimer)updateTimer()},1000)}
+init();
+</script>
+</body>
+</html>
