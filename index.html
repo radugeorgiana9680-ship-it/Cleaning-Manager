@@ -8,12 +8,22 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Pure Shine">
 <title>Pure Shine Cleaning Manager</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Parisienne&display=swap" rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Parisienne&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+
 <style>
 :root{
---pink:#d58eaa;--gold:#b99a62;--sage:#a8bda9;--lav:#b9acd0;
---blue:#a9c5d8;--peach:#e8bda9;--ink:#443b45;--muted:#8d828d;
---line:#eee3e9;--paper:#fffdfd;--bg:#faf6f8;
+--pink:#d58eaa;
+--pink-dark:#bd7896;
+--gold:#b99a62;
+--sage:#a8bda9;
+--lav:#b9acd0;
+--ink:#443b45;
+--muted:#8d828d;
+--line:#eee3e9;
+--paper:#fffdfd;
+--bg:#faf6f8;
 --app-scale:1;
 --nav-height:64px;
 --timer-height:64px;
@@ -26,145 +36,363 @@ scroll-behavior:auto;
 -webkit-text-size-adjust:100%;
 }
 body{
-margin:0;width:100%;height:100vh;height:100dvh;
-min-height:0;overflow:hidden;
-font-family:"DM Sans",sans-serif;color:var(--ink);
+margin:0;
+width:100%;
+height:100vh;
+height:100dvh;
+min-height:0;
+overflow:hidden;
+font-family:"DM Sans",sans-serif;
+color:var(--ink);
 background:linear-gradient(145deg,#fbf5f8 0%,#f4f5f1 48%,#f7f2ea 100%);
 }
 button,input,select,textarea{font:inherit;max-width:100%}
 button{cursor:pointer;border:0;touch-action:manipulation}
 .app{
-height:100vh;height:100dvh;min-height:0;
-display:flex;flex-direction:column;
-max-width:760px;margin:auto;
+height:100vh;
+height:100dvh;
+min-height:0;
+display:flex;
+flex-direction:column;
+max-width:760px;
+margin:auto;
 padding:max(env(safe-area-inset-top),5px) 9px 0;
-overflow:hidden;width:100%;
+overflow:hidden;
+width:100%;
 }
 header{
-padding:9px 5px;display:flex;align-items:center;
-gap:7px;flex-shrink:0;min-height:48px;
+padding:9px 5px;
+display:flex;
+align-items:center;
+gap:10px;
+flex-shrink:0;
+min-height:66px;
 }
-.brand{font:700 1.5rem Georgia;color:#a98b70}
-.brand-sub{font:1.3rem Georgia;color:var(--pink)}
-h1,h2,h3{font-family:Georgia,serif;overflow-wrap:anywhere}
-h1{font-size:1.5rem}
-h2{font-size:1.2rem}
-.row{display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap}
+.profile-picture{
+width:48px;
+height:48px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid #d7bd8e;
+background:linear-gradient(135deg,#f7e5ed,#f5eddf);
+flex-shrink:0;
+display:none;
+box-shadow:0 2px 9px #92798a20;
+}
+.brand-wrap{min-width:0}
+.brand{
+font-family:"Cormorant Garamond",serif;
+font-weight:700;
+font-size:1.85rem;
+line-height:1;
+color:#a98b70;
+letter-spacing:.3px;
+}
+.brand-sub{
+font-family:"Parisienne",cursive;
+font-size:1.65rem;
+color:var(--pink);
+line-height:1.1;
+}
+h1,h2,h3{
+font-family:"Cormorant Garamond",serif;
+font-weight:700;
+overflow-wrap:anywhere;
+}
+h1{font-size:1.85rem;margin:10px 0}
+h2{font-size:1.5rem;margin:10px 0}
+h3{font-size:1.25rem}
+.row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:7px;
+flex-wrap:wrap;
+}
 .card{
-background:var(--paper);border:1px solid var(--line);
-border-radius:13px;padding:12px;margin:8px 0;
-box-shadow:0 2px 9px #92798a0a;min-width:0;
+background:var(--paper);
+border:1px solid var(--line);
+border-radius:13px;
+padding:12px;
+margin:8px 0;
+box-shadow:0 2px 9px #92798a0a;
+min-width:0;
 }
-.welcome{background:linear-gradient(115deg,#f8e7ef,#f3edf7,#edf3ed,#f8f0df)}
-.welcome h1{color:#c47f9d}
-.sub{font-size:.75rem;color:var(--muted);line-height:1.5}
+.welcome{
+position:relative;
+overflow:hidden;
+min-height:170px;
+padding:0;
+background:linear-gradient(115deg,#f8e7ef,#f3edf7,#edf3ed,#f8f0df);
+}
+.welcome-image{
+width:100%;
+height:180px;
+object-fit:cover;
+display:none;
+}
+.welcome-content{
+padding:15px;
+position:relative;
+z-index:1;
+}
+.welcome h1{
+font-family:"Parisienne",cursive;
+font-weight:400;
+font-size:2.6rem;
+color:#c47f9d;
+margin:3px 0 12px;
+}
+.welcome .sub{
+font-size:.85rem;
+}
+.welcome.has-image{
+background:#eee5e9;
+}
+.welcome.has-image .welcome-image{
+display:block;
+}
+.welcome.has-image .welcome-content{
+position:absolute;
+inset:auto 0 0;
+background:linear-gradient(transparent,#ffffffed);
+padding:35px 14px 13px;
+}
+.welcome.has-image .welcome h1{
+font-size:2rem;
+margin-bottom:5px;
+}
+.welcome.has-image .sub{
+color:#574b55;
+}
+.sub{
+font-size:.75rem;
+color:var(--muted);
+line-height:1.5;
+}
 .primary,.secondary,.danger,.soft,.green{
-padding:9px 11px;border-radius:9px;font-size:.78rem;
-min-height:36px;white-space:normal;
+padding:9px 11px;
+border-radius:9px;
+font-size:.78rem;
+min-height:36px;
+white-space:normal;
 }
-.primary{background:linear-gradient(135deg,#d58eaa,#c77f9e);color:white}
-.secondary{background:white;border:1px solid var(--line);color:#a97891}
+.primary{
+background:linear-gradient(135deg,#d58eaa,#c77f9e);
+color:white;
+}
+.secondary{
+background:white;
+border:1px solid var(--line);
+color:#a97891;
+}
 .danger{background:#fff0f0;color:#b24e58}
 .soft{background:#f3edf8;color:#8875a5}
 .green{background:#edf5ed;color:#648b6b}
 .page{display:none;min-height:0;min-width:0}
 .page.active{
-display:block;flex:1 1 auto;min-height:0;
-overflow-y:auto;overflow-x:hidden;
+display:block;
+flex:1 1 auto;
+min-height:0;
+overflow-y:auto;
+overflow-x:hidden;
 overscroll-behavior:contain;
 -webkit-overflow-scrolling:touch;
 padding:0 2px calc(var(--nav-height) + var(--timer-height) + 28px);
 scrollbar-width:thin;
 }
-.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
-.stat{
-background:#fff;border:1px solid var(--line);
-border-radius:11px;padding:10px;min-width:0;
+.stats{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:7px;
 }
-.stat small{display:block;color:var(--muted);overflow-wrap:anywhere}
-.stat strong{font-size:1.15rem;color:var(--pink);overflow-wrap:anywhere}
+.stat{
+background:#fff;
+border:1px solid var(--line);
+border-radius:11px;
+padding:10px;
+min-width:0;
+}
+.stat small{
+display:block;
+color:var(--muted);
+overflow-wrap:anywhere;
+}
+.stat strong{
+font-size:1.15rem;
+color:var(--pink);
+overflow-wrap:anywhere;
+}
 .field{margin:9px 0;min-width:0}
 .field label{
-display:block;color:#a97891;font-weight:700;
-font-size:.75rem;margin-bottom:4px;
+display:block;
+color:#a97891;
+font-weight:700;
+font-size:.75rem;
+margin-bottom:4px;
 }
 .field input,.field select,.field textarea,.search{
-width:100%;min-width:0;padding:9px;
-border:1px solid var(--line);border-radius:9px;
-background:white;color:var(--ink);
+width:100%;
+min-width:0;
+padding:9px;
+border:1px solid var(--line);
+border-radius:9px;
+background:white;
+color:var(--ink);
 font-size:1rem;
 }
 .field textarea{min-height:60px;resize:vertical}
-.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.grid2{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:8px;
+}
+.actions{
+display:flex;
+gap:6px;
+flex-wrap:wrap;
+margin-top:9px;
+}
 .actions button{flex:1 1 90px;min-width:0}
 .job{
-background:white;border:1px solid var(--line);
+background:white;
+border:1px solid var(--line);
 border-left:4px solid var(--pink);
-border-radius:11px;padding:11px;margin:8px 0;
-min-width:0;overflow-wrap:anywhere;
+border-radius:11px;
+padding:11px;
+margin:8px 0;
+min-width:0;
+overflow-wrap:anywhere;
 }
 .job.done{border-left-color:var(--sage)}
 .jobname{font-weight:800}
 .jobtime{color:var(--pink);font-weight:700;margin:5px 0}
+.image-preview{
+width:100%;
+max-height:170px;
+object-fit:cover;
+border-radius:11px;
+border:1px solid var(--line);
+display:none;
+margin-top:8px;
+}
+.profile-preview{
+width:90px;
+height:90px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid #d7bd8e;
+display:none;
+margin-top:8px;
+}
+.image-tools{
+display:flex;
+align-items:center;
+gap:8px;
+flex-wrap:wrap;
+}
+.image-note{
+font-size:.7rem;
+color:var(--muted);
+line-height:1.5;
+}
 .nav{
-position:fixed;z-index:30;
-bottom:0;left:50%;transform:translateX(-50%);
+position:fixed;
+z-index:30;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
 width:min(760px,100%);
 padding:6px 4px calc(6px + var(--safe-bottom));
-background:#fffdfdf5;border-top:1px solid var(--line);
-display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+background:#fffdfdf5;
+border-top:1px solid var(--line);
+display:grid;
+grid-template-columns:repeat(5,minmax(0,1fr));
 backdrop-filter:blur(12px);
 -webkit-backdrop-filter:blur(12px);
 }
 .nav button{
-background:none;color:#a99a83;
-font-size:.65rem;padding:4px 1px;
-min-width:0;min-height:45px;
-display:flex;flex-direction:column;
-align-items:center;justify-content:center;
-gap:2px;overflow-wrap:anywhere;
+background:none;
+color:#a99a83;
+font-size:.65rem;
+padding:4px 1px;
+min-width:0;
+min-height:45px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:2px;
+overflow-wrap:anywhere;
 }
-.nav button span{display:block;font-size:1.2rem}
-.nav button.active{color:var(--pink);font-weight:800}
+.nav button span{
+display:block;
+font-size:1.2rem;
+}
+.nav button.active{
+color:var(--pink);
+font-weight:800;
+}
 .timer-dock{
-position:fixed;z-index:25;
+position:fixed;
+z-index:25;
 bottom:calc(var(--nav-height) + var(--safe-bottom) + 7px);
-left:50%;transform:translateX(-50%);
+left:50%;
+transform:translateX(-50%);
 width:min(740px,calc(100% - 14px));
-background:#fffafc;border:1px solid var(--line);
-border-radius:11px;padding:7px;
-display:flex;align-items:center;gap:8px;
+background:#fffafc;
+border:1px solid var(--line);
+border-radius:11px;
+padding:7px;
+display:flex;
+align-items:center;
+gap:8px;
 box-shadow:0 5px 20px #58425320;
 }
 .timerinfo{flex:1;min-width:0;overflow:hidden}
-.timerinfo .sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.timerinfo .sub{
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
 .clock{
-font:700 1.5rem Georgia;color:var(--gold);
+font-family:"Cormorant Garamond",serif;
+font-weight:700;
+font-size:2rem;
+color:var(--gold);
 font-variant-numeric:tabular-nums;
 white-space:nowrap;
+line-height:1;
 }
 .timer-dock button{flex-shrink:0}
 dialog{
-width:min(94%,520px);max-height:86dvh;
-overflow:auto;border:1px solid var(--line);
-border-radius:14px;background:#fffafc;
-color:var(--ink);padding:14px;
+width:min(94%,520px);
+max-height:86dvh;
+overflow:auto;
+border:1px solid var(--line);
+border-radius:14px;
+background:#fffafc;
+color:var(--ink);
+padding:14px;
 }
 dialog::backdrop{background:#30263088}
-.empty{text-align:center;padding:18px;color:var(--muted)}
+.empty{
+text-align:center;
+padding:18px;
+color:var(--muted);
+}
 @media(max-width:440px){
 .app{padding-left:7px;padding-right:7px}
-.brand{font-size:1.2rem}
-.brand-sub{font-size:1.05rem}
+.brand{font-size:1.55rem}
+.brand-sub{font-size:1.4rem}
 .page.active{padding-left:1px;padding-right:1px}
 .nav button{font-size:.62rem}
 .timer-dock{gap:5px;padding:6px}
 .timer-dock button{padding:7px 8px}
 }
 @media(max-width:350px){
-.brand{font-size:1.05rem}
-.brand-sub{font-size:.95rem}
+.brand{font-size:1.3rem}
+.brand-sub{font-size:1.2rem}
 .grid2{grid-template-columns:minmax(0,1fr)}
 .nav button{font-size:.56rem}
 .nav button span{font-size:1rem}
@@ -172,32 +400,45 @@ dialog::backdrop{background:#30263088}
 @media(max-height:570px){
 .nav button{min-height:38px;padding:2px}
 .timer-dock{padding:4px}
-.clock{font-size:1.2rem}
+.clock{font-size:1.5rem}
 }
 </style>
 </head>
+
 <body>
 <div class="app">
+
 <header>
+<img id="headerProfile" class="profile-picture" alt="Fotografie de profil">
+<div class="brand-wrap">
 <div class="brand">✧ Pure Shine ✧</div>
 <div class="brand-sub">Cleaning</div>
+</div>
 </header>
 
 <section id="home" class="page active">
-<div class="card welcome">
+
+<div class="card welcome" id="welcomeCard">
+<img id="bannerImage" class="welcome-image" alt="Banner Pure Shine Cleaning">
+<div class="welcome-content">
 <h1>Bine ai venit ♡</h1>
 <div class="sub">Afacererea ta de curățenie, organizată frumos.</div>
 <div class="sub" id="todayDate"></div>
 </div>
+</div>
+
 <div class="row">
 <h2>Programul de astăzi</h2>
 <button class="primary" onclick="openJob()">＋ Adaugă</button>
 </div>
+
 <div class="stats">
 <div class="stat"><small>Joburi astăzi</small><strong id="statJobs">0</strong></div>
 <div class="stat"><small>Ore programate</small><strong id="statHours">0h 0m</strong></div>
 </div>
+
 <div id="todayJobs"></div>
+
 <div class="card row">
 <b>Câștiguri astăzi</b>
 <strong id="todayEarn">£0.00</strong>
@@ -240,11 +481,58 @@ dialog::backdrop{background:#30263088}
 
 <section id="settings" class="page">
 <h1>Setări ⚙️</h1>
+
 <div class="card">
-<div class="field"><label>Numele afacerii</label><input id="businessName" value="Pure Shine Cleaning"></div>
-<div class="field"><label>Numele proprietarului</label><input id="ownerName"></div>
-<div class="field"><label>Telefon</label><input id="businessPhone"></div>
-<div class="field"><label>Adresă</label><textarea id="businessAddress"></textarea></div>
+<h2>Personalizare aplicație ♡</h2>
+
+<div class="field">
+<label>Numele afacerii</label>
+<input id="businessName" value="Pure Shine Cleaning">
+</div>
+
+<div class="field">
+<label>Numele proprietarului</label>
+<input id="ownerName">
+</div>
+
+<div class="field">
+<label>Telefon</label>
+<input id="businessPhone">
+</div>
+
+<div class="field">
+<label>Adresă</label>
+<textarea id="businessAddress"></textarea>
+</div>
+
+<div class="divider"></div>
+
+<h2>Fotografie de profil</h2>
+<div class="image-note">Alege fotografia care va apărea lângă logo-ul Pure Shine.</div>
+<img id="profilePreview" class="profile-preview" alt="Previzualizare profil">
+
+<div class="field">
+<label>Încarcă fotografia</label>
+<input type="file" id="profileUpload" accept="image/*" onchange="handleImageUpload(this,'profile')">
+</div>
+
+<button class="danger" onclick="removeImage('profile')">Șterge fotografia de profil</button>
+
+<div class="divider"></div>
+
+<h2>Banner principal</h2>
+<div class="image-note">Această imagine va apărea pe pagina principală, sub logo.</div>
+<img id="bannerPreview" class="image-preview" alt="Previzualizare banner">
+
+<div class="field">
+<label>Încarcă bannerul</label>
+<input type="file" id="bannerUpload" accept="image/*" onchange="handleImageUpload(this,'banner')">
+</div>
+
+<button class="danger" onclick="removeImage('banner')">Șterge bannerul</button>
+
+<div class="divider"></div>
+
 <div class="field">
 <label>Zoom aplicație</label>
 <select id="zoom" onchange="applyZoom()">
@@ -256,8 +544,10 @@ dialog::backdrop{background:#30263088}
 <option value="2">200%</option>
 </select>
 </div>
+
 <button class="primary" onclick="saveSettings()">Salvează setările</button>
 </div>
+
 <div class="card">
 <h2>Backup & Restaurare</h2>
 <button class="secondary" onclick="backup()">Exportă backup</button>
@@ -348,11 +638,179 @@ dialog::backdrop{background:#30263088}
 
 <script>
 const KEY="pureShineManager_v5";
+const DB_NAME="PureShineImages";
+const DB_VERSION=1;
+
 let data={clients:[],jobs:[],settings:{}};
 let activeTimer=null,timerInterval=null;
 let selectedDate=new Date().toISOString().slice(0,10);
+let imageDB=null;
+let imageURLs={profile:null,banner:null};
 
 const $=id=>document.getElementById(id);
+
+/* INDEXEDDB - STOCARE FOTOGRAFII */
+
+function openImageDB(){
+return new Promise((resolve,reject)=>{
+if(!("indexedDB" in window)){
+reject(new Error("IndexedDB nu este disponibil."));
+return;
+}
+const request=indexedDB.open(DB_NAME,DB_VERSION);
+
+request.onupgradeneeded=()=>{
+const db=request.result;
+if(!db.objectStoreNames.contains("images")){
+db.createObjectStore("images");
+}
+};
+
+request.onsuccess=()=>{
+imageDB=request.result;
+resolve(imageDB);
+};
+
+request.onerror=()=>reject(request.error);
+});
+}
+
+function imageTransaction(mode,action){
+return new Promise((resolve,reject)=>{
+if(!imageDB){
+reject(new Error("Baza de date nu este disponibilă."));
+return;
+}
+const tx=imageDB.transaction("images",mode);
+const store=tx.objectStore("images");
+let request=action(store);
+request.onsuccess=()=>resolve(request.result);
+request.onerror=()=>reject(request.error);
+});
+}
+
+async function saveImage(key,blob){
+await imageTransaction("readwrite",store=>store.put(blob,key));
+}
+
+async function getImage(key){
+return await imageTransaction("readonly",store=>store.get(key));
+}
+
+async function deleteImage(key){
+await imageTransaction("readwrite",store=>store.delete(key));
+}
+
+function showImage(key,blob){
+if(imageURLs[key]){
+URL.revokeObjectURL(imageURLs[key]);
+imageURLs[key]=null;
+}
+const header=$("headerProfile");
+const banner=$("bannerImage");
+const welcome=$("welcomeCard");
+const preview=key==="profile"?$("profilePreview"):$("bannerPreview");
+
+if(!blob){
+if(key==="profile"){
+header.style.display="none";
+preview.style.display="none";
+}else{
+banner.style.display="none";
+preview.style.display="none";
+welcome.classList.remove("has-image");
+}
+return;
+}
+
+const url=URL.createObjectURL(blob);
+imageURLs[key]=url;
+
+if(key==="profile"){
+header.src=url;
+header.style.display="block";
+preview.src=url;
+preview.style.display="block";
+}else{
+banner.src=url;
+banner.style.display="block";
+preview.src=url;
+preview.style.display="block";
+welcome.classList.add("has-image");
+}
+}
+
+async function loadImages(){
+try{
+const profile=await getImage("profile");
+const banner=await getImage("banner");
+showImage("profile",profile);
+showImage("banner",banner);
+}catch(e){
+console.error("Nu s-au putut încărca imaginile:",e);
+}
+}
+
+async function handleImageUpload(input,key){
+const file=input.files?.[0];
+if(!file)return;
+
+if(!file.type.startsWith("image/")){
+alert("Te rog selectează o fotografie.");
+input.value="";
+return;
+}
+
+try{
+const optimized=await optimizeImage(file,key);
+await saveImage(key,optimized);
+showImage(key,optimized);
+input.value="";
+alert(key==="profile"?"Fotografia de profil a fost salvată.":"Bannerul a fost salvat.");
+}catch(e){
+console.error(e);
+alert("Nu am putut salva fotografia. Verifică spațiul disponibil pe telefon.");
+}
+}
+
+function optimizeImage(file,key){
+return new Promise((resolve,reject)=>{
+const reader=new FileReader();
+
+reader.onload=()=>{
+const img=new Image();
+img.onload=()=>{
+const max=key==="banner"?1500:900;
+const ratio=Math.min(1,max/Math.max(img.width,img.height));
+const canvas=document.createElement("canvas");
+canvas.width=Math.round(img.width*ratio);
+canvas.height=Math.round(img.height*ratio);
+const ctx=canvas.getContext("2d");
+ctx.drawImage(img,0,0,canvas.width,canvas.height);
+canvas.toBlob(blob=>{
+if(blob)resolve(blob);
+else reject(new Error("Imaginea nu a putut fi procesată."));
+},"image/jpeg",0.84);
+};
+img.onerror=reject;
+img.src=reader.result;
+};
+reader.onerror=reject;
+reader.readAsDataURL(file);
+});
+}
+
+async function removeImage(key){
+if(!confirm(key==="profile"?"Ștergi fotografia de profil?":"Ștergi bannerul?"))return;
+try{
+await deleteImage(key);
+showImage(key,null);
+}catch(e){
+alert("Fotografia nu a putut fi ștearsă.");
+}
+}
+
+/* DATE APLICAȚIE */
 
 function load(){
 try{
@@ -365,7 +823,7 @@ function save(){
 try{
 localStorage.setItem(KEY,JSON.stringify(data));
 }catch(e){
-alert("Spațiul de stocare este plin. Exportă un backup și elimină fotografiile mari.");
+alert("Spațiul pentru date este plin. Exportă un backup.");
 }
 }
 
@@ -379,7 +837,9 @@ let n=h2*60+m2-h*60-m;
 return n<0?n+1440:n;
 }
 
-function fmt(n){return Math.floor(n/60)+"h "+n%60+"m"}
+function fmt(n){
+return Math.floor(n/60)+"h "+n%60+"m";
+}
 
 function page(id,btn){
 document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
@@ -400,7 +860,11 @@ updateTimer();
 function renderHome(){
 let d=new Date().toISOString().slice(0,10);
 let jobs=data.jobs.filter(x=>x.date===d&&x.status!=="cancelled");
-$("todayDate").textContent=new Date().toLocaleDateString("ro-RO",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+$("todayDate").textContent=new Date().toLocaleDateString("ro-RO",{
+weekday:"long",day:"numeric",month:"long",year:"numeric"
+});
+
 $("statJobs").textContent=jobs.length;
 $("statHours").textContent=fmt(jobs.reduce((s,j)=>s+duration(j.start,j.end),0));
 $("todayJobs").innerHTML=jobs.map(jobHTML).join("")||'<div class="empty">Nu ai joburi programate astăzi ♡</div>';
@@ -437,7 +901,12 @@ function openJob(){
 jobFormReset();
 $("jobDate").value=selectedDate;
 $("jobClient").innerHTML=data.clients.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
-if(!data.clients.length){alert("Adaugă mai întâi un client.");return}
+
+if(!data.clients.length){
+alert("Adaugă mai întâi un client.");
+return;
+}
+
 $("jobRate").value=data.clients[0].rate;
 $("jobDialog").showModal();
 }
@@ -449,6 +918,7 @@ $("jobId").value="";
 
 function saveJob(e){
 e.preventDefault();
+
 let j={
 id:$("jobId").value||crypto.randomUUID(),
 clientId:$("jobClient").value,
@@ -461,8 +931,11 @@ status:$("jobStatus").value,
 payment:$("jobPayment").value,
 notes:$("jobNotes").value
 };
+
 let i=data.jobs.findIndex(x=>x.id===j.id);
-if(i<0)data.jobs.push(j);else data.jobs[i]=j;
+if(i<0)data.jobs.push(j);
+else data.jobs[i]=j;
+
 save();
 $("jobDialog").close();
 render();
@@ -471,6 +944,7 @@ render();
 function editJob(id){
 let j=data.jobs.find(x=>x.id===id);
 if(!j)return;
+
 openJob();
 $("jobId").value=j.id;
 $("jobClient").value=j.clientId;
@@ -487,13 +961,18 @@ $("jobNotes").value=j.notes||"";
 function deleteJob(id){
 if(confirm("Ștergi acest job?")){
 data.jobs=data.jobs.filter(x=>x.id!==id);
-save();render();
+save();
+render();
 }
 }
 
 function completeJob(id){
 let j=data.jobs.find(x=>x.id===id);
-if(j){j.status="done";save();render()}
+if(j){
+j.status="done";
+save();
+render();
+}
 }
 
 function openClient(){
@@ -504,6 +983,7 @@ $("clientDialog").showModal();
 
 function saveClient(e){
 e.preventDefault();
+
 let c={
 id:$("clientId").value||crypto.randomUUID(),
 name:$("clientName").value,
@@ -513,8 +993,11 @@ rate:+$("clientRate").value,
 repeat:$("clientRepeat").value,
 notes:$("clientNotes").value
 };
+
 let i=data.clients.findIndex(x=>x.id===c.id);
-if(i<0)data.clients.push(c);else data.clients[i]=c;
+if(i<0)data.clients.push(c);
+else data.clients[i]=c;
+
 save();
 $("clientDialog").close();
 render();
@@ -522,6 +1005,7 @@ render();
 
 function renderClients(){
 let q=($("clientSearch").value||"").toLowerCase();
+
 $("clientList").innerHTML=data.clients
 .filter(c=>c.name.toLowerCase().includes(q))
 .map(c=>`<div class="card">
@@ -537,6 +1021,7 @@ $("clientList").innerHTML=data.clients
 function editClient(id){
 let c=data.clients.find(x=>x.id===id);
 if(!c)return;
+
 openClient();
 $("clientId").value=c.id;
 $("clientName").value=c.name;
@@ -550,7 +1035,8 @@ $("clientNotes").value=c.notes||"";
 function removeClient(id){
 if(confirm("Ștergi clientul? Joburile istorice vor rămâne salvate.")){
 data.clients=data.clients.filter(c=>c.id!==id);
-save();render();
+save();
+render();
 }
 }
 
@@ -559,10 +1045,12 @@ let jobs=data.jobs.filter(j=>j.status==="done");
 let total=jobs.reduce((s,j)=>s+duration(j.start,j.end)*j.rate/60,0);
 let paid=jobs.filter(j=>j.payment==="paid").reduce((s,j)=>s+duration(j.start,j.end)*j.rate/60,0);
 let debt=jobs.filter(j=>j.payment==="debt").reduce((s,j)=>s+duration(j.start,j.end)*j.rate/60,0);
+
 $("earnedTotal").textContent=money(total);
 $("paidTotal").textContent=money(paid);
 $("pendingTotal").textContent=money(total-paid-debt);
 $("owedTotal").textContent=money(debt);
+
 $("history").innerHTML=jobs.slice().sort((a,b)=>b.date.localeCompare(a.date))
 .map(j=>`<div class="card">${jobHTML(j)}
 <div class="actions"><button class="secondary" onclick="markPaid('${j.id}')">Marchează achitat</button></div>
@@ -571,8 +1059,14 @@ $("history").innerHTML=jobs.slice().sort((a,b)=>b.date.localeCompare(a.date))
 
 function markPaid(id){
 let j=data.jobs.find(x=>x.id===id);
-if(j){j.payment="paid";save();render()}
+if(j){
+j.payment="paid";
+save();
+render();
 }
+}
+
+/* SETĂRI */
 
 function applyZoom(){
 let scale=Number($("zoom").value)||1;
@@ -587,41 +1081,93 @@ data.settings.ownerName=$("ownerName").value;
 data.settings.phone=$("businessPhone").value;
 data.settings.address=$("businessAddress").value;
 data.settings.zoom=$("zoom").value;
+
 applyZoom();
 save();
 alert("Setările au fost salvate.");
 }
 
-function backup(){
-let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+/* BACKUP */
+
+async function backup(){
+try{
+const profile=await getImage("profile");
+const banner=await getImage("banner");
+
+const images={};
+if(profile)images.profile=await blobToDataURL(profile);
+if(banner)images.banner=await blobToDataURL(banner);
+
+let backupData={...data,images};
+
+let blob=new Blob([JSON.stringify(backupData,null,2)],{type:"application/json"});
 let a=document.createElement("a");
 a.href=URL.createObjectURL(blob);
 a.download="Pure-Shine-Backup.json";
 a.click();
-URL.revokeObjectURL(a.href);
+setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}catch(e){
+alert("Backupul nu a putut fi creat.");
+}
+}
+
+function blobToDataURL(blob){
+return new Promise((resolve,reject)=>{
+let reader=new FileReader();
+reader.onload=()=>resolve(reader.result);
+reader.onerror=reject;
+reader.readAsDataURL(blob);
+});
+}
+
+function dataURLToBlob(url){
+return fetch(url).then(r=>r.blob());
 }
 
 function restore(input){
 let f=input.files[0];
 if(!f)return;
+
 let r=new FileReader();
-r.onload=()=>{
+
+r.onload=async()=>{
 try{
-data=JSON.parse(r.result);
-save();render();
+let restored=JSON.parse(r.result);
+if(restored.images){
+if(restored.images.profile){
+await saveImage("profile",await dataURLToBlob(restored.images.profile));
+}
+if(restored.images.banner){
+await saveImage("banner",await dataURLToBlob(restored.images.banner));
+}
+delete restored.images;
+}
+data=restored;
+save();
+await loadImages();
+render();
 alert("Backup restaurat.");
-}catch(e){alert("Fișier invalid.")}
+}catch(e){
+console.error(e);
+alert("Fișier invalid sau backup incompatibil.");
+}
 };
+
 r.readAsText(f);
+input.value="";
 }
 
 function esc(s){
 return String(s??"").replace(/[&<>"']/g,c=>({
-"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
 }[c]));
 }
 
-/* TIMER CU TIMESTAMP PERSISTENT */
+/* TIMER PERSISTENT */
 
 function toggleTimer(){
 if(activeTimer){
@@ -630,6 +1176,8 @@ clearInterval(timerInterval);
 timerInterval=null;
 $("timerButton").textContent="Start";
 localStorage.removeItem("pureShineActiveTimer");
+$("timerClock").textContent="00:00:00";
+$("timerName").textContent="◷ Niciun timer activ";
 }else{
 activeTimer=Date.now();
 localStorage.setItem("pureShineActiveTimer",String(activeTimer));
@@ -641,30 +1189,36 @@ updateTimer();
 
 function updateTimer(){
 if(!activeTimer)return;
+
 let s=Math.floor((Date.now()-activeTimer)/1000);
 let h=String(Math.floor(s/3600)).padStart(2,"0");
 let m=String(Math.floor(s%3600/60)).padStart(2,"0");
 let sec=String(s%60).padStart(2,"0");
+
 $("timerClock").textContent=`${h}:${m}:${sec}`;
 $("timerName").textContent="◷ Timer activ";
 }
 
-/* MĂSOARĂ AUTOMAT MENIUL ȘI TIMERUL */
+/* LAYOUT */
 
 function measureLayout(){
 const nav=$("mainNav");
 const dock=$("timerDock");
+
 if(nav){
 const h=nav.getBoundingClientRect().height;
 document.documentElement.style.setProperty("--nav-height",h+"px");
 }
+
 if(dock){
 const h=dock.getBoundingClientRect().height;
 document.documentElement.style.setProperty("--timer-height",h+"px");
 }
 }
 
-function init(){
+/* INITIALIZARE */
+
+async function init(){
 load();
 
 $("businessName").value=data.settings.businessName||"Pure Shine Cleaning";
@@ -676,7 +1230,16 @@ const savedZoom=localStorage.getItem("pureShineZoom")||data.settings.zoom||"1";
 $("zoom").value=savedZoom;
 applyZoom();
 
+try{
+await openImageDB();
+await loadImages();
+}catch(e){
+console.error("Eroare IndexedDB:",e);
+alert("Nu am putut inițializa stocarea fotografiilor. Verifică setările browserului.");
+}
+
 const storedTimer=Number(localStorage.getItem("pureShineActiveTimer"));
+
 if(storedTimer){
 activeTimer=storedTimer;
 $("timerButton").textContent="Stop";
