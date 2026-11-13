@@ -1,84 +1,337 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f5eaf0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Pure Shine">
 <title>Pure Shine Cleaning Manager</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Parisienne&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+
 <style>
-:root{--pink:#d58eaa;--pinkdark:#bd7896;--gold:#b99a62;--sage:#a8bda9;--ink:#443b45;--muted:#8d828d;--line:#eee3e9;--paper:#fffdfd;--navh:66px;--scale:1;--safe:env(safe-area-inset-bottom,0px)}
+:root{
+--pink:#d58eaa;
+--pink-dark:#bd7896;
+--gold:#b99a62;
+--sage:#a8bda9;
+--ink:#443b45;
+--muted:#8d828d;
+--line:#eee3e9;
+--paper:#fffdfd;
+--bg:#faf6f8;
+--scale:1;
+--nav-height:70px;
+--safe:env(safe-area-inset-bottom,0px);
+}
 *{box-sizing:border-box}
 html{font-size:calc(14px * var(--scale));-webkit-text-size-adjust:100%}
-body{margin:0;height:100vh;height:100dvh;overflow:hidden;font-family:"DM Sans",sans-serif;color:var(--ink);background:linear-gradient(145deg,#fbf5f8,#f4f5f1 48%,#f7f2ea)}
-button,input,select,textarea{font:inherit;max-width:100%}button{cursor:pointer;border:0;touch-action:manipulation}
-.app{height:100dvh;max-width:760px;margin:auto;display:flex;flex-direction:column;padding:max(env(safe-area-inset-top),5px) 9px 0;overflow:hidden}
-header{height:72px;flex-shrink:0;display:flex;align-items:center;gap:10px;padding:8px 5px}
-.profile{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #d7bd8e;display:none}
-.brand{font:700 1.95rem/1 "Cormorant Garamond",serif;color:var(--gold)}
-.brand-sub{font:1.65rem/1.1 "Parisienne",cursive;color:var(--pink)}
-h1,h2,h3{font-family:"Cormorant Garamond",serif;margin:10px 0;font-weight:700}
-h1{font-size:1.9rem}h2{font-size:1.5rem}h3{font-size:1.25rem}
-.row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:12px;margin:8px 0;min-width:0;box-shadow:0 2px 9px #92798a0a}
+body{
+margin:0;
+height:100vh;
+height:100dvh;
+overflow:hidden;
+font-family:"DM Sans",sans-serif;
+color:var(--ink);
+background:linear-gradient(145deg,#fbf5f8,#f4f5f1 48%,#f7f2ea);
+}
+button,input,select,textarea{font:inherit;max-width:100%}
+button{cursor:pointer;border:0;touch-action:manipulation}
+.app{
+height:100dvh;
+max-width:760px;
+margin:auto;
+display:flex;
+flex-direction:column;
+padding:max(env(safe-area-inset-top),5px) 9px 0;
+overflow:hidden;
+}
+header{
+height:72px;
+flex-shrink:0;
+display:flex;
+align-items:center;
+gap:10px;
+padding:8px 5px;
+}
+.profile{
+width:48px;
+height:48px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid #d7bd8e;
+display:none;
+flex-shrink:0;
+}
+.brand{
+font:700 1.95rem/1 "Cormorant Garamond",serif;
+color:var(--gold);
+}
+.brand-sub{
+font:1.65rem/1.1 "Parisienne",cursive;
+color:var(--pink);
+}
+h1,h2,h3{
+font-family:"Cormorant Garamond",serif;
+margin:10px 0;
+font-weight:700;
+}
+h1{font-size:1.9rem}
+h2{font-size:1.5rem}
+h3{font-size:1.25rem}
+.row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+flex-wrap:wrap;
+}
+.card{
+background:var(--paper);
+border:1px solid var(--line);
+border-radius:13px;
+padding:12px;
+margin:8px 0;
+min-width:0;
+box-shadow:0 2px 9px #92798a0a;
+}
 .page{display:none;min-height:0;min-width:0}
-.page.active{display:block;flex:1;overflow-y:auto;overflow-x:hidden;padding:0 2px calc(var(--navh) + var(--safe) + 24px);-webkit-overflow-scrolling:touch}
-.banner{padding:0;overflow:hidden;min-height:0}.banner img{width:100%;height:175px;object-fit:cover;display:none}.banner.has-image img{display:block}
-.placeholder{height:145px;display:flex;align-items:center;justify-content:center;color:var(--gold);font:2rem "Parisienne",cursive}
-.banner.has-image .placeholder{display:none}
-.bottom-banner{margin-top:25px;padding:0;overflow:hidden;min-height:0}.bottom-banner img{display:none;width:100%;max-height:150px;object-fit:cover}.bottom-banner.has-image img{display:block}
-.sub{font-size:.77rem;color:var(--muted);line-height:1.5}
-.primary,.secondary,.danger,.soft,.green{padding:9px 11px;border-radius:9px;font-size:.8rem;min-height:38px}
+.page.active{
+display:block;
+flex:1;
+overflow-y:auto;
+overflow-x:hidden;
+padding:0 2px calc(var(--nav-height) + var(--safe) + 25px);
+-webkit-overflow-scrolling:touch;
+overscroll-behavior:contain;
+}
+.sub{
+font-size:.77rem;
+color:var(--muted);
+line-height:1.5;
+}
+.primary,.secondary,.danger,.soft,.green{
+padding:9px 11px;
+border-radius:9px;
+font-size:.8rem;
+min-height:38px;
+}
 .primary{background:linear-gradient(135deg,#d58eaa,#c77f9e);color:white}
-.secondary{background:#fff;border:1px solid var(--line);color:#a97891}
-.danger{background:#fff0f0;color:#b24e58}.soft{background:#f3edf8;color:#8875a5}.green{background:#edf5ed;color:#648b6b}
-.field{margin:10px 0;min-width:0}.field label{display:block;color:#a97891;font-weight:700;font-size:.77rem;margin-bottom:5px}
-.field input,.field select,.field textarea,.search{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;background:white;color:var(--ink);font-size:1rem}
-.field textarea{min-height:85px;resize:vertical}
-.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.stat{background:white;border:1px solid var(--line);border-radius:11px;padding:11px;min-width:0}
-.stat small{display:block;color:var(--muted)}.stat strong{font-size:1.2rem;color:var(--gold)}
-.job{background:#fff;border:1px solid var(--line);border-left:4px solid var(--pink);border-radius:11px;padding:12px;margin:9px 0;overflow-wrap:anywhere}
-.job.done{border-left-color:var(--sage)}.job.running{border-left-color:var(--gold)}
-.job-name{font-weight:800;font-size:1rem}.job-time{color:var(--pink);font-weight:700;margin:5px 0}
-.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.actions button{flex:1 1 85px}
-.job-clock{font:700 1.9rem "Cormorant Garamond",serif;color:var(--gold);font-variant-numeric:tabular-nums}
-.message-preview{background:white;border:1px solid var(--line);border-radius:10px;padding:12px;white-space:pre-wrap;line-height:1.6;min-height:90px}
-.image-preview{width:100%;max-height:170px;object-fit:cover;border-radius:10px;display:none;margin-top:8px}
-.profile-preview{width:85px;height:85px;border-radius:50%;object-fit:cover;display:none;margin-top:8px}
+.secondary{background:white;border:1px solid var(--line);color:#a97891}
+.danger{background:#fff0f0;color:#b24e58}
+.soft{background:#f3edf8;color:#8875a5}
+.green{background:#edf5ed;color:#648b6b}
+.field{margin:10px 0;min-width:0}
+.field label{
+display:block;
+color:#a97891;
+font-weight:700;
+font-size:.77rem;
+margin-bottom:5px;
+}
+.field input,.field select,.field textarea,.search{
+width:100%;
+padding:10px;
+border:1px solid var(--line);
+border-radius:9px;
+background:white;
+color:var(--ink);
+font-size:1rem;
+}
+.field textarea{min-height:75px;resize:vertical}
+.grid2{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:8px;
+}
+.stats{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:8px;
+}
+.stat{
+background:white;
+border:1px solid var(--line);
+border-radius:11px;
+padding:11px;
+min-width:0;
+}
+.stat small{display:block;color:var(--muted)}
+.stat strong{font-size:1.2rem;color:var(--gold);overflow-wrap:anywhere}
+.banner{
+padding:0;
+overflow:hidden;
+min-height:0;
+}
+.banner img{
+width:100%;
+height:175px;
+object-fit:cover;
+display:none;
+}
+.banner.has-image img{display:block}
+.banner-placeholder{
+height:145px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:var(--gold);
+font:2rem "Parisienne",cursive;
+}
+.banner.has-image .banner-placeholder{display:none}
+.bottom-banner{
+margin-top:25px;
+padding:0;
+overflow:hidden;
+min-height:0;
+}
+.bottom-banner img{
+display:none;
+width:100%;
+max-height:145px;
+object-fit:cover;
+}
+.bottom-banner.has-image img{display:block}
+.job{
+background:white;
+border:1px solid var(--line);
+border-left:4px solid var(--pink);
+border-radius:11px;
+padding:12px;
+margin:9px 0;
+overflow-wrap:anywhere;
+}
+.job.done{border-left-color:var(--sage)}
+.job.running{border-left-color:var(--gold)}
+.job-name{font-weight:800;font-size:1rem}
+.job-time{color:var(--pink);font-weight:700;margin:5px 0}
+.job-clock{
+font:700 1.8rem "Cormorant Garamond",serif;
+color:var(--gold);
+font-variant-numeric:tabular-nums;
+}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.actions button{flex:1 1 85px}
+.message-preview{
+background:white;
+border:1px solid var(--line);
+border-radius:10px;
+padding:12px;
+white-space:pre-wrap;
+line-height:1.6;
+min-height:85px;
+}
+.image-preview{
+width:100%;
+max-height:170px;
+object-fit:cover;
+border-radius:10px;
+display:none;
+margin-top:8px;
+}
+.profile-preview{
+width:85px;
+height:85px;
+border-radius:50%;
+object-fit:cover;
+display:none;
+margin-top:8px;
+}
 .divider{height:1px;background:var(--line);margin:16px 0}
-.nav{position:fixed;z-index:20;bottom:0;left:50%;transform:translateX(-50%);width:min(760px,100%);display:grid;grid-template-columns:repeat(7,minmax(0,1fr));padding:7px 3px calc(7px + var(--safe));background:#fffdfdf5;border-top:1px solid var(--line);backdrop-filter:blur(12px)}
-.nav button{background:none;color:#a99a83;font-size:.59rem;padding:4px 1px;min-width:0;min-height:53px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
-.nav button span{font-size:1.65rem;line-height:1.2}.nav button.active{color:var(--pink);font-weight:800}
+.nav{
+position:fixed;
+z-index:20;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
+width:min(760px,100%);
+display:grid;
+grid-template-columns:repeat(7,minmax(0,1fr));
+padding:7px 3px calc(7px + var(--safe));
+background:#fffdfdf5;
+border-top:1px solid var(--line);
+backdrop-filter:blur(12px);
+}
+.nav button{
+background:none;
+color:#a99a83;
+font-size:.59rem;
+padding:4px 1px;
+min-width:0;
+min-height:54px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:3px;
+}
+.nav button span{font-size:1.65rem;line-height:1.2}
+.nav button.active{color:var(--pink);font-weight:800}
 .empty{text-align:center;padding:20px;color:var(--muted)}
-dialog{width:min(94%,520px);max-height:88dvh;overflow:auto;border:1px solid var(--line);border-radius:15px;background:#fffafc;color:var(--ink);padding:14px}
+dialog{
+width:min(94%,520px);
+max-height:88dvh;
+overflow:auto;
+border:1px solid var(--line);
+border-radius:15px;
+background:#fffafc;
+color:var(--ink);
+padding:14px;
+}
 dialog::backdrop{background:#30263088}
-@media(max-width:440px){.app{padding-left:7px;padding-right:7px}.nav button{font-size:.52rem}.nav button span{font-size:1.45rem}.grid2{gap:6px}}
-@media(max-width:350px){.nav button{font-size:.46rem}.nav button span{font-size:1.2rem}.grid2{grid-template-columns:1fr}}
+.status-note{
+padding:9px;
+border-radius:9px;
+background:#f3f5ef;
+font-size:.75rem;
+color:#648b6b;
+margin:8px 0;
+}
+@media(max-width:440px){
+.app{padding-left:7px;padding-right:7px}
+.nav button{font-size:.52rem}
+.nav button span{font-size:1.45rem}
+.grid2{gap:6px}
+}
+@media(max-width:350px){
+.nav button{font-size:.46rem}
+.nav button span{font-size:1.2rem}
+.grid2{grid-template-columns:1fr}
+}
 </style>
 </head>
+
 <body>
 <div class="app">
+
 <header>
 <img id="profileHeader" class="profile" alt="Profile">
-<div><div class="brand">✧ Pure Shine ✧</div><div class="brand-sub">Cleaning</div></div>
+<div>
+<div class="brand">✧ Pure Shine ✧</div>
+<div class="brand-sub">Cleaning</div>
+</div>
 </header>
 
 <section id="home" class="page active">
-<div class="card banner" id="mainBanner"><img id="mainBannerImg" alt="Main banner"><div class="placeholder">Pure Shine ♡</div></div>
+<div class="card banner" id="mainBanner">
+<img id="mainBannerImg" alt="Main banner">
+<div class="banner-placeholder">Pure Shine ♡</div>
+</div>
+
 <h2>Today's Overview</h2>
 <div class="stats">
 <div class="stat"><small>Today's Jobs</small><strong id="homeJobs">0</strong></div>
-<div class="stat"><small>Completed Hours</small><strong id="homeHours">0h 0m</strong></div>
+<div class="stat"><small>Completed Hours</small><strong id="homeHours">0h 00m</strong></div>
 <div class="stat"><small>Today's Earnings</small><strong id="homeMoney">£0.00</strong></div>
 <div class="stat"><small>Upcoming Jobs</small><strong id="upcomingCount">0</strong></div>
 </div>
 <div id="homeList"></div>
-<div class="card bottom-banner" id="bottomBanner"><img id="bottomBannerImg" alt="Bottom banner"></div>
+
+<div class="card bottom-banner" id="bottomBanner">
+<img id="bottomBannerImg" alt="Bottom banner">
+</div>
 </section>
 
 <section id="schedule" class="page">
@@ -88,13 +341,16 @@ dialog::backdrop{background:#30263088}
 <b id="scheduleDate"></b>
 <button class="secondary" onclick="moveDate(1)">Next ›</button>
 </div>
-<div class="row"><h2 id="scheduleHeading"></h2><button class="primary" onclick="openJob()">＋ Add Job</button></div>
+<div class="row">
+<h2 id="scheduleHeading"></h2>
+<button class="primary" onclick="openJob()">＋ Add Job</button>
+</div>
 <div id="scheduleList"></div>
 </section>
 
 <section id="jobs" class="page">
 <h1>My Jobs & Timers</h1>
-<div class="sub">Each appointment has its own timer, target duration, automatic time recording and earnings calculation.</div>
+<div class="sub">Each job has its own timer, target duration, automatic time recording and earnings calculation.</div>
 <div class="row">
 <button class="secondary" onclick="setJobFilter('all')">All Jobs</button>
 <button class="secondary" onclick="setJobFilter('planned')">Upcoming</button>
@@ -105,16 +361,23 @@ dialog::backdrop{background:#30263088}
 </section>
 
 <section id="clients" class="page">
-<div class="row"><h1>My Clients ♡</h1><button class="primary" onclick="openClient()">＋ Add Client</button></div>
+<div class="row">
+<h1>My Clients ♡</h1>
+<button class="primary" onclick="openClient()">＋ Add Client</button>
+</div>
 <input class="search" id="clientSearch" placeholder="Search clients..." oninput="renderClients()">
 <div id="clientList"></div>
 </section>
 
 <section id="messages" class="page">
 <h1>Client Messages ✉</h1>
+
 <div class="card">
 <h2>Cleaning Reminder</h2>
-<div class="field"><label>Appointment</label><select id="reminderJob" onchange="prepareReminder()"></select></div>
+<div class="field">
+<label>Appointment</label>
+<select id="reminderJob" onchange="prepareReminder()"></select>
+</div>
 <div class="message-preview" id="reminderPreview">Choose an appointment.</div>
 <div class="actions">
 <button class="primary" onclick="sendMessage('reminder','whatsapp')">WhatsApp</button>
@@ -122,9 +385,13 @@ dialog::backdrop{background:#30263088}
 <button class="soft" onclick="copyMessage('reminder')">Copy</button>
 </div>
 </div>
+
 <div class="card">
 <h2>Thank You Message</h2>
-<div class="field"><label>Completed Job</label><select id="thanksJob" onchange="prepareThanks()"></select></div>
+<div class="field">
+<label>Completed Job</label>
+<select id="thanksJob" onchange="prepareThanks()"></select>
+</div>
 <div class="message-preview" id="thanksPreview">Choose a completed job.</div>
 <div class="actions">
 <button class="primary" onclick="sendMessage('thanks','whatsapp')">WhatsApp</button>
@@ -132,9 +399,13 @@ dialog::backdrop{background:#30263088}
 <button class="soft" onclick="copyMessage('thanks')">Copy</button>
 </div>
 </div>
+
 <div class="card">
 <h2>Holiday Announcement</h2>
-<div class="field"><label>Client</label><select id="holidayClient" onchange="prepareHoliday()"></select></div>
+<div class="field">
+<label>Client</label>
+<select id="holidayClient" onchange="prepareHoliday()"></select>
+</div>
 <div class="grid2">
 <div class="field"><label>Holiday From</label><input type="date" id="holidayStart" onchange="prepareHoliday()"></div>
 <div class="field"><label>Holiday To</label><input type="date" id="holidayEnd" onchange="prepareHoliday()"></div>
@@ -161,32 +432,44 @@ dialog::backdrop{background:#30263088}
 
 <section id="settings" class="page">
 <h1>Settings ⚙</h1>
+
 <div class="card">
 <h2>Business Details</h2>
 <div class="field"><label>Business Name</label><input id="businessName"></div>
 <div class="field"><label>Owner Name</label><input id="ownerName"></div>
 <div class="field"><label>Business Phone</label><input id="businessPhone"></div>
 <div class="field"><label>Business Address</label><textarea id="businessAddress"></textarea></div>
+
 <div class="divider"></div>
 <h2>Profile Photo</h2>
 <img id="profilePreview" class="profile-preview" alt="Profile preview">
 <div class="field"><label>Upload Profile Photo</label><input type="file" accept="image/*" onchange="uploadImage(this,'profile')"></div>
 <button class="danger" onclick="removeImage('profile')">Remove Profile Photo</button>
+
 <div class="divider"></div>
 <h2>Main Banner</h2>
 <img id="mainPreview" class="image-preview" alt="Main banner preview">
 <div class="field"><label>Upload Main Banner</label><input type="file" accept="image/*" onchange="uploadImage(this,'main')"></div>
 <button class="danger" onclick="removeImage('main')">Remove Main Banner</button>
+
 <div class="divider"></div>
 <h2>Bottom Banner</h2>
 <img id="bottomPreview" class="image-preview" alt="Bottom banner preview">
 <div class="field"><label>Upload Bottom Banner</label><input type="file" accept="image/*" onchange="uploadImage(this,'bottom')"></div>
 <button class="danger" onclick="removeImage('bottom')">Remove Bottom Banner</button>
+
 <div class="divider"></div>
-<div class="field"><label>App Zoom</label>
+<div class="field">
+<label>App Zoom</label>
 <select id="zoom" onchange="applyZoom()">
-<option value="1">100%</option><option value="1.2">120%</option><option value="1.3">130%</option><option value="1.5">150%</option><option value="1.75">175%</option><option value="2">200%</option>
-</select></div>
+<option value="1">100%</option>
+<option value="1.2">120%</option>
+<option value="1.3">130%</option>
+<option value="1.5">150%</option>
+<option value="1.75">175%</option>
+<option value="2">200%</option>
+</select>
+</div>
 <button class="primary" onclick="saveSettings()">Save Business Settings</button>
 </div>
 
@@ -195,16 +478,19 @@ dialog::backdrop{background:#30263088}
 <div class="field"><label>Cleaning Reminder</label><textarea id="tplReminder"></textarea></div>
 <div class="field"><label>Thank You Message</label><textarea id="tplThanks"></textarea></div>
 <div class="field"><label>Holiday Announcement</label><textarea id="tplHoliday"></textarea></div>
-<div class="sub">Placeholders: {client}, {date}, {start}, {end}, {hours}, {business}, {owner}, {holidayStart}, {holidayEnd}, {returnDate}.</div>
+<div class="sub">Available placeholders: {client}, {date}, {start}, {end}, {hours}, {business}, {owner}, {holidayStart}, {holidayEnd}, {returnDate}.</div>
 <button class="primary" onclick="saveTemplates()">Save Templates</button>
 <button class="secondary" onclick="resetTemplates()">Restore Defaults</button>
 </div>
 
 <div class="card">
 <h2>Timer Alarm Sound</h2>
-<div class="sub">Upload your own melody. It will play when a job reaches its target duration while the app is open and active.</div>
+<div class="sub">Upload your own melody. The alarm can play when a job reaches its target duration while the app is open.</div>
 <div class="field"><label>Upload Alarm Melody</label><input type="file" accept="audio/*" onchange="uploadAlarm(this)"></div>
-<div class="row"><span id="alarmName" class="sub">No custom melody uploaded</span><button class="secondary" onclick="testAlarm()">Test Sound</button></div>
+<div class="row">
+<span id="alarmName" class="sub">No custom melody uploaded</span>
+<button class="secondary" onclick="testAlarm()">Test Sound</button>
+</div>
 <button class="danger" onclick="removeAlarm()">Remove Melody</button>
 </div>
 
@@ -212,6 +498,7 @@ dialog::backdrop{background:#30263088}
 <h2>Backup & Restore</h2>
 <button class="secondary" onclick="backup()">Export Backup</button>
 <div class="field"><label>Restore Backup</label><input type="file" accept="application/json" onchange="restore(this)"></div>
+<div id="storageStatus" class="status-note">Your data is stored in this browser.</div>
 </div>
 </section>
 
@@ -227,431 +514,10 @@ dialog::backdrop{background:#30263088}
 </div>
 
 <dialog id="jobDialog">
-<form onsubmit="saveJob(event)">
-<div class="row"><h2>Job Details</h2><button type="button" class="secondary" onclick="jobDialog.close()">✕</button></div>
-<input type="hidden" id="jobId">
-<div class="field"><label>Client</label><select id="jobClient" required></select></div>
-<div class="field"><label>Date</label><input type="date" id="jobDate" required></div>
-<div class="grid2">
-<div class="field"><label>Start Time</label><input type="time" id="jobStart" required></div>
-<div class="field"><label>End Time</label><input type="time" id="jobEnd" required></div>
-</div>
-<div class="grid2">
-<div class="field"><label>Hourly Rate (£)</label><input type="number" id="jobRate" step=".01" min="0" required></div>
-<div class="field"><label>Target Hours</label><input type="number" id="jobTarget" step=".25" min=".25" value="2" required></div>
-</div>
-<div class="grid2">
-<div class="field"><label>Client Type</label><select id="jobType"><option>Private</option><option>Agency</option><option>Occasional</option></select></div>
-<div class="field"><label>Status</label><select id="jobStatus"><option value="planned">Scheduled</option><option value="done">Completed</option></select></div>
-</div>
-<div class="field"><label>Payment Status</label><select id="jobPayment"><option value="pending">Pending</option><option value="paid">Paid</option><option value="debt">Outstanding</option></select></div>
-<div class="field"><label>Notes</label><textarea id="jobNotes"></textarea></div>
-<button class="primary" type="submit">Save Job</button>
-</form>
-</dialog>
-
-<dialog id="clientDialog">
-<form onsubmit="saveClient(event)">
-<div class="row"><h2>Client Details</h2><button type="button" class="secondary" onclick="clientDialog.close()">✕</button></div>
-<input type="hidden" id="clientId">
-<div class="field"><label>Full Name</label><input id="clientName" required></div>
-<div class="field"><label>Phone Number</label><input id="clientPhone" type="tel"></div>
-<div class="field"><label>Address</label><textarea id="clientAddress"></textarea></div>
-<div class="grid2">
-<div class="field"><label>Client Type</label><select id="clientType"><option>Private</option><option>Agency</option><option>Occasional</option></select></div>
-<div class="field"><label>Hourly Rate (£)</label><input id="clientRate" type="number" step=".01"></div>
-</div>
-<div class="field"><label>Frequency</label><select id="clientRepeat"><option>Weekly</option><option>Fortnightly</option><option>Every three weeks</option><option>Occasional</option></select></div>
-<div class="field"><label>Usual Day</label><select id="clientDay"><option value="">Not set</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div>
-<div class="grid2">
-<div class="field"><label>Usual Start</label><input type="time" id="clientStart"></div>
-<div class="field"><label>Usual Finish</label><input type="time" id="clientEnd"></div>
-</div>
-<div class="field"><label>Holiday / Availability Notes</label><textarea id="clientHoliday"></textarea></div>
-<div class="field"><label>Other Notes</label><textarea id="clientNotes"></textarea></div>
-<button class="primary" type="submit">Save Client</button>
-</form>
-</dialog>
-
-<script>
-const KEY="pureShineManager_v5";
-const DB="PureShineImages";
-const DEFAULT_TEMPLATES={
-reminder:"Hi {client}! ♡ Just a friendly reminder that your cleaning appointment is booked for {date} at {start}. Thank you! Kind regards, {owner} – {business}.",
-thanks:"Hi {client}! ♡ Thank you for choosing {business}. I worked {hours} today ({start}–{end}). I really appreciate your trust and continued support. Thank you for having me! Kind regards, {owner}.",
-holiday:"Hi {client}! ♡ I wanted to let you know that I will be away from {holidayStart} to {holidayEnd}. I will be available again from {returnDate}. Thank you for your understanding! Kind regards, {owner} – {business}."
-};
-let data={clients:[],jobs:[],settings:{}};
-let selectedDate=localDate();
-let jobFilter="all",db=null,urls={};
-let runningIntervals={},alarmAudio=null,alarmObjectURL=null;
-const $=id=>document.getElementById(id);
-function localDate(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
-function addDays(s,n){let d=new Date(s+"T12:00:00");d.setDate(d.getDate()+n);return localDate(d)}
-function dateText(s){return s?new Date(s+"T12:00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric"}):""}
-function money(n){return "£"+Number(n||0).toFixed(2)}
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function mins(a,b){if(!a||!b)return 0;let [h,m]=a.split(":").map(Number),[hh,mm]=b.split(":").map(Number),v=hh*60+mm-h*60-m;return v<0?v+1440:v}
-function formatMins(n){return `${Math.floor(n/60)}h ${String(n%60).padStart(2,"0")}m`}
-function fmtSeconds(s){s=Math.max(0,Math.floor(s||0));return [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(x=>String(x).padStart(2,"0")).join(":")}
-function load(){try{data={...data,...JSON.parse(localStorage.getItem(KEY)||"{}")}}catch(e){};data.clients||=[];data.jobs||=[];data.settings||={}}
-function save(){localStorage.setItem(KEY,JSON.stringify(data))}
-function showPage(id,btn){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));$(id).classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));btn?.classList.add("active");render()}
-function render(){renderHome();renderSchedule();renderJobs();renderClients();renderEarnings();renderMessageSelects()}
-function findClient(id){return data.clients.find(c=>c.id===id)}
-function earnings(j){return (Number(j.elapsedSeconds||0)/3600)*Number(j.rate||0)}
-function jobCard(j){
-let c=findClient(j.clientId),elapsed=elapsedNow(j),target=Number(j.targetHours||0)*3600;
-let state=j.status==="done"?"Completed":j.runningSince?"Timer running":"Scheduled";
-return `<div class="job ${j.status==="done"?"done":j.runningSince?"running":""}">
-<div class="row"><div class="job-name">${esc(c?.name||"Client")}</div><span class="sub">${esc(state)}</span></div>
-<div class="job-time">${dateText(j.date)} · ${esc(j.start||"")}–${esc(j.end||"")}</div>
-<div class="sub">Target: ${Number(j.targetHours||0).toFixed(2)} hours · Rate: ${money(j.rate)}/hour</div>
-<div class="row"><div><div class="sub">Time recorded</div><div class="job-clock" id="clock_${j.id}">${fmtSeconds(elapsed)}</div></div>
-<div><div class="sub">Current earnings</div><div class="job-clock" id="amount_${j.id}">${money(earnings({...j,elapsedSeconds:elapsed}))}</div></div></div>
-<div class="sub" id="target_${j.id}">${target>0?Math.max(0,Math.ceil((target-elapsed)/60))+" minutes remaining":"Set a target duration"}</div>
-<div class="actions">
-${j.status!=="done"?(j.runningSince?`<button class="secondary" onclick="pauseJob('${j.id}')">Pause</button>`:`<button class="primary" onclick="startJob('${j.id}')">Start Timer</button>`):""}
-${j.status!=="done"?`<button class="green" onclick="finishJob('${j.id}')">Finish & Save</button>`:`<button class="secondary" onclick="reopenJob('${j.id}')">Reopen</button>`}
-<button class="secondary" onclick="editJob('${j.id}')">Edit</button>
-<button class="danger" onclick="deleteJob('${j.id}')">Delete</button>
-</div></div>`;
-}
-function elapsedNow(j){return Number(j.elapsedSeconds||0)+(j.runningSince?Math.max(0,Math.floor((Date.now()-j.runningSince)/1000)):0)}
-function renderHome(){
-let today=data.jobs.filter(j=>j.date===localDate()&&j.status!=="cancelled");
-$("homeJobs").textContent=today.length;
-$("homeHours").textContent=formatMins(today.reduce((s,j)=>s+Math.floor(elapsedNow(j)/60),0));
-$("homeMoney").textContent=money(today.reduce((s,j)=>s+earnings({...j,elapsedSeconds:elapsedNow(j)}),0));
-$("upcomingCount").textContent=data.jobs.filter(j=>j.status==="planned"&&j.date>localDate()).length;
-$("homeList").innerHTML=today.map(jobCard).join("")||'<div class="empty">No jobs scheduled for today.</div>';
-}
-function renderSchedule(){
-$("scheduleDate").textContent=dateText(selectedDate);$("scheduleHeading").textContent=selectedDate;
-$("scheduleList").innerHTML=data.jobs.filter(j=>j.date===selectedDate).sort((a,b)=>(a.start||"").localeCompare(b.start||"")).map(j=>`
-<div class="job"><div class="job-name">${esc(findClient(j.clientId)?.name||"Client")}</div>
-<div class="job-time">${esc(j.start)}–${esc(j.end)} · Target ${j.targetHours||0} hours</div>
-<div class="sub">${j.status==="done"?"Completed":"Scheduled"} · ${money(earnings(j))}</div>
-<button class="secondary" onclick="editJob('${j.id}')">Edit Job</button>
-</div>`).join("")||'<div class="empty">No appointments for this day.</div>';
-}
-function moveDate(n){selectedDate=addDays(selectedDate,n);renderSchedule()}
-function setJobFilter(f){jobFilter=f;renderJobs()}
-function renderJobs(){
-let list=data.jobs.filter(j=>jobFilter==="all"||(jobFilter==="planned"&&j.status!=="done")||(jobFilter==="done"&&j.status==="done")).sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start));
-$("jobsList").innerHTML=list.map(jobCard).join("")||'<div class="empty">No jobs to display.</div>';
-}
-function openJob(id){
-$("jobForm")?.reset();
-$("jobId").value="";
-$("jobClient").innerHTML=data.clients.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
-if(!data.clients.length){alert("Please add a client first.");return}
-$("jobDate").value=selectedDate;
-let c=findClient($("jobClient").value);
-$("jobRate").value=c?.rate||16;$("jobType").value=c?.type||"Agency";
-$("jobTarget").value=2;
-$("jobDialog").showModal();
-}
-function saveJob(e){
-e.preventDefault();
-let id=$("jobId").value||crypto.randomUUID(),old=data.jobs.find(j=>j.id===id);
-let j={
-...(old||{}),id,clientId:$("jobClient").value,date:$("jobDate").value,
-start:$("jobStart").value,end:$("jobEnd").value,rate:Number($("jobRate").value),
-targetHours:Number($("jobTarget").value),type:$("jobType").value,
-status:$("jobStatus").value,payment:$("jobPayment").value,notes:$("jobNotes").value
-};
-if(!old){j.elapsedSeconds=0;j.runningSince=null}
-let i=data.jobs.findIndex(x=>x.id===id);if(i<0)data.jobs.push(j);else data.jobs[i]=j;
-save();$("jobDialog").close();render();
-}
-function editJob(id){
-let j=data.jobs.find(x=>x.id===id);if(!j)return;
-$("jobClient").innerHTML=data.clients.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
-$("jobId").value=j.id;$("jobClient").value=j.clientId;$("jobDate").value=j.date;
-$("jobStart").value=j.start;$("jobEnd").value=j.end;$("jobRate").value=j.rate;
-$("jobTarget").value=j.targetHours||2;$("jobType").value=j.type||"Private";
-$("jobStatus").value=j.status;$("jobPayment").value=j.payment||"pending";$("jobNotes").value=j.notes||"";
-$("jobDialog").showModal();
-}
-function startJob(id){
-let j=data.jobs.find(x=>x.id===id);if(!j||j.status==="done")return;
-if(data.jobs.some(x=>x.id!==id&&x.runningSince)){alert("Please pause the other active job timer first.");return}
-j.runningSince=Date.now();save();renderJobs();renderHome();runJobTicker(id);
-}
-function pauseJob(id){
-let j=data.jobs.find(x=>x.id===id);if(!j||!j.runningSince)return;
-j.elapsedSeconds=elapsedNow(j);j.runningSince=null;save();clearInterval(runningIntervals[id]);render();
-}
-function finishJob(id){
-let j=data.jobs.find(x=>x.id===id);if(!j)return;
-if(j.runningSince){j.elapsedSeconds=elapsedNow(j);j.runningSince=null}
-j.status="done";j.completedAt=Date.now();save();clearInterval(runningIntervals[id]);render();
-if(Number(j.elapsedSeconds)>=Number(j.targetHours||0)*3600)playAlarm();
-}
-function reopenJob(id){let j=data.jobs.find(x=>x.id===id);if(j){j.status="planned";save();render()}}
-function deleteJob(id){if(!confirm("Delete this job?"))return;let j=data.jobs.find(x=>x.id===id);if(j?.runningSince)pauseJob(id);data.jobs=data.jobs.filter(x=>x.id!==id);save();render()}
-function runJobTicker(id){
-clearInterval(runningIntervals[id]);
-runningIntervals[id]=setInterval(()=>{
-let j=data.jobs.find(x=>x.id===id);if(!j||!j.runningSince){clearInterval(runningIntervals[id]);return}
-let elapsed=elapsedNow(j),target=Number(j.targetHours||0)*3600;
-let clock=$("clock_"+id),amount=$("amount_"+id),remaining=$("target_"+id);
-if(clock)clock.textContent=fmtSeconds(elapsed);
-if(amount)amount.textContent=money(earnings({...j,elapsedSeconds:elapsed}));
-if(remaining)remaining.textContent=target?elapsed>=target?"Target reached!":Math.ceil((target-elapsed)/60)+" minutes remaining":"Set a target duration";
-if(target>0&&elapsed>=target&&!j.alarmPlayed){j.alarmPlayed=true;save();playAlarm();pauseJob(id);alert("Target time reached for "+(findClient(j.clientId)?.name||"this job")+".")}
-},1000);
-}
-function resumeRunningTimers(){data.jobs.filter(j=>j.runningSince).forEach(j=>runJobTicker(j.id))}
-
-/* CLIENTS */
-function openClient(){
-$("clientForm").reset();$("clientId").value="";$("clientRate").value=16;$("clientDialog").showModal();
-}
-function saveClient(e){
-e.preventDefault();
-let id=$("clientId").value||crypto.randomUUID();
-let c={id,name:$("clientName").value.trim(),phone:$("clientPhone").value,address:$("clientAddress").value,
-type:$("clientType").value,rate:Number($("clientRate").value),repeat:$("clientRepeat").value,
-day:$("clientDay").value,start:$("clientStart").value,end:$("clientEnd").value,
-holiday:$("clientHoliday").value,notes:$("clientNotes").value};
-let i=data.clients.findIndex(x=>x.id===id);if(i<0)data.clients.push(c);else data.clients[i]=c;
-save();$("clientDialog").close();render();
-}
-function editClient(id){
-let c=findClient(id);if(!c)return;
-$("clientId").value=c.id;$("clientName").value=c.name;$("clientPhone").value=c.phone||"";
-$("clientAddress").value=c.address||"";$("clientType").value=c.type||"Private";
-$("clientRate").value=c.rate??18;$("clientRepeat").value=c.repeat||"Weekly";
-$("clientDay").value=c.day||"";$("clientStart").value=c.start||"";$("clientEnd").value=c.end||"";
-$("clientHoliday").value=c.holiday||"";$("clientNotes").value=c.notes||"";
-$("clientDialog").showModal();
-}
-function renderClients(){
-let q=($("clientSearch").value||"").toLowerCase();
-$("clientList").innerHTML=data.clients.filter(c=>c.name.toLowerCase().includes(q)).map(c=>`
-<div class="card">
-<div class="row"><b>${esc(c.name)}</b><b>${money(c.rate)}/hour</b></div>
-<div class="sub">${esc(c.type)} · ${esc(c.repeat||"")} · ${esc(c.day||"Day not set")}</div>
-<div class="sub">${esc(c.phone||"Phone not added")}</div>
-${c.address?`<div class="sub">${esc(c.address)}</div>`:""}
-${c.start||c.end?`<div class="sub">Usual time: ${esc(c.start||"")}–${esc(c.end||"")}</div>`:""}
-${c.holiday?`<div class="sub">Availability: ${esc(c.holiday)}</div>`:""}
-${c.notes?`<div class="sub">Notes: ${esc(c.notes)}</div>`:""}
-<div class="actions"><button class="secondary" onclick="editClient('${c.id}')">Edit</button><button class="danger" onclick="deleteClient('${c.id}')">Delete</button></div>
-</div>`).join("")||'<div class="empty">No clients found.</div>';
-}
-function deleteClient(id){if(!confirm("Delete this client? Job history will be kept."))return;data.clients=data.clients.filter(c=>c.id!==id);save();render()}
-
-/* EARNINGS */
-function renderEarnings(){
-let done=data.jobs.filter(j=>j.status==="done"),total=done.reduce((s,j)=>s+earnings(j),0);
-let paid=done.filter(j=>j.payment==="paid").reduce((s,j)=>s+earnings(j),0);
-let owed=done.filter(j=>j.payment==="debt").reduce((s,j)=>s+earnings(j),0);
-$("earned").textContent=money(total);$("paid").textContent=money(paid);
-$("pending").textContent=money(total-paid-owed);$("owed").textContent=money(owed);
-$("history").innerHTML=done.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(j=>`
-<div class="card"><b>${esc(findClient(j.clientId)?.name||"Client")}</b>
-<div class="sub">${dateText(j.date)} · ${formatMins(Math.floor((j.elapsedSeconds||0)/60))}</div>
-<div class="row"><b>${money(earnings(j))}</b><button class="secondary" onclick="markPaid('${j.id}')">Mark Paid</button></div></div>`).join("")||'<div class="empty">No completed jobs yet.</div>';
-}
-function markPaid(id){let j=data.jobs.find(x=>x.id===id);if(j){j.payment="paid";save();render()}}
-
-/* MESSAGES */
-function templates(){return {...DEFAULT_TEMPLATES,...(data.settings.templates||{})}}
-function fillTemplate(t,v){return String(t).replace(/\{(\w+)\}/g,(m,k)=>v[k]??m)}
-function biz(){return {business:data.settings.businessName||"Pure Shine Cleaning",owner:data.settings.ownerName||"Your Cleaner"}}
-function setOptions(id,items,placeholder){
-let el=$(id),old=el.value;el.innerHTML=`<option value="">${placeholder}</option>`+items.map(x=>`<option value="${esc(x.value)}">${esc(x.label)}</option>`).join("");
-if(items.some(x=>x.value===old))el.value=old;
-}
-function renderMessageSelects(){
-let future=data.jobs.filter(j=>j.status!=="done"&&j.date>=localDate()).sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start));
-setOptions("reminderJob",future.map(j=>({value:j.id,label:`${findClient(j.clientId)?.name||"Client"} · ${dateText(j.date)} · ${j.start}`})),"Choose an appointment");
-let done=data.jobs.filter(j=>j.status==="done").sort((a,b)=>b.date.localeCompare(a.date));
-setOptions("thanksJob",done.map(j=>({value:j.id,label:`${findClient(j.clientId)?.name||"Client"} · ${dateText(j.date)}`})),"Choose completed job");
-setOptions("holidayClient",data.clients.map(c=>({value:c.id,label:c.name})),"Choose client");
-}
-function prepareReminder(){
-let j=data.jobs.find(x=>x.id===$("reminderJob").value);if(!j){$("reminderPreview").textContent="Choose an appointment.";return}
-let c=findClient(j.clientId);
-$("reminderPreview").textContent=fillTemplate(templates().reminder,{...biz(),client:c?.name||"client",date:dateText(j.date),start:j.start,end:j.end});
-}
-function prepareThanks(){
-let j=data.jobs.find(x=>x.id===$("thanksJob").value);if(!j){$("thanksPreview").textContent="Choose a completed job.";return}
-let c=findClient(j.clientId);
-$("thanksPreview").textContent=fillTemplate(templates().thanks,{...biz(),client:c?.name||"client",date:dateText(j.date),start:j.start,end:j.end,hours:formatMins(Math.floor((j.elapsedSeconds||0)/60))});
-}
-function prepareHoliday(){
-let c=findClient($("holidayClient").value),a=$("holidayStart").value,b=$("holidayEnd").value;
-if(!c||!a||!b){$("holidayPreview").textContent="Choose a client and holiday dates.";return}
-if(b<a){$("holidayPreview").textContent="The end date must be after the start date.";return}
-$("holidayPreview").textContent=fillTemplate(templates().holiday,{...biz(),client:c.name,holidayStart:dateText(a),holidayEnd:dateText(b),returnDate:dateText(addDays(b,1))});
-}
-function messageDetails(type){
-if(type==="reminder"){let j=data.jobs.find(x=>x.id===$("reminderJob").value);return {client:findClient(j?.clientId),text:$("reminderPreview").textContent}}
-if(type==="thanks"){let j=data.jobs.find(x=>x.id===$("thanksJob").value);return {client:findClient(j?.clientId),text:$("thanksPreview").textContent}}
-return {client:findClient($("holidayClient").value),text:$("holidayPreview").textContent};
-}
-function sendMessage(type,method){
-if(type==="reminder")prepareReminder();if(type==="thanks")prepareThanks();if(type==="holiday")prepareHoliday();
-let {client,text}=messageDetails(type);
-if(!client||!text||text.startsWith("Choose")||text.startsWith("The end")){alert("Please select the required details first.");return}
-let phone=String(client.phone||"").replace(/[^\d+]/g,"");
-if(!phone){alert("Please add this client's phone number in Client Details.");return}
-if(method==="whatsapp")window.open("https://wa.me/"+phone.replace(/\D/g,"")+"?text="+encodeURIComponent(text),"_blank");
-else location.href="sms:"+phone+"?body="+encodeURIComponent(text);
-}
-function copyMessage(type){
-if(type==="reminder")prepareReminder();if(type==="thanks")prepareThanks();if(type==="holiday")prepareHoliday();
-let {text}=messageDetails(type);if(!text){alert("Prepare a message first.");return}
-navigator.clipboard?.writeText(text).then(()=>alert("Message copied.")).catch(()=>alert("Please copy the message from the preview."));
-}
-function saveTemplates(){
-data.settings.templates={reminder:$("tplReminder").value,thanks:$("tplThanks").value,holiday:$("tplHoliday").value};save();alert("Message templates saved.");
-}
-function resetTemplates(){if(!confirm("Restore default message templates?"))return;data.settings.templates={...DEFAULT_TEMPLATES};loadTemplateFields();saveTemplates()}
-function loadTemplateFields(){let t=templates();$("tplReminder").value=t.reminder;$("tplThanks").value=t.thanks;$("tplHoliday").value=t.holiday}
-
-/* IMAGES + AUDIO IN INDEXEDDB */
-function openDB(){return new Promise((resolve,reject)=>{let r=indexedDB.open(DB,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains("files"))r.result.createObjectStore("files")};r.onsuccess=()=>{db=r.result;resolve()};r.onerror=()=>reject(r.error)})}
-function dbPut(k,v){return new Promise((res,rej)=>{let tx=db.transaction("files","readwrite"),r=tx.objectStore("files").put(v,k);r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
-function dbGet(k){return new Promise((res,rej)=>{let r=db.transaction("files").objectStore("files").get(k);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
-function dbDel(k){return new Promise((res,rej)=>{let r=db.transaction("files","readwrite").objectStore("files").delete(k);r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
-async function uploadImage(input,key){
-let file=input.files[0];if(!file)return;
-try{
-let blob=await compress(file,key==="profile"?900:1600);
-await dbPut("img_"+key,blob);await showStoredImage(key,blob);input.value="";
-}catch(e){alert("Unable to save this image.")}
-}
-function compress(file,max){return new Promise((res,rej)=>{let r=new FileReader();r.onload=()=>{let im=new Image();im.onload=()=>{let scale=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*scale;c.height=im.height*scale;c.getContext("2d").drawImage(im,0,0,c.width,c.height);c.toBlob(b=>b?res(b):rej(),"image/jpeg",.84)};im.onerror=rej;im.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
-async function showStoredImage(key,blob){
-if(urls[key])URL.revokeObjectURL(urls[key]);
-let url=blob?URL.createObjectURL(blob):null;urls[key]=url;
-if(key==="profile"){
-$("profileHeader").style.display=blob?"block":"none";$("profilePreview").style.display=blob?"block":"none";
-if(blob){$("profileHeader").src=url;$("profilePreview").src=url}
-}else if(key==="main"){
-$("mainBanner").classList.toggle("has-image",!!blob);$("mainBannerImg").style.display=blob?"block":"none";$("mainPreview").style.display=blob?"block":"none";
-if(blob){$("mainBannerImg").src=url;$("mainPreview").src=url}
-}else{
-$("bottomBanner").classList.toggle("has-image",!!blob);$("bottomBannerImg").style.display=blob?"block":"none";$("bottomPreview").style.display=blob?"block":"none";
-if(blob){$("bottomBannerImg").src=url;$("bottomPreview").src=url}
-}
-}
-async function removeImage(key){if(!confirm("Remove this photo?"))return;await dbDel("img_"+key);showStoredImage(key,null)}
-async function uploadAlarm(input){
-let f=input.files[0];if(!f)return;if(!f.type.startsWith("audio/")){alert("Please select an audio file.");return}
-await dbPut("alarm",f);$("alarmName").textContent=f.name;input.value="";
-}
-async function playAlarm(){
-try{
-let blob=await dbGet("alarm");
-if(blob){if(alarmObjectURL)URL.revokeObjectURL(alarmObjectURL);alarmObjectURL=URL.createObjectURL(blob);alarmAudio=new Audio(alarmObjectURL);alarmAudio.loop=true;await alarmAudio.play();setTimeout(()=>{alarmAudio?.pause();alarmAudio=null},60000)}
-else{let ctx=new(window.AudioContext||window.webkitAudioContext)();let osc=ctx.createOscillator(),gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.frequency.value=880;gain.gain.value=.2;osc.start();setTimeout(()=>{osc.stop();ctx.close()},1200)}
-}catch(e){alert("The alarm could not play. Please tap Test Sound once and check your phone's sound settings.")}
-}
-async function testAlarm(){await playAlarm()}
-function removeAlarm(){if(!confirm("Remove your uploaded alarm melody?"))return;dbDel("alarm");$("alarmName").textContent="No custom melody uploaded";if(alarmAudio){alarmAudio.pause();alarmAudio=null}}
-
-/* SETTINGS + BACKUP */
-function applyZoom(){document.documentElement.style.setProperty("--scale",$("zoom").value||1);localStorage.setItem("pureShineZoom",$("zoom").value)}
-function saveSettings(){
-data.settings.businessName=$("businessName").value;data.settings.ownerName=$("ownerName").value;
-data.settings.phone=$("businessPhone").value;data.settings.address=$("businessAddress").value;
-data.settings.zoom=$("zoom").value;save();applyZoom();alert("Settings saved.");
-}
-async function backup(){
-let out={...data,files:{}};
-for(let k of ["profile","main","bottom","alarm"]){let b=await dbGet(k==="alarm"?"alarm":"img_"+k);if(b)out.files[k]=await blobData(b)}
-let blob=new Blob([JSON.stringify(out)],{type:"application/json"}),a=document.createElement("a");
-a.href=URL.createObjectURL(blob);a.download="Pure-Shine-Backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-}
-function blobData(b){return new Promise((res,rej)=>{let r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(b)})}
-async function restore(input){
-let f=input.files[0];if(!f)return;
-try{
-let x=JSON.parse(await f.text());
-for(let k of ["profile","main","bottom","alarm"])if(x.files?.[k])await dbPut(k==="alarm"?"alarm":"img_"+k,await(await fetch(x.files[k])).blob());
-delete x.files;data={clients:[],jobs:[],settings:{},...x};save();await loadImages();loadTemplateFields();render();alert("Backup restored.");
-}catch(e){alert("Unable to restore this backup.")}
-input.value="";
-}
-async function loadImages(){
-for(let k of ["profile","main","bottom"]){let b=await dbGet("img_"+k);await showStoredImage(k,b)}
-let alarm=await dbGet("alarm");$("alarmName").textContent=alarm?.name||"No custom melody uploaded";
-}
-
-/* INITIAL CLIENT DETAILS AND RECURRING JOBS */
-function seedClients(){
-const defaults=[
-{name:"Lottie",phone:"07788 447015",day:"Monday",start:"09:00",end:"11:00",type:"Agency",rate:16,repeat:"Weekly"},
-{name:"Meghan",phone:"+44 7740 291352",day:"Monday",start:"13:00",end:"14:00",type:"Private",rate:20,repeat:"Weekly"},
-{name:"Christine",phone:"",day:"Tuesday",start:"09:30",end:"12:30",type:"Private",rate:18,repeat:"Fortnightly",holiday:"Currently on holiday"},
-{name:"Matt",phone:"07886 711055",day:"Tuesday",start:"09:30",end:"13:30",type:"Agency",rate:16,repeat:"Weekly",notes:"Alternates hours around Christine's fortnightly appointment."},
-{name:"Sonia",phone:"+44 7813 677012",day:"Wednesday",start:"10:00",end:"16:00",type:"Agency",rate:16,repeat:"Weekly",notes:"Hours can vary."},
-{name:"Laura",phone:"+44 7958 391731",day:"Thursday",start:"09:30",end:"13:30",type:"Private",rate:18,repeat:"Weekly"},
-{name:"Hannah",phone:"07920 724916",day:"Thursday",start:"14:00",end:"17:00",type:"Agency",rate:16,repeat:"Weekly"},
-{name:"Sindu",phone:"07438 168843",day:"Friday",start:"09:30",end:"12:30",type:"Private",rate:20,repeat:"Fortnightly"},
-{name:"Joanna",phone:"07872 011386",day:"Friday",start:"09:30",end:"13:00",type:"Private",rate:20,repeat:"Fortnightly",notes:"Alternates Friday weeks with Sindu."},
-{name:"Peter",phone:"",day:"",start:"",end:"",type:"Private",rate:20,repeat:"Occasional"},
-{name:"Mike",phone:"",day:"",start:"",end:"",type:"Private",rate:20,repeat:"Every three weeks",notes:"Usually around 2 hours; duration can vary."}
-];
-defaults.forEach(d=>{if(!data.clients.some(c=>c.name.toLowerCase()===d.name.toLowerCase()))data.clients.push({id:crypto.randomUUID(),address:"",holiday:"",notes:"",...d})});
-}
-function ensureSchedule(){
-let today=localDate(),monday=addDays(today,(8-new Date(today+"T12:00:00").getDay())%7);
-let existing=new Set(data.jobs.map(j=>j.recurringKey).filter(Boolean));
-let cByName=n=>data.clients.find(c=>c.name.toLowerCase()===n.toLowerCase());
-for(let w=0;w<26;w++){
-let mon=addDays(monday,w*7),christineWeek=w%2===0;
-let specs=[
-["Lottie",0,"09:00","11:00","lottie"],
-["Meghan",0,"13:00","14:00","meghan"],
-["Sonia",2,"10:00","16:00","sonia"],
-["Laura",3,"09:30","13:30","laura"],
-["Hannah",3,"14:00","17:00","hannah"]
-];
-let tue=christineWeek?[["Christine",1,"09:30","12:30","christine"],["Matt",1,"13:00","17:00","matt"]]:[["Matt",1,"09:30","13:30","matt"]];
-specs.push(...tue);
-let fri=addDays(mon,4),sinduAnchor=addDays(today,(5-new Date(today+"T12:00:00").getDay()+7)%7);
-let diff=Math.round((new Date(fri+"T12:00:00")-new Date(sinduAnchor+"T12:00:00"))/86400000);
-if(diff>=0&&diff%14===0)specs.push(["Sindu",4,"09:30","12:30","sindu"]);
-else if(diff>=0&&diff%14===7)specs.push(["Joanna",4,"09:30","13:00","joanna"]);
-for(let [name,day,start,end,key] of specs){
-let date=addDays(mon,day),recurringKey=key+"_"+date;
-if(date<today||existing.has(recurringKey))continue;
-let c=cByName(name);if(!c)continue;
-if(name==="Christine"&&c.holiday&&c.holiday.toLowerCase().includes("holiday"))continue;
-data.jobs.push({id:"rec_"+recurringKey,recurringKey,clientId:c.id,date,start,end,rate:c.rate,type:c.type,targetHours:mins(start,end)/60,elapsedSeconds:0,runningSince:null,status:"planned",payment:"pending",notes:"Recurring appointment"});
-existing.add(recurringKey);
-}
-}
-save();
-}
-
-/* INITIALISE */
-async function init(){
-load();seedClients();ensureSchedule();
-$("businessName").value=data.settings.businessName||"Pure Shine Cleaning";
-$("ownerName").value=data.settings.ownerName||"";
-$("businessPhone").value=data.settings.phone||"";
-$("businessAddress").value=data.settings.address||"";
-$("zoom").value=localStorage.getItem("pureShineZoom")||data.settings.zoom||"1";applyZoom();
-loadTemplateFields();
-try{await openDB();await loadImages()}catch(e){console.error(e)}
-render();resumeRunningTimers();
-}
-init();
-</script>
-
-<dialog id="jobDialog">
 <form id="jobForm" onsubmit="saveJob(event)">
 <div class="row"><h2>Job Details</h2><button type="button" class="secondary" onclick="jobDialog.close()">✕</button></div>
 <input type="hidden" id="jobId">
-<div class="field"><label>Client</label><select id="jobClient" required></select></div>
+<div class="field"><label>Client</label><select id="jobClient" required onchange="updateJobClientDefaults()"></select></div>
 <div class="field"><label>Date</label><input type="date" id="jobDate" required></div>
 <div class="grid2">
 <div class="field"><label>Start Time</label><input type="time" id="jobStart" required></div>
@@ -693,5 +559,1221 @@ init();
 <button class="primary" type="submit">Save Client</button>
 </form>
 </dialog>
+
+<script>
+/* DATABASE AND APP STATE */
+
+const DB_NAME="PureShineImages";
+const DB_VERSION=3;
+const OLD_KEY="pureShineManager_v5";
+
+const DEFAULT_TEMPLATES={
+reminder:"Hi {client}! ♡ Just a friendly reminder that your cleaning appointment is booked for {date} at {start}. Thank you! Kind regards, {owner} – {business}.",
+thanks:"Hi {client}! ♡ Thank you for choosing {business}. I worked {hours} today ({start}–{end}). I really appreciate your trust and continued support. Thank you for having me! Kind regards, {owner}.",
+holiday:"Hi {client}! ♡ I wanted to let you know that I will be away from {holidayStart} to {holidayEnd}. I will be available again from {returnDate}. Thank you for your understanding! Kind regards, {owner} – {business}."
+};
+
+let data={clients:[],jobs:[],settings:{}};
+let db=null;
+let selectedDate=localDate();
+let jobFilter="all";
+let urls={};
+let runningIntervals={};
+let alarmAudio=null;
+let alarmObjectURL=null;
+let saveQueue=Promise.resolve();
+let migrationComplete=false;
+
+const $=id=>document.getElementById(id);
+
+function localDate(d=new Date()){
+return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function addDays(s,n){
+let d=new Date(s+"T12:00:00");
+d.setDate(d.getDate()+n);
+return localDate(d);
+}
+function dateText(s){
+return s?new Date(s+"T12:00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric"}):"";
+}
+function money(n){return "£"+Number(n||0).toFixed(2)}
+function esc(s){
+return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function mins(a,b){
+if(!a||!b)return 0;
+let [h,m]=a.split(":").map(Number);
+let [hh,mm]=b.split(":").map(Number);
+let v=hh*60+mm-h*60-m;
+return v<0?v+1440:v;
+}
+function formatMins(n){
+n=Math.max(0,Math.floor(n||0));
+return `${Math.floor(n/60)}h ${String(n%60).padStart(2,"0")}m`;
+}
+function fmtSeconds(s){
+s=Math.max(0,Math.floor(s||0));
+return [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(x=>String(x).padStart(2,"0")).join(":");
+}
+
+/* INDEXEDDB */
+
+function openDB(){
+return new Promise((resolve,reject)=>{
+if(!("indexedDB" in window)){
+reject(new Error("IndexedDB is unavailable."));
+return;
+}
+const request=indexedDB.open(DB_NAME,DB_VERSION);
+
+request.onupgradeneeded=event=>{
+const database=request.result;
+const transaction=request.transaction;
+
+if(!database.objectStoreNames.contains("files")){
+database.createObjectStore("files");
+}
+
+// Migrate the original image store to the new shared store.
+if(database.objectStoreNames.contains("images")){
+const oldStore=transaction.objectStore("images");
+const newStore=transaction.objectStore("files");
+
+oldStore.getAll().onsuccess=e=>{
+const values=e.target.result;
+oldStore.getAllKeys().onsuccess=keyEvent=>{
+const keys=keyEvent.target.result;
+keys.forEach((key,index)=>{
+const mapping={
+profile:"img_profile",
+banner:"img_main",
+bottom:"img_bottom"
+};
+const newKey=mapping[key];
+if(newKey&&values[index]){
+newStore.put(values[index],newKey);
+}
+});
+};
+};
+}
+};
+
+request.onsuccess=()=>{
+db=request.result;
+db.onversionchange=()=>db.close();
+resolve(db);
+};
+request.onerror=()=>reject(request.error);
+request.onblocked=()=>console.warn("Close other Pure Shine tabs to finish the storage update.");
+});
+}
+
+function dbPut(key,value){
+return new Promise((resolve,reject)=>{
+if(!db){reject(new Error("Database not ready."));return;}
+const tx=db.transaction("files","readwrite");
+tx.objectStore("files").put(value,key);
+tx.oncomplete=()=>resolve(true);
+tx.onerror=()=>reject(tx.error);
+tx.onabort=()=>reject(tx.error||new Error("Storage transaction aborted."));
+});
+}
+
+function dbGet(key){
+return new Promise((resolve,reject)=>{
+if(!db){reject(new Error("Database not ready."));return;}
+const request=db.transaction("files","readonly").objectStore("files").get(key);
+request.onsuccess=()=>resolve(request.result);
+request.onerror=()=>reject(request.error);
+});
+}
+
+function dbDel(key){
+return new Promise((resolve,reject)=>{
+if(!db){reject(new Error("Database not ready."));return;}
+const tx=db.transaction("files","readwrite");
+tx.objectStore("files").delete(key);
+tx.oncomplete=()=>resolve(true);
+tx.onerror=()=>reject(tx.error);
+tx.onabort=()=>reject(tx.error||new Error("Delete failed."));
+});
+}
+
+/* DATA MIGRATION AND SAVING */
+
+async function load(){
+let stored=await dbGet("appData");
+
+if(stored){
+data={
+clients:[],
+jobs:[],
+settings:{},
+...stored
+};
+migrationComplete=true;
+return true;
+}
+
+// Import old localStorage data without deleting it yet.
+let oldData=null;
+try{
+const raw=localStorage.getItem(OLD_KEY);
+if(raw)oldData=JSON.parse(raw);
+}catch(error){
+console.warn("Could not read previous local data:",error);
+}
+
+if(oldData){
+data={
+clients:[],
+jobs:[],
+settings:{},
+...oldData
+};
+await dbPut("appData",data);
+
+// Verify the IndexedDB copy before removing the old copy.
+const verification=await dbGet("appData");
+if(verification){
+migrationComplete=true;
+try{localStorage.removeItem(OLD_KEY)}catch(e){}
+return true;
+}
+throw new Error("Previous data could not be verified.");
+}
+
+migrationComplete=true;
+return true;
+}
+
+function save(){
+const snapshot=JSON.parse(JSON.stringify(data));
+saveQueue=saveQueue.then(()=>dbPut("appData",snapshot));
+return saveQueue.catch(error=>{
+console.error("Data save failed:",error);
+alert("Your data could not be saved. Please export a backup and check your browser storage.");
+return false;
+});
+}
+
+/* NAVIGATION */
+
+function showPage(id,btn){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+$(id).classList.add("active");
+document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+if(btn)btn.classList.add("active");
+render();
+}
+function render(){
+renderHome();
+renderSchedule();
+renderJobs();
+renderClients();
+renderEarnings();
+renderMessageSelects();
+}
+
+/* CLIENTS AND JOB HELPERS */
+
+function findClient(id){return data.clients.find(c=>c.id===id)}
+function elapsedNow(j){
+return Number(j.elapsedSeconds||0)+
+(j.runningSince?Math.max(0,Math.floor((Date.now()-j.runningSince)/1000)):0);
+}
+function earnings(j){
+return Number(j.elapsedSeconds||0)/3600*Number(j.rate||0);
+}
+function targetSeconds(j){return Number(j.targetHours||0)*3600}
+
+/* HOME */
+
+function renderHome(){
+const today=localDate();
+const jobs=data.jobs.filter(j=>j.date===today&&j.status!=="cancelled");
+$("homeJobs").textContent=jobs.length;
+$("homeHours").textContent=formatMins(jobs.reduce((s,j)=>s+Math.floor(elapsedNow(j)/60),0));
+$("homeMoney").textContent=money(jobs.reduce((s,j)=>s+earnings({...j,elapsedSeconds:elapsedNow(j)}),0));
+$("upcomingCount").textContent=data.jobs.filter(j=>j.status==="planned"&&j.date>today).length;
+$("homeList").innerHTML=jobs.sort((a,b)=>(a.start||"").localeCompare(b.start||"")).map(jobCard).join("")||
+'<div class="empty">No jobs scheduled for today.</div>';
+}
+
+/* SCHEDULE */
+
+function renderSchedule(){
+$("scheduleDate").textContent=dateText(selectedDate);
+$("scheduleHeading").textContent=selectedDate;
+$("scheduleList").innerHTML=data.jobs
+.filter(j=>j.date===selectedDate)
+.sort((a,b)=>(a.start||"").localeCompare(b.start||""))
+.map(j=>{
+const c=findClient(j.clientId);
+return `<div class="job">
+<div class="job-name">${esc(c?.name||"Client")}</div>
+<div class="job-time">${esc(j.start||"")}–${esc(j.end||"")}</div>
+<div class="sub">${j.status==="done"?"Completed":"Scheduled"} · ${money(earnings(j))}</div>
+<button class="secondary" onclick="editJob('${j.id}')">Edit Job</button>
+</div>`;
+}).join("")||'<div class="empty">No appointments for this day.</div>';
+}
+function moveDate(n){
+selectedDate=addDays(selectedDate,n);
+renderSchedule();
+}
+
+/* JOBS */
+
+function jobCard(j){
+const c=findClient(j.clientId);
+const elapsed=elapsedNow(j);
+const target=targetSeconds(j);
+const state=j.status==="done"?"Completed":j.runningSince?"Timer running":"Scheduled";
+
+return `<div class="job ${j.status==="done"?"done":j.runningSince?"running":""}">
+<div class="row">
+<div class="job-name">${esc(c?.name||"Client")}</div>
+<span class="sub">${state}</span>
+</div>
+<div class="job-time">${dateText(j.date)} · ${esc(j.start||"")}–${esc(j.end||"")}</div>
+<div class="sub">Target: ${Number(j.targetHours||0).toFixed(2)} hours · Rate: ${money(j.rate)}/hour</div>
+<div class="row">
+<div>
+<div class="sub">Time recorded</div>
+<div class="job-clock" id="clock_${j.id}">${fmtSeconds(elapsed)}</div>
+</div>
+<div>
+<div class="sub">Current earnings</div>
+<div class="job-clock" id="amount_${j.id}">${money(earnings({...j,elapsedSeconds:elapsed}))}</div>
+</div>
+</div>
+<div class="sub" id="target_${j.id}">${target?elapsed>=target?"Target reached!":Math.ceil((target-elapsed)/60)+" minutes remaining":"Set a target duration"}</div>
+<div class="actions">
+${j.status!=="done"?(j.runningSince?
+`<button class="secondary" onclick="pauseJob('${j.id}')">Pause</button>`:
+`<button class="primary" onclick="startJob('${j.id}')">Start Timer</button>`):""}
+${j.status!=="done"?`<button class="green" onclick="finishJob('${j.id}')">Finish & Save</button>`:
+`<button class="secondary" onclick="reopenJob('${j.id}')">Reopen</button>`}
+<button class="secondary" onclick="editJob('${j.id}')">Edit</button>
+<button class="danger" onclick="deleteJob('${j.id}')">Delete</button>
+</div>
+</div>`;
+}
+
+function renderJobs(){
+const list=data.jobs.filter(j=>
+jobFilter==="all"||
+(jobFilter==="planned"&&j.status!=="done")||
+(jobFilter==="done"&&j.status==="done")
+).sort((a,b)=>(a.date+(a.start||"")).localeCompare(b.date+(b.start||"")));
+$("jobsList").innerHTML=list.map(jobCard).join("")||
+'<div class="empty">No jobs to display.</div>';
+}
+function setJobFilter(filter){jobFilter=filter;renderJobs()}
+
+function openJob(){
+$("jobForm").reset();
+$("jobId").value="";
+$("jobClient").innerHTML=data.clients.map(c=>
+`<option value="${esc(c.id)}">${esc(c.name)}</option>`
+).join("");
+
+if(!data.clients.length){
+alert("Please add a client first.");
+return;
+}
+$("jobDate").value=selectedDate;
+updateJobClientDefaults();
+$("jobTarget").value=2;
+$("jobDialog").showModal();
+}
+
+function updateJobClientDefaults(){
+const c=findClient($("jobClient").value);
+if(!c)return;
+$("jobRate").value=c.rate||16;
+$("jobType").value=c.type||"Private";
+if(c.start)$("jobStart").value=c.start;
+if(c.end)$("jobEnd").value=c.end;
+if(c.start&&c.end)$("jobTarget").value=(mins(c.start,c.end)/60).toFixed(2);
+}
+
+async function saveJob(e){
+e.preventDefault();
+const id=$("jobId").value||crypto.randomUUID();
+const old=data.jobs.find(j=>j.id===id);
+
+const j={
+...(old||{}),
+id,
+clientId:$("jobClient").value,
+date:$("jobDate").value,
+start:$("jobStart").value,
+end:$("jobEnd").value,
+rate:Number($("jobRate").value),
+targetHours:Number($("jobTarget").value),
+type:$("jobType").value,
+status:$("jobStatus").value,
+payment:$("jobPayment").value,
+notes:$("jobNotes").value
+};
+
+if(!old){
+j.elapsedSeconds=0;
+j.runningSince=null;
+j.alarmPlayed=false;
+}
+const index=data.jobs.findIndex(x=>x.id===id);
+if(index<0)data.jobs.push(j);
+else data.jobs[index]=j;
+
+await save();
+$("jobDialog").close();
+render();
+}
+
+function editJob(id){
+const j=data.jobs.find(x=>x.id===id);
+if(!j)return;
+
+$("jobClient").innerHTML=data.clients.map(c=>
+`<option value="${esc(c.id)}">${esc(c.name)}</option>`
+).join("");
+
+$("jobId").value=j.id;
+$("jobClient").value=j.clientId;
+$("jobDate").value=j.date;
+$("jobStart").value=j.start||"";
+$("jobEnd").value=j.end||"";
+$("jobRate").value=j.rate;
+$("jobTarget").value=j.targetHours||2;
+$("jobType").value=j.type||"Private";
+$("jobStatus").value=j.status||"planned";
+$("jobPayment").value=j.payment||"pending";
+$("jobNotes").value=j.notes||"";
+$("jobDialog").showModal();
+}
+
+async function startJob(id){
+const j=data.jobs.find(x=>x.id===id);
+if(!j||j.status==="done")return;
+
+if(data.jobs.some(x=>x.id!==id&&x.runningSince)){
+alert("Please pause the other active job timer first.");
+return;
+}
+j.runningSince=Date.now();
+await save();
+renderJobs();
+renderHome();
+runJobTicker(id);
+}
+
+async function pauseJob(id){
+const j=data.jobs.find(x=>x.id===id);
+if(!j||!j.runningSince)return;
+j.elapsedSeconds=elapsedNow(j);
+j.runningSince=null;
+clearInterval(runningIntervals[id]);
+await save();
+render();
+}
+
+async function finishJob(id){
+const j=data.jobs.find(x=>x.id===id);
+if(!j)return;
+if(j.runningSince){
+j.elapsedSeconds=elapsedNow(j);
+j.runningSince=null;
+}
+j.status="done";
+j.completedAt=Date.now();
+clearInterval(runningIntervals[id]);
+await save();
+render();
+if(j.elapsedSeconds>=targetSeconds(j))playAlarm();
+}
+
+async function reopenJob(id){
+const j=data.jobs.find(x=>x.id===id);
+if(!j)return;
+j.status="planned";
+j.alarmPlayed=false;
+await save();
+render();
+}
+
+async function deleteJob(id){
+if(!confirm("Delete this job?"))return;
+const j=data.jobs.find(x=>x.id===id);
+if(j?.runningSince){
+j.elapsedSeconds=elapsedNow(j);
+j.runningSince=null;
+}
+clearInterval(runningIntervals[id]);
+data.jobs=data.jobs.filter(x=>x.id!==id);
+await save();
+render();
+}
+
+function runJobTicker(id){
+clearInterval(runningIntervals[id]);
+runningIntervals[id]=setInterval(async()=>{
+const j=data.jobs.find(x=>x.id===id);
+if(!j||!j.runningSince){
+clearInterval(runningIntervals[id]);
+return;
+}
+const elapsed=elapsedNow(j);
+const target=targetSeconds(j);
+
+const clock=$("clock_"+id);
+const amount=$("amount_"+id);
+const remaining=$("target_"+id);
+
+if(clock)clock.textContent=fmtSeconds(elapsed);
+if(amount)amount.textContent=money(earnings({...j,elapsedSeconds:elapsed}));
+if(remaining)remaining.textContent=target?
+(elapsed>=target?"Target reached!":Math.ceil((target-elapsed)/60)+" minutes remaining"):
+"Set a target duration";
+
+if(target>0&&elapsed>=target&&!j.alarmPlayed){
+j.alarmPlayed=true;
+j.elapsedSeconds=elapsed;
+j.runningSince=null;
+clearInterval(runningIntervals[id]);
+await save();
+playAlarm();
+alert("Target time reached for "+(findClient(j.clientId)?.name||"this job")+".");
+render();
+}
+},1000);
+}
+
+function resumeRunningTimers(){
+data.jobs.filter(j=>j.runningSince).forEach(j=>runJobTicker(j.id));
+}
+
+/* CLIENTS */
+
+function openClient(){
+$("clientForm").reset();
+$("clientId").value="";
+$("clientRate").value=16;
+$("clientDialog").showModal();
+}
+
+async function saveClient(e){
+e.preventDefault();
+const id=$("clientId").value||crypto.randomUUID();
+const c={
+id,
+name:$("clientName").value.trim(),
+phone:$("clientPhone").value,
+address:$("clientAddress").value,
+type:$("clientType").value,
+rate:Number($("clientRate").value),
+repeat:$("clientRepeat").value,
+day:$("clientDay").value,
+start:$("clientStart").value,
+end:$("clientEnd").value,
+holiday:$("clientHoliday").value,
+notes:$("clientNotes").value
+};
+
+const index=data.clients.findIndex(x=>x.id===id);
+if(index<0)data.clients.push(c);
+else data.clients[index]=c;
+
+await save();
+$("clientDialog").close();
+render();
+}
+
+function editClient(id){
+const c=findClient(id);
+if(!c)return;
+
+$("clientId").value=c.id;
+$("clientName").value=c.name;
+$("clientPhone").value=c.phone||"";
+$("clientAddress").value=c.address||"";
+$("clientType").value=c.type||"Private";
+$("clientRate").value=c.rate??18;
+$("clientRepeat").value=c.repeat||"Weekly";
+$("clientDay").value=c.day||"";
+$("clientStart").value=c.start||"";
+$("clientEnd").value=c.end||"";
+$("clientHoliday").value=c.holiday||"";
+$("clientNotes").value=c.notes||"";
+$("clientDialog").showModal();
+}
+
+function renderClients(){
+const q=($("clientSearch").value||"").toLowerCase();
+$("clientList").innerHTML=data.clients
+.filter(c=>(c.name||"").toLowerCase().includes(q))
+.map(c=>`
+<div class="card">
+<div class="row"><b>${esc(c.name)}</b><b>${money(c.rate)}/hour</b></div>
+<div class="sub">${esc(c.type)} · ${esc(c.repeat||"")} · ${esc(c.day||"Day not set")}</div>
+<div class="sub">${esc(c.phone||"Phone not added")}</div>
+${c.address?`<div class="sub">${esc(c.address)}</div>`:""}
+${c.start||c.end?`<div class="sub">Usual time: ${esc(c.start||"")}–${esc(c.end||"")}</div>`:""}
+${c.holiday?`<div class="sub">Availability: ${esc(c.holiday)}</div>`:""}
+${c.notes?`<div class="sub">Notes: ${esc(c.notes)}</div>`:""}
+<div class="actions">
+<button class="secondary" onclick="editClient('${c.id}')">Edit</button>
+<button class="danger" onclick="deleteClient('${c.id}')">Delete</button>
+</div>
+</div>`).join("")||'<div class="empty">No clients found.</div>';
+}
+
+async function deleteClient(id){
+if(!confirm("Delete this client? Job history will be kept."))return;
+data.clients=data.clients.filter(c=>c.id!==id);
+await save();
+render();
+}
+
+/* EARNINGS */
+
+function renderEarnings(){
+const done=data.jobs.filter(j=>j.status==="done");
+const total=done.reduce((s,j)=>s+earnings(j),0);
+const paid=done.filter(j=>j.payment==="paid").reduce((s,j)=>s+earnings(j),0);
+const owed=done.filter(j=>j.payment==="debt").reduce((s,j)=>s+earnings(j),0);
+
+$("earned").textContent=money(total);
+$("paid").textContent=money(paid);
+$("pending").textContent=money(total-paid-owed);
+$("owed").textContent=money(owed);
+
+$("history").innerHTML=done.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(j=>`
+<div class="card">
+<b>${esc(findClient(j.clientId)?.name||"Client")}</b>
+<div class="sub">${dateText(j.date)} · ${formatMins(Math.floor((j.elapsedSeconds||0)/60))}</div>
+<div class="row">
+<b>${money(earnings(j))}</b>
+<button class="secondary" onclick="markPaid('${j.id}')">Mark Paid</button>
+</div>
+</div>`).join("")||'<div class="empty">No completed jobs yet.</div>';
+}
+
+async function markPaid(id){
+const j=data.jobs.find(x=>x.id===id);
+if(j){j.payment="paid";await save();render();}
+}
+
+/* CLIENT MESSAGES */
+
+function templates(){
+return {...DEFAULT_TEMPLATES,...(data.settings.templates||{})};
+}
+function fillTemplate(template,values){
+return String(template).replace(/\{(\w+)\}/g,(match,key)=>values[key]??match);
+}
+function businessValues(){
+return {
+business:data.settings.businessName||"Pure Shine Cleaning",
+owner:data.settings.ownerName||"Your Cleaner"
+};
+}
+function setOptions(id,items,placeholder){
+const el=$(id);
+const previous=el.value;
+el.innerHTML=`<option value="">${placeholder}</option>`+
+items.map(x=>`<option value="${esc(x.value)}">${esc(x.label)}</option>`).join("");
+if(items.some(x=>x.value===previous))el.value=previous;
+}
+
+function renderMessageSelects(){
+const future=data.jobs.filter(j=>j.status!=="done"&&j.date>=localDate())
+.sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start));
+
+setOptions("reminderJob",future.map(j=>({
+value:j.id,
+label:`${findClient(j.clientId)?.name||"Client"} · ${dateText(j.date)} · ${j.start}`
+})),"Choose an appointment");
+
+const completed=data.jobs.filter(j=>j.status==="done").sort((a,b)=>b.date.localeCompare(a.date));
+setOptions("thanksJob",completed.map(j=>({
+value:j.id,
+label:`${findClient(j.clientId)?.name||"Client"} · ${dateText(j.date)}`
+})),"Choose completed job");
+
+setOptions("holidayClient",data.clients.map(c=>({
+value:c.id,label:c.name
+})),"Choose client");
+}
+
+function prepareReminder(){
+const j=data.jobs.find(x=>x.id===$("reminderJob").value);
+if(!j){$("reminderPreview").textContent="Choose an appointment.";return;}
+const c=findClient(j.clientId);
+$("reminderPreview").textContent=fillTemplate(templates().reminder,{
+...businessValues(),
+client:c?.name||"client",
+date:dateText(j.date),
+start:j.start,
+end:j.end
+});
+}
+
+function prepareThanks(){
+const j=data.jobs.find(x=>x.id===$("thanksJob").value);
+if(!j){$("thanksPreview").textContent="Choose a completed job.";return;}
+const c=findClient(j.clientId);
+$("thanksPreview").textContent=fillTemplate(templates().thanks,{
+...businessValues(),
+client:c?.name||"client",
+date:dateText(j.date),
+start:j.start,
+end:j.end,
+hours:formatMins(Math.floor((j.elapsedSeconds||0)/60))
+});
+}
+
+function prepareHoliday(){
+const c=findClient($("holidayClient").value);
+const start=$("holidayStart").value;
+const end=$("holidayEnd").value;
+
+if(!c||!start||!end){
+$("holidayPreview").textContent="Choose a client and holiday dates.";
+return;
+}
+if(end<start){
+$("holidayPreview").textContent="The end date must be after the start date.";
+return;
+}
+
+$("holidayPreview").textContent=fillTemplate(templates().holiday,{
+...businessValues(),
+client:c.name,
+holidayStart:dateText(start),
+holidayEnd:dateText(end),
+returnDate:dateText(addDays(end,1))
+});
+}
+
+function getMessageDetails(type){
+if(type==="reminder"){
+const j=data.jobs.find(x=>x.id===$("reminderJob").value);
+return {client:findClient(j?.clientId),text:$("reminderPreview").textContent};
+}
+if(type==="thanks"){
+const j=data.jobs.find(x=>x.id===$("thanksJob").value);
+return {client:findClient(j?.clientId),text:$("thanksPreview").textContent};
+}
+return {client:findClient($("holidayClient").value),text:$("holidayPreview").textContent};
+}
+
+function sendMessage(type,method){
+if(type==="reminder")prepareReminder();
+if(type==="thanks")prepareThanks();
+if(type==="holiday")prepareHoliday();
+
+const {client,text}=getMessageDetails(type);
+if(!client||!text||text.startsWith("Choose")||text.startsWith("The end")){
+alert("Please select the required details first.");
+return;
+}
+
+const phone=String(client.phone||"").replace(/[^\d+]/g,"");
+if(!phone){
+alert("Please add this client's phone number in Client Details.");
+return;
+}
+
+if(method==="whatsapp"){
+const number=phone.replace(/\D/g,"");
+window.open("https://wa.me/"+number+"?text="+encodeURIComponent(text),"_blank");
+}else{
+location.href="sms:"+phone+"?body="+encodeURIComponent(text);
+}
+}
+
+async function copyMessage(type){
+if(type==="reminder")prepareReminder();
+if(type==="thanks")prepareThanks();
+if(type==="holiday")prepareHoliday();
+
+const {text}=getMessageDetails(type);
+if(!text||text.startsWith("Choose"))return;
+
+try{
+await navigator.clipboard.writeText(text);
+alert("Message copied.");
+}catch(error){
+alert("Clipboard unavailable. Please select and copy the message from the preview.");
+}
+}
+
+async function saveTemplates(){
+data.settings.templates={
+reminder:$("tplReminder").value,
+thanks:$("tplThanks").value,
+holiday:$("tplHoliday").value
+};
+await save();
+alert("Message templates saved.");
+}
+function resetTemplates(){
+if(!confirm("Restore default message templates?"))return;
+data.settings.templates={...DEFAULT_TEMPLATES};
+loadTemplateFields();
+saveTemplates();
+}
+function loadTemplateFields(){
+const t=templates();
+$("tplReminder").value=t.reminder;
+$("tplThanks").value=t.thanks;
+$("tplHoliday").value=t.holiday;
+}
+
+/* IMAGES */
+
+function compressImage(file,max){
+return new Promise((resolve,reject)=>{
+const reader=new FileReader();
+reader.onload=()=>{
+const img=new Image();
+img.onload=()=>{
+const ratio=Math.min(1,max/Math.max(img.width,img.height));
+const canvas=document.createElement("canvas");
+canvas.width=Math.round(img.width*ratio);
+canvas.height=Math.round(img.height*ratio);
+const context=canvas.getContext("2d");
+context.drawImage(img,0,0,canvas.width,canvas.height);
+canvas.toBlob(blob=>{
+if(blob)resolve(blob);
+else reject(new Error("Image processing failed."));
+},"image/jpeg",.82);
+};
+img.onerror=reject;
+img.src=reader.result;
+};
+reader.onerror=reject;
+reader.readAsDataURL(file);
+});
+}
+
+async function uploadImage(input,key){
+const file=input.files?.[0];
+if(!file)return;
+
+if(!file.type.startsWith("image/")){
+alert("Please select a valid image.");
+input.value="";
+return;
+}
+
+try{
+const blob=await compressImage(file,key==="profile"?900:1600);
+await dbPut("img_"+key,blob);
+await showStoredImage(key,blob);
+input.value="";
+alert("Image saved successfully.");
+}catch(error){
+console.error("Image upload failed:",error);
+alert("Unable to save this image. Please try a smaller photo.");
+}
+}
+
+async function showStoredImage(key,blob){
+if(urls[key]){
+URL.revokeObjectURL(urls[key]);
+urls[key]=null;
+}
+const url=blob?URL.createObjectURL(blob):null;
+urls[key]=url;
+
+if(key==="profile"){
+$("profileHeader").style.display=blob?"block":"none";
+$("profilePreview").style.display=blob?"block":"none";
+if(blob){
+$("profileHeader").src=url;
+$("profilePreview").src=url;
+}
+}
+
+if(key==="main"){
+$("mainBanner").classList.toggle("has-image",!!blob);
+$("mainBannerImg").style.display=blob?"block":"none";
+$("mainPreview").style.display=blob?"block":"none";
+if(blob){
+$("mainBannerImg").src=url;
+$("mainPreview").src=url;
+}
+}
+
+if(key==="bottom"){
+$("bottomBanner").classList.toggle("has-image",!!blob);
+$("bottomBannerImg").style.display=blob?"block":"none";
+$("bottomPreview").style.display=blob?"block":"none";
+if(blob){
+$("bottomBannerImg").src=url;
+$("bottomPreview").src=url;
+}
+}
+}
+
+async function loadImages(){
+for(const key of ["profile","main","bottom"]){
+try{
+let blob=await dbGet("img_"+key);
+
+// Compatibility with the original version's key.
+if(!blob&&key==="main")blob=await dbGet("banner");
+if(!blob&&key==="profile")blob=await dbGet("profile");
+if(!blob&&key==="bottom")blob=await dbGet("bottom");
+
+await showStoredImage(key,blob||null);
+}catch(error){
+console.error("Image loading failed:",key,error);
+}
+}
+}
+
+async function removeImage(key){
+if(!confirm("Remove this image?"))return;
+try{
+await dbDel("img_"+key);
+await showStoredImage(key,null);
+}catch(error){
+alert("The image could not be removed.");
+}
+}
+
+/* ALARM SOUND */
+
+async function uploadAlarm(input){
+const file=input.files?.[0];
+if(!file)return;
+if(!file.type.startsWith("audio/")){
+alert("Please choose an audio file.");
+input.value="";
+return;
+}
+try{
+await dbPut("alarm",file);
+$("alarmName").textContent=file.name;
+input.value="";
+alert("Alarm melody saved.");
+}catch(error){
+alert("Unable to save the alarm melody.");
+}
+}
+
+async function playAlarm(){
+try{
+const blob=await dbGet("alarm");
+if(blob){
+if(alarmObjectURL)URL.revokeObjectURL(alarmObjectURL);
+alarmObjectURL=URL.createObjectURL(blob);
+alarmAudio=new Audio(alarmObjectURL);
+alarmAudio.loop=true;
+await alarmAudio.play();
+setTimeout(()=>{
+if(alarmAudio){
+alarmAudio.pause();
+alarmAudio=null;
+}
+},60000);
+}else{
+const context=new(window.AudioContext||window.webkitAudioContext)();
+const oscillator=context.createOscillator();
+const gain=context.createGain();
+oscillator.connect(gain);
+gain.connect(context.destination);
+oscillator.frequency.value=880;
+gain.gain.value=.2;
+oscillator.start();
+setTimeout(()=>{
+oscillator.stop();
+context.close();
+},1500);
+}
+}catch(error){
+alert("The alarm could not play. Please check your phone's sound settings.");
+}
+}
+
+async function testAlarm(){
+await playAlarm();
+}
+async function removeAlarm(){
+if(!confirm("Remove your uploaded alarm melody?"))return;
+await dbDel("alarm");
+$("alarmName").textContent="No custom melody uploaded";
+if(alarmAudio){
+alarmAudio.pause();
+alarmAudio=null;
+}
+}
+
+/* SETTINGS */
+
+function applyZoom(){
+const scale=$("zoom").value||"1";
+document.documentElement.style.setProperty("--scale",scale);
+try{localStorage.setItem("pureShineZoom",scale)}catch(e){}
+}
+
+async function saveSettings(){
+data.settings.businessName=$("businessName").value;
+data.settings.ownerName=$("ownerName").value;
+data.settings.phone=$("businessPhone").value;
+data.settings.address=$("businessAddress").value;
+data.settings.zoom=$("zoom").value;
+await save();
+applyZoom();
+alert("Settings saved.");
+}
+
+/* BACKUP AND RESTORE */
+
+function blobToDataURL(blob){
+return new Promise((resolve,reject)=>{
+const reader=new FileReader();
+reader.onload=()=>resolve(reader.result);
+reader.onerror=reject;
+reader.readAsDataURL(blob);
+});
+}
+
+async function backup(){
+try{
+await save();
+const output={
+...data,
+files:{}
+};
+
+for(const key of ["profile","main","bottom","alarm"]){
+const blob=await dbGet(key==="alarm"?"alarm":"img_"+key);
+if(blob)output.files[key]=await blobToDataURL(blob);
+}
+
+const file=new Blob([JSON.stringify(output,null,2)],{type:"application/json"});
+const url=URL.createObjectURL(file);
+const link=document.createElement("a");
+link.href=url;
+link.download="Pure-Shine-Backup.json";
+link.click();
+setTimeout(()=>URL.revokeObjectURL(url),1500);
+}catch(error){
+console.error(error);
+alert("Backup could not be created.");
+}
+}
+
+async function restore(input){
+const file=input.files?.[0];
+if(!file)return;
+
+try{
+const restored=JSON.parse(await file.text());
+
+if(restored.files){
+for(const key of ["profile","main","bottom","alarm"]){
+if(restored.files[key]){
+const blob=await(await fetch(restored.files[key])).blob();
+await dbPut(key==="alarm"?"alarm":"img_"+key,blob);
+}
+}
+delete restored.files;
+}
+
+data={
+clients:[],
+jobs:[],
+settings:{},
+...restored
+};
+
+await save();
+await loadImages();
+loadTemplateFields();
+render();
+
+const alarm=await dbGet("alarm");
+$("alarmName").textContent=alarm?.name||"No custom melody uploaded";
+
+alert("Backup restored successfully.");
+}catch(error){
+console.error(error);
+alert("Unable to restore this backup.");
+}
+input.value="";
+}
+
+/* RECURRING APPOINTMENTS */
+
+function getMonday(date){
+const d=new Date(date+"T12:00:00");
+const day=d.getDay();
+d.setDate(d.getDate()-(day===0?6:day-1));
+return localDate(d);
+}
+
+function seedClients(){
+const defaults=[
+{name:"Lottie",type:"Agency",rate:16,repeat:"Weekly",day:"Monday",start:"09:00",end:"11:00"},
+{name:"Meghan",type:"Private",rate:18,repeat:"Weekly",day:"Monday",start:"13:00",end:"14:00"},
+{name:"Christine",type:"Private",rate:18,repeat:"Fortnightly",day:"Tuesday",start:"09:30",end:"12:30"},
+{name:"Matt",type:"Agency",rate:16,repeat:"Weekly",day:"Tuesday",start:"09:30",end:"13:30",notes:"Hours alternate around Christine's fortnightly appointment."},
+{name:"Sonia",type:"Agency",rate:16,repeat:"Weekly",day:"Wednesday",start:"10:00",end:"16:00",notes:"Usual hours; editable when needed."},
+{name:"Laura",type:"Private",rate:18,repeat:"Weekly",day:"Thursday",start:"09:30",end:"13:30"},
+{name:"Hannah",type:"Agency",rate:16,repeat:"Weekly",day:"Thursday",start:"14:00",end:"17:00"},
+{name:"Sindu",type:"Agency",rate:16,repeat:"Fortnightly",day:"Friday",start:"09:30",end:"12:30"},
+{name:"Joanna",type:"Agency",rate:16,repeat:"Fortnightly",day:"Friday",start:"09:30",end:"12:30",notes:"Alternates weeks with Sindu."},
+{name:"Peter",type:"Private",rate:20,repeat:"Occasional"},
+{name:"Mike",type:"Private",rate:20,repeat:"Every three weeks",notes:"Usually around 2 hours; duration can vary."}
+];
+
+defaults.forEach(item=>{
+if(!data.clients.some(c=>c.name.toLowerCase()===item.name.toLowerCase())){
+data.clients.push({
+id:crypto.randomUUID(),
+phone:"",
+address:"",
+holiday:"",
+notes:"",
+...item
+});
+}
+});
+}
+
+function ensureSchedule(){
+const today=localDate();
+const monday=getMonday(today);
+const existing=new Set(data.jobs.map(j=>j.recurringKey).filter(Boolean));
+
+const clientByName=name=>data.clients.find(c=>c.name.toLowerCase()===name.toLowerCase());
+
+const firstFriday=addDays(monday,4);
+const fridayDiff=Math.round(
+(new Date(firstFriday+"T12:00:00")-new Date(today+"T12:00:00"))/86400000
+);
+const sinduAnchor=addDays(today,fridayDiff>=0?fridayDiff:fridayDiff+7);
+
+for(let week=0;week<26;week++){
+const weekStart=addDays(monday,week*7);
+const christineWeek=week%2===0;
+
+const appointments=[
+["Lottie",0,"09:00","11:00","lottie"],
+["Meghan",0,"13:00","14:00","meghan"],
+["Sonia",2,"10:00","16:00","sonia"],
+["Laura",3,"09:30","13:30","laura"],
+["Hannah",3,"14:00","17:00","hannah"]
+];
+
+if(christineWeek){
+appointments.push(
+["Christine",1,"09:30","12:30","christine"],
+["Matt",1,"13:00","17:00","matt"]
+);
+}else{
+appointments.push(
+["Matt",1,"09:30","13:30","matt"]
+);
+}
+
+const friday=addDays(weekStart,4);
+const diff=Math.round(
+(new Date(friday+"T12:00:00")-new Date(sinduAnchor+"T12:00:00"))/86400000
+);
+
+if(diff>=0&&diff%14===0){
+appointments.push(["Sindu",4,"09:30","12:30","sindu"]);
+}else if(diff>=0&&diff%14===7){
+appointments.push(["Joanna",4,"09:30","12:30","joanna"]);
+}
+
+appointments.forEach(([name,day,start,end,key])=>{
+const date=addDays(weekStart,day);
+const recurringKey=key+"_"+date;
+
+if(date<today||existing.has(recurringKey))return;
+
+const client=clientByName(name);
+if(!client)return;
+
+const job={
+id:"rec_"+recurringKey,
+recurringKey,
+clientId:client.id,
+date,
+start,
+end,
+rate:Number(client.rate||16),
+targetHours:mins(start,end)/60,
+type:client.type||"Agency",
+elapsedSeconds:0,
+runningSince:null,
+alarmPlayed:false,
+status:"planned",
+payment:"pending",
+notes:"Recurring appointment"
+};
+
+data.jobs.push(job);
+existing.add(recurringKey);
+});
+}
+}
+
+/* INITIALISE */
+
+async function init(){
+try{
+await openDB();
+await load();
+
+seedClients();
+ensureSchedule();
+
+$("businessName").value=data.settings.businessName||"Pure Shine Cleaning";
+$("ownerName").value=data.settings.ownerName||"";
+$("businessPhone").value=data.settings.phone||"";
+$("businessAddress").value=data.settings.address||"";
+
+let zoom="1";
+try{
+zoom=localStorage.getItem("pureShineZoom")||data.settings.zoom||"1";
+}catch(e){
+zoom=data.settings.zoom||"1";
+}
+$("zoom").value=zoom;
+applyZoom();
+
+loadTemplateFields();
+await loadImages();
+
+const alarm=await dbGet("alarm");
+$("alarmName").textContent=alarm?.name||"No custom melody uploaded";
+
+await save();
+render();
+resumeRunningTimers();
+
+$("storageStatus").textContent="Your data is saved in IndexedDB on this device.";
+
+}catch(error){
+console.error("Application initialisation failed:",error);
+alert("Pure Shine could not initialise its storage. Please reload the application. Do not clear your browser data.");
+}
+}
+
+init();
+</script>
+
 </body>
 </html>
