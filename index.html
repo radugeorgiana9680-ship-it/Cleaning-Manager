@@ -41,7 +41,211 @@ h1,h2,h3{font-family:"Cormorant Garamond",serif;margin:10px 0;font-weight:700}h1
 @media(max-width:390px){.nav button{font-size:.53rem}.nav button span{font-size:1.55rem}.cal-day{min-height:56px;font-size:.7rem}}
 </style>
 </head>
-<body>
-<!-- Pentru a evita trunchierea, codul complet este disponibil în fișierul atașat. -->
-</body>
-</html>
+<body><div class="app">
+<header><img id="profileHeader" class="profile" alt="Profile"><div class="greeting-wrap"><div class="greeting" id="greetingText">Good morning!</div><div class="greeting-date" id="greetingDate"></div><div class="greeting-business">Welcome to your day ✧</div></div></header>
+
+<section id="home" class="page active">
+<div class="card banner" id="mainBanner"><img id="mainBannerImg" alt="Banner"><div class="banner-placeholder"></div></div>
+<h2>Today's Overview</h2>
+<div class="stats">
+<div class="stat"><small>Today's Jobs</small><strong id="homeJobs">0</strong></div><div class="stat"><small>Completed Hours</small><strong id="homeHours">0h 00m</strong></div>
+<div class="stat"><small>Today's Earnings</small><strong id="homeMoney">£0.00</strong></div><div class="stat"><small>Upcoming Jobs</small><strong id="upcomingCount">0</strong></div></div>
+<div id="homeTimer"></div><div id="homeList"></div><div class="bottom-brand-banner"><strong>✧ Pure Shine Cleaning ✧</strong><span>Making every space shine, one clean at a time.</span><small>CARE • QUALITY • SPARKLE</small></div>
+</section>
+
+<section id="schedule" class="page">
+<h1>Schedule & Calendar</h1>
+<div class="view-tabs"><button class="secondary" id="monthTab" onclick="setCalendarView('month')">Month</button><button class="secondary" id="weekTab" onclick="setCalendarView('week')">Week</button><button class="secondary" id="dayTab" onclick="setCalendarView('day')">Day</button></div>
+<div class="row" style="margin-top:10px"><button class="secondary" onclick="moveDate(-1)">‹ Previous</button><b id="scheduleHeading"></b><button class="secondary" onclick="moveDate(1)">Next ›</button></div>
+<div id="calendar"></div>
+<div class="row"><h2 id="selectedDateHeading"></h2><button class="primary" onclick="openJob()">＋ Add Job</button></div>
+<div id="scheduleList"></div>
+</section>
+
+<section id="clients" class="page"><div class="row"><h1>My Clients ♡</h1><button class="primary" onclick="openClient()">＋ Add Client</button></div><input id="clientSearch" class="search" placeholder="Search clients..." oninput="renderClients()"><div id="clientList"></div></section>
+
+<section id="messages" class="page">
+<h1>Messages ♡</h1>
+<div class="card"><h2>Client Messages</h2><div class="field"><label>Select client</label><select id="messageClient" onchange="updateMessagePreview()"></select></div><div class="field"><label>Message type</label><select id="messageType" onchange="updateMessagePreview()"><option value="reminder">Appointment reminder</option><option value="payment">Payment reminder</option><option value="thanks">Thank you / job completed</option><option value="holiday">Holiday notice</option></select></div><div id="messagePreview" class="message-preview"></div><div class="actions"><button class="primary" onclick="copyMessage()">Copy message</button><button class="secondary" onclick="shareMessage()">Share message</button></div></div>
+<div class="card"><h2>Message Templates</h2><div class="field"><label>Reminder</label><textarea id="tplReminder"></textarea></div><div class="field"><label>Payment reminder</label><textarea id="tplPayment"></textarea></div><div class="field"><label>Thank you message</label><textarea id="tplThanks"></textarea></div><div class="field"><label>Holiday notice</label><textarea id="tplHoliday"></textarea></div><button class="primary" onclick="saveTemplates()">Save templates</button><button class="secondary" onclick="resetTemplates()">Restore defaults</button></div>
+</section>
+
+<section id="earnings" class="page">
+<h1>Earnings & Payments</h1>
+<div class="stats">
+<div class="stat"><small>Total earned</small><strong id="earned">£0.00</strong></div>
+<div class="stat"><small>Paid</small><strong id="paid">£0.00</strong></div>
+<div class="stat"><small>Pending</small><strong id="pending">£0.00</strong></div>
+<div class="stat"><small>Outstanding</small><strong id="owed">£0.00</strong></div>
+</div>
+<h2>Completed Jobs</h2><div id="history"></div>
+</section>
+
+<section id="settings" class="page">
+<h1>Settings ⚙</h1>
+<div class="card"><h2>Business details</h2>
+<div class="field"><label>Business name</label><input id="businessName"></div>
+<div class="field"><label>Your name</label><input id="ownerName"></div>
+<div class="field"><label>Phone</label><input id="businessPhone"></div>
+<div class="field"><label>Address</label><textarea id="businessAddress"></textarea></div>
+<button class="primary" onclick="saveSettings()">Save business details</button></div>
+<div class="card"><h2>Appearance</h2>
+<div class="field"><label>Zoom</label><select id="zoom" onchange="applyZoom()"><option value=".85">85%</option><option value="1">100%</option><option value="1.15">115%</option><option value="1.3">130%</option><option value="1.5">150%</option><option value="1.75">175%</option><option value="2">200%</option></select></div>
+<div class="field"><label>Font</label><select id="fontChoice"><option value='"DM Sans",sans-serif'>DM Sans</option><option value='"Quicksand",sans-serif'>Quicksand</option><option value='"Playfair Display",serif'>Playfair Display</option><option value='"Cormorant Garamond",serif'>Cormorant Garamond</option></select></div>
+<div class="field"><label>Theme</label><select id="themeChoice"><option value="pink">Powder pink & gold</option><option value="sage">Sage green</option><option value="lavender">Lavender</option><option value="blue">Soft blue</option><option value="peach">Peach</option></select></div>
+<button class="primary" onclick="saveSettings()">Save appearance</button></div>
+<div class="card"><h2>Photos</h2><div class="field"><label>Profile photo</label><input type="file" accept="image/*" onchange="uploadImage(this,'profile')"></div><div class="field"><label>Banner photo</label><input type="file" accept="image/*" onchange="uploadImage(this,'main')"></div><div class="field"><label>Background photo</label><input type="file" accept="image/*" onchange="uploadBackground(this)"></div><button class="secondary" onclick="removeBackground()">Remove background</button></div>
+<div class="card"><h2>Backup & Restore</h2><button class="primary" onclick="backup()">Download backup</button><div class="field"><label>Restore backup</label><input type="file" accept="application/json" onchange="restore(this)"></div><p class="sub" id="storageStatus"></p></div>
+</section>
+
+<nav class="nav"><button class="active" onclick="showPage('home',this)"><span>⌂</span>Home</button><button onclick="showPage('schedule',this)"><span>▦</span>Schedule</button><button onclick="showPage('clients',this)"><span>♙</span>Clients</button><button onclick="showPage('messages',this)"><span>✉</span>Messages</button><button onclick="showPage('earnings',this)"><span>£</span>Earnings</button><button onclick="showPage('settings',this)"><span>⚙</span>Settings</button></nav>
+</div>
+
+<dialog id="jobDialog"><form id="jobForm" onsubmit="saveJob(event)"><div class="row"><h2>Job Details</h2><button type="button" class="secondary" onclick="closeJobDialog()">✕</button></div><input type="hidden" id="jobId"><div class="field"><label>Client</label><select id="jobClient" required onchange="updateJobClientDefaults()"></select></div><div class="field"><label>Date</label><input type="date" id="jobDate" required></div><div class="grid2"><div class="field"><label>Start Time</label><input type="time" id="jobStart" required></div><div class="field"><label>End Time</label><input type="time" id="jobEnd" required></div></div><div class="grid2"><div class="field"><label>Hourly Rate (£)</label><input type="number" id="jobRate" min="0" step=".01" required></div><div class="field"><label>Actual Hours (editable — used for payment and invoice)</label><input type="number" id="jobTarget" min="0" step="0.01" value="2" required></div></div><div class="field"><label>Client Type</label><select id="jobType"><option>Private</option><option>Agency</option><option>Occasional</option></select></div><div class="field"><label>Notes</label><textarea id="jobNotes"></textarea></div><button class="primary" type="submit">Save Job</button></form></dialog>
+
+<dialog id="clientDialog"><form id="clientForm" onsubmit="saveClient(event)"><div class="row"><h2>Client Details</h2><button type="button" class="secondary" onclick="clientDialog.close()">✕</button></div><input type="hidden" id="clientId"><div class="field"><label>Full Name</label><input id="clientName" required></div><div class="field"><label>Phone Number</label><input id="clientPhone" type="tel"></div><div class="field"><label>Address</label><textarea id="clientAddress"></textarea></div><div class="grid2"><div class="field"><label>Client Type</label><select id="clientType"><option>Private</option><option>Agency</option><option>Occasional</option></select></div><div class="field"><label>Hourly Rate (£)</label><input id="clientRate" type="number" step=".01"></div></div><div class="field"><label>Frequency</label><select id="clientRepeat"><option>Weekly</option><option>Fortnightly</option><option>Every three weeks</option><option>Occasional</option></select></div><div class="field"><label>Usual Day</label><select id="clientDay"><option value="">Not set</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div><div class="grid2"><div class="field"><label>Usual Start</label><input type="time" id="clientStart"></div><div class="field"><label>Usual Finish</label><input type="time" id="clientEnd"></div></div><div class="field"><label>Notes</label><textarea id="clientNotes"></textarea></div><button class="primary" type="submit">Save Client</button></form></dialog>
+
+<script>
+const DB_NAME="PureShineImages",DB_VERSION=4,OLD_KEY="pureShineManager_v5";
+const DEFAULT_TEMPLATES={
+reminder:"Hi {client}! ♡ Just a friendly reminder that your cleaning appointment is booked for {date} at {start}. Thank you! Kind regards, {owner} – {business}.",
+payment:"Hi {client}! ♡ Just a friendly reminder that payment of {amount} for the cleaning service on {date} is due today. As a reminder, payment is kindly requested on the same day as the cleaning appointment. Thank you so much! ♡ Kind regards, {owner} – {business}.",
+thanks:"Hi {client}! ♡ Thank you for choosing {business}. I worked {hours} today ({start}–{end}), and the total is {amount}. I really appreciate your trust and continued support. Kind regards, {owner}.",
+holiday:"Hi {client}! ♡ I wanted to let you know that I will be away from {holidayStart} to {holidayEnd}. I will be available again from {returnDate}. Thank you for your understanding! Kind regards, {owner} – {business}."
+};
+let data={clients:[],jobs:[],settings:{}},db=null,selectedDate=localDate(),calendarView="month",urls={},ticker=null,saveQueue=Promise.resolve();
+const $=id=>document.getElementById(id);
+function localDate(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function addDays(s,n){let d=new Date(s+"T12:00:00");d.setDate(d.getDate()+n);return localDate(d)}
+function dateText(s){return s?new Date(s+"T12:00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric"}):""}
+function money(n){return "£"+Number(n||0).toFixed(2)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function mins(a,b){if(!a||!b)return 0;let [h,m]=a.split(":").map(Number),[hh,mm]=b.split(":").map(Number),v=hh*60+mm-h*60-m;return v<0?v+1440:v}
+function formatMins(n){n=Math.max(0,Math.floor(n||0));return `${Math.floor(n/60)}h ${String(n%60).padStart(2,"0")}m`}
+function fmtSeconds(s){s=Math.max(0,Math.floor(s||0));return [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(x=>String(x).padStart(2,"0")).join(":")}
+function openDB(){return new Promise((resolve,reject)=>{let r=indexedDB.open(DB_NAME,DB_VERSION);r.onupgradeneeded=()=>{let d=r.result;if(!d.objectStoreNames.contains("files"))d.createObjectStore("files")};r.onsuccess=()=>{db=r.result;resolve(db)};r.onerror=()=>reject(r.error)})}
+function dbPut(k,v){return new Promise((res,rej)=>{let tx=db.transaction("files","readwrite");tx.objectStore("files").put(v,k);tx.oncomplete=()=>res(true);tx.onerror=()=>rej(tx.error)})}
+function dbGet(k){return new Promise((res,rej)=>{let r=db.transaction("files","readonly").objectStore("files").get(k);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+function dbDel(k){return new Promise((res,rej)=>{let tx=db.transaction("files","readwrite");tx.objectStore("files").delete(k);tx.oncomplete=()=>res(true);tx.onerror=()=>rej(tx.error)})}
+async function load(){let v=await dbGet("appData");if(v)data={clients:[],jobs:[],settings:{},...v};else{try{let old=localStorage.getItem(OLD_KEY);if(old){data={clients:[],jobs:[],settings:{},...JSON.parse(old)};await dbPut("appData",data);localStorage.removeItem(OLD_KEY)}}catch(e){}}}
+function save(){let snapshot=JSON.parse(JSON.stringify(data));saveQueue=saveQueue.then(()=>dbPut("appData",snapshot));return saveQueue.catch(e=>{console.error(e);alert("Could not save. Please export a backup.");return false})}
+function showPage(id,btn){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));$(id).classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));if(btn)btn.classList.add("active");render()}
+function findClient(id){return data.clients.find(c=>c.id===id)}
+function elapsedNow(j){return Number(j.elapsedSeconds||0)+(j.runningSince?Math.max(0,Math.floor((Date.now()-j.runningSince)/1000)):0)}
+function billableHours(j){if(j.actualHoursOverride!==undefined&&j.actualHoursOverride!==null&&Number.isFinite(Number(j.actualHoursOverride)))return Math.max(0,Number(j.actualHoursOverride));let sec=elapsedNow(j);if(sec>0)return sec/3600;if(j.actualHours!=null&&Number(j.actualHours)>0)return Number(j.actualHours);return j.status==="done"?mins(j.start,j.end)/60:0}
+function earnings(j){return billableHours(j)*Number(j.rate||0)}
+function targetSeconds(j){return Number(j.targetHours||0)*3600}
+function render(){renderGreeting();renderHome();renderCalendar();renderClients();renderEarnings();renderMessageSelects()}
+function renderGreeting(){let now=new Date(),h=now.getHours(),g=h<12?"Good morning!":h<17?"Good afternoon!":"Good evening!";$("greetingText").textContent=g;$("greetingDate").textContent=now.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});}
+function renderHome(){let t=localDate(),jobs=data.jobs.filter(j=>j.date===t&&j.status!=="cancelled");$("homeJobs").textContent=jobs.length;$("homeHours").textContent=formatMins(jobs.filter(j=>j.status==="done").reduce((s,j)=>s+Math.floor(billableHours(j)*60),0));$("homeMoney").textContent=money(jobs.filter(j=>j.status==="done").reduce((s,j)=>s+earnings(j),0));$("upcomingCount").textContent=data.jobs.filter(j=>j.status==="planned"&&j.date>t).length;let active=data.jobs.find(j=>j.runningSince),next=jobs.find(j=>j.status==="planned");let box=$("homeTimer");if(active){let c=findClient(active.clientId),sec=elapsedNow(active);box.innerHTML=`<div class="home-timer"><div class="row"><b>♡ Cleaning in Progress</b><span class="sub">● LIVE</span></div><div style="text-align:center;font-weight:800">${esc(c?.name||"Client")}</div><div class="timer-display" id="liveClock">${fmtSeconds(sec)}</div><div class="row"><span class="sub">Earned so far</span><b class="timer-money" id="liveMoney">${money(sec/3600*active.rate)}</b></div><div class="timer-buttons"><button class="secondary" onclick="pauseJob('${active.id}')">Ⅱ PAUSE</button><button class="green" onclick="finishJob('${active.id}')">✓ FINISH</button><button class="soft" onclick="openJob()">＋ JOB</button></div></div>`}else if(next){let c=findClient(next.clientId);box.innerHTML=`<div class="home-timer"><b>♡ Cleaning Timer</b><div style="text-align:center;font-weight:800">${esc(c?.name||"Client")}</div><div class="timer-display">00:00:00</div><div class="sub" style="text-align:center">${esc(next.start)}–${esc(next.end)} · ${money(next.rate)}/hour</div><div class="timer-buttons" style="grid-template-columns:1fr"><button class="primary" onclick="startJob('${next.id}')">▶ START CLEANING</button></div></div>`}else{box.innerHTML=`<div class="home-timer"><b>♡ Cleaning Timer</b><div class="sub">No active cleaning job.</div><button class="primary" style="width:100%;margin-top:10px" onclick="openJob()">＋ ADD A JOB</button></div>`}
+$("homeList").innerHTML=jobs.sort((a,b)=>(a.start||"").localeCompare(b.start||"")).map(j=>`<div class="job ${j.status==="done"?"done":j.runningSince?"running":""}"><div class="row"><b class="job-name">${esc(findClient(j.clientId)?.name||"Client")}</b><b>${esc(j.start||"")}–${esc(j.end||"")}</b></div><div class="sub">${j.status==="done"?"Completed":j.runningSince?"Timer running":"Scheduled"} · ${money(earnings(j))}</div><div class="actions">${j.status!=="done"?(j.runningSince?`<button class="secondary" onclick="pauseJob('${j.id}')">Pause</button>`:`<button class="primary" onclick="startJob('${j.id}')">Start Timer</button>`):`<button class="soft" onclick="createInvoice('${j.id}')">Invoice</button>`}<button class="secondary" onclick="editJob('${j.id}')">Edit</button><button class="danger" onclick="deleteJob('${j.id}')">Delete</button></div></div>`).join("")||'<div class="empty">No jobs scheduled for today.</div>'}
+function setCalendarView(v){calendarView=v;renderCalendar()}
+function moveDate(n){let d=new Date(selectedDate+"T12:00:00");if(calendarView==="month")d.setMonth(d.getMonth()+n);else d.setDate(d.getDate()+n*(calendarView==="week"?7:1));selectedDate=localDate(d);renderCalendar()}
+function renderCalendar(){let d=new Date(selectedDate+"T12:00:00"),y=d.getFullYear(),m=d.getMonth(),first=new Date(y,m,1),start=new Date(y,m,1);start.setDate(1-((first.getDay()+6)%7));$("scheduleHeading").textContent=calendarView==="month"?d.toLocaleDateString("en-GB",{month:"long",year:"numeric"}):calendarView==="week"?"Week of "+dateText(getMonday(selectedDate)):dateText(selectedDate);["month","week","day"].forEach(v=>$(""+v+"Tab").className=(calendarView===v?"primary":"secondary"));let days=[];if(calendarView==="day")days=[selectedDate];else if(calendarView==="week"){let s=getMonday(selectedDate);for(let i=0;i<7;i++)days.push(addDays(s,i))}else{for(let i=0;i<42;i++)days.push(addDays(localDate(start),i))}
+let html=calendarView==="day"?"":'<div class="calendar-head">'+["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(x=>`<span>${x}</span>`).join("")+'</div><div class="calendar-grid">';
+if(calendarView!=="day")html+=days.map(s=>{let dt=new Date(s+"T12:00:00"),same=dt.getMonth()===m,arr=data.jobs.filter(j=>j.date===s);return `<button class="cal-day ${same||calendarView==='week'?'':'muted'} ${s===selectedDate?'selected':''} ${s===localDate()?'today':''}" onclick="selectedDate='${s}';renderCalendar()"><span>${dt.getDate()}</span><div class="dots">${arr.slice(0,3).map(()=>'<i></i>').join("")}</div><small>${arr.length?arr.length+" job"+(arr.length>1?"s":""):""}</small></button>`}).join("")+"</div>";
+$("calendar").innerHTML=html;$("selectedDateHeading").textContent=dateText(selectedDate);let dayJobs=data.jobs.filter(j=>j.date===selectedDate).sort((a,b)=>(a.start||"").localeCompare(b.start||""));$("scheduleList").innerHTML=dayJobs.map(j=>`<div class="job ${j.status==='done'?'done':j.runningSince?'running':''}"><div class="row"><b class="job-name">${esc(findClient(j.clientId)?.name||"Client")}</b><b>${esc(j.start||"")}–${esc(j.end||"")}</b></div><div class="sub">${j.status==="done"?"Completed":j.runningSince?"Timer running":"Scheduled"} · ${formatMins(Math.floor(billableHours(j)*60))} · ${money(j.rate)}/hour · ${money(earnings(j))}</div>${j.notes?`<div class="sub">Notes: ${esc(j.notes)}</div>`:""}<div class="actions"><button class="secondary" onclick="editJob('${j.id}')">Edit</button>${j.status!=="done"?(j.runningSince?`<button class="secondary" onclick="pauseJob('${j.id}')">Pause timer</button>`:`<button class="primary" onclick="startJob('${j.id}')">Start timer</button>`):`<button class="soft" onclick="createInvoice('${j.id}')">Invoice</button>`}${j.status!=="done"?`<button class="green" onclick="finishJob('${j.id}')">Finish job</button>`:""}<button class="danger" onclick="deleteJob('${j.id}')">Delete</button></div></div>`).join("")||'<div class="empty">No appointments for this day.</div>'}
+function getMonday(s){let d=new Date(s+"T12:00:00"),day=d.getDay();d.setDate(d.getDate()-(day===0?6:day-1));return localDate(d)}
+function fillClientOptions(){$("jobClient").innerHTML=data.clients.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("")}
+function closeJobDialog(){let dlg=$("jobDialog");if(dlg.open)dlg.close()}
+function openJob(){if(!data.clients.length){alert("Please add a client first.");return}$("jobForm").reset();$("jobId").value="";fillClientOptions();$("jobDate").value=selectedDate;updateJobClientDefaults();let dlg=$("jobDialog");if(!dlg.open)dlg.showModal()}
+function updateJobClientDefaults(){let c=findClient($("jobClient").value);if(!c)return;$("jobRate").value=c.rate||16;$("jobType").value=c.type||"Private";if(c.start)$("jobStart").value=c.start;if(c.end)$("jobEnd").value=c.end;if(c.start&&c.end)$("jobTarget").value=(mins(c.start,c.end)/60).toFixed(2)}
+async function saveJob(e){e.preventDefault();let id=$("jobId").value||crypto.randomUUID(),old=data.jobs.find(j=>j.id===id),enteredHours=Number($("jobTarget").value),j={...(old||{}),id,clientId:$("jobClient").value,date:$("jobDate").value,start:$("jobStart").value,end:$("jobEnd").value,rate:Number($("jobRate").value),targetHours:enteredHours,type:$("jobType").value,status:old?.status||"planned",payment:old?.payment||"pending",notes:$("jobNotes").value};j.actualHoursOverride=enteredHours;j.actualHours=enteredHours;if(!old){j.elapsedSeconds=0;j.runningSince=null}if(old?.runningSince&&(old.date!==j.date||old.start!==j.start||old.end!==j.end)){alert("Pause the timer before changing date or scheduled times.");return}if(old?.clientNameSnapshot&&findClient(j.clientId))delete j.clientNameSnapshot;let i=data.jobs.findIndex(x=>x.id===id);if(i<0)data.jobs.push(j);else data.jobs[i]=j;await save();closeJobDialog();render()}
+function editJob(id){let j=data.jobs.find(x=>x.id===id);if(!j){alert("This job could not be found.");return}fillClientOptions();if(j.clientId&&!findClient(j.clientId)){let opt=document.createElement("option");opt.value=j.clientId;opt.textContent=j.clientNameSnapshot||"Former client";$("jobClient").appendChild(opt)}$("jobId").value=j.id;$("jobClient").value=j.clientId||"";$("jobDate").value=j.date||selectedDate;$("jobStart").value=j.start||"";$("jobEnd").value=j.end||"";$("jobRate").value=j.rate??16;$("jobTarget").value=j.actualHoursOverride!==undefined?Number(j.actualHoursOverride).toFixed(2):(j.status==="done"?billableHours(j).toFixed(2):(j.targetHours??(mins(j.start,j.end)/60||2)));$("jobType").value=j.type||"Private";$("jobNotes").value=j.notes||"";let dlg=$("jobDialog");if(!dlg.open)dlg.showModal()}
+async function deleteJob(id){let j=data.jobs.find(x=>x.id===id);if(!j)return;let client=findClient(j.clientId)?.name||j.clientNameSnapshot||"this client";if(!confirm(`Delete the ${dateText(j.date)} job for ${client}? This cannot be undone.`))return;if(j.recurringKey){data.settings.deletedRecurringKeys=data.settings.deletedRecurringKeys||[];if(!data.settings.deletedRecurringKeys.includes(j.recurringKey))data.settings.deletedRecurringKeys.push(j.recurringKey)}data.jobs=data.jobs.filter(x=>x.id!==id);await save();render();runTicker()}
+async function startJob(id){let j=data.jobs.find(x=>x.id===id);if(!j||j.status==="done")return;if(data.jobs.some(x=>x.id!==id&&x.runningSince)){alert("Pause the other active timer first.");return}j.runningSince=Date.now();await save();render();runTicker()}
+async function pauseJob(id){let j=data.jobs.find(x=>x.id===id);if(!j?.runningSince)return;j.elapsedSeconds=elapsedNow(j);j.runningSince=null;await save();render();runTicker()}
+async function finishJob(id){let j=data.jobs.find(x=>x.id===id);if(!j)return;if(j.runningSince){j.elapsedSeconds=elapsedNow(j);j.runningSince=null}j.status="done";j.completedAt=Date.now();j.payment="paid";j.paidAt=Date.now();await save();render();runTicker()}
+function runTicker(){if(ticker)clearInterval(ticker);ticker=setInterval(()=>{let j=data.jobs.find(x=>x.runningSince);if(!j){clearInterval(ticker);ticker=null;return}let sec=elapsedNow(j);if($("liveClock"))$("liveClock").textContent=fmtSeconds(sec);if($("liveMoney"))$("liveMoney").textContent=money(sec/3600*j.rate)},1000)}
+function renderClients(){let q=($("clientSearch").value||"").toLowerCase();$("clientList").innerHTML=data.clients.filter(c=>(c.name||"").toLowerCase().includes(q)).map(c=>`<div class="card"><div class="row"><b>${esc(c.name)}</b><b>${money(c.rate)}/hour</b></div><div class="sub">${esc(c.type)} · ${esc(c.repeat||"")} · ${esc(c.day||"Day not set")}</div><div class="sub">${esc(c.phone||"Phone not added")}</div>${c.address?`<div class="sub">${esc(c.address)}</div>`:""}${c.start||c.end?`<div class="sub">Usual time: ${esc(c.start||"")}–${esc(c.end||"")}</div>`:""}${c.notes?`<div class="sub">Notes: ${esc(c.notes)}</div>`:""}<div class="actions"><button class="secondary" onclick="editClient('${c.id}')">Edit</button><button class="danger" onclick="deleteClient('${c.id}')">Delete</button></div></div>`).join("")||'<div class="empty">No clients found.</div>'}
+function openClient(){$("clientForm").reset();$("clientId").value="";$("clientRate").value=16;$("clientDialog").showModal()}
+async function saveClient(e){e.preventDefault();let id=$("clientId").value||crypto.randomUUID(),c={id,name:$("clientName").value.trim(),phone:$("clientPhone").value,address:$("clientAddress").value,type:$("clientType").value,rate:Number($("clientRate").value||0),repeat:$("clientRepeat").value,day:$("clientDay").value,start:$("clientStart").value,end:$("clientEnd").value,notes:$("clientNotes").value},i=data.clients.findIndex(x=>x.id===id);if(i<0)data.clients.push(c);else data.clients[i]=c;await save();$("clientDialog").close();render()}
+function editClient(id){let c=findClient(id);if(!c)return;$("clientId").value=c.id;$("clientName").value=c.name;$("clientPhone").value=c.phone||"";$("clientAddress").value=c.address||"";$("clientType").value=c.type||"Private";$("clientRate").value=c.rate??18;$("clientRepeat").value=c.repeat||"Weekly";$("clientDay").value=c.day||"";$("clientStart").value=c.start||"";$("clientEnd").value=c.end||"";$("clientNotes").value=c.notes||"";$("clientDialog").showModal()}
+async function deleteClient(id){let c=findClient(id);if(!c||!confirm("Remove this client? Completed job history will be retained."))return;data.jobs.forEach(j=>{if(j.clientId===id&&j.status==="done")j.clientNameSnapshot=c.name});data.jobs=data.jobs.filter(j=>j.clientId!==id||j.status==="done");data.clients=data.clients.filter(x=>x.id!==id);await save();render()}
+function renderEarnings(){let done=data.jobs.filter(j=>j.status==="done"),total=done.reduce((s,j)=>s+earnings(j),0),paid=done.filter(j=>j.payment==="paid").reduce((s,j)=>s+earnings(j),0),owed=done.filter(j=>j.payment==="debt").reduce((s,j)=>s+earnings(j),0);$("earned").textContent=money(total);$("paid").textContent=money(paid);$("pending").textContent=money(total-paid-owed);$("owed").textContent=money(owed);$("history").innerHTML=done.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(j=>`<div class="card"><b>${esc(findClient(j.clientId)?.name||j.clientNameSnapshot||"Former client")}</b><div class="sub">${dateText(j.date)} · ${formatMins(Math.floor(billableHours(j)*60))}</div><div class="row"><b>${money(earnings(j))}</b><span class="sub">${j.payment==="paid"?"Paid automatically":j.payment==="debt"?"Outstanding":"Pending"}</span><button class="soft" onclick="createInvoice('${j.id}')">Create Invoice</button></div></div>`).join("")||'<div class="empty">No completed jobs yet.</div>'}
+function templates(){return {...DEFAULT_TEMPLATES,...(data.settings.templates||{})}}
+function fillTemplate(t,v){return String(t).replace(/\{(\w+)\}/g,(m,k)=>v[k]??m)}
+function businessValues(){return {business:data.settings.businessName||"Pure Shine Cleaning",owner:data.settings.ownerName||"Your Cleaner"}}
+function renderMessageSelects(){let sel=$("messageClient");if(!sel)return;let old=sel.value;sel.innerHTML=data.clients.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");if(old)sel.value=old;updateMessagePreview()}
+function updateMessagePreview(){let c=findClient($("messageClient").value),type=$("messageType").value;if(!c){$("messagePreview").textContent="Add a client to create a message.";return}let job=data.jobs.filter(j=>j.clientId===c.id).sort((a,b)=>b.date.localeCompare(a.date))[0],b=businessValues(),vals={...b,client:c.name,date:job?dateText(job.date):dateText(localDate()),start:job?.start||c.start||"",end:job?.end||c.end||"",hours:job?billableHours(job).toFixed(2):"",amount:job?money(earnings(job)):money(c.rate),holidayStart:"",holidayEnd:"",returnDate:""};$("messagePreview").textContent=fillTemplate(templates()[type],vals)}
+async function copyMessage(){let s=$("messagePreview").textContent;try{await navigator.clipboard.writeText(s);alert("Message copied.")}catch(e){alert("Copy is unavailable in this browser.")}}
+async function shareMessage(){let text=$("messagePreview").textContent;if(navigator.share){try{await navigator.share({text})}catch(e){}}else copyMessage()}
+async function saveTemplates(){data.settings.templates={reminder:$("tplReminder").value,payment:$("tplPayment").value,thanks:$("tplThanks").value,holiday:$("tplHoliday").value};await save();alert("Templates saved.")}
+function loadTemplateFields(){let t=templates();$("tplReminder").value=t.reminder;$("tplPayment").value=t.payment;$("tplThanks").value=t.thanks;$("tplHoliday").value=t.holiday}
+function resetTemplates(){if(!confirm("Restore default message templates?"))return;data.settings.templates={...DEFAULT_TEMPLATES};loadTemplateFields();save()}
+function applyZoom(){document.documentElement.style.setProperty("--scale",$("zoom").value||"1")}
+function applyTheme(){let themes={pink:["#e8b4c6","#d58eaa","#c5a46c"],sage:["#b8cbb8","#86a88d","#b49a68"],lavender:["#c8b9dc","#9d8cbd","#aaa0b6"],blue:["#b5d0e1","#86adc7","#c5a46c"],peach:["#edc2ae","#d99b87","#b78d73"]},v=themes[$("themeChoice").value]||themes.pink;document.documentElement.style.setProperty("--pink",v[0]);document.documentElement.style.setProperty("--rose",v[1]);document.documentElement.style.setProperty("--gold",v[2]);document.documentElement.style.setProperty("--font",$("fontChoice").value)}
+async function saveSettings(){data.settings.businessName=$("businessName").value;data.settings.ownerName=$("ownerName").value;data.settings.phone=$("businessPhone").value;data.settings.address=$("businessAddress").value;data.settings.zoom=$("zoom").value;data.settings.font=$("fontChoice").value;data.settings.theme=$("themeChoice").value;applyZoom();applyTheme();await save();alert("Settings saved.")}
+function compressImage(file,max){return new Promise((res,rej)=>{let r=new FileReader();r.onload=()=>{let img=new Image();img.onload=()=>{let ratio=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement("canvas");c.width=Math.round(img.width*ratio);c.height=Math.round(img.height*ratio);c.getContext("2d").drawImage(img,0,0,c.width,c.height);c.toBlob(b=>b?res(b):rej(Error("Image processing failed")),"image/jpeg",.82)};img.onerror=rej;img.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
+async function uploadImage(input,key){let f=input.files?.[0];if(!f)return;try{let b=await compressImage(f,1600);await dbPut("img_"+key,b);await showImage(key,b);input.value=""}catch(e){alert("Unable to save image.")}}
+async function showImage(key,b){if(urls[key])URL.revokeObjectURL(urls[key]);urls[key]=b?URL.createObjectURL(b):null;if(key==="profile"){$("profileHeader").style.display=b?"block":"none";if(b)$("profileHeader").src=urls[key]}if(key==="main"){$("mainBanner").classList.toggle("has-image",!!b);if(b)$("mainBannerImg").src=urls[key]}}
+async function removeImage(key){if(!confirm("Remove this photo?"))return;await dbDel("img_"+key);await showImage(key,null)}
+async function uploadBackground(input){let f=input.files?.[0];if(!f)return;try{let b=await compressImage(f,1800);await dbPut("background",b);await applyBackground(b);input.value=""}catch(e){alert("Unable to save background photo.")}}
+async function applyBackground(b){if(urls.background)URL.revokeObjectURL(urls.background);urls.background=b?URL.createObjectURL(b):null;document.body.style.backgroundImage=b?`linear-gradient(#ffffff66,#ffffff66),url("${urls.background}")`:""}
+async function removeBackground(){await dbDel("background");await applyBackground(null)}
+async function loadImages(){for(let k of ["profile","main"])await showImage(k,await dbGet("img_"+k)||null);await applyBackground(await dbGet("background")||null)}
+async function backup(){try{await save();let out={...data,files:{}};for(let k of ["profile","main","background"]){let b=await dbGet(k==="background"?"background":"img_"+k);if(b)out.files[k]=await blobData(b)}let blob=new Blob([JSON.stringify(out)],{type:"application/json"}),u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="Pure-Shine-Backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(u),1500)}catch(e){alert("Backup failed.")}}
+function blobData(b){return new Promise((res,rej)=>{let r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(b)})}
+async function restore(input){let f=input.files?.[0];if(!f)return;try{let r=JSON.parse(await f.text());if(r.files){for(let k of ["profile","main","background"])if(r.files[k])await dbPut(k==="background"?"background":"img_"+k,await(await fetch(r.files[k])).blob());delete r.files}data={clients:[],jobs:[],settings:{},...r};await save();await loadImages();loadTemplateFields();render();alert("Backup restored.")}catch(e){alert("Unable to restore backup.")}input.value=""}
+function seedClients(){let joannaIds=new Set(data.clients.filter(c=>(c.name||"").toLowerCase()==="joanna").map(c=>c.id));data.jobs.forEach(j=>{if(joannaIds.has(j.clientId)&&j.status==="done")j.clientNameSnapshot="Joanna"});data.jobs=data.jobs.filter(j=>!joannaIds.has(j.clientId)||j.status==="done");data.clients=data.clients.filter(c=>(c.name||"").toLowerCase()!=="joanna");let defs=[
+{name:"Lottie",type:"Agency",rate:16,repeat:"Weekly",day:"Monday",start:"13:00",end:"15:00"},
+{name:"Christine",type:"Private",rate:18,repeat:"Fortnightly",day:"Tuesday",start:"09:30",end:"12:30"},
+{name:"Matt",type:"Agency",rate:16,repeat:"Weekly",day:"Tuesday",start:"09:30",end:"13:30",notes:"Usually 4 hours; duration can vary."},
+{name:"Sonia",type:"Agency",rate:16,repeat:"Weekly",day:"Wednesday",start:"09:00",end:"14:00",notes:"Finish time can vary."},
+{name:"Laura",type:"Private",rate:18,repeat:"Weekly",day:"Thursday",start:"09:00",end:"13:00"},
+{name:"Hannah",type:"Agency",rate:16,repeat:"Weekly",day:"Thursday",start:"13:00",end:"16:00"},
+{name:"Meghan",type:"Private",rate:18,repeat:"Weekly"},
+{name:"Sindu",type:"Agency",rate:16,repeat:"Fortnightly",day:"Friday",start:"09:30",end:"12:30"},
+{name:"Peter",type:"Private",rate:20,repeat:"Occasional"},
+{name:"Mike",type:"Private",rate:20,repeat:"Every three weeks",notes:"Usually around 2 hours; duration can vary."}
+];defs.forEach(x=>{if(!data.clients.some(c=>c.name.toLowerCase()===x.name.toLowerCase()))data.clients.push({id:crypto.randomUUID(),phone:"",address:"",notes:"",...x})})}
+function ensureSchedule(){let today=localDate(),monday=getMonday(today),sindu=data.clients.find(c=>c.name.toLowerCase()==="sindu");if(!sindu)return;let firstSinduFriday=addDays(monday,11),existing=new Set([...data.jobs.map(j=>j.recurringKey).filter(Boolean),...(data.settings.deletedRecurringKeys||[])]);for(let w=0;w<26;w++){let ws=addDays(monday,w*7),ap=[["Lottie",0,"13:00","15:00","lottie"],["Sonia",2,"09:00","14:00","sonia"],["Laura",3,"09:00","13:00","laura"],["Hannah",3,"13:00","16:00","hannah"]];if(w%2===0)ap.push(["Christine",1,"09:30","12:30","christine"],["Matt",1,"13:00","17:00","matt"]);else ap.push(["Matt",1,"09:30","13:30","matt"]);let thisFriday=addDays(ws,4),weeksFromAnchor=Math.round((new Date(thisFriday+"T12:00:00")-new Date(firstSinduFriday+"T12:00:00"))/604800000);if(weeksFromAnchor>=0&&weeksFromAnchor%2===0)ap.push(["Sindu",4,"09:30","12:30","sindu"]);ap.forEach(([name,day,start,end,key])=>{let date=addDays(ws,day),rk=key+"_"+date,c=data.clients.find(x=>x.name.toLowerCase()===name.toLowerCase());if(date<today||existing.has(rk)||!c)return;data.jobs.push({id:"rec_"+rk,recurringKey:rk,clientId:c.id,date,start,end,rate:Number(c.rate||16),targetHours:mins(start,end)/60,elapsedSeconds:0,runningSince:null,status:"planned",payment:"pending",type:c.type||"Agency",notes:"Recurring appointment"});existing.add(rk)})}}
+function createInvoice(id){
+const j=data.jobs.find(x=>x.id===id);
+if(!j||j.status!=="done"){alert("Finish the job first.");return}
+const c=findClient(j.clientId)||{},s=data.settings,h=billableHours(j),total=earnings(j);
+const old=document.getElementById("invoicePrintOverlay");if(old)old.remove();
+const overlay=document.createElement("div");overlay.id="invoicePrintOverlay";
+overlay.innerHTML=`<style>
+#invoicePrintOverlay{position:fixed;inset:0;z-index:99999;background:#fff;overflow:auto;padding:20px 14px 35px;color:#443b45;font:16px -apple-system,BlinkMacSystemFont,Arial,sans-serif;line-height:1.5}
+#invoicePrintOverlay .invoice-sheet{max-width:800px;margin:0 auto;padding:18px 12px 35px}
+#invoicePrintOverlay h1{color:#d58eaa;font-size:clamp(27px,6vw,38px);margin:0 0 32px}
+#invoicePrintOverlay h2{font-size:25px;margin:30px 0 16px;color:#443b45}
+#invoicePrintOverlay h3{font-size:20px;margin:26px 0 10px}
+#invoicePrintOverlay .muted{color:#777;line-height:1.7}
+#invoicePrintOverlay .meta{margin:24px 0}
+#invoicePrintOverlay table{width:100%;border-collapse:collapse;margin:35px 0 22px;table-layout:fixed}
+#invoicePrintOverlay th,#invoicePrintOverlay td{padding:12px 6px;border-bottom:1px solid #eee;text-align:left;overflow-wrap:anywhere;font-size:14px}
+#invoicePrintOverlay th:nth-child(2),#invoicePrintOverlay td:nth-child(2){width:16%}
+#invoicePrintOverlay th:nth-child(3),#invoicePrintOverlay td:nth-child(3){width:24%}
+#invoicePrintOverlay th:nth-child(4),#invoicePrintOverlay td:nth-child(4){width:19%}
+#invoicePrintOverlay .total{text-align:right;font-size:25px;color:#9d8050;font-weight:800;margin:28px 0}
+#invoicePrintOverlay .invoice-actions{display:flex;gap:10px;flex-wrap:wrap;margin:30px 0 12px}
+#invoicePrintOverlay button{border:0;border-radius:10px;padding:14px 18px;min-height:48px;font-size:16px;cursor:pointer}
+#invoicePrintOverlay .print-btn{background:#bd7896;color:white}
+#invoicePrintOverlay .close-btn{background:#f1e8ed;color:#8e6c7e}
+#invoicePrintOverlay .save-help{font-size:13px;color:#777;line-height:1.5;margin-top:14px}
+@media print{ @page{margin:14mm} body>*:not(#invoicePrintOverlay){display:none!important} #invoicePrintOverlay{display:block!important;position:static!important;inset:auto!important;overflow:visible!important;padding:0!important;background:#fff!important} #invoicePrintOverlay .invoice-sheet{max-width:none!important;padding:0!important} #invoicePrintOverlay .invoice-actions,#invoicePrintOverlay .save-help{display:none!important} #invoicePrintOverlay table{break-inside:avoid} #invoicePrintOverlay h1,#invoicePrintOverlay h2,#invoicePrintOverlay h3{break-after:avoid} }
+</style>
+<div class="invoice-sheet">
+<h1>✧ ${esc(s.businessName||"Pure Shine Cleaning")} ✧</h1>
+<div class="muted">${esc(s.ownerName||"")}<br>${esc(s.phone||"")}<br>${esc(s.address||"")}</div>
+<h2>INVOICE</h2>
+<div class="meta"><b>Service date:</b> ${dateText(j.date)}<br><b>Payment status:</b> ${(j.payment||"paid").toUpperCase()}</div>
+<h3>Bill To</h3><b>${esc(c.name||j.clientNameSnapshot||"Client")}</b><div class="muted">${esc(c.address||"")}<br>${esc(c.phone||"")}</div>
+<table><thead><tr><th>Description</th><th>Hours</th><th>Rate</th><th>Amount</th></tr></thead><tbody><tr><td>Cleaning service</td><td>${h.toFixed(2)}</td><td>${money(j.rate)}/hour</td><td>${money(total)}</td></tr></tbody></table>
+<div class="total">Total: ${money(total)}</div>
+<p class="muted">Payment is due on the same day as the cleaning appointment. Thank you for choosing ${esc(s.businessName||"Pure Shine Cleaning")}.</p>
+<div class="invoice-actions"><button type="button" class="print-btn" id="printInvoiceBtn">Print / Save as PDF</button><button type="button" class="close-btn" id="closeInvoiceBtn">Close invoice</button></div>
+<p class="save-help">On iPhone: tap Print / Save as PDF. In the print preview, spread two fingers apart on the preview to open the PDF, then tap Share → Save to Files.</p>
+</div>`;
+document.body.appendChild(overlay);
+document.getElementById("printInvoiceBtn").addEventListener("click",()=>{try{window.print()}catch(err){alert("Printing is unavailable in this view. Open the app in Safari and try again.")}});
+document.getElementById("closeInvoiceBtn").addEventListener("click",()=>overlay.remove());
+}
+
+async function init(){try{await openDB();await load();seedClients();ensureSchedule();$("businessName").value=data.settings.businessName||"Pure Shine Cleaning";$("ownerName").value=data.settings.ownerName||"";$("businessPhone").value=data.settings.phone||"";$("businessAddress").value=data.settings.address||"";$("zoom").value=data.settings.zoom||"1";$("fontChoice").value=data.settings.font||'"DM Sans",sans-serif';$("themeChoice").value=data.settings.theme||"pink";applyZoom();applyTheme();loadTemplateFields();await loadImages();await save();render();runTicker();$("storageStatus").textContent="Your data is saved in this browser."}catch(e){console.error(e);alert("Pure Shine could not initialise storage. Please reload the app.")}}
+init();
+document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="hidden"){let j=data.jobs.find(x=>x.runningSince);if(j){j.elapsedSeconds=elapsedNow(j);j.runningSince=Date.now();await save()}}else{renderHome();runTicker()}});
+window.addEventListener("pagehide",()=>{let j=data.jobs.find(x=>x.runningSince);if(j){j.elapsedSeconds=elapsedNow(j);j.runningSince=Date.now();save()}});
+</script></body></html>
